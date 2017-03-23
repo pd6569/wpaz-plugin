@@ -1,12 +1,10 @@
 <div id="wpaz-3d-tours-layout">
-    <h2>3D TOURS LAYOUT</h2>
     <div class="container">
         <div class="row">
             <div id="wpaz-toolbar" class="col-md-12">
                 <div class="btn-group" role="group" aria-label="...">
-                    <button type="button" class="btn btn-default">Left</button>
-                    <button type="button" class="btn btn-default">Middle</button>
-                    <button type="button" class="btn btn-default">Right</button>
+                    <button id="toolbar-zoom-in" type="button" class="btn btn-default">Zoom In</button>
+                    <button id="toolbar-zoom-out" type="button" class="btn btn-default">Zoom Out</button>
                 </div>
             </div>
         </div>
@@ -27,12 +25,12 @@
                 <h2 class="text-center">Notes</h2>
                 <form>
                     <div class="form-group">
-                        <input type="notes-title" class="form-control" id="notes-title" placeholder="Title">
+                        <input type="notes-title" class="form-control notes-title" placeholder="Title">
                     </div>
                     <textarea class="notes-textarea form-control" rows="10" placeholder="Enter notes"></textarea>
                 </form>
 
-                <button type="button" class="btn btn-primary notes-save-button pull-right">Save</button>
+                <button id="notes-save-btn" type="button" class="btn btn-primary notes-save-button pull-right">Save</button>
             </div>
         </div>
     </div>

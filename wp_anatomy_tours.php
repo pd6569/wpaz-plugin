@@ -41,7 +41,7 @@ class wpaz_anatomy_tours {
 		add_action('the_post', array($this, 'set_content'));
 		
 		// Ajax hooks
-		add_action('wp_ajax_process_templates', array($this, 'process_template_request' ));
+		add_action('wp_ajax_save_notes', array($this, 'save_notes' ));
 
 
 		register_activation_hook(__FILE__, array($this, 'plugin_activate'));
@@ -55,7 +55,7 @@ class wpaz_anatomy_tours {
 	}
 	public function clear_content($content){
 
-		add_action( 'the_post', 'load_scripts' );
+		add_action( 'the_post', 'my_the_post_action' );
 
 		$layoutFile = WPAZ_ANATOMY_TOURS_PLUGIN_DIR . '/' . self::$TMPL_LAYOUT_3D_TOURS;
 
@@ -117,7 +117,7 @@ class wpaz_anatomy_tours {
 
 	public function enqueue() {
 
-		function load_scripts( $post_object ) {
+		function my_the_post_action( $post_object ) {
 			// modify post object here
 			if ($post_object->post_type == '3d-tours'){
 
@@ -128,6 +128,7 @@ class wpaz_anatomy_tours {
 				// scripts
 				wp_enqueue_script('wpaz_bootstrap', plugins_url('lib/bootstrap.js', __FILE__), null, null, true);
 				wp_enqueue_script('wpaz_handlebars', plugins_url('lib/handlebars-v4.0.5.js', __FILE__), null, null, true);
+				wp_enqueue_script('wpaz_biodigital_human', plugins_url('lib/human-api.min.js', __FILE__), null, null, true);
 				wp_enqueue_script('wpaz_3d_tours_main', plugins_url('js/3dtours.js', __FILE__), array('jquery'), '1.0', true);
 
 				// sends ajax script to wpaz_3d_tours_main script
@@ -138,7 +139,7 @@ class wpaz_anatomy_tours {
 			}
 		}
 
-		add_action( 'the_post', 'load_scripts' );
+		add_action( 'the_post', 'my_the_post_action' );
 	}
 
 	
@@ -162,6 +163,19 @@ class wpaz_anatomy_tours {
 	/**********************
 	 *  AJAX FUNCTIONS    *
 	 **********************/
+
+	public function save_notes(){
+		// first check if data is being sent and that it is the data we want
+		if (!isset($_POST['wpaz_3d_tours_nonce'])) {
+			wp_die('Your request failed permission check.');
+		}
+
+		// success
+		wp_send_json (array(
+			'status' => 'success',
+			'message' => 'Notes saved',
+		));
+	}
 
 	public function process_template_request() {
 		// first check if data is being sent and that it is the data we want
