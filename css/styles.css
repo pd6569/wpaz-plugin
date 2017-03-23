@@ -1,0 +1,21 @@
+
+#main .wf-wrap {
+    width: 100%;
+}
+
+#wpaz-3d-tours-layout .container {
+    width: 100%;
+}
+
+#wpaz-toolbar {
+    margin-bottom: 10px;
+}
+
+#wpaz-notes-container {
+    padding: 10px;
+    border: solid 2px #676a73;
+}
+
+#wpaz-notes-container .notes-save-button {
+    margin-top: 10px;
+}
