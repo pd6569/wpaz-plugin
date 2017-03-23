@@ -38,8 +38,9 @@ class wpaz_anatomy_tours {
 		add_action('init', array($this,'register_anatomy_tours')); //register location content type
 		add_action('admin_enqueue_scripts', array($this,'enqueueAdmin'));
 		add_action('wp_enqueue_scripts', array($this,'enqueue'));
-
-		add_action('the_content', array($this, 'clear_content'));
+		add_action('the_post', array($this, 'set_content'));
+		
+		// Ajax hooks
 		add_action('wp_ajax_process_templates', array($this, 'process_template_request' ));
 
 
@@ -47,7 +48,14 @@ class wpaz_anatomy_tours {
 		register_deactivation_hook(__FILE__, array($this, 'plugin_deactivate'));
 	}
 
+	public function set_content($post_object){
+		if ($post_object->post_type == '3d-tours'){
+			add_action('the_content', array($this, 'clear_content'));
+		}
+	}
 	public function clear_content($content){
+
+		add_action( 'the_post', 'load_scripts' );
 
 		$layoutFile = WPAZ_ANATOMY_TOURS_PLUGIN_DIR . '/' . self::$TMPL_LAYOUT_3D_TOURS;
 
@@ -109,7 +117,7 @@ class wpaz_anatomy_tours {
 
 	public function enqueue() {
 
-		function my_the_post_action( $post_object ) {
+		function load_scripts( $post_object ) {
 			// modify post object here
 			if ($post_object->post_type == '3d-tours'){
 
@@ -130,22 +138,10 @@ class wpaz_anatomy_tours {
 			}
 		}
 
-		add_action( 'the_post', 'my_the_post_action' );
+		add_action( 'the_post', 'load_scripts' );
 	}
 
-	public function process_template_request() {
-		// first check if data is being sent and that it is the data we want
-		if (!isset($_POST['wpaz_3d_tours_nonce'])) {
-			wp_die('Your request failed permission check.');
-		}
-
-		// success
-		wp_send_json (array(
-			'status' => 'success',
-			'message' => 'Your request was processed',
-			'template' => WPAZ_ANATOMY_TOURS_TEMPLATES_URL . '/' . self::$TMPL_ITEM_NOTES_FORM
-		));
-	}
+	
 
 	//triggered on activation of the plugin (called only once)
 	public function plugin_activate() {
@@ -161,6 +157,24 @@ class wpaz_anatomy_tours {
 	public function plugin_deactivate(){
 		//flush permalinks
 		flush_rewrite_rules();
+	}
+	
+	/**********************
+	 *  AJAX FUNCTIONS    *
+	 **********************/
+
+	public function process_template_request() {
+		// first check if data is being sent and that it is the data we want
+		if (!isset($_POST['wpaz_3d_tours_nonce'])) {
+			wp_die('Your request failed permission check.');
+		}
+
+		// success
+		wp_send_json (array(
+			'status' => 'success',
+			'message' => 'Your request was processed',
+			'template' => WPAZ_ANATOMY_TOURS_TEMPLATES_URL . '/' . self::$TMPL_ITEM_NOTES_FORM
+		));
 	}
 }
 
