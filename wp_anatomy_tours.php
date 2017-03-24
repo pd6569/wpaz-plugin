@@ -269,13 +269,24 @@ class wp_az_anatomy_tours {
 
 	public function load_notes(){
 
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'az_anatomy_tours';
+
 		$post_id = intval($_GET['wp_az_post_id']);
 		$order = intval($_GET['wp_az_notes_order']);
 
+		$notes = $wpdb->get_row( "SELECT notes_title, notes_text, notes_order, notes_scene_state FROM $table_name WHERE post_id = $post_id" );
+		$scene_state = stripslashes_deep($notes->notes_scene_state);
 		// success
-		wp_send_json (array(
+		/*wp_send_json (array(
 			'status'    => 'success',
 			'message'   => 'Load notes. post_id ' . $post_id . ' order ' . $order,
+		));*/
+
+		wp_send_json(array (
+			'status' => "success",
+			'notes' => $notes,
+			'scene_state' => $scene_state
 		));
 
 	}

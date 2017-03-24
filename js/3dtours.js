@@ -15,12 +15,16 @@ class AnatomyTour {
         this.sceneState = {};
 
         // notes variables
+        this.notes = {};
+        this.sceneStateString = "";
+        this.decodedSceneState= {};
         this.notesOrder = 1;
 
         this.human.on('human.ready', () => {
             console.log("Human is now ready for action");
             this.setCameraInfo();
             this.setToolbarListeners();
+            this.setSceneState();
         });
 
         // DOM
@@ -32,6 +36,7 @@ class AnatomyTour {
 
             this.human.send('scene.capture', (sceneState) => {
                 this.sceneState = sceneState;
+                console.log("scene.capture : " + JSON.stringify(sceneState));
 
                 let title = this.$notesTitle.val();
                 let notesText = this.$notesText.val();
@@ -70,6 +75,15 @@ class AnatomyTour {
         this.loadNotes();
     }
 
+    setSceneState(){
+        if (this.sceneStateString.length > 0){
+            console.log("sceneStateInfoAvailable: " + this.sceneStateString);
+            let sceneState = JSON.parse(this.sceneStateString);
+            console.log("scene state object:" + JSON.stringify(sceneState));
+            this.human.send("scene.restore", sceneState);
+        }
+    }
+
     loadNotes(){
 
         let data = {
@@ -83,6 +97,11 @@ class AnatomyTour {
             if (response.status == 'success') {
                 // Show success message, then fade out the button after 2 seconds
                 console.log("Success! " + JSON.stringify(response));
+                this.notes = response.notes;
+                this.sceneStateString = response.scene_state;
+
+                this.$notesTitle.val(response.notes.notes_title);
+                this.$notesText.text(response.notes.notes_text);
             } else {
                 // Re-enable the button and revert to original text
                 console.log("Failed. " + JSON.stringify(response));
