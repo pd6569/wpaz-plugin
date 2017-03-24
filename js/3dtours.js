@@ -21,21 +21,31 @@ class AnatomyTour {
         this.sceneStateString = "";
         this.notesOrder = 1;
 
+        // actions varibles
+        this.numActions = 0;
+        this.storedActions = [];
+
         // user
         this.isUserAdmin = ajax_object.wp_az_user_role;
 
         this.human.on('human.ready', () => {
             console.log("Human is now ready for action");
 
-            this.setCameraInfo();
+            this.updateCameraInfo();
             this.setToolbarListeners();
             this.setSceneState();
+            this.registerCallbacks();
         });
 
         // DOM
         this.$notesTitle = jQuery('.notes-title');
         this.$notesText = jQuery('.notes-text');
+        this.$callbackAlert = jQuery('#callback-alert-box');
+        this.$cameraBtn = jQuery('#action-camera');
         this.$saveBtn = jQuery('#notes-save-btn');
+        this.$actionsSequenceContainer = jQuery('#scene-actions .list-group');
+
+        // DOM Event listeners
         this.$saveBtn.on('click', (event) => {
             event.preventDefault();
 
@@ -74,10 +84,41 @@ class AnatomyTour {
 
             });
 
-        })
+        });
+
+        this.$cameraBtn.on('click', (event) => {
+
+            this.numActions++;
+
+            let actionId = "action-" + this.numActions;
+            let $actionItem = jQuery("<li id='" + actionId + "' class='list-group-item'><a>" + this.numActions + ". Updated Camera Position</a></li>")
+
+            event.preventDefault();
+            this.$actionsSequenceContainer.append($actionItem);
+
+            // create new camera action
+            let action = new Action(this.numActions, 'camera', this.cameraInfo.position);
+            this.storedActions.push(action);
+            console.log("action stored: " + JSON.stringify(action));
+
+            $actionItem.on('click', (event) => {
+                this.human.send('camera.set', {
+                    position: action.data,
+                    animate: true
+                })
+            })
+        });
 
         // Load notes data
         this.loadNotes();
+    }
+
+    registerCallbacks() {
+
+        this.human.on("camera.updated", (cameraInfo) => {
+            this.cameraInfo = cameraInfo;
+            this.$callbackAlert.text('Camera position updated - click camera button to store new location').removeClass('hidden');
+        });
     }
 
     setSceneState(){
@@ -141,8 +182,8 @@ class AnatomyTour {
         });
     }
 
-    setCameraInfo() {
-        console.log("setCameraInfo");
+    updateCameraInfo() {
+        console.log("updateCameraInfo");
 
         // set initial variables
         this.human.send("camera.info", (camera) => {

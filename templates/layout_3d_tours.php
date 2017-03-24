@@ -31,7 +31,25 @@
                     <textarea class="notes-text form-control" rows="10" placeholder="Enter notes"></textarea>
                 </form>
 
-                <button id="notes-save-btn" type="button" class="btn btn-primary notes-save-button pull-right">Save</button>
+                <div class="actions-toolbar">
+                    <div class="btn-group" role="group" aria-label="...">
+                        <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                        <button id="action-camera" type="button" class="btn btn-default"><span class="glyphicon glyphicon-camera" aria-hidden="true"></span></button>
+                    </div>
+                </div>
+
+                <div id="callback-alert-box" class="alert alert-info hidden" role="alert"></div>
+
+                <div id="save-btn-container">
+                    <button id="notes-save-btn" type="button" class="btn btn-primary notes-save-button pull-right">Save</button>
+                </div>
+
+                <div id="scene-actions">
+                    <ul class="list-group">
+                        <!--<li class="list-group-item">Action 1</li>
+                        <li class="list-group-item">Action 2</li>-->
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

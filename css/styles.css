@@ -15,6 +15,19 @@
     padding: 10px;
 }
 
+#callback-alert-box {
+    margin-top: 10px;
+    padding: 10px;
+}
+
 #wpaz-notes-container .notes-save-button {
     margin-top: 10px;
+}
+
+#scene-actions .list-group {
+    margin: 0px;
+}
+
+#save-btn-container {
+    height: 55px;
 }
