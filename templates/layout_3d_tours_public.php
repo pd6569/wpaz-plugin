@@ -22,15 +22,13 @@
                 </iframe>
             </div>
             <div id="wpaz-notes-container" class="col-md-4">
-                <h2 class="text-center">Notes</h2>
-                <form>
-                    <div class="form-group">
-                        <input type="notes-title" class="form-control notes-title" placeholder="Title">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="text-center notes-title"></h2>
                     </div>
-                    <textarea class="notes-text form-control" rows="10" placeholder="Enter notes"></textarea>
-                </form>
-
-                <button id="notes-save-btn" type="button" class="btn btn-primary notes-save-button pull-right">Save</button>
+                    <div class="panel-body notes-text">
+                    </div>
+                </div>
             </div>
         </div>
     </div>

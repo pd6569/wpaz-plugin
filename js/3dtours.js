@@ -20,6 +20,9 @@ class AnatomyTour {
         this.decodedSceneState= {};
         this.notesOrder = 1;
 
+        // user
+        this.isUserAdmin = ajax_object.wp_az_user_role;
+
         this.human.on('human.ready', () => {
             console.log("Human is now ready for action");
             this.setCameraInfo();
@@ -29,7 +32,7 @@ class AnatomyTour {
 
         // DOM
         this.$notesTitle = jQuery('.notes-title');
-        this.$notesText = jQuery('.notes-textarea');
+        this.$notesText = jQuery('.notes-text');
         this.$saveBtn = jQuery('#notes-save-btn');
         this.$saveBtn.on('click', (event) => {
             event.preventDefault();
@@ -100,8 +103,14 @@ class AnatomyTour {
                 this.notes = response.notes;
                 this.sceneStateString = response.scene_state;
 
-                this.$notesTitle.val(response.notes.notes_title);
-                this.$notesText.text(response.notes.notes_text);
+                if (this.isUserAdmin) {
+                    this.$notesTitle.val(response.notes.notes_title);
+                    this.$notesText.text(response.notes.notes_text);
+                } else {
+                    this.$notesTitle.text(response.notes.notes_title);
+                    this.$notesText.empty().append(response.notes.notes_text);
+                }
+
             } else {
                 // Re-enable the button and revert to original text
                 console.log("Failed. " + JSON.stringify(response));

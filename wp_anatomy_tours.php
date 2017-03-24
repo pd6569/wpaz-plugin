@@ -33,6 +33,7 @@ class wp_az_anatomy_tours {
 
 	public static $TMPL_ITEM_NOTES_FORM = "item_notes_form.html";
 	public static $TMPL_LAYOUT_3D_TOURS = "/templates/layout_3d_tours.php";
+	public static $TMPL_LAYOUT_3D_TOURS_PUBLIC = "/templates/layout_3d_tours_public.php";
 
 	public function __construct() {
 		$this->hooks();
@@ -47,6 +48,7 @@ class wp_az_anatomy_tours {
 		// Ajax hooks
 		add_action('wp_ajax_save_notes', array($this, 'save_notes' ));
 		add_action('wp_ajax_load_notes', array($this, 'load_notes'));
+		add_action('wp_ajax_nopriv_load_notes', array($this, 'load_notes'));
 
 		register_activation_hook(__FILE__, array($this, 'plugin_activate'));
 		register_deactivation_hook(__FILE__, array($this, 'plugin_deactivate'));
@@ -64,7 +66,11 @@ class wp_az_anatomy_tours {
 
 		add_action( 'the_post', 'my_the_post_action' );
 
-		$layoutFile = WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . '/' . self::$TMPL_LAYOUT_3D_TOURS;
+		if (current_user_can('administrator')) :
+			$layoutFile = WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . '/' . self::$TMPL_LAYOUT_3D_TOURS;
+		else :
+			$layoutFile = WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . '/' . self::$TMPL_LAYOUT_3D_TOURS_PUBLIC;
+		endif;
 
 		$content = wp_az_return_output($layoutFile);
 
@@ -143,7 +149,8 @@ class wp_az_anatomy_tours {
 				wp_localize_script( 'wp_az_3d_tours_main', 'ajax_object', array(
 					'wp_az_ajax_url'         => admin_url('admin-ajax.php'),
 					'wp_az_3d_tours_nonce'   => wp_create_nonce('wp_az_3d_tours_nonce'),
-					'wp_az_post_id'          => $post_object->ID
+					'wp_az_post_id'          => $post_object->ID,
+					'wp_az_user_role'        => current_user_can('administrator')
 				));
 			}
 		}
@@ -219,7 +226,7 @@ class wp_az_anatomy_tours {
 		$post_id = intval($_POST['wp_az_post_id']);
 		$notes_title = $_POST['wp_az_notes_title'];
 		$notes_text = $_POST['wp_az_notes_text'];
-		$notes_scene_state = $_POST['wp_az_notes_scene_state'];
+		$notes_scene_state = stripslashes_deep($_POST['wp_az_notes_scene_state']);
 		$notes_order = $_POST['wp_az_notes_order'];
 
 
