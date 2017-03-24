@@ -143,6 +143,7 @@ class wp_az_anatomy_tours {
 				wp_enqueue_script('wp_az_bootstrap', plugins_url('lib/bootstrap.js', __FILE__), null, null, true);
 				wp_enqueue_script('wp_az_handlebars', plugins_url('lib/handlebars-v4.0.5.js', __FILE__), null, null, true);
 				wp_enqueue_script('wp_az_biodigital_human', plugins_url('lib/human-api.min.js', __FILE__), null, null, true);
+				wp_enqueue_script('wp_az_biodigital_human_components', plugins_url('lib/human-components.min.js', __FILE__), null, null, true);
 				wp_enqueue_script('wp_az_3d_tours_main', plugins_url('js/3dtours.js', __FILE__), array('jquery'), '1.0', true);
 
 				// sends ajax script to wp_az_3d_tours_main script

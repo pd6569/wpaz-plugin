@@ -26,7 +26,7 @@
                     <div class="panel-heading">
                         <h2 class="text-center notes-title"></h2>
                     </div>
-                    <div class="panel-body notes-text">
+                    <div class="panel-body notes-text" data-scantext data-target="embedded-human">
                     </div>
                 </div>
             </div>

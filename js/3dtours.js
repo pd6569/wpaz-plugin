@@ -9,6 +9,7 @@ class AnatomyTour {
 
         // get BioDigital Human
         this.human = new HumanAPI("embedded-human");
+        this.$humanWidget = jQuery('#embedded-human');
 
         // 3d model variables
         this.cameraInfo = {};
@@ -109,6 +110,12 @@ class AnatomyTour {
                 } else {
                     this.$notesTitle.text(response.notes.notes_title);
                     this.$notesText.empty().append(response.notes.notes_text);
+
+                    //ignores 'left', 'right', and 'bones of the' when searching for matching anatomy objects.
+                    let toStrip = /^left\s|right\s|bones\sof\sthe\s/i;
+
+                    //outputs <button class="anatomy-object" data-id="OBJECT_ID">OBJECT DISPLAY NAME</button>
+                    this.$humanWidget.scanner({toStrip: toStrip, formatData: 'focus'});
                 }
 
             } else {
