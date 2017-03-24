@@ -5,6 +5,7 @@
                 <div class="btn-group" role="group" aria-label="...">
                     <button id="toolbar-zoom-in" type="button" class="btn btn-default">Zoom In</button>
                     <button id="toolbar-zoom-out" type="button" class="btn btn-default">Zoom Out</button>
+                    <button id="toolbar-reset" type="button" class="btn btn-default">Reset</button>
                 </div>
             </div>
         </div>

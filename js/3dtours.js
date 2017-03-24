@@ -13,12 +13,12 @@ class AnatomyTour {
 
         // 3d model variables
         this.cameraInfo = {};
-        this.sceneState = {};
+        this.currentSceneState = {};
+        this.resetSceneState = {};
 
         // notes variables
         this.notes = {};
         this.sceneStateString = "";
-        this.decodedSceneState= {};
         this.notesOrder = 1;
 
         // user
@@ -26,6 +26,7 @@ class AnatomyTour {
 
         this.human.on('human.ready', () => {
             console.log("Human is now ready for action");
+
             this.setCameraInfo();
             this.setToolbarListeners();
             this.setSceneState();
@@ -39,13 +40,13 @@ class AnatomyTour {
             event.preventDefault();
 
             this.human.send('scene.capture', (sceneState) => {
-                this.sceneState = sceneState;
+                this.currentSceneState = sceneState;
                 console.log("scene.capture : " + JSON.stringify(sceneState));
 
                 let title = this.$notesTitle.val();
                 let notesText = this.$notesText.val();
                 let notesOrder = this.notesOrder;
-                let sceneStateString = JSON.stringify(this.sceneState);
+                let sceneStateString = JSON.stringify(this.currentSceneState);
 
                 //!* Data to make available via the $_POST variable
                 let data = {
@@ -80,11 +81,19 @@ class AnatomyTour {
     }
 
     setSceneState(){
+        console.log("setSceneState");
         if (this.sceneStateString.length > 0){
-            console.log("sceneStateInfoAvailable: " + this.sceneStateString);
+            console.log("setSceneState restore previous scene state");
             let sceneState = JSON.parse(this.sceneStateString);
-            console.log("scene state object:" + JSON.stringify(sceneState));
             this.human.send("scene.restore", sceneState);
+
+            // save scene as reset point
+            this.resetSceneState = sceneState;
+        } else {
+            console.log("setSceneState no previous state to restore, set reset point");
+            this.human.send('scene.capture', (sceneState) => {
+               this.resetSceneState = sceneState;
+            });
         }
     }
 
@@ -102,21 +111,28 @@ class AnatomyTour {
                 // Show success message, then fade out the button after 2 seconds
                 console.log("Success! " + JSON.stringify(response));
                 this.notes = response.notes;
-                this.sceneStateString = response.scene_state;
+                response.scene_state != null ? this.sceneStateString = response.scene_state : this.sceneStateString = "";
 
-                if (this.isUserAdmin) {
-                    this.$notesTitle.val(response.notes.notes_title);
-                    this.$notesText.text(response.notes.notes_text);
-                } else {
-                    this.$notesTitle.text(response.notes.notes_title);
-                    this.$notesText.empty().append(response.notes.notes_text);
+                if (response.notes){
+                    if (this.isUserAdmin) {
+                        this.$notesTitle.val(response.notes.notes_title);
+                        this.$notesText.text(response.notes.notes_text);
+                    } else {
+                        this.$notesTitle.text(response.notes.notes_title);
+                        this.$notesText.empty().append(response.notes.notes_text);
 
-                    //ignores 'left', 'right', and 'bones of the' when searching for matching anatomy objects.
-                    let toStrip = /^left\s|right\s|bones\sof\sthe\s/i;
+                        //ignores 'left', 'right', and 'bones of the' when searching for matching anatomy objects.
+                        let toStrip = /^left\s|right\s|bones\sof\sthe\s/i;
 
-                    //outputs <button class="anatomy-object" data-id="OBJECT_ID">OBJECT DISPLAY NAME</button>
-                    this.$humanWidget.scanner({toStrip: toStrip, formatData: 'focus'});
+                        this.$humanWidget.scanner({toStrip: toStrip, formatData: {
+                            prefix: function(dataId) {
+                                return '<a class="anatomy-object" data-id="' + dataId + '">'
+                            },
+                            suffix: "</a>"
+                        }});
+                    }
                 }
+
 
             } else {
                 // Re-enable the button and revert to original text
@@ -141,6 +157,7 @@ class AnatomyTour {
 
         let $toolbarZoomIn = jQuery('#toolbar-zoom-in');
         let $toolbarZoomOut = jQuery('#toolbar-zoom-out');
+        let $toolbarReset = jQuery('#toolbar-reset');
 
         $toolbarZoomIn.on('click', event => {
             console.log("zoom in. current zoom " + this.cameraInfo.zoom);
@@ -155,6 +172,11 @@ class AnatomyTour {
             this.human.send("camera.zoom", newZoom);
             this.cameraInfo.zoom = newZoom;
         });
+
+        $toolbarReset.on('click', event => {
+            console.log("reset scene");
+            this.human.send("scene.restore", this.resetSceneState);
+        })
 
     }
 }
