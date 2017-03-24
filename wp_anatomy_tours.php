@@ -163,27 +163,9 @@ class wp_az_anatomy_tours {
 		flush_rewrite_rules();
 
 		//create database entry
-		global $wpdb;
-		global $wp_az_db_version;
+		$this->create_db();
 
-		$table_name = $wpdb->prefix . 'az_anatomy_tours';
 
-		$charset_collate = $wpdb->get_charset_collate();
-
-		$sql = "CREATE TABLE $table_name (
-		id mediumint(9) NOT NULL AUTO_INCREMENT,
-		notes_time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-		notes_title tinytext NOT NULL,
-		notes_text text NOT NULL,
-		notes_order tinyint NOT NULL,
-		notes_scene_state text NOT NULL,
-		PRIMARY KEY  (id)
-		) $charset_collate;";
-
-		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-		dbDelta( $sql );
-
-		add_option('wp_az_db_version', $wp_az_db_version);
 	}
 
 	// triggered on deactivation of the plugin (called only once)
@@ -199,22 +181,27 @@ class wp_az_anatomy_tours {
 	private function create_db(){
 
 		global $wpdb;
+		global $wp_az_db_version;
+
+		$table_name = $wpdb->prefix . 'az_anatomy_tours';
+
 		$charset_collate = $wpdb->get_charset_collate();
-		$table_name = $wpdb->prefix . 'az_notes';
 
 		$sql = "CREATE TABLE $table_name (
-			note_id mediumint(9) NOT NULL AUTO_INCREMENT,
-			post_id mediumint(6) NOT NULL,
-			note_title varchar(55),
-			note_text text,
-			note_scene_state json,
-			note_order tinyint(2) DEFAULT '0' NOT NULL,
-			note_date datetime NOT NULL,
-			PRIMARY KEY  (id)
+		id mediumint(9) NOT NULL AUTO_INCREMENT,
+		post_id mediumint(9) NOT NULL,
+		notes_time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+		notes_title tinytext NOT NULL,
+		notes_text text NOT NULL,
+		notes_order tinyint NOT NULL,
+		notes_scene_state text,
+		PRIMARY KEY  (id)
 		) $charset_collate;";
 
-		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-		dbDelta($sql);
+		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		dbDelta( $sql );
+
+		add_option('wp_az_db_version', $wp_az_db_version);
 
 	}
 	
@@ -232,6 +219,53 @@ class wp_az_anatomy_tours {
 		$post_id = intval($_POST['wp_az_post_id']);
 		$notes_title = $_POST['wp_az_notes_title'];
 		$notes_text = $_POST['wp_az_notes_text'];
+		$notes_scene_state = $_POST['wp_az_notes_scene_state'];
+		$notes_order = $_POST['wp_az_notes_order'];
+
+
+		// write to database
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . 'az_anatomy_tours';
+
+		if ($wpdb->get_row( "SELECT * FROM $table_name WHERE post_id = $post_id AND notes_order = $notes_order" )){
+			// Update
+			$wpdb->update(
+				$table_name,
+				array(
+					'post_id'           => $post_id,
+					'notes_time'        => current_time( 'mysql' ),
+					'notes_title'       => $notes_title,
+					'notes_text'        => $notes_text,
+					'notes_order'       => $notes_order,
+					'notes_scene_state' => $notes_scene_state
+				),
+				array (
+					post_id => $post_id,
+					notes_order => $notes_order
+				)
+			);
+		} else {
+			//Insert
+			$wpdb->insert(
+				$table_name,
+				array(
+					'post_id'           => $post_id,
+					'notes_time'        => current_time( 'mysql' ),
+					'notes_title'       => $notes_title,
+					'notes_text'        => $notes_text,
+					'notes_order'       => $notes_order,
+					'notes_scene_state' => $notes_scene_state
+				)
+			);
+
+		};
+		
+		
+
+
+
+
 
 		// success
 		wp_send_json (array(
@@ -240,7 +274,9 @@ class wp_az_anatomy_tours {
 			'id'    => $post_id,
 			'title' => $notes_title,
 			'text' => $notes_text,
+			'order' => $notes_order,
 		));
+
 
 	}
 
