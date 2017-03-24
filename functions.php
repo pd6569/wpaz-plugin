@@ -6,7 +6,7 @@
  * Time: 09:47
  */
 
-function wpaz_return_output($file){
+function wp_az_return_output($file){
 	ob_start();
 	include $file;
 	return ob_get_clean();

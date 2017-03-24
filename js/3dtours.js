@@ -26,18 +26,24 @@ class AnatomyTour {
         this.$saveBtn.on('click', (event) => {
             event.preventDefault();
 
+            this.human.send('scene.capture', (sceneState) => {
+                console.log("sceneState: " + JSON.stringify(sceneState));
+            });
+
             let title = this.$notesTitle.val();
             let notesText = this.$notesText.val();
 
-            console.log("save notes clicked. title: " + title + " text: " + notesText);
             //!* Data to make available via the $_POST variable
             let data = {
                 action: 'save_notes',
-                wpaz_3d_tours_nonce: ajax_object.wpaz_3d_tours_nonce
+                wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
+                wp_az_post_id: ajax_object.wp_az_post_id,
+                wp_az_notes_title: title,
+                wp_az_notes_text: notesText
             };
 
             //!* Process the AJAX POST request
-            jQuery.post(ajax_object.wpaz_ajax_url, data, response => {
+            jQuery.post(ajax_object.wp_az_ajax_url, data, response => {
                 if (response.status == 'success') {
                     // Show success message, then fade out the button after 2 seconds
                     console.log("Success! " + JSON.stringify(response));
@@ -46,6 +52,8 @@ class AnatomyTour {
                     console.log("Failed. " + JSON.stringify(response));
                 }
             });
+
+
 
         })
 
@@ -56,11 +64,11 @@ class AnatomyTour {
          //!* Data to make available via the $_POST variable
          let data = {
          action: 'process_templates',
-         wpaz_3d_tours_nonce: ajax_object.wpaz_3d_tours_nonce
+         wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce
          };
 
          //!* Process the AJAX POST request
-         jQuery.post(ajax_object.wpaz_ajax_url, data, response => {
+         jQuery.post(ajax_object.wp_az_ajax_url, data, response => {
          if ( response.status == 'success' ) {
          // Show success message, then fade out the button after 2 seconds
          console.log("Success " + JSON.stringify(response));

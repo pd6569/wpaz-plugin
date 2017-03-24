@@ -15,17 +15,22 @@ if (!defined( 'ABSPATH')) {
 	exit;
 }
 
-define('WPAZ_ANATOMY_TOURS_PLUGIN_DIR', untrailingslashit(plugin_dir_path(__FILE__)));
-define('WPAZ_ANATOMY_TOURS_PLUGIN_URL', plugin_dir_url(__FILE__));
-define('WPAZ_ANATOMY_TOURS_TEMPLATES_URL', plugin_dir_url(__FILE__) . 'templates');
-define('WPAZ_ANATOMY_TOURS_PLUGIN_FILE', __FILE__);
-define('WPAZ_ANATOMY_TOURS_PLUGIN_BASENAME', plugin_basename(__FILE__));
-define('WPAZ_ANATOMY_TOURS_VERSION', 1.0);
 
-require_once (WPAZ_ANATOMY_TOURS_PLUGIN_DIR . '\functions.php');
+define('WP_AZ_ANATOMY_TOURS_PLUGIN_DIR', untrailingslashit(plugin_dir_path(__FILE__)));
+define('WP_AZ_ANATOMY_TOURS_PLUGIN_URL', plugin_dir_url(__FILE__));
+define('WP_AZ_ANATOMY_TOURS_TEMPLATES_URL', plugin_dir_url(__FILE__) . 'templates');
+define('WP_AZ_ANATOMY_TOURS_PLUGIN_FILE', __FILE__);
+define('WP_AZ_ANATOMY_TOURS_PLUGIN_BASENAME', plugin_basename(__FILE__));
+define('WP_AZ_ANATOMY_TOURS_VERSION', 1.0);
+
+require_once ( WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . '\functions.php');
+
+// Database
+global $wp_az_db_version;
+$wp_az_db_version = '1.0';
 
 
-class wpaz_anatomy_tours {
+class wp_az_anatomy_tours {
 
 	public static $TMPL_ITEM_NOTES_FORM = "item_notes_form.html";
 	public static $TMPL_LAYOUT_3D_TOURS = "/templates/layout_3d_tours.php";
@@ -49,7 +54,9 @@ class wpaz_anatomy_tours {
 	}
 
 	public function set_content($post_object){
+
 		if ($post_object->post_type == '3d-tours'){
+
 			add_action('the_content', array($this, 'clear_content'));
 		}
 	}
@@ -57,9 +64,9 @@ class wpaz_anatomy_tours {
 
 		add_action( 'the_post', 'my_the_post_action' );
 
-		$layoutFile = WPAZ_ANATOMY_TOURS_PLUGIN_DIR . '/' . self::$TMPL_LAYOUT_3D_TOURS;
+		$layoutFile = WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . '/' . self::$TMPL_LAYOUT_3D_TOURS;
 
-		$content = wpaz_return_output($layoutFile);
+		$content = wp_az_return_output($layoutFile);
 
 		return $content;
 	}
@@ -118,23 +125,25 @@ class wpaz_anatomy_tours {
 	public function enqueue() {
 
 		function my_the_post_action( $post_object ) {
+
 			// modify post object here
 			if ($post_object->post_type == '3d-tours'){
 
 				// styles
-				wp_enqueue_style('wpaz_bootstrap', plugins_url('css/bootstrap.css', __FILE__));
-				wp_enqueue_style('wpaz_3d_tours_main_style', plugins_url('css/styles.css', __FILE__), null, '1.0');
+				wp_enqueue_style('wp_az_bootstrap', plugins_url('css/bootstrap.css', __FILE__));
+				wp_enqueue_style('wp_az_3d_tours_main_style', plugins_url('css/styles.css', __FILE__), null, '1.0');
 
 				// scripts
-				wp_enqueue_script('wpaz_bootstrap', plugins_url('lib/bootstrap.js', __FILE__), null, null, true);
-				wp_enqueue_script('wpaz_handlebars', plugins_url('lib/handlebars-v4.0.5.js', __FILE__), null, null, true);
-				wp_enqueue_script('wpaz_biodigital_human', plugins_url('lib/human-api.min.js', __FILE__), null, null, true);
-				wp_enqueue_script('wpaz_3d_tours_main', plugins_url('js/3dtours.js', __FILE__), array('jquery'), '1.0', true);
+				wp_enqueue_script('wp_az_bootstrap', plugins_url('lib/bootstrap.js', __FILE__), null, null, true);
+				wp_enqueue_script('wp_az_handlebars', plugins_url('lib/handlebars-v4.0.5.js', __FILE__), null, null, true);
+				wp_enqueue_script('wp_az_biodigital_human', plugins_url('lib/human-api.min.js', __FILE__), null, null, true);
+				wp_enqueue_script('wp_az_3d_tours_main', plugins_url('js/3dtours.js', __FILE__), array('jquery'), '1.0', true);
 
-				// sends ajax script to wpaz_3d_tours_main script
-				wp_localize_script( 'wpaz_3d_tours_main', 'ajax_object', array(
-					'wpaz_ajax_url'         => admin_url('admin-ajax.php'),
-					'wpaz_3d_tours_nonce'   => wp_create_nonce('wpaz_3d_tours_nonce')
+				// sends ajax script to wp_az_3d_tours_main script
+				wp_localize_script( 'wp_az_3d_tours_main', 'ajax_object', array(
+					'wp_az_ajax_url'         => admin_url('admin-ajax.php'),
+					'wp_az_3d_tours_nonce'   => wp_create_nonce('wp_az_3d_tours_nonce'),
+					'wp_az_post_id'          => $post_object->ID
 				));
 			}
 		}
@@ -152,6 +161,29 @@ class wpaz_anatomy_tours {
 
 		// flush permalinks
 		flush_rewrite_rules();
+
+		//create database entry
+		global $wpdb;
+		global $wp_az_db_version;
+
+		$table_name = $wpdb->prefix . 'az_anatomy_tours';
+
+		$charset_collate = $wpdb->get_charset_collate();
+
+		$sql = "CREATE TABLE $table_name (
+		id mediumint(9) NOT NULL AUTO_INCREMENT,
+		notes_time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+		notes_title tinytext NOT NULL,
+		notes_text text NOT NULL,
+		notes_order tinyint NOT NULL,
+		notes_scene_state text NOT NULL,
+		PRIMARY KEY  (id)
+		) $charset_collate;";
+
+		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		dbDelta( $sql );
+
+		add_option('wp_az_db_version', $wp_az_db_version);
 	}
 
 	// triggered on deactivation of the plugin (called only once)
@@ -159,27 +191,62 @@ class wpaz_anatomy_tours {
 		//flush permalinks
 		flush_rewrite_rules();
 	}
+
+	/*********************
+	 * PRIVATE FUNCTIONS *
+	 *********************/
+
+	private function create_db(){
+
+		global $wpdb;
+		$charset_collate = $wpdb->get_charset_collate();
+		$table_name = $wpdb->prefix . 'az_notes';
+
+		$sql = "CREATE TABLE $table_name (
+			note_id mediumint(9) NOT NULL AUTO_INCREMENT,
+			post_id mediumint(6) NOT NULL,
+			note_title varchar(55),
+			note_text text,
+			note_scene_state json,
+			note_order tinyint(2) DEFAULT '0' NOT NULL,
+			note_date datetime NOT NULL,
+			PRIMARY KEY  (id)
+		) $charset_collate;";
+
+		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+		dbDelta($sql);
+
+	}
 	
 	/**********************
 	 *  AJAX FUNCTIONS    *
 	 **********************/
 
 	public function save_notes(){
+
 		// first check if data is being sent and that it is the data we want
-		if (!isset($_POST['wpaz_3d_tours_nonce'])) {
+		if (!isset($_POST['wp_az_3d_tours_nonce']) || !isset($_POST['wp_az_notes_title']) || !isset($_POST['wp_az_notes_text'])) {
 			wp_die('Your request failed permission check.');
 		}
+
+		$post_id = intval($_POST['wp_az_post_id']);
+		$notes_title = $_POST['wp_az_notes_title'];
+		$notes_text = $_POST['wp_az_notes_text'];
 
 		// success
 		wp_send_json (array(
 			'status' => 'success',
 			'message' => 'Notes saved',
+			'id'    => $post_id,
+			'title' => $notes_title,
+			'text' => $notes_text,
 		));
+
 	}
 
 	public function process_template_request() {
 		// first check if data is being sent and that it is the data we want
-		if (!isset($_POST['wpaz_3d_tours_nonce'])) {
+		if (!isset($_POST['wp_az_3d_tours_nonce'])) {
 			wp_die('Your request failed permission check.');
 		}
 
@@ -187,11 +254,11 @@ class wpaz_anatomy_tours {
 		wp_send_json (array(
 			'status' => 'success',
 			'message' => 'Your request was processed',
-			'template' => WPAZ_ANATOMY_TOURS_TEMPLATES_URL . '/' . self::$TMPL_ITEM_NOTES_FORM
+			'template' => WP_AZ_ANATOMY_TOURS_TEMPLATES_URL . '/' . self::$TMPL_ITEM_NOTES_FORM
 		));
 	}
 }
 
 global $anatomy_tours;
 
-$anatomy_tours = new wpaz_anatomy_tours();
+$anatomy_tours = new wp_az_anatomy_tours();
