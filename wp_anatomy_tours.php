@@ -227,45 +227,32 @@ class wp_az_anatomy_tours {
 		global $wpdb;
 
 		$table_name = $wpdb->prefix . 'az_anatomy_tours';
+		$notes_data = array (
+			'post_id'           => $post_id,
+			'notes_time'        => current_time('mysql'),
+			'notes_title'       => $notes_title,
+			'notes_text'        => $notes_text,
+			'notes_order'       => $notes_order,
+			'notes_scene_state' => $notes_scene_state
+		);
 
-		if ($wpdb->get_row( "SELECT * FROM $table_name WHERE post_id = $post_id AND notes_order = $notes_order" )){
-			// Update
-			$wpdb->update(
+		// try to update notes if available
+		$update = $wpdb->update(
 				$table_name,
-				array(
-					'post_id'           => $post_id,
-					'notes_time'        => current_time( 'mysql' ),
-					'notes_title'       => $notes_title,
-					'notes_text'        => $notes_text,
-					'notes_order'       => $notes_order,
-					'notes_scene_state' => $notes_scene_state
-				),
+				$notes_data,
 				array (
 					post_id => $post_id,
 					notes_order => $notes_order
 				)
 			);
-		} else {
-			//Insert
+
+		// insert new notes if no record exists
+		if (!$update) {
 			$wpdb->insert(
 				$table_name,
-				array(
-					'post_id'           => $post_id,
-					'notes_time'        => current_time( 'mysql' ),
-					'notes_title'       => $notes_title,
-					'notes_text'        => $notes_text,
-					'notes_order'       => $notes_order,
-					'notes_scene_state' => $notes_scene_state
-				)
+				$notes_data
 			);
-
-		};
-		
-		
-
-
-
-
+		}
 
 		// success
 		wp_send_json (array(
