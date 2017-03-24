@@ -15,7 +15,6 @@ if (!defined( 'ABSPATH')) {
 	exit;
 }
 
-
 define('WP_AZ_ANATOMY_TOURS_PLUGIN_DIR', untrailingslashit(plugin_dir_path(__FILE__)));
 define('WP_AZ_ANATOMY_TOURS_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('WP_AZ_ANATOMY_TOURS_TEMPLATES_URL', plugin_dir_url(__FILE__) . 'templates');
@@ -47,7 +46,7 @@ class wp_az_anatomy_tours {
 		
 		// Ajax hooks
 		add_action('wp_ajax_save_notes', array($this, 'save_notes' ));
-
+		add_action('wp_ajax_load_notes', array($this, 'load_notes'));
 
 		register_activation_hook(__FILE__, array($this, 'plugin_activate'));
 		register_deactivation_hook(__FILE__, array($this, 'plugin_deactivate'));
@@ -60,6 +59,7 @@ class wp_az_anatomy_tours {
 			add_action('the_content', array($this, 'clear_content'));
 		}
 	}
+
 	public function clear_content($content){
 
 		add_action( 'the_post', 'my_the_post_action' );
@@ -256,14 +256,27 @@ class wp_az_anatomy_tours {
 
 		// success
 		wp_send_json (array(
-			'status' => 'success',
-			'message' => 'Notes saved',
-			'id'    => $post_id,
-			'title' => $notes_title,
-			'text' => $notes_text,
-			'order' => $notes_order,
+			'status'    => 'success',
+			'message'   => 'Notes saved',
+			'id'        => $post_id,
+			'title'     => $notes_title,
+			'text'      => $notes_text,
+			'order'     => $notes_order,
 		));
 
+
+	}
+
+	public function load_notes(){
+
+		$post_id = intval($_GET['wp_az_post_id']);
+		$order = intval($_GET['wp_az_notes_order']);
+
+		// success
+		wp_send_json (array(
+			'status'    => 'success',
+			'message'   => 'Load notes. post_id ' . $post_id . ' order ' . $order,
+		));
 
 	}
 

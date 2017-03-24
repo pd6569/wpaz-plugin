@@ -64,9 +64,30 @@ class AnatomyTour {
 
             });
 
-
         })
 
+        // Load notes data
+        this.loadNotes();
+    }
+
+    loadNotes(){
+
+        let data = {
+            action: 'load_notes',
+            wp_az_post_id: ajax_object.wp_az_post_id,
+            wp_az_notes_order: this.notesOrder
+        };
+
+        //!* Process the AJAX GET request
+        jQuery.get(ajax_object.wp_az_ajax_url, data, response => {
+            if (response.status == 'success') {
+                // Show success message, then fade out the button after 2 seconds
+                console.log("Success! " + JSON.stringify(response));
+            } else {
+                // Re-enable the button and revert to original text
+                console.log("Failed. " + JSON.stringify(response));
+            }
+        });
     }
 
     setCameraInfo() {
