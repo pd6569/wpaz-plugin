@@ -15,6 +15,8 @@ class AnatomyTour {
         this.cameraInfo = {};
         this.currentSceneState = {};
         this.resetSceneState = {};
+        this.sceneInfo = {};
+        this.sceneObjects = {};
 
         // notes variables
         this.notes = {};
@@ -33,7 +35,9 @@ class AnatomyTour {
 
             this.updateCameraInfo();
             this.setToolbarListeners();
-            this.setSceneState();
+            this.setInitialSceneState((sceneState) => {
+                this.sceneObjects = sceneState.objects;
+            });
             this.registerCallbacks();
         });
 
@@ -41,7 +45,7 @@ class AnatomyTour {
         this.$notesTitle = jQuery('.notes-title');
         this.$notesText = jQuery('.notes-text');
         this.$callbackAlert = jQuery('#callback-alert-box');
-        this.$cameraBtn = jQuery('#action-camera');
+        this.$addAction = jQuery('#action-add');
         this.$saveBtn = jQuery('#notes-save-btn');
         this.$actionsSequenceContainer = jQuery('#scene-actions .list-group');
 
@@ -86,7 +90,7 @@ class AnatomyTour {
 
         });
 
-        this.$cameraBtn.on('click', (event) => {
+        this.$addAction.on('click', (event) => {
 
             this.numActions++;
 
@@ -133,17 +137,21 @@ class AnatomyTour {
             // create new generic action
             this.getSceneState((sceneState) => {
                 let genAction = new Action(this.numActions, 'general', sceneState);
-                console.log("saved scene state: " + JSON.stringify(sceneState));
+                console.log("Scene state saved as action: " + JSON.stringify(sceneState));
 
                 $actionItem.on('click', (event) => {
                     event.preventDefault();
 
-                    this.human.send('scene.restore', sceneState);
-                    /*this.human.send('camera.set', {
+                    this.human.send('camera.set', {
                         position: genAction.data.camera.eye,
+                        target: genAction.data.camera.look,
                         up: genAction.data.camera.up,
                         animate: true
-                    })*/
+                    }, () => {
+                        this.human.send('scene.restore', sceneState)
+                    });
+
+
 
                 })
 
@@ -156,12 +164,28 @@ class AnatomyTour {
         this.loadNotes();
     }
 
+    getCameraInfoFromSceneState(sceneState) {
+        return sceneState.eye;
+    }
+
+    getObjectsFromSceneState(sceneState) {
+        return sceneState.objects;
+    }
+
     registerCallbacks() {
 
         this.human.on("camera.updated", (cameraInfo) => {
             this.cameraInfo = cameraInfo;
             this.$callbackAlert.text('Camera position updated - click camera button to store new location').removeClass('hidden');
         });
+    }
+
+    getSceneInfo (callback) {
+        console.log("getSceneInfo");
+        this.human.send('scene.info', (sceneInfo) => {
+            callback(sceneInfo);
+            return sceneInfo;
+        })
     }
 
     getSceneState(callback){
@@ -172,20 +196,22 @@ class AnatomyTour {
         })
     }
 
-    setSceneState(){
-        console.log("setSceneState");
+    setInitialSceneState(callback){
+        console.log("setInitialSceneState");
         if (this.sceneStateString.length > 0){
-            console.log("setSceneState restore previous scene state");
+            console.log("setInitialSceneState restore previous scene state");
             let sceneState = JSON.parse(this.sceneStateString);
             this.human.send("scene.restore", sceneState);
 
             // save scene as reset point
             this.resetSceneState = sceneState;
+            callback(sceneState);
         } else {
-            console.log("setSceneState no previous state to restore, set reset point");
+            console.log("setInitialSceneState no previous state to restore, set reset point");
             this.human.send('scene.capture', (sceneState) => {
                this.resetSceneState = sceneState;
             });
+            callback(sceneState);
         }
     }
 
@@ -201,7 +227,7 @@ class AnatomyTour {
         jQuery.get(ajax_object.wp_az_ajax_url, data, response => {
             if (response.status == 'success') {
                 // Show success message, then fade out the button after 2 seconds
-                console.log("Success! " + JSON.stringify(response));
+                console.log("loadNotes success!");
                 this.notes = response.notes;
                 response.scene_state != null ? this.sceneStateString = response.scene_state : this.sceneStateString = "";
 

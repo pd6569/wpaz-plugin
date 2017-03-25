@@ -33,8 +33,7 @@
 
                 <div class="actions-toolbar">
                     <div class="btn-group" role="group" aria-label="...">
-                        <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-                        <button id="action-camera" type="button" class="btn btn-default"><span class="glyphicon glyphicon-camera" aria-hidden="true"></span></button>
+                        <button id="action-add" type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
                     </div>
                 </div>
 
