@@ -90,23 +90,66 @@ class AnatomyTour {
 
             this.numActions++;
 
-            let actionId = "action-" + this.numActions;
+            /*let actionId = "action-" + this.numActions;
             let $actionItem = jQuery("<li id='" + actionId + "' class='list-group-item'><a>" + this.numActions + ". Updated Camera Position</a></li>")
 
             event.preventDefault();
             this.$actionsSequenceContainer.append($actionItem);
 
             // create new camera action
-            let action = new Action(this.numActions, 'camera', this.cameraInfo.position);
+            let action = new Action(this.numActions, 'camera', this.cameraInfo);
             this.storedActions.push(action);
             console.log("action stored: " + JSON.stringify(action));
 
             $actionItem.on('click', (event) => {
                 this.human.send('camera.set', {
-                    position: action.data,
+                    position: action.data.position,
+                    up: action.data.up,
+                    animate: true
+                })
+            })*/
+
+
+            let actionId = "action-" + this.numActions;
+            let $actionItem = jQuery("<li id='" + actionId + "' class='list-group-item'><a>" + this.numActions + ". Updated Camera Position</a></li>")
+
+            event.preventDefault();
+            this.$actionsSequenceContainer.append($actionItem);
+
+            /*// create new camera action
+            let action = new Action(this.numActions, 'camera', this.cameraInfo);
+            this.storedActions.push(action);
+            console.log("action stored: " + JSON.stringify(action));
+
+            $actionItem.on('click', (event) => {
+                this.human.send('camera.set', {
+                    position: action.data.position,
+                    up: action.data.up,
                     animate: true
                 })
             })
+            */
+
+            // create new generic action
+            this.getSceneState((sceneState) => {
+                let genAction = new Action(this.numActions, 'general', sceneState);
+                console.log("saved scene state: " + JSON.stringify(sceneState));
+
+                $actionItem.on('click', (event) => {
+                    event.preventDefault();
+
+                    this.human.send('scene.restore', sceneState);
+                    /*this.human.send('camera.set', {
+                        position: genAction.data.camera.eye,
+                        up: genAction.data.camera.up,
+                        animate: true
+                    })*/
+
+                })
+
+            });
+
+
         });
 
         // Load notes data
@@ -119,6 +162,14 @@ class AnatomyTour {
             this.cameraInfo = cameraInfo;
             this.$callbackAlert.text('Camera position updated - click camera button to store new location').removeClass('hidden');
         });
+    }
+
+    getSceneState(callback){
+
+        this.human.send('scene.capture', (sceneState) => {
+            callback(sceneState);
+            return sceneState;
+        })
     }
 
     setSceneState(){
