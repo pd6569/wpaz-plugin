@@ -42,6 +42,8 @@ class AnatomyTour {
         });
 
         // DOM
+        this.$notesContainer = jQuery('#wpaz-notes-container');
+        this.$postTitle = jQuery('.post-title');
         this.$notesTitle = jQuery('.notes-title');
         this.$notesText = jQuery('.notes-text');
         this.$callbackAlert = jQuery('#callback-alert-box');
@@ -217,6 +219,8 @@ class AnatomyTour {
 
     loadNotes(){
 
+        Utils.showLoading(jQuery('#wpaz-notes'));
+
         let data = {
             action: 'load_notes',
             wp_az_post_id: ajax_object.wp_az_post_id,
@@ -225,6 +229,8 @@ class AnatomyTour {
 
         //!* Process the AJAX GET request
         jQuery.get(ajax_object.wp_az_ajax_url, data, response => {
+            Utils.hideLoading();
+            this.$notesContainer.removeClass('hidden');
             if (response.status == 'success') {
                 // Show success message, then fade out the button after 2 seconds
                 console.log("loadNotes success!");
@@ -232,6 +238,9 @@ class AnatomyTour {
                 response.scene_state != null ? this.sceneStateString = response.scene_state : this.sceneStateString = "";
 
                 if (response.notes){
+
+                    this.$postTitle.text(response.notes.notes_title);
+
                     if (this.isUserAdmin) {
                         this.$notesTitle.val(response.notes.notes_title);
                         this.$notesText.text(response.notes.notes_text);
