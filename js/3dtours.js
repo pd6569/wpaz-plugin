@@ -12,6 +12,7 @@ class AnatomyTour {
         this.$humanWidget = jQuery('#embedded-human');
 
         // 3d model variables
+        this.humanLoaded = false;
         this.cameraInfo = {};
         this.currentSceneState = {};
         this.resetSceneState = {};
@@ -32,7 +33,7 @@ class AnatomyTour {
 
         this.human.on('human.ready', () => {
             console.log("Human is now ready for action");
-
+            this.humanLoaded = true;
             this.updateCameraInfo();
             this.setToolbarListeners();
             this.setInitialSceneState((sceneState) => {
@@ -47,6 +48,7 @@ class AnatomyTour {
         this.$notesTitle = jQuery('.notes-title');
         this.$notesText = jQuery('.notes-text');
         this.$callbackAlert = jQuery('#callback-alert-box');
+        this.$savingStatus = jQuery('.saving-status');
         this.$addAction = jQuery('#action-add');
         this.$saveBtn = jQuery('#notes-save-btn');
         this.$actionsDropdownContainer = jQuery('#actions-dropdown-container');
@@ -54,6 +56,8 @@ class AnatomyTour {
         // DOM Event listeners
         this.$saveBtn.on('click', (event) => {
             event.preventDefault();
+
+            Utils.setSavingStatus("Saving...");
 
             this.human.send('scene.capture', (sceneState) => {
                 this.currentSceneState = sceneState;
@@ -82,9 +86,12 @@ class AnatomyTour {
                     if (response.status == 'success') {
                         // Show success message, then fade out the button after 2 seconds
                         console.log("Success! " + JSON.stringify(response));
+                        Utils.setSavingStatus("Notes saved.", 3000);
                     } else {
                         // Re-enable the button and revert to original text
                         console.log("Failed. " + JSON.stringify(response));
+                        Utils.setSavingStatus("Saving notes failed.", 3000);
+
                     }
                 });
 
@@ -212,8 +219,9 @@ class AnatomyTour {
             console.log("setInitialSceneState no previous state to restore, set reset point");
             this.human.send('scene.capture', (sceneState) => {
                this.resetSceneState = sceneState;
+                callback(sceneState);
             });
-            callback(sceneState);
+
         }
     }
 
@@ -240,6 +248,13 @@ class AnatomyTour {
                 if (response.notes){
 
                     this.$postTitle.text(response.notes.notes_title);
+
+                    if (this.humanLoaded) {
+                        console.log("human already loaded, set scene state");
+                        this.setInitialSceneState((sceneState) => {
+                            this.sceneObjects = sceneState.objects;
+                        });
+                    }
 
                     if (this.isUserAdmin) {
                         this.$notesTitle.val(response.notes.notes_title);

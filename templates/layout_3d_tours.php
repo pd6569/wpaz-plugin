@@ -43,15 +43,9 @@
                     <div id="callback-alert-box" class="alert alert-info hidden" role="alert"></div>
 
                     <div id="buttons-container">
+                        <span class="saving-status hidden"></span>
                         <button id="notes-save-btn" type="button" class="btn btn-primary notes-button pull-right">Save</button>
                         <button id="notes-add-new-btn" type="button" class="btn btn-success notes-button pull-right">Add new</button>
-                    </div>
-
-                    <div id="scene-actions">
-                        <ul class="list-group">
-                            <!--<li class="list-group-item">Action 1</li>
-							<li class="list-group-item">Action 2</li>-->
-                        </ul>
                     </div>
 
                 </div>

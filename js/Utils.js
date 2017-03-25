@@ -22,4 +22,17 @@ class Utils {
     static hideLoading(){
         jQuery('.wpaz-spinner').addClass('hidden');
     }
+
+    static setSavingStatus(statusText, timeoutMillis){
+        let $savingStatus = jQuery('.saving-status');
+        $savingStatus.text(statusText).removeClass('hidden').show();
+
+        if (timeoutMillis){
+            setTimeout(() => {
+                $savingStatus.fadeOut();
+            }, timeoutMillis)
+        }
+
+    }
+
 }

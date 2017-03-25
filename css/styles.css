@@ -11,6 +11,11 @@
     margin-bottom: 10px;
 }
 
+
+/*************************
+ *    NOTES CONTAINER    *
+ *************************/
+
 #wpaz-notes-container {
     padding: 10px;
 }
@@ -40,9 +45,16 @@
     list-style: none;
 }
 
-/****************
- * LOADING
- ****************/
+#wpaz-notes-container .saving-status {
+    font-size: medium;
+    font-style: italic;
+}
+
+/************************************************
+ * LOADING from http://tobiasahlin.com/spinkit/ *
+ ************************************************/
+
+/* spinner for main element */
 
 .wpaz-spinner {
     width: 40px;
@@ -85,3 +97,4 @@
           -webkit-transform: scale(1.0);
       }
 }
+

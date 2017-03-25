@@ -287,11 +287,6 @@ class wp_az_anatomy_tours {
 
 		$notes = $wpdb->get_row( "SELECT notes_title, notes_text, notes_order, notes_scene_state FROM $table_name WHERE post_id = $post_id" );
 		$scene_state = stripslashes_deep($notes->notes_scene_state);
-		// success
-		/*wp_send_json (array(
-			'status'    => 'success',
-			'message'   => 'Load notes. post_id ' . $post_id . ' order ' . $order,
-		));*/
 
 		wp_send_json(array (
 			'status' => "success",
