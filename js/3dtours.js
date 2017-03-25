@@ -115,7 +115,7 @@ class AnatomyTour {
 
 
             let actionId = "action-" + this.numActions;
-            let $actionItem = jQuery("<li id='" + actionId + "' class='list-group-item'><a>" + this.numActions + ". Updated Camera Position</a></li>")
+            let $actionItem = jQuery("<li id='" + actionId + "' class='list-group-item'><a> Action " + this.numActions + "</a></li>")
 
             event.preventDefault();
             this.$actionsDropdownContainer.append($actionItem);
