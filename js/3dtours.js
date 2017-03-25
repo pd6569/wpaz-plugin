@@ -47,7 +47,7 @@ class AnatomyTour {
         this.$callbackAlert = jQuery('#callback-alert-box');
         this.$addAction = jQuery('#action-add');
         this.$saveBtn = jQuery('#notes-save-btn');
-        this.$actionsSequenceContainer = jQuery('#scene-actions .list-group');
+        this.$actionsDropdownContainer = jQuery('#actions-dropdown-container');
 
         // DOM Event listeners
         this.$saveBtn.on('click', (event) => {
@@ -98,7 +98,7 @@ class AnatomyTour {
             let $actionItem = jQuery("<li id='" + actionId + "' class='list-group-item'><a>" + this.numActions + ". Updated Camera Position</a></li>")
 
             event.preventDefault();
-            this.$actionsSequenceContainer.append($actionItem);
+            this.$actionsDropdownContainer.append($actionItem);
 
             // create new camera action
             let action = new Action(this.numActions, 'camera', this.cameraInfo);
@@ -118,7 +118,7 @@ class AnatomyTour {
             let $actionItem = jQuery("<li id='" + actionId + "' class='list-group-item'><a>" + this.numActions + ". Updated Camera Position</a></li>")
 
             event.preventDefault();
-            this.$actionsSequenceContainer.append($actionItem);
+            this.$actionsDropdownContainer.append($actionItem);
 
             /*// create new camera action
             let action = new Action(this.numActions, 'camera', this.cameraInfo);
@@ -137,7 +137,7 @@ class AnatomyTour {
             // create new generic action
             this.getSceneState((sceneState) => {
                 let genAction = new Action(this.numActions, 'general', sceneState);
-                console.log("Scene state saved as action: " + JSON.stringify(sceneState));
+                console.log("Scene state saved as action");
 
                 $actionItem.on('click', (event) => {
                     event.preventDefault();

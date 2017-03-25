@@ -31,6 +31,15 @@
                     <textarea class="notes-text form-control" rows="10" placeholder="Enter notes"></textarea>
                 </form>
 
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="actions-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Actions
+                        <span class="caret"></span>
+                    </button>
+                    <ul id="actions-dropdown-container" class="dropdown-menu" aria-labelledby="actions-dropdown">
+                    </ul>
+                </div>
+
                 <div class="actions-toolbar">
                     <div class="btn-group" role="group" aria-label="...">
                         <button id="action-add" type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>

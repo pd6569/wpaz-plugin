@@ -32,3 +32,10 @@
 #buttons-container {
     height: 55px;
 }
+
+#wpaz-notes-container .dropdown {
+    margin: 10px 0px 10px 0px
+}
+#wpaz-notes-container .dropdown-menu {
+    list-style: none;
+}
