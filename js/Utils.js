@@ -35,4 +35,21 @@ class Utils {
 
     }
 
+    static updateActionStatusBox(statusText, timeoutMillis = 3000){
+        console.log("updateActionStatusBox");
+        let $actionStatusBox = jQuery('#action-status-box');
+        $actionStatusBox
+            .empty()
+            .append(statusText)
+            .hide()
+            .removeClass('hidden')
+            .fadeIn();
+
+        if (timeoutMillis){
+            setTimeout(() => {
+                $actionStatusBox.fadeOut();
+            }, timeoutMillis)
+        }
+    }
+
 }

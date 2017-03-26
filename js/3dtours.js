@@ -47,7 +47,7 @@ class AnatomyTour {
         this.$postTitle = jQuery('.post-title');
         this.$notesTitle = jQuery('.notes-title');
         this.$notesText = jQuery('.notes-text');
-        this.$callbackAlert = jQuery('#callback-alert-box');
+        this.$actionStatusBox = jQuery('#action-status-box');
         this.$savingStatus = jQuery('.saving-status');
         this.$addAction = jQuery('#action-add');
         this.$saveBtn = jQuery('#notes-save-btn');
@@ -147,6 +147,7 @@ class AnatomyTour {
             this.getSceneState((sceneState) => {
                 let genAction = new Action(this.numActions, 'general', sceneState);
                 console.log("Scene state saved as action");
+                Utils.updateActionStatusBox("Action added to this note set.");
 
                 $actionItem.on('click', (event) => {
                     event.preventDefault();
@@ -185,7 +186,6 @@ class AnatomyTour {
 
         this.human.on("camera.updated", (cameraInfo) => {
             this.cameraInfo = cameraInfo;
-            this.$callbackAlert.text('Camera position updated - click camera button to store new location').removeClass('hidden');
         });
     }
 

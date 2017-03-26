@@ -41,13 +41,13 @@
                         </div>
                     </div>
 
-                    <div id="callback-alert-box" class="alert alert-info hidden" role="alert"></div>
-
                     <div id="buttons-container">
                         <span class="saving-status hidden"></span>
                         <button id="notes-save-btn" type="button" class="btn btn-primary notes-button pull-right">Save</button>
                         <button id="notes-add-new-btn" type="button" class="btn btn-success notes-button pull-right">Add new</button>
                     </div>
+
+                    <div id="action-status-box" class="alert alert-info hidden" role="alert"></div>
 
                 </div>
 
