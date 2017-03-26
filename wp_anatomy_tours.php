@@ -272,7 +272,6 @@ class wp_az_anatomy_tours {
 			'title'     => $notes['title'],
 			'text'      => $notes['text'],
 			'order'     => $notes['order'],
-			'nigger'    => "NIGGER",
 		));
 
 

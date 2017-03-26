@@ -37,7 +37,8 @@ class Note {
     }
 
     addNote(noteObject) {
-        appGlobals.notes[this.id] = noteObject;
+        let id = this.id;
+        appGlobals.notes[id] = noteObject;
     }
 
     removeNote(id){

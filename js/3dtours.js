@@ -23,6 +23,7 @@ class AnatomyTour {
         this.notes = {};
         this.sceneStateString = "";
         this.notesOrder = 1;
+        this.numNotes = 0;
 
         // actions varibles
         this.numActions = 0;
@@ -161,9 +162,19 @@ class AnatomyTour {
 
     addNotesSection(){
 
+        this.numNotes++;
+        this.notesOrder++;
+
+        let note = new Note(this.numNotes, "", "", "");
+
+        this.$notesTitle.val("");
+        this.$notesText.val("");
+
     }
 
     loadNotes(){
+
+        this.numNotes++;
 
         let data = {
             action: 'load_notes',
@@ -174,9 +185,8 @@ class AnatomyTour {
         //!* Process the AJAX POST request
         jQuery.get(ajax_object.wp_az_ajax_url, data, response => {
             if (response.status == 'success') {
-
-                console.log("Loaded notes. " + JSON.stringify(response));
-
+                let note = new Note(response.notes.notes_order, response.notes.notes_title, response.notes.notes_text, response.scene_state);
+                console.log("Loaded notes. And created object:" + JSON.stringify(note) + " global notes: " + JSON.stringify(appGlobals));
             } else {
 
                 console.log("Failed. " + JSON.stringify(response));
