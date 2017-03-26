@@ -297,23 +297,7 @@ class AnatomyTour {
         // get DOM elements
         console.log("setToolbarListeners");
 
-        let $toolbarZoomIn = jQuery('#toolbar-zoom-in');
-        let $toolbarZoomOut = jQuery('#toolbar-zoom-out');
         let $toolbarReset = jQuery('#toolbar-reset');
-
-        $toolbarZoomIn.on('click', event => {
-            console.log("zoom in. current zoom " + this.cameraInfo.zoom);
-            let newZoom = this.cameraInfo.zoom + 0.001;
-            this.human.send("camera.zoom", newZoom);
-            this.cameraInfo.zoom = newZoom;
-        });
-
-        $toolbarZoomOut.on('click', event => {
-            console.log("zoom out. current zoom " + this.cameraInfo.zoom);
-            let newZoom = this.cameraInfo.zoom - 0.001;
-            this.human.send("camera.zoom", newZoom);
-            this.cameraInfo.zoom = newZoom;
-        });
 
         $toolbarReset.on('click', event => {
             console.log("reset scene");

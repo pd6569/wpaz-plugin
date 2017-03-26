@@ -37,6 +37,7 @@
                     <div class="actions-toolbar">
                         <div class="btn-group" role="group" aria-label="...">
                             <button id="action-add" type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                            <button id="toolbar-reset" type="button" class="btn btn-default">Reset</button>
                         </div>
                     </div>
 
@@ -53,15 +54,14 @@
 
             </div>
         </div>
-        <div class="row">
+        <!--<div class="row">
             <div id="wpaz-toolbar" class="col-md-12">
                 <div class="btn-group" role="group" aria-label="...">
                     <button id="toolbar-zoom-in" type="button" class="btn btn-default">Zoom In</button>
                     <button id="toolbar-zoom-out" type="button" class="btn btn-default">Zoom Out</button>
-                    <button id="toolbar-reset" type="button" class="btn btn-default">Reset</button>
                 </div>
             </div>
-        </div>
+        </div>-->
 
         <div id="notes-timeline" class="row">
 
@@ -69,7 +69,8 @@
 
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Skull anatomy</h3>
+                        <h3 class="panel-title">Skull anatomy<span class="glyphicon glyphicon-trash pull-right delete-note" aria-hidden="true"></span></h3>
+
                     </div>
                     <div class="panel-body">
 
