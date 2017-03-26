@@ -26,12 +26,12 @@ $layout_template_names = array(
 	'3D_TOURS'          => '3d_tours',
 );
 
-function wp_az_get_template_html($templateName){
+function wp_az_get_template_html($template_name){
 
 	global $layout_template_names;
 	global $item_template_names;
 
-	switch($templateName){
+	switch($template_name){
 
 		case $layout_template_names['3D_TOURS']:
 			return wp_az_return_output(TMPL_URL_LAYOUT_3D_TOURS);

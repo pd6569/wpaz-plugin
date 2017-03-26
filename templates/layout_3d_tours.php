@@ -2,6 +2,7 @@
 
     global $wpdb;
     global $post;
+    global $item_template_names;
 
     $table_name = $wpdb->prefix . 'az_anatomy_tours';
 
@@ -83,52 +84,11 @@
 
             </div>
         </div>
-        <!--<div class="row">
-            <div id="wpaz-toolbar" class="col-md-12">
-                <div class="btn-group" role="group" aria-label="...">
-                    <button id="toolbar-zoom-in" type="button" class="btn btn-default">Zoom In</button>
-                    <button id="toolbar-zoom-out" type="button" class="btn btn-default">Zoom Out</button>
-                </div>
-            </div>
-        </div>-->
 
         <div id="notes-timeline" class="row">
 
-            <div class="col-md-8">
+	        <?php include TMPL_URL_ITEM_NOTE_SECTION ?>
 
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">
-                            <?php
-                            echo $notes->notes_title;
-                            ?>
-                            <span class="glyphicon glyphicon-trash pull-right delete-note" aria-hidden="true"></span></h3>
-
-                    </div>
-                    <div class="panel-body">
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <?php
-                                echo $notes->notes_text;
-                                ?>
-                            </div>
-
-                            <div class="col-md-6">
-                                <ul class="list-group">
-                                    <li class="list-group-item">Action 1</li>
-                                    <li class="list-group-item">Action 2</li>
-                                    <li class="list-group-item">Action 3</li>
-                                    <li class="list-group-item">Action 4</li>
-                                    <li class="list-group-item">Action 5</li>
-                                </ul>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
 
         </div>
 
