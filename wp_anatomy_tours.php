@@ -71,12 +71,14 @@ class wp_az_anatomy_tours {
 
 	public function clear_content($content){
 
+		global $layout_templates;
+
 		add_action( 'the_post', 'my_the_post_action' );
 
 		if (current_user_can('administrator')) :
-			$content = wp_az_get_template(TMPL_NAME_3D_TOURS);
+			$content = wp_az_get_template($layout_templates['3D_TOURS']);
 		else :
-			$content = wp_az_get_template(TMPL_NAME_3D_TOURS_PUBLIC);
+			$content = wp_az_get_template($layout_templates['3D_TOURS_PUBLIC']);
 		endif;
 
 		return $content;
@@ -158,7 +160,7 @@ class wp_az_anatomy_tours {
 					'wp_az_ajax_url'         => admin_url('admin-ajax.php'),
 					'wp_az_3d_tours_nonce'   => wp_create_nonce('wp_az_3d_tours_nonce'),
 					'wp_az_post_id'          => $post_object->ID,
-					'wp_az_user_role'        => current_user_can('administrator')
+					'wp_az_user_role'        => current_user_can('administrator'),
 				));
 			}
 		}
