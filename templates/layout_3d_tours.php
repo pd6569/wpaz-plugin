@@ -32,13 +32,13 @@
 
                 <?php if (current_user_can('administrator')): ?>
 
-                <div id="wpaz-notes-container" class="hidden">
+                <div id="wpaz-notes-container">
                     <h2 class="post-title text-center">Notes</h2>
                     <form>
                         <div class="form-group">
-                            <input type="notes-title" class="form-control notes-title" placeholder="Title">
+                            <input type="notes-title" class="form-control notes-title" placeholder="Enter title" value="<?php echo $notes->notes_title ?>">
                         </div>
-                        <textarea class="notes-text form-control" rows="10" placeholder="Enter notes"></textarea>
+                        <textarea class="notes-text form-control" rows="10" placeholder="Enter notes"><?php echo $notes->notes_text ?></textarea>
                     </form>
 
                     <div class="dropdown">
@@ -69,12 +69,13 @@
 
                 <?php else: ?>
 
-                <div id="wpaz-notes-container" class="hidden">
+                <div id="wpaz-notes-container">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h2 class="text-center notes-title"></h2>
+                            <h2 class="text-center notes-title"><?php echo $notes->notes_title?></h2>
                         </div>
                         <div class="panel-body notes-text" data-scantext data-target="embedded-human">
+                            <?php echo $notes->notes_text?>
                         </div>
                     </div>
                 </div>

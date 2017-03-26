@@ -147,8 +147,12 @@ class AnatomyTour {
 
         });
 
-        // Load notes data
-        this.loadNotes();
+        /*// Load notes data
+        this.loadNotes();*/
+
+        if(!this.isUserAdmin) {
+            this.setScanner();
+        }
 
         this.itemTemplates = ajax_object.wp_az_item_templates;
         console.log("item templates: " + JSON.stringify(this.itemTemplates));
@@ -164,22 +168,21 @@ class AnatomyTour {
 
         this.human.send('scene.capture', (sceneState) => {
             this.currentSceneState = sceneState;
-            console.log("scene.capture : " + JSON.stringify(sceneState));
 
             let title = this.$notesTitle.val();
             let notesText = this.$notesText.val();
             let notesOrder = this.notesOrder;
             let sceneStateString = JSON.stringify(this.currentSceneState);
 
+            // create new notes object if does not already exist
+            let note = new Note(notesOrder, title, notesText, sceneStateString);
+
             //!* Data to make available via the $_POST variable
             let data = {
                 action: 'save_notes',
                 wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
                 wp_az_post_id: ajax_object.wp_az_post_id,
-                wp_az_notes_title: title,
-                wp_az_notes_text: notesText,
-                wp_az_notes_scene_state: sceneStateString,
-                wp_az_notes_order: notesOrder
+                wp_az_note_object: note
             };
 
             //!* Process the AJAX POST request
@@ -251,6 +254,18 @@ class AnatomyTour {
             });
 
         }
+    }
+
+    setScanner(){
+        //ignores 'left', 'right', and 'bones of the' when searching for matching anatomy objects.
+        let toStrip = /^left\s|right\s|bones\sof\sthe\s/i;
+
+        this.$humanWidget.scanner({toStrip: toStrip, formatData: {
+            prefix: function(dataId) {
+                return '<a class="anatomy-object" data-id="' + dataId + '">'
+            },
+            suffix: "</a>"
+        }});
     }
 
     loadNotes(){

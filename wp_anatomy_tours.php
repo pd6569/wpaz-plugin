@@ -147,6 +147,8 @@ class wp_az_anatomy_tours {
 			wp_enqueue_script('wp_az_handlebars', plugins_url('lib/handlebars-v4.0.5.js', __FILE__), null, null, true);
 			wp_enqueue_script('wp_az_biodigital_human', plugins_url('lib/human-api.min.js', __FILE__), null, null, true);
 			wp_enqueue_script('wp_az_biodigital_human_components', plugins_url('lib/human-components.js', __FILE__), null, null, true);
+			wp_enqueue_script('wp_az_globals', plugins_url('js/globals.js', __FILE__), array('jquery'), '1.0', true);
+			wp_enqueue_script('wp_az_note', plugins_url('js/Note.js', __FILE__), array('jquery'), '1.0', true);
 			wp_enqueue_script('wp_az_actions', plugins_url('js/Actions.js', __FILE__), array('jquery'), '1.0', true);
 			wp_enqueue_script('wp_az_utils', plugins_url('js/Utils.js', __FILE__), array('jquery'), '1.0', true);
 			wp_enqueue_script('wp_az_3d_tours_main', plugins_url('js/3dtours.js', __FILE__), array('jquery'), '1.0', true);
@@ -224,16 +226,12 @@ class wp_az_anatomy_tours {
 	public function save_notes(){
 
 		// first check if data is being sent and that it is the data we want
-		if (!isset($_POST['wp_az_3d_tours_nonce']) || !isset($_POST['wp_az_notes_title']) || !isset($_POST['wp_az_notes_text'])) {
+		if (!isset($_POST['wp_az_3d_tours_nonce']) || !isset($_POST['wp_az_note_object']) || !isset($_POST['wp_az_post_id'])) {
 			wp_die('Your request failed permission check.');
 		}
 
 		$post_id = intval($_POST['wp_az_post_id']);
-		$notes_title = $_POST['wp_az_notes_title'];
-		$notes_text = $_POST['wp_az_notes_text'];
-		$notes_scene_state = stripslashes_deep($_POST['wp_az_notes_scene_state']);
-		$notes_order = $_POST['wp_az_notes_order'];
-
+		$notes = $_POST['wp_az_note_object'];
 
 		// write to database
 		global $wpdb;
@@ -242,10 +240,10 @@ class wp_az_anatomy_tours {
 		$notes_data = array (
 			'post_id'           => $post_id,
 			'notes_time'        => current_time('mysql'),
-			'notes_title'       => $notes_title,
-			'notes_text'        => $notes_text,
-			'notes_order'       => $notes_order,
-			'notes_scene_state' => $notes_scene_state
+			'notes_title'       => $notes['title'],
+			'notes_text'        => $notes['text'],
+			'notes_order'       => $notes['order'],
+			'notes_scene_state' => $notes['sceneStateStr']
 		);
 
 		// try to update notes if available
@@ -254,7 +252,7 @@ class wp_az_anatomy_tours {
 				$notes_data,
 				array (
 					post_id => $post_id,
-					notes_order => $notes_order
+					notes_order => $notes['order']
 				)
 			);
 
@@ -271,9 +269,10 @@ class wp_az_anatomy_tours {
 			'status'    => 'success',
 			'message'   => 'Notes saved',
 			'id'        => $post_id,
-			'title'     => $notes_title,
-			'text'      => $notes_text,
-			'order'     => $notes_order,
+			'title'     => $notes['title'],
+			'text'      => $notes['text'],
+			'order'     => $notes['order'],
+			'nigger'    => "NIGGER",
 		));
 
 

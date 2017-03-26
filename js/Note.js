@@ -7,6 +7,7 @@ class Note {
     constructor (order, title, text, sceneStateStr) {
 
         this.id = "notes-" + order;
+        this.order = order;
         this.title = title;
         this.text = text;
         this.sceneStateStr = sceneStateStr;
@@ -17,6 +18,10 @@ class Note {
 
     getId(){
         return this.id;
+    }
+
+    getOrder(){
+        return this.order;
     }
 
     getTitle(){
@@ -32,7 +37,7 @@ class Note {
     }
 
     addNote(noteObject) {
-        appGlobals.notes[noteObject.getId] = noteObject;
+        appGlobals.notes[this.id] = noteObject;
     }
 
     removeNote(id){
