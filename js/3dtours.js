@@ -54,51 +54,25 @@ class AnatomyTour {
         this.$savingStatus = jQuery('.saving-status');
         this.$addAction = jQuery('#action-add');
         this.$saveBtn = jQuery('#notes-save-btn');
+        this.$addNewNotesSection = jQuery('#notes-add-new-btn');
         this.$actionsDropdownContainer = jQuery('#actions-dropdown-container');
 
         // DOM Event listeners
+
+        this.$addNewNotesSection.on('click', (event) => {
+            event.preventDefault();
+            console.log("addNewNotes");
+            this.saveNotes(() => {
+                this.addNotesSection();
+            });
+
+        });
+
         this.$saveBtn.on('click', (event) => {
             event.preventDefault();
+            console.log("Save notes");
+            this.saveNotes();
 
-            Utils.setSavingStatus("Saving...");
-
-            this.human.send('scene.capture', (sceneState) => {
-                this.currentSceneState = sceneState;
-                console.log("scene.capture : " + JSON.stringify(sceneState));
-
-                let title = this.$notesTitle.val();
-                let notesText = this.$notesText.val();
-                let notesOrder = this.notesOrder;
-                let sceneStateString = JSON.stringify(this.currentSceneState);
-
-                //!* Data to make available via the $_POST variable
-                let data = {
-                    action: 'save_notes',
-                    wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
-                    wp_az_post_id: ajax_object.wp_az_post_id,
-                    wp_az_notes_title: title,
-                    wp_az_notes_text: notesText,
-                    wp_az_notes_scene_state: sceneStateString,
-                    wp_az_notes_order: notesOrder
-                };
-
-                console.log("data: " + JSON.stringify(data));
-
-                //!* Process the AJAX POST request
-                jQuery.post(ajax_object.wp_az_ajax_url, data, response => {
-                    if (response.status == 'success') {
-                        // Show success message, then fade out the button after 2 seconds
-                        console.log("Success! " + JSON.stringify(response));
-                        Utils.setSavingStatus("Notes saved.", 3000);
-                    } else {
-                        // Re-enable the button and revert to original text
-                        console.log("Failed. " + JSON.stringify(response));
-                        Utils.setSavingStatus("Saving notes failed.", 3000);
-
-                    }
-                });
-
-            });
 
         });
 
@@ -179,6 +153,53 @@ class AnatomyTour {
         this.itemTemplates = ajax_object.wp_az_item_templates;
         console.log("item templates: " + JSON.stringify(this.itemTemplates));
         jQuery('#notes-timeline').append(this.itemTemplates['NOTE_SECTION']);
+    }
+
+    addNotesSection(){
+
+    }
+
+    saveNotes(callback){
+        Utils.setSavingStatus("Saving...");
+
+        this.human.send('scene.capture', (sceneState) => {
+            this.currentSceneState = sceneState;
+            console.log("scene.capture : " + JSON.stringify(sceneState));
+
+            let title = this.$notesTitle.val();
+            let notesText = this.$notesText.val();
+            let notesOrder = this.notesOrder;
+            let sceneStateString = JSON.stringify(this.currentSceneState);
+
+            //!* Data to make available via the $_POST variable
+            let data = {
+                action: 'save_notes',
+                wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
+                wp_az_post_id: ajax_object.wp_az_post_id,
+                wp_az_notes_title: title,
+                wp_az_notes_text: notesText,
+                wp_az_notes_scene_state: sceneStateString,
+                wp_az_notes_order: notesOrder
+            };
+
+            //!* Process the AJAX POST request
+            jQuery.post(ajax_object.wp_az_ajax_url, data, response => {
+                if (response.status == 'success') {
+                    // Show success message, then fade out the button after 2 seconds
+                    console.log("Success! " + JSON.stringify(response));
+                    Utils.setSavingStatus("Notes saved.", 3000);
+
+                    // execute callback function
+                    if(callback) callback();
+                } else {
+                    // Re-enable the button and revert to original text
+                    console.log("Failed. " + JSON.stringify(response));
+                    Utils.setSavingStatus("Saving notes failed.", 3000);
+
+                }
+            });
+
+        });
     }
 
     getCameraInfoFromSceneState(sceneState) {

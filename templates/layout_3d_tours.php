@@ -87,10 +87,11 @@
 
         <div id="notes-timeline" class="row">
 
-	        <?php include TMPL_URL_ITEM_NOTE_SECTION ?>
+		    <?php include TMPL_URL_ITEM_NOTE_SECTION ?>
 
 
         </div>
+
 
 
     </div>
