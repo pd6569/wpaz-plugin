@@ -297,6 +297,7 @@ class wp_az_anatomy_tours {
 
 	}
 
+
 }
 
 global $anatomy_tours;

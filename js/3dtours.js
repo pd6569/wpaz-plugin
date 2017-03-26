@@ -147,8 +147,8 @@ class AnatomyTour {
 
         });
 
-        /*// Load notes data
-        this.loadNotes();*/
+        // Load notes data
+        this.loadNotes();
 
         if(!this.isUserAdmin) {
             this.setScanner();
@@ -160,6 +160,29 @@ class AnatomyTour {
     }
 
     addNotesSection(){
+
+    }
+
+    loadNotes(){
+
+        let data = {
+            action: 'load_notes',
+            wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
+            wp_az_post_id: ajax_object.wp_az_post_id,
+        };
+
+        //!* Process the AJAX POST request
+        jQuery.get(ajax_object.wp_az_ajax_url, data, response => {
+            if (response.status == 'success') {
+
+                console.log("Loaded notes. " + JSON.stringify(response));
+
+            } else {
+
+                console.log("Failed. " + JSON.stringify(response));
+
+            }
+        });
 
     }
 
@@ -268,7 +291,7 @@ class AnatomyTour {
         }});
     }
 
-    loadNotes(){
+    /*loadNotes(){
 
         Utils.showLoading(jQuery('#wpaz-notes'));
 
@@ -324,7 +347,7 @@ class AnatomyTour {
                 console.log("Failed. " + JSON.stringify(response));
             }
         });
-    }
+    }*/
 
     updateCameraInfo() {
         console.log("updateCameraInfo");

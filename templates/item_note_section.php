@@ -1,6 +1,6 @@
 <div class="col-md-8">
 
-	<div class="panel panel-primary">
+	<div id="az-note-<?php echo $notes->notes_order ?>" class="panel panel-primary">
 		<div class="panel-heading">
 			<h3 class="panel-title">
 				<?php echo $notes->notes_title ?>
