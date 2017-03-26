@@ -48,8 +48,7 @@ class wp_az_anatomy_tours {
 		add_action('init', array($this,'register_anatomy_tours')); //register location content type
 		add_action('admin_enqueue_scripts', array($this,'enqueueAdmin'));
 		add_action('wp_enqueue_scripts', array($this,'enqueue'), 50); // ensure styles are enqueued AFTER theme!
-		add_filter('the_post', array($this, 'set_content'));
-		add_filter('the_post', array($this, 'send_ajax_object'));
+		add_filter('the_content', array($this, 'set_content'));
 		
 		// Ajax hooks
 		add_action('wp_ajax_save_notes', array($this, 'save_notes' ));
@@ -60,23 +59,21 @@ class wp_az_anatomy_tours {
 		register_deactivation_hook(__FILE__, array($this, 'plugin_deactivate'));
 	}
 
-	public function set_content($post_object){
+	public function set_content($content){
 
-		if ($post_object->post_type == '3d-tours'){
-
-			add_filter('the_content', array($this, 'clear_content'), 10);
-		}
-	}
-
-	public function clear_content($content){
-
+		global $post;
 		global $layout_template_names;
 
-		if (current_user_can('administrator')) :
-			$content = wp_az_get_template($layout_template_names['3D_TOURS']);
-		else :
-			$content = wp_az_get_template($layout_template_names['3D_TOURS_PUBLIC']);
-		endif;
+		if ($post->post_type == '3d-tours') {
+
+			if (current_user_can('administrator')) :
+				$content = wp_az_get_template($layout_template_names['3D_TOURS']);
+			else :
+				$content = wp_az_get_template($layout_template_names['3D_TOURS_PUBLIC']);
+			endif;
+
+		}
+
 
 		return $content;
 	}
@@ -134,35 +131,33 @@ class wp_az_anatomy_tours {
 
 	public function enqueue() {
 
-		// styles
-		wp_enqueue_style('wp_az_bootstrap', plugins_url('css/bootstrap.css', __FILE__));
-		wp_enqueue_style('wp_az_3d_tours_main_style', plugins_url('css/styles.css', __FILE__), null, '1.0');
-
-		// scripts
-		wp_enqueue_script('wp_az_bootstrap', plugins_url('lib/bootstrap.js', __FILE__), null, null, true);
-		wp_enqueue_script('wp_az_handlebars', plugins_url('lib/handlebars-v4.0.5.js', __FILE__), null, null, true);
-		wp_enqueue_script('wp_az_biodigital_human', plugins_url('lib/human-api.min.js', __FILE__), null, null, true);
-		wp_enqueue_script('wp_az_biodigital_human_components', plugins_url('lib/human-components.js', __FILE__), null, null, true);
-		wp_enqueue_script('wp_az_actions', plugins_url('js/Actions.js', __FILE__), array('jquery'), '1.0', true);
-		wp_enqueue_script('wp_az_utils', plugins_url('js/Utils.js', __FILE__), array('jquery'), '1.0', true);
-		wp_enqueue_script('wp_az_3d_tours_main', plugins_url('js/3dtours.js', __FILE__), array('jquery'), '1.0', true);
-
-	}
-
-	public function send_ajax_object($post_object) {
-
+		global $post;
 		global $item_templates;
 
 		// modify post object here
-		if ($post_object->post_type == '3d-tours'){
+		if ($post->post_type == '3d-tours'){
+
+			// styles
+			wp_enqueue_style('wp_az_bootstrap', plugins_url('css/bootstrap.css', __FILE__));
+			wp_enqueue_style('wp_az_3d_tours_main_style', plugins_url('css/styles.css', __FILE__), null, '1.0');
+
+			// scripts
+			wp_enqueue_script('wp_az_bootstrap', plugins_url('lib/bootstrap.js', __FILE__), null, null, true);
+			wp_enqueue_script('wp_az_handlebars', plugins_url('lib/handlebars-v4.0.5.js', __FILE__), null, null, true);
+			wp_enqueue_script('wp_az_biodigital_human', plugins_url('lib/human-api.min.js', __FILE__), null, null, true);
+			wp_enqueue_script('wp_az_biodigital_human_components', plugins_url('lib/human-components.js', __FILE__), null, null, true);
+			wp_enqueue_script('wp_az_actions', plugins_url('js/Actions.js', __FILE__), array('jquery'), '1.0', true);
+			wp_enqueue_script('wp_az_utils', plugins_url('js/Utils.js', __FILE__), array('jquery'), '1.0', true);
+			wp_enqueue_script('wp_az_3d_tours_main', plugins_url('js/3dtours.js', __FILE__), array('jquery'), '1.0', true);
+
 
 			// sends ajax script to wp_az_3d_tours_main script
 			wp_localize_script( 'wp_az_3d_tours_main', 'ajax_object', array(
 				'wp_az_ajax_url'         => admin_url('admin-ajax.php'),
 				'wp_az_3d_tours_nonce'   => wp_create_nonce('wp_az_3d_tours_nonce'),
-				'wp_az_post_id'          => $post_object->ID,
+				'wp_az_post_id'          => $post->ID,
 				'wp_az_user_role'        => current_user_can('administrator'),
-				'wp_az_item_templates'   => $item_templates
+				'wp_az_item_templates'   => $item_templates['NOTE_SECTION']
 			));
 		}
 

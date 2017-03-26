@@ -1,4 +1,17 @@
+<?php
+
+    global $wpdb;
+    global $post;
+
+    $table_name = $wpdb->prefix . 'az_anatomy_tours';
+
+    $notes = $wpdb->get_row( "SELECT notes_title, notes_text, notes_order, notes_scene_state FROM $table_name WHERE post_id = $post->ID" );
+
+?>
+
+
 <div id="wpaz-3d-tours-layout">
+
     <div class="container">
 
         <div class="row">
@@ -65,18 +78,24 @@
 
         <div id="notes-timeline" class="row">
 
-            <!--<div class="col-md-8">
+            <div class="col-md-8">
 
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Skull anatomy<span class="glyphicon glyphicon-trash pull-right delete-note" aria-hidden="true"></span></h3>
+                        <h3 class="panel-title">
+                            <?php
+                            echo $notes->notes_title;
+                            ?>
+                            <span class="glyphicon glyphicon-trash pull-right delete-note" aria-hidden="true"></span></h3>
 
                     </div>
                     <div class="panel-body">
 
                         <div class="row">
                             <div class="col-md-6">
-                                Skull notes go here...
+                                <?php
+                                echo $notes->notes_text;
+                                ?>
                             </div>
 
                             <div class="col-md-6">
@@ -93,7 +112,7 @@
                     </div>
                 </div>
 
-            </div>-->
+            </div>
 
         </div>
 
