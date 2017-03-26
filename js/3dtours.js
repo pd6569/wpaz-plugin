@@ -28,6 +28,9 @@ class AnatomyTour {
         this.numActions = 0;
         this.storedActions = [];
 
+        // templates
+        this.itemTemplates = {};
+
         // user
         this.isUserAdmin = ajax_object.wp_az_user_role;
 
@@ -172,6 +175,10 @@ class AnatomyTour {
 
         // Load notes data
         this.loadNotes();
+
+        this.itemTemplates = ajax_object.wp_az_item_templates;
+        console.log("item templates: " + JSON.stringify(this.itemTemplates));
+        jQuery('#notes-timeline').append(this.itemTemplates['NOTE_SECTION']);
     }
 
     getCameraInfoFromSceneState(sceneState) {

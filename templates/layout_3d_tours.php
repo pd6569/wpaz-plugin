@@ -65,7 +65,7 @@
 
         <div id="notes-timeline" class="row">
 
-            <div class="col-md-8">
+            <!--<div class="col-md-8">
 
                 <div class="panel panel-primary">
                     <div class="panel-heading">
@@ -93,7 +93,7 @@
                     </div>
                 </div>
 
-            </div>
+            </div>-->
 
         </div>
 

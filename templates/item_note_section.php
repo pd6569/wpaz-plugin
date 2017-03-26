@@ -2,7 +2,7 @@
 
 	<div class="panel panel-primary">
 		<div class="panel-heading">
-			<h3 class="panel-title">Title of section<span class="glyphicon glyphicon-trash pull-right delete-note" aria-hidden="true"></span></h3>
+			<h3 class="panel-title">HI! Title of section<span class="glyphicon glyphicon-trash pull-right delete-note" aria-hidden="true"></span></h3>
 
 		</div>
 		<div class="panel-body">
