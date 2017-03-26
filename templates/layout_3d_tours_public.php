@@ -14,24 +14,26 @@
                 <a href="https://www.biodigital.com"></a>
                 </iframe>
             </div>
-            <div id="wpaz-notes-container" class="col-md-4">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h2 class="text-center notes-title"></h2>
-                    </div>
-                    <div class="panel-body notes-text" data-scantext data-target="embedded-human">
+            <div id="wpaz-notes" class="col-md-4">
+                <div id="wpaz-notes-container" class="hidden">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h2 class="text-center notes-title"></h2>
+                        </div>
+                        <div class="panel-body notes-text" data-scantext data-target="embedded-human">
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="row">
+        <!--<div class="row">
             <div id="wpaz-toolbar" class="col-md-12">
                 <div class="btn-group" role="group" aria-label="...">
                     <button id="toolbar-zoom-in" type="button" class="btn btn-default">Zoom In</button>
                     <button id="toolbar-zoom-out" type="button" class="btn btn-default">Zoom Out</button>
                 </div>
             </div>
-        </div>
+        </div>-->
     </div>
 </div>

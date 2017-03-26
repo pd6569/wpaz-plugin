@@ -17,12 +17,18 @@ if (!defined( 'ABSPATH')) {
 
 define('WP_AZ_ANATOMY_TOURS_PLUGIN_DIR', untrailingslashit(plugin_dir_path(__FILE__)));
 define('WP_AZ_ANATOMY_TOURS_PLUGIN_URL', plugin_dir_url(__FILE__));
-define('WP_AZ_ANATOMY_TOURS_TEMPLATES_URL', plugin_dir_url(__FILE__) . 'templates');
 define('WP_AZ_ANATOMY_TOURS_PLUGIN_FILE', __FILE__);
 define('WP_AZ_ANATOMY_TOURS_PLUGIN_BASENAME', plugin_basename(__FILE__));
 define('WP_AZ_ANATOMY_TOURS_VERSION', 1.0);
 
-require_once ( WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . '\functions.php');
+# templates
+define('TMPL_URL_LAYOUT_3D_TOURS', WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . "/templates/layout_3d_tours.php");
+define('TMPL_URL_LAYOUT_3D_TOURS_PUBLIC', WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . "/templates/layout_3d_tours_public.php");
+define('TMPL_URL_ITEM_NOTE_SECTION', WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . "/templates/item_note_section.php");
+
+
+require_once (WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . '\functions.php');
+require_once (WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . '\templates.php');
 
 // Database
 global $wp_az_db_version;
@@ -31,9 +37,10 @@ $wp_az_db_version = '1.0';
 
 class wp_az_anatomy_tours {
 
-	public static $TMPL_ITEM_NOTES_FORM = "item_notes_form.html";
-	public static $TMPL_LAYOUT_3D_TOURS = "/templates/layout_3d_tours.php";
+	/*public static $TMPL_ITEM_NOTES_FORM = "item_notes_form.html";*/
+	/*public static $TMPL_LAYOUT_3D_TOURS = "/templates/layout_3d_tours.php";
 	public static $TMPL_LAYOUT_3D_TOURS_PUBLIC = "/templates/layout_3d_tours_public.php";
+	public static $TMPL_ITEM_NOTE_SECTION = "/templates/item_note_section.php";*/
 
 	public function __construct() {
 		$this->hooks();
@@ -67,12 +74,10 @@ class wp_az_anatomy_tours {
 		add_action( 'the_post', 'my_the_post_action' );
 
 		if (current_user_can('administrator')) :
-			$layoutFile = WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . '/' . self::$TMPL_LAYOUT_3D_TOURS;
+			$content = wp_az_get_template(TMPL_NAME_3D_TOURS);
 		else :
-			$layoutFile = WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . '/' . self::$TMPL_LAYOUT_3D_TOURS_PUBLIC;
+			$content = wp_az_get_template(TMPL_NAME_3D_TOURS_PUBLIC);
 		endif;
-
-		$content = wp_az_return_output($layoutFile);
 
 		return $content;
 	}
@@ -296,7 +301,7 @@ class wp_az_anatomy_tours {
 
 	}
 
-	public function process_template_request() {
+	/*public function process_template_request() {
 		// first check if data is being sent and that it is the data we want
 		if (!isset($_POST['wp_az_3d_tours_nonce'])) {
 			wp_die('Your request failed permission check.');
@@ -308,7 +313,7 @@ class wp_az_anatomy_tours {
 			'message' => 'Your request was processed',
 			'template' => WP_AZ_ANATOMY_TOURS_TEMPLATES_URL . '/' . self::$TMPL_ITEM_NOTES_FORM
 		));
-	}
+	}*/
 }
 
 global $anatomy_tours;
