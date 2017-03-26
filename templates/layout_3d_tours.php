@@ -9,7 +9,7 @@
                         width="100%"
                         height="600"
                         allowFullScreen="true"
-                        src="https://human.biodigital.com/widget?be=1l2x&background=255,255,255,51,64,77&ui-tools=true&dk=6f2c42f37ce7c183993a87afb2df8d136fecc7c7">
+                        src="https://human.biodigital.com/widget?be=1l2x&background=255,255,255,51,64,77&ui-all=true&dk=6f2c42f37ce7c183993a87afb2df8d136fecc7c7">
                 </iframe>
                 <a href="https://www.biodigital.com"></a>
                 </iframe>
@@ -62,5 +62,40 @@
                 </div>
             </div>
         </div>
+
+        <div id="notes-timeline" class="row">
+
+            <div class="col-md-8">
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Skull anatomy</h3>
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                Skull notes go here...
+                            </div>
+
+                            <div class="col-md-6">
+                                <ul class="list-group">
+                                    <li class="list-group-item">Action 1</li>
+                                    <li class="list-group-item">Action 2</li>
+                                    <li class="list-group-item">Action 3</li>
+                                    <li class="list-group-item">Action 4</li>
+                                    <li class="list-group-item">Action 5</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
     </div>
 </div>
