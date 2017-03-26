@@ -23,7 +23,6 @@ define('WP_AZ_ANATOMY_TOURS_VERSION', 1.0);
 
 # templates
 define('TMPL_URL_LAYOUT_3D_TOURS', WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . "/templates/layout_3d_tours.php");
-define('TMPL_URL_LAYOUT_3D_TOURS_PUBLIC', WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . "/templates/layout_3d_tours_public.php");
 define('TMPL_URL_ITEM_NOTE_SECTION', WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . "/templates/item_note_section.php");
 
 
@@ -66,11 +65,13 @@ class wp_az_anatomy_tours {
 
 		if ($post->post_type == '3d-tours') {
 
-			if (current_user_can('administrator')) :
+			/*if (current_user_can('administrator')) :
 				$content = wp_az_get_template($layout_template_names['3D_TOURS']);
 			else :
 				$content = wp_az_get_template($layout_template_names['3D_TOURS_PUBLIC']);
-			endif;
+			endif;*/
+
+			$content = wp_az_get_template_html($layout_template_names['3D_TOURS']);
 
 		}
 

@@ -24,10 +24,9 @@ $item_template_names = array(
 
 $layout_template_names = array(
 	'3D_TOURS'          => '3d_tours',
-	'3D_TOURS_PUBLIC'   => '3d_tours_public'
 );
 
-function wp_az_get_template($templateName){
+function wp_az_get_template_html($templateName){
 
 	global $layout_template_names;
 	global $item_template_names;
@@ -36,9 +35,6 @@ function wp_az_get_template($templateName){
 
 		case $layout_template_names['3D_TOURS']:
 			return wp_az_return_output(TMPL_URL_LAYOUT_3D_TOURS);
-
-		case $layout_template_names['3D_TOURS_PUBLIC']:
-			return wp_az_return_output(TMPL_URL_LAYOUT_3D_TOURS_PUBLIC);
 
 		case $item_template_names['NOTE_SECTION']:
 			return wp_az_return_output(TMPL_URL_ITEM_NOTE_SECTION);
@@ -54,7 +50,7 @@ function wp_az_generate_item_templates(){
 	global $item_templates;
 
 	foreach ($item_template_names as $item_template_key => $item_template_value) {
-		$item_templates[$item_template_key] = wp_az_get_template($item_template_value);
+		$item_templates[$item_template_key] = wp_az_get_template_html($item_template_value);
 	}
 }
 

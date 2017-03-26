@@ -29,6 +29,8 @@
             </div>
             <div id="wpaz-notes" class="col-md-4">
 
+                <?php if (current_user_can('administrator')): ?>
+
                 <div id="wpaz-notes-container" class="hidden">
                     <h2 class="post-title text-center">Notes</h2>
                     <form>
@@ -63,6 +65,20 @@
                     <div id="action-status-box" class="alert alert-info hidden" role="alert"></div>
 
                 </div>
+
+                <?php else: ?>
+
+                <div id="wpaz-notes-container" class="hidden">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h2 class="text-center notes-title"></h2>
+                        </div>
+                        <div class="panel-body notes-text" data-scantext data-target="embedded-human">
+                        </div>
+                    </div>
+                </div>
+
+                <?php endif ?>
 
 
             </div>
