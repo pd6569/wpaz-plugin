@@ -30,6 +30,7 @@ class Note {
 
     setTitle(title){
         this.title = title;
+        console.log("title updated");
     }
 
     getNoteContent(){
@@ -38,10 +39,16 @@ class Note {
 
     setNoteContent(note_content){
         this.note_content = note_content;
+        console.log("note_content updated");
     }
 
     getSceneState(){
         return this.scene_state;
+    }
+
+    setSceneState(sceneState){
+        this.scene_state = sceneState;
+        console.log("scene_state updated");
     }
 
     addNote(noteObject) {

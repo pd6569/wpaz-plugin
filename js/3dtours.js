@@ -12,7 +12,6 @@ class AnatomyTour {
         this.$humanWidget = jQuery('#embedded-human');
 
         // 3d model variables
-        this.humanLoaded = false;
         this.cameraInfo = {};
         this.currentSceneState = {};
         this.resetSceneState = {};
@@ -20,10 +19,6 @@ class AnatomyTour {
         this.sceneObjects = {};
 
         // notes variables
-        this.notes = {};
-        this.currentNote = {};
-        this.sceneStateString = "";
-        this.currentNotesSequence = 1;
         this.numNotes = 0;
 
         // actions varibles
@@ -38,10 +33,10 @@ class AnatomyTour {
 
         this.human.on('human.ready', () => {
             console.log("Human is now ready for action");
-            this.humanLoaded = true;
+            appGlobals['humanLoaded'] = true;
             this.updateCameraInfo();
             this.setToolbarListeners();
-            this.setInitialSceneState((sceneState) => {
+            this.setInitialSceneState(this.human, this.resetSceneState, (sceneState) => {
                 this.sceneObjects = sceneState.objects;
             });
             this.registerCallbacks();
@@ -93,7 +88,7 @@ class AnatomyTour {
 
         this.$saveBtn.on('click', (event) => {
             event.preventDefault();
-            console.log("Save notes");
+            console.log("Save notes. Current note object: " + JSON.stringify(appGlobals.currentNote));
             this.saveNotes();
 
 
@@ -176,26 +171,26 @@ class AnatomyTour {
         if(!this.isUserAdmin) {
             this.setScanner();
         }
-
-        this.itemTemplates = ajax_object.wp_az_item_templates;
-        console.log("item templates: " + JSON.stringify(this.itemTemplates));
-        jQuery('#notes-timeline').append(this.itemTemplates['NOTE_SECTION']);
     }
 
     addNotesSection(){
 
-        this.numNotes++;
+        /*this.numNotes++;
         this.currentNotesSequence = this.numNotes;
 
         let note = new Note(this.currentNotesSequence, "", "", "");
 
         this.$notesTitle.val("");
-        this.$notesText.val("");
+        this.$notesText.val("");*/
 
     }
 
     loadNotes(){
         console.log("loadNotes");
+        let human = this.human;
+        let resetSceneState = this.resetSceneState;
+        let setInitialSceneState = this.setInitialSceneState;
+
         jQuery.ajax({
             url: ajax_object.wp_az_ajax_url,
             data: {
@@ -207,7 +202,22 @@ class AnatomyTour {
                 console.log("Failed to load notes");
             },
             success: function(data) {
-                console.log("Notes loaded: " + JSON.stringify(data));
+                console.log("Notes loaded from server. human loaded: " + appGlobals['humanLoaded']);
+                let notesArray = data.notes;
+                if (notesArray.length > 0){
+                    notesArray.forEach(function(note){
+                        appGlobals.notes[note.sequence] = new Note(note.sequence, note.title, note.note_content, note.scene_state);
+                    });
+                    appGlobals.currentNote = appGlobals.notes[1];
+                    console.log("appGlobals notes object created.");
+                    if (appGlobals['humanLoaded'] = true) setInitialSceneState(human, resetSceneState, null);
+
+                } else {
+                    appGlobals.currentNote = new Note(1, "", "", "");
+                    if (appGlobals['humanLoaded'] = true) setInitialSceneState(human, resetSceneState, null);
+                    console.log("no notes to load. New note created: " + JSON.stringify(appGlobals.currentNote));
+                }
+                appGlobals.notesLoaded = true;
             },
             type: 'GET'
         });
@@ -215,7 +225,7 @@ class AnatomyTour {
 
     loadSingleNote(noteSequenceNumber) {
 
-        console.log("loadSingleNote: " + noteSequenceNumber);
+        /*console.log("loadSingleNote: " + noteSequenceNumber);
 
         let data = {
             action: 'load_single_note',
@@ -239,30 +249,9 @@ class AnatomyTour {
             } else {
                 console.log("Failed to load note, or no note" + JSON.stringify(response));
             }
-        });
+        });*/
 
     }
-
-    /*loadNotes(){
-
-        this.numNotes++;
-
-        let data = {
-            action: 'load_notes',
-            wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
-            wp_az_post_id: ajax_object.wp_az_post_id,
-        };
-
-        //!* Process the AJAX POST request
-        jQuery.get(ajax_object.wp_az_ajax_url, data, response => {
-            if (response.status == 'success' && response.notes != null && response.scene_state != null) {
-                let note = new Note(response.notes.sequence, response.notes.title, response.notes.note_content, response.scene_state);
-            } else {
-                console.log("Failed to load notes, or no notes available" + JSON.stringify(response));
-            }
-        });
-
-    }*/
 
     saveNotes(callback){
         Utils.setSavingStatus("Saving...");
@@ -277,14 +266,19 @@ class AnatomyTour {
             let scene_state = JSON.stringify(this.currentSceneState);
 
             // create new notes object if does not already exist
-            if (Object.keys(this.currentNote).length == 0 || this.currentNote == null) {
+            /*if (Object.keys(this.currentNote).length == 0 || this.currentNote == null) {
                 let note = new Note(sequence, title, note_content, scene_state);
                 this.currentNote = note;
             } else {
                 this.currentNote.setNoteContent(note_content);
                 this.currentNote.setTitle(title);
                 note = this.currentNote;
-            }
+            }*/
+            appGlobals.currentNote.setNoteContent(note_content);
+            appGlobals.currentNote.setTitle(title);
+            appGlobals.currentNote.setSceneState(scene_state);
+
+            note = appGlobals.currentNote;
 
             //!* Data to make available via the $_POST variable
             let data = {
@@ -345,23 +339,23 @@ class AnatomyTour {
         })
     }
 
-    setInitialSceneState(callback){
+    setInitialSceneState(human, resetSceneState, callback){
         console.log("setInitialSceneState");
-        if (this.sceneStateString.length > 0){
+
+        if (appGlobals.notes[1] != "" && appGlobals.notes[1] != null){
             console.log("setInitialSceneState restore previous scene state");
-            let sceneState = JSON.parse(this.sceneStateString);
-            this.human.send("scene.restore", sceneState);
+            let scene_state = JSON.parse(appGlobals.notes[1].scene_state);
+            human.send("scene.restore", scene_state);
 
             // save scene as reset point
-            this.resetSceneState = sceneState;
-            callback(sceneState);
+            resetSceneState = scene_state;
+            if (callback) callback(scene_state);
         } else {
             console.log("setInitialSceneState no previous state to restore, set reset point");
-            this.human.send('scene.capture', (sceneState) => {
-               this.resetSceneState = sceneState;
-                callback(sceneState);
+            human.send('scene.capture', (sceneState) => {
+                resetSceneState = sceneState;
+                if (callback) callback(sceneState);
             });
-
         }
     }
 
@@ -376,64 +370,6 @@ class AnatomyTour {
             suffix: "</a>"
         }});
     }
-
-    /*loadNotes(){
-
-        Utils.showLoading(jQuery('#wpaz-notes'));
-
-        let data = {
-            action: 'load_notes',
-            wp_az_post_id: ajax_object.wp_az_post_id,
-            wp_az_notes_order: this.currentNotesSequence
-        };
-
-        //!* Process the AJAX GET request
-        jQuery.get(ajax_object.wp_az_ajax_url, data, response => {
-            Utils.hideLoading();
-            this.$notesContainer.removeClass('hidden');
-            if (response.status == 'success') {
-                // Show success message, then fade out the button after 2 seconds
-                console.log("loadNotes success!");
-                this.notes = response.notes;
-                response.scene_state != null ? this.sceneStateString = response.scene_state : this.sceneStateString = "";
-
-                if (response.notes){
-
-                    this.$postTitle.text(response.notes.notes_title);
-
-                    if (this.humanLoaded) {
-                        console.log("human already loaded, set scene state");
-                        this.setInitialSceneState((sceneState) => {
-                            this.sceneObjects = sceneState.objects;
-                        });
-                    }
-
-                    if (this.isUserAdmin) {
-                        this.$notesTitle.val(response.notes.notes_title);
-                        this.$notesText.text(response.notes.notes_text);
-                    } else {
-                        this.$notesTitle.text(response.notes.notes_title);
-                        this.$notesText.empty().append(response.notes.notes_text);
-
-                        //ignores 'left', 'right', and 'bones of the' when searching for matching anatomy objects.
-                        let toStrip = /^left\s|right\s|bones\sof\sthe\s/i;
-
-                        this.$humanWidget.scanner({toStrip: toStrip, formatData: {
-                            prefix: function(dataId) {
-                                return '<a class="anatomy-object" data-id="' + dataId + '">'
-                            },
-                            suffix: "</a>"
-                        }});
-                    }
-                }
-
-
-            } else {
-                // Re-enable the button and revert to original text
-                console.log("Failed. " + JSON.stringify(response));
-            }
-        });
-    }*/
 
     updateCameraInfo() {
         console.log("updateCameraInfo");
