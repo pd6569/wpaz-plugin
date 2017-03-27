@@ -52,6 +52,7 @@ class wp_az_anatomy_tours {
 		// Ajax hooks
 		add_action('wp_ajax_save_notes', array($this, 'save_notes' ));
 		add_action('wp_ajax_load_notes', array($this, 'load_notes'));
+		add_action('wp_ajax_load_single_note', array($this, 'load_single_note'));
 		add_action('wp_ajax_nopriv_load_notes', array($this, 'load_notes'));
 
 		register_activation_hook(__FILE__, array($this, 'plugin_activate'));
@@ -287,6 +288,25 @@ class wp_az_anatomy_tours {
 			'sequence'              => $notes['sequence'],
 		));
 
+
+	}
+
+	public function load_single_note(){
+
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'anatomy_tours_notes';
+
+		$post_id = intval($_GET['wp_az_post_id']);
+		$sequence = intval($_GET['wp_az_sequence']);
+
+		$notes = $wpdb->get_row( "SELECT title, note_content, sequence, scene_state FROM $table_name WHERE post_id = $post_id AND sequence = $sequence" );
+		$scene_state = stripslashes_deep($notes->scene_state);
+
+		wp_send_json(array (
+			'status' => "success",
+			'notes' => $notes,
+			'scene_state' => $scene_state
+		));
 
 	}
 

@@ -21,8 +21,9 @@ class AnatomyTour {
 
         // notes variables
         this.notes = {};
+        this.currentNote = {};
         this.sceneStateString = "";
-        this.notesOrder = 1;
+        this.currentNotesSequence = 1;
         this.numNotes = 0;
 
         // actions varibles
@@ -47,8 +48,12 @@ class AnatomyTour {
         });
 
         // DOM
+
+        /* edit notes */
         this.$notesContainer = jQuery('#wpaz-notes-container');
         this.$postTitle = jQuery('.post-title');
+        this.$noteSequenceNum = jQuery('.notes-sequence');
+        this.$noteSequenceNum.text("1");
         this.$notesTitle = jQuery('.notes-title');
         this.$notesText = jQuery('.notes-text');
         this.$actionStatusBox = jQuery('#action-status-box');
@@ -58,7 +63,24 @@ class AnatomyTour {
         this.$addNewNotesSection = jQuery('#notes-add-new-btn');
         this.$actionsDropdownContainer = jQuery('#actions-dropdown-container');
 
+        /* timeline */
+        this.$editNote = jQuery('.edit-note');
+
+
         // DOM Event listeners
+
+        let self = this;
+
+        this.$editNote.on('click', function(event){
+            event.preventDefault();
+            let $noteItem = jQuery(this).closest('div.note-item');
+            let sequence = $noteItem.attr('sequence');
+            let title = $noteItem.find('.note-title').text();
+            let note_content = $noteItem.find('.note-content').text();
+            console.log("edit note. sequence: " + sequence + " title: " + title);
+
+            self.loadSingleNote(sequence);
+        });
 
         this.$addNewNotesSection.on('click', (event) => {
             event.preventDefault();
@@ -149,7 +171,7 @@ class AnatomyTour {
         });
 
         // Load notes data
-        this.loadNotes();
+        /*this.loadNotes();*/
 
         if(!this.isUserAdmin) {
             this.setScanner();
@@ -163,16 +185,46 @@ class AnatomyTour {
     addNotesSection(){
 
         this.numNotes++;
-        this.notesOrder++;
+        this.currentNotesSequence = this.numNotes;
 
-        let note = new Note(this.numNotes, "", "", "");
+        let note = new Note(this.currentNotesSequence, "", "", "");
 
         this.$notesTitle.val("");
         this.$notesText.val("");
 
     }
 
-    loadNotes(){
+    loadSingleNote(noteSequenceNumber) {
+
+        console.log("loadSingleNote: " + noteSequenceNumber);
+
+        let data = {
+            action: 'load_single_note',
+            wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
+            wp_az_post_id: ajax_object.wp_az_post_id,
+            wp_az_sequence: noteSequenceNumber
+        };
+
+        //!* Process the AJAX POST request
+        jQuery.get(ajax_object.wp_az_ajax_url, data, response => {
+            if (response.status == 'success' && response.notes != null && response.scene_state != null) {
+                let noteToLoad = new Note(response.notes.sequence, response.notes.title, response.notes.note_content, response.scene_state);
+                console.log("Noted loaded: " + noteToLoad.title + " sequence: " + noteToLoad.sequence);
+                this.saveNotes(() => {
+                    console.log("save notes and then set title: " + noteToLoad.title);
+                    this.$noteSequenceNum.text(noteToLoad.sequence);
+                    this.$notesTitle.val(noteToLoad.title);
+                    this.$notesText.val(noteToLoad.note_content);
+                    this.currentNote = noteToLoad;
+                })
+            } else {
+                console.log("Failed to load note, or no note" + JSON.stringify(response));
+            }
+        });
+
+    }
+
+    /*loadNotes(){
 
         this.numNotes++;
 
@@ -191,7 +243,7 @@ class AnatomyTour {
             }
         });
 
-    }
+    }*/
 
     saveNotes(callback){
         Utils.setSavingStatus("Saving...");
@@ -199,13 +251,21 @@ class AnatomyTour {
         this.human.send('scene.capture', (sceneState) => {
             this.currentSceneState = sceneState;
 
+            let note = {};
             let title = this.$notesTitle.val();
             let note_content = this.$notesText.val();
-            let sequence = this.notesOrder;
+            let sequence = this.currentNotesSequence;
             let scene_state = JSON.stringify(this.currentSceneState);
 
             // create new notes object if does not already exist
-            let note = new Note(sequence, title, note_content, scene_state);
+            if (Object.keys(this.currentNote).length == 0 || this.currentNote == null) {
+                let note = new Note(sequence, title, note_content, scene_state);
+                this.currentNote = note;
+            } else {
+                this.currentNote.setNoteContent(note_content);
+                this.currentNote.setTitle(title);
+                note = this.currentNote;
+            }
 
             //!* Data to make available via the $_POST variable
             let data = {
@@ -219,7 +279,7 @@ class AnatomyTour {
             jQuery.post(ajax_object.wp_az_ajax_url, data, response => {
                 if (response.status == 'success') {
                     // Show success message, then fade out the button after 2 seconds
-                    console.log("Success! " + JSON.stringify(response));
+                    console.log("Noted saved! " + JSON.stringify(response));
                     Utils.setSavingStatus("Notes saved.", 3000);
 
                     // execute callback function
@@ -305,7 +365,7 @@ class AnatomyTour {
         let data = {
             action: 'load_notes',
             wp_az_post_id: ajax_object.wp_az_post_id,
-            wp_az_notes_order: this.notesOrder
+            wp_az_notes_order: this.currentNotesSequence
         };
 
         //!* Process the AJAX GET request

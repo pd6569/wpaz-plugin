@@ -28,8 +28,16 @@ class Note {
         return this.title;
     }
 
+    setTitle(title){
+        this.title = title;
+    }
+
     getNoteContent(){
         return this.note_content;
+    }
+
+    setNoteContent(note_content){
+        this.note_content = note_content;
     }
 
     getSceneState(){

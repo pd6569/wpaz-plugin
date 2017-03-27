@@ -36,7 +36,7 @@
                 <?php if (current_user_can('administrator')): ?>
 
                 <div id="wpaz-notes-container">
-                    <h2 class="post-title text-center">Notes</h2>
+                    <h2 class="post-title text-center">Notes: <span class="notes-sequence"></span></h2>
                     <form>
                         <div class="form-group">
                             <input type="notes-title" class="form-control notes-title" placeholder="Enter title" value="<?php echo $notes[0]->title ?>">
