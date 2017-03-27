@@ -58,6 +58,7 @@ class AnatomyTour {
         this.$actionsDropdownContainer = jQuery('#actions-dropdown-container');
 
         /* timeline */
+        this.$notesTimelineContainer = jQuery('#notes-timeline');
         this.$editNote = jQuery('.edit-note');
 
 
@@ -175,10 +176,32 @@ class AnatomyTour {
 
         // Load notes data
         this.loadNotes();
+        this.getItemTemplates();
 
         if(!this.isUserAdmin) {
             this.setScanner();
         }
+    }
+
+    getItemTemplates(){
+
+        let $notesTimelineContainer = this.$notesTimelineContainer;
+
+        jQuery.ajax({
+            url: ajax_object.wp_az_ajax_url,
+            data: {
+                action: 'send_item_templates',
+                wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
+            },
+            error: function() {
+                console.log("Failed to get item templates");
+            },
+            success: function(data) {
+                console.log("Loaded item templates: " + JSON.stringify(data));
+                $notesTimelineContainer.append(data.templates['NOTE_SECTION'])
+            },
+            type: 'GET'
+        });
     }
 
     addNotesSection(){

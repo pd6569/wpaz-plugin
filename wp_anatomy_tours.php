@@ -54,6 +54,7 @@ class wp_az_anatomy_tours {
 		add_action('wp_ajax_load_notes', array($this, 'load_notes'));
 		add_action('wp_ajax_nopriv_load_notes', array($this, 'load_notes'));
 		add_action('wp_ajax_load_single_note', array($this, 'load_single_note'));
+		add_action('wp_ajax_send_item_templates', array($this, 'send_item_templates'));
 
 		register_activation_hook(__FILE__, array($this, 'plugin_activate'));
 		register_deactivation_hook(__FILE__, array($this, 'plugin_deactivate'));
@@ -332,6 +333,17 @@ class wp_az_anatomy_tours {
 		wp_send_json(array (
 			'status' => "success",
 			'notes' => $notes,
+		));
+
+	}
+
+	public function send_item_templates() {
+
+		global $item_templates;
+
+		wp_send_json(array (
+			'status' => "success",
+			'templates' => $item_templates,
 		));
 
 	}
