@@ -184,7 +184,6 @@ class AnatomyTour {
 
         //!* Process the AJAX POST request
         jQuery.get(ajax_object.wp_az_ajax_url, data, response => {
-            console.log("load note response: " + JSON.stringify(response));
             if (response.status == 'success' && response.notes != null && response.scene_state != null) {
                 let note = new Note(response.notes.sequence, response.notes.title, response.notes.note_content, response.scene_state);
             } else {

@@ -6,9 +6,12 @@
 
     $table_name = $wpdb->prefix . 'anatomy_tours_notes';
 
-    $notes = $wpdb->get_row( "SELECT title, note_content, sequence, scene_state FROM $table_name WHERE post_id = $post->ID" );
-
-?>
+    $notes = $wpdb->get_results(
+            "SELECT title, note_content, sequence, scene_state
+                  FROM $table_name 
+                  WHERE post_id = $post->ID
+                  ORDER BY sequence ASC" );
+    ?>
 
 
 <div id="wpaz-3d-tours-layout">
@@ -36,9 +39,9 @@
                     <h2 class="post-title text-center">Notes</h2>
                     <form>
                         <div class="form-group">
-                            <input type="notes-title" class="form-control notes-title" placeholder="Enter title" value="<?php echo $notes->title ?>">
+                            <input type="notes-title" class="form-control notes-title" placeholder="Enter title" value="<?php echo $notes[0]->title ?>">
                         </div>
-                        <textarea class="notes-text form-control" rows="10" placeholder="Enter notes"><?php echo $notes->note_content ?></textarea>
+                        <textarea class="notes-text form-control" rows="10" placeholder="Enter notes"><?php echo $notes[0]->note_content ?></textarea>
                     </form>
 
                     <div class="dropdown">
@@ -72,10 +75,10 @@
                 <div id="wpaz-notes-container">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h2 class="text-center notes-title"><?php echo $notes->title ?></h2>
+                            <h2 class="text-center notes-title"><?php echo $notes[0]->title ?></h2>
                         </div>
                         <div class="panel-body notes-text" data-scantext data-target="embedded-human">
-                            <?php echo $notes->note_content ?>
+                            <?php echo $notes[0]->note_content ?>
                         </div>
                     </div>
                 </div>
@@ -87,19 +90,14 @@
         </div>
 
         <div id="notes-timeline" class="row">
-
 		    <?php
-
-            if ($notes != null):
-                include TMPL_URL_ITEM_NOTE_SECTION;
-            endif
-
+                if ($notes != null):
+                    foreach($notes as $note){
+                        include TMPL_URL_ITEM_NOTE_SECTION;
+                    }
+                endif
             ?>
-
-
         </div>
-
-
 
     </div>
 </div>

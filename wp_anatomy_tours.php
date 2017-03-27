@@ -293,10 +293,9 @@ class wp_az_anatomy_tours {
 	public function load_notes(){
 
 		global $wpdb;
-		$table_name = $wpdb->prefix . 'az_anatomy_tours';
+		$table_name = $wpdb->prefix . 'anatomy_tours_notes';
 
 		$post_id = intval($_GET['wp_az_post_id']);
-		$order = intval($_GET['wp_az_notes_order']);
 
 		$notes = $wpdb->get_row( "SELECT title, note_content, sequence, scene_state FROM $table_name WHERE post_id = $post_id" );
 		$scene_state = stripslashes_deep($notes->scene_state);
