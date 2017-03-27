@@ -6,6 +6,8 @@ class Note {
 
     constructor (sequence, title, note_content, scene_state) {
 
+        appGlobals.numNotes = parseInt(appGlobals.numNotes) + 1;
+
         this.id = "notes-" + sequence;
         this.sequence = sequence;
         this.title = title;
@@ -66,6 +68,7 @@ class Note {
     removeNote(id){
         if (appGlobals.notes[id]) {
             delete appGlobals.notes[id];
+            appGlobals.numNotes = parseInt(appGlobals.numNotes) - 1;
         } else {
             console.log("removeNote failed. Could not delete note with id: " + id);
         }

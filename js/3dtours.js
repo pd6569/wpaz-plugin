@@ -79,9 +79,13 @@ class AnatomyTour {
         this.$addNewNotesSection.on('click', (event) => {
             event.preventDefault();
             console.log("addNewNotes");
-            this.saveNotes(() => {
-                this.addNotesSection();
-            });
+
+            // get current notes info
+            let title = this.$notesTitle.val();
+            let note_content = this.$notesText.val();
+
+            this.saveNotes(title, note_content);
+            this.addNotesSection();
 
         });
 
@@ -178,15 +182,16 @@ class AnatomyTour {
     }
 
     addNotesSection(){
-
-        /*this.numNotes++;
-        this.currentNotesSequence = this.numNotes;
-
-        let note = new Note(this.currentNotesSequence, "", "", "");
-
         this.$notesTitle.val("");
-        this.$notesText.val("");*/
+        this.$notesText.val("");
 
+        let sequence = (parseInt(appGlobals.numNotes) + 1);
+        let addNote = new Note(sequence, "", "", "");
+        this.human.send('scene.capture', (sceneState) => {
+            addNote.setSceneState(JSON.stringify(sceneState));
+            appGlobals.currentNote = addNote;
+            console.log("new notes section added: " + JSON.stringify(addNote));
+        });
     }
 
     loadNotes(){
@@ -208,13 +213,14 @@ class AnatomyTour {
                 console.log("Notes loaded from server. human loaded: " + appGlobals['humanLoaded']);
                 let notesArray = data.notes;
                 if (notesArray.length > 0){
-                    let i = 0;
+                    let numNotes = 0;
                     notesArray.forEach(function(note){
-                        i++;
+                        numNotes++;
                         let addNote = new Note(note.sequence, note.title, note.note_content, note.scene_state);
-                        if (i == 1) appGlobals.currentNote = addNote;
+                        if (numNotes == 1) appGlobals.currentNote = addNote;
                     });
-                    console.log("appGlobals notes object created. currentNote: " + appGlobals.currentNote.title);
+
+                    console.log("appGlobals notes object created. currentNote: " + appGlobals.currentNote.title + " total number of notes " + appGlobals.numNotes);
                     if (appGlobals.humanLoaded == true) setInitialSceneState(human, null);
 
                 } else {

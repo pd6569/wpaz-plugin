@@ -6,6 +6,7 @@ let appGlobals = {
 
     // data
     notes: {},
+    numNotes: 0,
     actions: {},
 
     // current note object (being edited or viewed in right hand panel)
