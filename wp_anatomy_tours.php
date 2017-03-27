@@ -52,8 +52,8 @@ class wp_az_anatomy_tours {
 		// Ajax hooks
 		add_action('wp_ajax_save_notes', array($this, 'save_notes' ));
 		add_action('wp_ajax_load_notes', array($this, 'load_notes'));
-		add_action('wp_ajax_load_single_note', array($this, 'load_single_note'));
 		add_action('wp_ajax_nopriv_load_notes', array($this, 'load_notes'));
+		add_action('wp_ajax_load_single_note', array($this, 'load_single_note'));
 
 		register_activation_hook(__FILE__, array($this, 'plugin_activate'));
 		register_deactivation_hook(__FILE__, array($this, 'plugin_deactivate'));
@@ -318,12 +318,20 @@ class wp_az_anatomy_tours {
 		$post_id = intval($_GET['wp_az_post_id']);
 
 		$notes = $wpdb->get_row( "SELECT title, note_content, sequence, scene_state FROM $table_name WHERE post_id = $post_id" );
-		$scene_state = stripslashes_deep($notes->scene_state);
+
+		$notes = $wpdb->get_results(
+			"SELECT title, note_content, sequence, scene_state
+                  FROM $table_name 
+                  WHERE post_id = $post_id
+                  ORDER BY sequence ASC" );
+		foreach ($notes as $note){
+			$scene_state = stripslashes_deep($note->scene_state);
+			$note->scene_state = $scene_state;
+		}
 
 		wp_send_json(array (
 			'status' => "success",
 			'notes' => $notes,
-			'scene_state' => $scene_state
 		));
 
 	}

@@ -171,7 +171,7 @@ class AnatomyTour {
         });
 
         // Load notes data
-        /*this.loadNotes();*/
+        this.loadNotes();
 
         if(!this.isUserAdmin) {
             this.setScanner();
@@ -192,6 +192,25 @@ class AnatomyTour {
         this.$notesTitle.val("");
         this.$notesText.val("");
 
+    }
+
+    loadNotes(){
+        console.log("loadNotes");
+        jQuery.ajax({
+            url: ajax_object.wp_az_ajax_url,
+            data: {
+                action: 'load_notes',
+                wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
+                wp_az_post_id: ajax_object.wp_az_post_id,
+            },
+            error: function() {
+                console.log("Failed to load notes");
+            },
+            success: function(data) {
+                console.log("Notes loaded: " + JSON.stringify(data));
+            },
+            type: 'GET'
+        });
     }
 
     loadSingleNote(noteSequenceNumber) {
