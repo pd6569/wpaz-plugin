@@ -197,18 +197,30 @@ class wp_az_anatomy_tours {
 		global $wpdb;
 		global $wp_az_db_version;
 
-		$table_name = $wpdb->prefix . 'az_anatomy_tours';
+		$table_notes = $wpdb->prefix . 'anatomy_tours_notes';
+		$table_actions = $wpdb->prefix . 'anatomy_tours_actions';
+
 
 		$charset_collate = $wpdb->get_charset_collate();
 
-		$sql = "CREATE TABLE $table_name (
+		$sql = "CREATE TABLE $table_notes (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
 		post_id mediumint(9) NOT NULL,
-		notes_time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-		notes_title tinytext NOT NULL,
-		notes_text text NOT NULL,
-		notes_order tinyint NOT NULL,
-		notes_scene_state text,
+		created datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+		last_modified datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+		title tinytext NOT NULL,
+		note_content text NOT NULL,
+		sequence tinyint NOT NULL,
+		scene_state text,
+		PRIMARY KEY  (id)
+		) $charset_collate;";
+
+		$sql .= "CREATE TABLE $table_actions (
+		id mediumint(9) NOT NULL AUTO_INCREMENT,
+		post_id mediumint(9) NOT NULL,
+		notes_id mediumint(9) NOT NULL,
+		action_type text,
+		scene_state text,
 		PRIMARY KEY  (id)
 		) $charset_collate;";
 
@@ -236,14 +248,14 @@ class wp_az_anatomy_tours {
 		// write to database
 		global $wpdb;
 
-		$table_name = $wpdb->prefix . 'az_anatomy_tours';
+		$table_name = $wpdb->prefix . 'anatomy_tours_notes';
 		$notes_data = array (
-			'post_id'           => $post_id,
-			'notes_time'        => current_time('mysql'),
-			'notes_title'       => $notes['title'],
-			'notes_text'        => $notes['text'],
-			'notes_order'       => $notes['order'],
-			'notes_scene_state' => $notes['sceneStateStr']
+			'post_id'              => $post_id,
+			'last_modified'        => current_time('mysql'),
+			'title'                => $notes['title'],
+			'note_content'         => $notes['note_content'],
+			'sequence'             => $notes['sequence'],
+			'scene_state'          => $notes['scene_state']
 		);
 
 		// try to update notes if available
@@ -251,13 +263,14 @@ class wp_az_anatomy_tours {
 				$table_name,
 				$notes_data,
 				array (
-					post_id => $post_id,
-					notes_order => $notes['order']
+					post_id  => $post_id,
+					sequence => $notes['sequence']
 				)
 			);
 
 		// insert new notes if no record exists
 		if (!$update) {
+			$notes_data['created'] = current_time('mysql');
 			$wpdb->insert(
 				$table_name,
 				$notes_data
@@ -266,12 +279,12 @@ class wp_az_anatomy_tours {
 
 		// success
 		wp_send_json (array(
-			'status'    => 'success',
-			'message'   => 'Notes saved',
-			'id'        => $post_id,
-			'title'     => $notes['title'],
-			'text'      => $notes['text'],
-			'order'     => $notes['order'],
+			'status'                => 'success',
+			'message'               => 'Notes saved',
+			'post_id'               => $post_id,
+			'title'                 => $notes['title'],
+			'note_content'          => $notes['note_content'],
+			'sequence'              => $notes['sequence'],
 		));
 
 
@@ -285,8 +298,8 @@ class wp_az_anatomy_tours {
 		$post_id = intval($_GET['wp_az_post_id']);
 		$order = intval($_GET['wp_az_notes_order']);
 
-		$notes = $wpdb->get_row( "SELECT notes_title, notes_text, notes_order, notes_scene_state FROM $table_name WHERE post_id = $post_id" );
-		$scene_state = stripslashes_deep($notes->notes_scene_state);
+		$notes = $wpdb->get_row( "SELECT title, note_content, sequence, scene_state FROM $table_name WHERE post_id = $post_id" );
+		$scene_state = stripslashes_deep($notes->scene_state);
 
 		wp_send_json(array (
 			'status' => "success",

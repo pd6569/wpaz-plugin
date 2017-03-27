@@ -4,13 +4,13 @@
 
 class Note {
 
-    constructor (order, title, text, sceneStateStr) {
+    constructor (sequence, title, note_content, scene_state) {
 
-        this.id = "notes-" + order;
-        this.order = order;
+        this.id = "notes-" + sequence;
+        this.sequence = sequence;
         this.title = title;
-        this.text = text;
-        this.sceneStateStr = sceneStateStr;
+        this.note_content = note_content;
+        this.scene_state = scene_state;
 
         // add notes to global notes object
         this.addNote(this);
@@ -20,20 +20,20 @@ class Note {
         return this.id;
     }
 
-    getOrder(){
-        return this.order;
+    getSequence(){
+        return this.sequence;
     }
 
     getTitle(){
         return this.title;
     }
 
-    getText(){
-        return this.text;
+    getNoteContent(){
+        return this.note_content;
     }
 
-    getSceneStateStr(){
-        return this.sceneStateStr;
+    getSceneState(){
+        return this.scene_state;
     }
 
     addNote(noteObject) {

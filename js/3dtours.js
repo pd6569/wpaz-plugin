@@ -184,13 +184,11 @@ class AnatomyTour {
 
         //!* Process the AJAX POST request
         jQuery.get(ajax_object.wp_az_ajax_url, data, response => {
-            if (response.status == 'success') {
-                let note = new Note(response.notes.notes_order, response.notes.notes_title, response.notes.notes_text, response.scene_state);
-                console.log("Loaded notes. And created object:" + JSON.stringify(note) + " global notes: " + JSON.stringify(appGlobals));
+            console.log("load note response: " + JSON.stringify(response));
+            if (response.status == 'success' && response.notes != null && response.scene_state != null) {
+                let note = new Note(response.notes.sequence, response.notes.title, response.notes.note_content, response.scene_state);
             } else {
-
-                console.log("Failed. " + JSON.stringify(response));
-
+                console.log("Failed to load notes, or no notes available" + JSON.stringify(response));
             }
         });
 
@@ -203,12 +201,12 @@ class AnatomyTour {
             this.currentSceneState = sceneState;
 
             let title = this.$notesTitle.val();
-            let notesText = this.$notesText.val();
-            let notesOrder = this.notesOrder;
-            let sceneStateString = JSON.stringify(this.currentSceneState);
+            let note_content = this.$notesText.val();
+            let sequence = this.notesOrder;
+            let scene_state = JSON.stringify(this.currentSceneState);
 
             // create new notes object if does not already exist
-            let note = new Note(notesOrder, title, notesText, sceneStateString);
+            let note = new Note(sequence, title, note_content, scene_state);
 
             //!* Data to make available via the $_POST variable
             let data = {
