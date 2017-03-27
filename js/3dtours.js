@@ -14,7 +14,6 @@ class AnatomyTour {
         // 3d model variables
         this.cameraInfo = {};
         this.currentSceneState = {};
-        this.resetSceneState = {};
         this.sceneInfo = {};
         this.sceneObjects = {};
 
@@ -36,7 +35,7 @@ class AnatomyTour {
             appGlobals['humanLoaded'] = true;
             this.updateCameraInfo();
             this.setToolbarListeners();
-            this.setInitialSceneState(this.human, this.resetSceneState, (sceneState) => {
+            this.setInitialSceneState(this.human, (sceneState) => {
                 this.sceneObjects = sceneState.objects;
             });
             this.registerCallbacks();
@@ -88,8 +87,13 @@ class AnatomyTour {
 
         this.$saveBtn.on('click', (event) => {
             event.preventDefault();
-            console.log("Save notes. Current note object: " + JSON.stringify(appGlobals.currentNote));
-            this.saveNotes();
+            console.log("Save notes.");
+
+            // get notes data
+            let title = this.$notesTitle.val();
+            let note_content = this.$notesText.val();
+
+            this.saveNotes(title, note_content);
 
 
         });
@@ -188,7 +192,6 @@ class AnatomyTour {
     loadNotes(){
         console.log("loadNotes");
         let human = this.human;
-        let resetSceneState = this.resetSceneState;
         let setInitialSceneState = this.setInitialSceneState;
 
         jQuery.ajax({
@@ -205,17 +208,21 @@ class AnatomyTour {
                 console.log("Notes loaded from server. human loaded: " + appGlobals['humanLoaded']);
                 let notesArray = data.notes;
                 if (notesArray.length > 0){
+                    let i = 0;
                     notesArray.forEach(function(note){
-                        new Note(note.sequence, note.title, note.note_content, note.scene_state);
+                        i++;
+                        let addNote = new Note(note.sequence, note.title, note.note_content, note.scene_state);
+                        if (i == 1) appGlobals.currentNote = addNote;
                     });
-                    appGlobals.currentNote = appGlobals.notes['note-1'];
-                    console.log("appGlobals notes object created: " + JSON.stringify(appGlobals.notes));
-                    if (appGlobals['humanLoaded'] = true) setInitialSceneState(human, resetSceneState, null);
+                    console.log("appGlobals notes object created. currentNote: " + appGlobals.currentNote.title);
+                    if (appGlobals.humanLoaded == true) setInitialSceneState(human, null);
 
                 } else {
-                    appGlobals.currentNote = new Note(1, "", "", "");
-                    if (appGlobals['humanLoaded'] = true) setInitialSceneState(human, resetSceneState, null);
-                    console.log("no notes to load. New note created. appGlobals" + JSON.stringify(appGlobals.notes));
+                    human.send('scene.capture', (sceneState) => {
+                        let sceneStateStr = JSON.stringify(sceneState);
+                        appGlobals.currentNote = new Note(1, "", "", sceneStateStr);
+                        console.log("no notes to load. New note created.");
+                    });
                 }
                 appGlobals.notesLoaded = true;
             },
@@ -253,24 +260,18 @@ class AnatomyTour {
 
     }
 
-    saveNotes(callback){
+    saveNotes(title, note_content, callback){
         Utils.setSavingStatus("Saving...");
 
         this.human.send('scene.capture', (sceneState) => {
             this.currentSceneState = sceneState;
 
-            let note = {};
-            let title = this.$notesTitle.val();
-            let note_content = this.$notesText.val();
-            let sequence = this.currentNotesSequence;
-            let scene_state = JSON.stringify(this.currentSceneState);
-
             // update current note properties
             appGlobals.currentNote.setNoteContent(note_content);
             appGlobals.currentNote.setTitle(title);
-            appGlobals.currentNote.setSceneState(scene_state);
+            appGlobals.currentNote.setSceneState(JSON.stringify(sceneState));
 
-            note = appGlobals.currentNote;
+            let note = appGlobals.currentNote;
 
             //!* Data to make available via the $_POST variable
             let data = {
@@ -331,23 +332,15 @@ class AnatomyTour {
         })
     }
 
-    setInitialSceneState(human, resetSceneState, callback){
-        console.log("setInitialSceneState");
+    setInitialSceneState(human, callback){
+        console.log("setInitialSceneState. currentNote: " + appGlobals.currentNote.title);
 
-        if (appGlobals.notes[1] != "" && appGlobals.notes[1] != null){
+        if (Object.keys(appGlobals.currentNote).length !== 0){
             console.log("setInitialSceneState restore previous scene state");
-            let scene_state = JSON.parse(appGlobals.notes[1].scene_state);
+            let scene_state = JSON.parse(appGlobals.currentNote['scene_state']);
             human.send("scene.restore", scene_state);
 
-            // save scene as reset point
-            resetSceneState = scene_state;
             if (callback) callback(scene_state);
-        } else {
-            console.log("setInitialSceneState no previous state to restore, set reset point");
-            human.send('scene.capture', (sceneState) => {
-                resetSceneState = sceneState;
-                if (callback) callback(sceneState);
-            });
         }
     }
 
@@ -380,8 +373,8 @@ class AnatomyTour {
         let $toolbarReset = jQuery('#toolbar-reset');
 
         $toolbarReset.on('click', event => {
-            console.log("reset scene");
-            this.human.send("scene.restore", this.resetSceneState);
+            console.log("reset scene.");
+            this.human.send("scene.restore", JSON.parse(appGlobals.currentNote.scene_state));
         })
 
     }

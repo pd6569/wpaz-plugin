@@ -24,12 +24,17 @@ class Note {
         return this.sequence;
     }
 
+    setSequence(sequence){
+        this.sequence = sequence;
+    }
+
     getTitle(){
         return this.title;
     }
 
     setTitle(title){
         this.title = title;
+        this.updateNotes();
         console.log("title updated");
     }
 
@@ -39,6 +44,7 @@ class Note {
 
     setNoteContent(note_content){
         this.note_content = note_content;
+        this.updateNotes();
         console.log("note_content updated");
     }
 
@@ -48,6 +54,7 @@ class Note {
 
     setSceneState(sceneState){
         this.scene_state = sceneState;
+        this.updateNotes();
         console.log("scene_state updated");
     }
 
@@ -66,7 +73,7 @@ class Note {
 
     // update notes collection
     updateNotes(){
-        appGlobals.notes[this.sequence] = this;
-        console.log("notes updated. new content: " + appGlobals.notes[this.sequence]);
+        appGlobals.notes[this.id] = this;
+        console.log("appGlobal.notes updated. id: " + this.id);
     }
 }
