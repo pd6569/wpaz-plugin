@@ -206,16 +206,16 @@ class AnatomyTour {
                 let notesArray = data.notes;
                 if (notesArray.length > 0){
                     notesArray.forEach(function(note){
-                        appGlobals.notes[note.sequence] = new Note(note.sequence, note.title, note.note_content, note.scene_state);
+                        new Note(note.sequence, note.title, note.note_content, note.scene_state);
                     });
-                    appGlobals.currentNote = appGlobals.notes[1];
-                    console.log("appGlobals notes object created.");
+                    appGlobals.currentNote = appGlobals.notes['note-1'];
+                    console.log("appGlobals notes object created: " + JSON.stringify(appGlobals.notes));
                     if (appGlobals['humanLoaded'] = true) setInitialSceneState(human, resetSceneState, null);
 
                 } else {
                     appGlobals.currentNote = new Note(1, "", "", "");
                     if (appGlobals['humanLoaded'] = true) setInitialSceneState(human, resetSceneState, null);
-                    console.log("no notes to load. New note created: " + JSON.stringify(appGlobals.currentNote));
+                    console.log("no notes to load. New note created. appGlobals" + JSON.stringify(appGlobals.notes));
                 }
                 appGlobals.notesLoaded = true;
             },
@@ -265,15 +265,7 @@ class AnatomyTour {
             let sequence = this.currentNotesSequence;
             let scene_state = JSON.stringify(this.currentSceneState);
 
-            // create new notes object if does not already exist
-            /*if (Object.keys(this.currentNote).length == 0 || this.currentNote == null) {
-                let note = new Note(sequence, title, note_content, scene_state);
-                this.currentNote = note;
-            } else {
-                this.currentNote.setNoteContent(note_content);
-                this.currentNote.setTitle(title);
-                note = this.currentNote;
-            }*/
+            // update current note properties
             appGlobals.currentNote.setNoteContent(note_content);
             appGlobals.currentNote.setTitle(title);
             appGlobals.currentNote.setSceneState(scene_state);

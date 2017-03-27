@@ -13,7 +13,7 @@ class Note {
         this.scene_state = scene_state;
 
         // add notes to global notes object
-        this.addNote(this);
+        this.addNote();
     }
 
     getId(){
@@ -51,9 +51,9 @@ class Note {
         console.log("scene_state updated");
     }
 
-    addNote(noteObject) {
-        let id = this.id;
-        appGlobals.notes[id] = noteObject;
+    addNote() {
+        appGlobals.notes[this.id] = this;
+        console.log("new note added to global notes: " + JSON.stringify(this.title));
     }
 
     removeNote(id){
@@ -62,5 +62,11 @@ class Note {
         } else {
             console.log("removeNote failed. Could not delete note with id: " + id);
         }
+    }
+
+    // update notes collection
+    updateNotes(){
+        appGlobals.notes[this.sequence] = this;
+        console.log("notes updated. new content: " + appGlobals.notes[this.sequence]);
     }
 }
