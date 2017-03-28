@@ -74,9 +74,10 @@ class AnatomyTour {
         // Toolbar
         this.$toolbarReset = jQuery('#toolbar-reset');
 
-        // save/add notes
+        // save/add/delete notes
         this.$saveBtn = jQuery('#notes-save-btn');
         this.$addNewNotesSection = jQuery('#notes-add-new-btn');
+        this.$deleteNoteBtn = jQuery('#notes-delete-btn');
 
 
         /*********************
@@ -108,6 +109,7 @@ class AnatomyTour {
         // Save/Add new
         this.$saveBtn.on('click', (event) => { this.saveNotes(this.$noteTitle.val(), this.$noteText.val()); });
         this.$addNewNotesSection.on('click', (event) => { this.addNoteSection(); });
+        this.$deleteNoteBtn.on('click', (event) => { this.deleteNote(); });
 
         // Timeline
         this.$editNote.on('click', (event) => { this.editNote(jQuery(event.target).closest('div.note-item').attr('id')) });
@@ -123,6 +125,39 @@ class AnatomyTour {
         } else {
             this.setAdminUi();
         }
+    }
+
+    // Class methods
+
+    deleteNote(){
+
+        console.log("delete Note");
+        let noteToDelete = appGlobals.currentNote;
+
+        // remove from timeline
+        jQuery('#' + noteToDelete.id).fadeOut();
+
+        // clear fields
+        this.$noteTitle.val("");
+        this.$noteText.val("");
+
+        jQuery.ajax({
+            url: ajax_object.wp_az_ajax_url,
+            data: {
+                action: 'delete_note',
+                wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
+                wp_az_post_id: ajax_object.wp_az_post_id,
+                wp_az_note_sequence: noteToDelete.sequence
+            },
+            error: function() {
+                console.log("Failed to delete note");
+            },
+            success: function(data) {
+                console.log("Note deleted: " + JSON.stringify(data));
+            },
+            type: 'POST'
+        });
+
     }
 
     setAdminUi(){

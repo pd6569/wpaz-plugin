@@ -6,6 +6,7 @@ let appGlobals = {
 
     // data
     notes: {},
+    sequenceIndex: [],
     numNotes: 0,
     actions: {},
 

@@ -56,6 +56,7 @@ class wp_az_anatomy_tours {
 		add_action('wp_ajax_load_single_note', array($this, 'load_single_note'));
 		add_action('wp_ajax_send_item_templates', array($this, 'send_item_templates'));
 		add_action('wp_ajax_nopriv_send_item_templates', array($this, 'send_item_templates'));
+		add_action('wp_ajax_delete_note', array($this, 'delete_note'));
 
 		register_activation_hook(__FILE__, array($this, 'plugin_activate'));
 		register_deactivation_hook(__FILE__, array($this, 'plugin_deactivate'));
@@ -323,8 +324,6 @@ class wp_az_anatomy_tours {
 
 		$post_id = intval($_GET['wp_az_post_id']);
 
-		$notes = $wpdb->get_row( "SELECT title, note_content, sequence, scene_state FROM $table_name WHERE post_id = $post_id" );
-
 		$notes = $wpdb->get_results(
 			"SELECT title, note_content, sequence, scene_state
                   FROM $table_name 
@@ -349,6 +348,27 @@ class wp_az_anatomy_tours {
 		wp_send_json(array (
 			'status' => "success",
 			'templates' => $item_templates,
+		));
+
+	}
+
+	public function delete_note() {
+
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'anatomy_tours_notes';
+
+		$post_id = intval($_POST['wp_az_post_id']);
+		$sequence = intval($_POST['wp_az_note_sequence']);
+
+		$wpdb->delete(
+			$table_name,
+			array(
+				post_id => $post_id,
+				sequence => $sequence));
+
+		wp_send_json(array (
+			'status' => "success",
+			'message' => "Note deleted: " . $sequence,
 		));
 
 	}

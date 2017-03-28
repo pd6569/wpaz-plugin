@@ -20,6 +20,7 @@ class Note {
         if (!doNotAdd) {
             appGlobals.numNotes = parseInt(appGlobals.numNotes) + 1;
             this.addNote();
+            this.updateSequenceIndex();
         }
     }
 
@@ -83,5 +84,10 @@ class Note {
     updateNotes(){
         appGlobals.notes[this.id] = this;
         console.log("appGlobal.notes updated. id: " + this.id);
+    }
+
+    // Sequence index
+    updateSequenceIndex(){
+        appGlobals.sequenceIndex.push([this.id, this.sequence])
     }
 }
