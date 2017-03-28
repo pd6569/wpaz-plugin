@@ -86,8 +86,15 @@ class AnatomyTour {
             console.log("edit note. id: " + id + " sequence: " + sequence + " title: " + title);
 
             let noteToEdit = appGlobals.notes[id];
+
+            jQuery('#current-note-label').text('Note ' + noteToEdit.sequence);
             jQuery('.notes-title').val(noteToEdit.title);
             jQuery('.notes-text').val(noteToEdit.note_content);
+
+            // scroll to top
+            jQuery('html, body').animate({
+                scrollTop: 0
+            }, 500);
 
             appGlobals.currentNote = noteToEdit;
         });
