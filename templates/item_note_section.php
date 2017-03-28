@@ -4,8 +4,8 @@
 		<div class="panel-heading">
 			<h3 class="panel-title">
                 <span class="note-title"><?php echo $note->title ?></span>
-				<span class="glyphicon glyphicon-trash pull-right delete-note note-actions" aria-hidden="true"></span>
-                <span class="glyphicon glyphicon-pencil pull-right edit-note note-actions" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon-trash pull-right delete-note note-actions hvr-grow" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-pencil pull-right edit-note note-actions hvr-grow" aria-hidden="true"></span>
             </h3>
 
 		</div>
