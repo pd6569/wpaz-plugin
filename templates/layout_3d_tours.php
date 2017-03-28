@@ -57,7 +57,7 @@
                                     <ul id="actions-dropdown-container" class="dropdown-menu" aria-labelledby="actions-dropdown">
                                     </ul>
                                 </div>
-                                <span id="num-actions" class="label label-info">6 actions</span>
+                                <span id="num-actions" class="label label-info">0 actions</span>
                             </div>
 
                             <div class="col-md-6 reset-buttons">

@@ -50,12 +50,19 @@ class AnatomyTour {
         this.$noteSequenceNum.text("1");
         this.$notesTitle = jQuery('.notes-title');
         this.$notesText = jQuery('.notes-text');
-        this.$actionStatusBox = jQuery('#action-status-box');
+
         this.$savingStatus = jQuery('.saving-status');
+
+        // actions
         this.$addAction = jQuery('#action-add');
+        this.$actionsDropdownContainer = jQuery('#actions-dropdown-container');
+        this.$numActions = jQuery('#num-actions');
+        this.$actionStatusBox = jQuery('#action-status-box');
+
+
         this.$saveBtn = jQuery('#notes-save-btn');
         this.$addNewNotesSection = jQuery('#notes-add-new-btn');
-        this.$actionsDropdownContainer = jQuery('#actions-dropdown-container');
+
 
         /* timeline */
         this.$notesTimelineContainer = jQuery('#notes-timeline');
@@ -108,6 +115,7 @@ class AnatomyTour {
         this.$addAction.on('click', (event) => {
 
             this.numActions++;
+            this.$numActions.text(this.numActions + ' actions');
 
             /*let actionId = "action-" + this.numActions;
             let $actionItem = jQuery("<li id='" + actionId + "' class='list-group-item'><a>" + this.numActions + ". Updated Camera Position</a></li>")
