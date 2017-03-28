@@ -9,6 +9,11 @@ let appGlobals = {
     numNotes: 0,
     actions: {},
 
+    // templates
+    templates: {
+        NOTE_SECTION: {},
+    },
+
     // current note object (being edited or viewed in right hand panel)
     currentNote: {},
 

@@ -82,10 +82,12 @@ class AnatomyTour {
             console.log("addNewNotes");
 
             // get current notes info
+            let id = appGlobals.currentNote.id;
             let title = this.$notesTitle.val();
             let note_content = this.$notesText.val();
 
             this.saveNotes(title, note_content);
+
             this.addNotesSection();
 
         });
@@ -197,8 +199,7 @@ class AnatomyTour {
                 console.log("Failed to get item templates");
             },
             success: function(data) {
-                console.log("Loaded item templates: " + JSON.stringify(data));
-                $notesTimelineContainer.append(data.templates['NOTE_SECTION'])
+                appGlobals.templates.NOTE_SECTION = (data.templates['NOTE_SECTION']);
             },
             type: 'GET'
         });
@@ -213,7 +214,6 @@ class AnatomyTour {
         this.human.send('scene.capture', (sceneState) => {
             addNote.setSceneState(JSON.stringify(sceneState));
             appGlobals.currentNote = addNote;
-            console.log("new notes section added: " + JSON.stringify(addNote));
         });
     }
 
@@ -291,6 +291,23 @@ class AnatomyTour {
 
     saveNotes(title, note_content, callback){
         Utils.setSavingStatus("Saving...");
+
+        // update UI
+        let $updateNote = this.$notesTimelineContainer.find('#' + appGlobals.currentNote.id);
+        if (($updateNote).length !== 0) {
+            // update note
+            $updateNote.find('.note-title').text(title);
+            $updateNote.find('.note-content').text(note_content);
+        } else {
+            // append new note
+            let noteSectionHtml = appGlobals.templates.NOTE_SECTION;
+            let $noteSection = jQuery(jQuery.parseHTML(noteSectionHtml));
+            $noteSection.find('.note-item').attr('id', 'pwnage');
+            $noteSection.find('.note-title').html(title);
+            $noteSection.find('.note-content').html(note_content);
+
+            this.$notesTimelineContainer.append($noteSection);
+        }
 
         this.human.send('scene.capture', (sceneState) => {
             this.currentSceneState = sceneState;

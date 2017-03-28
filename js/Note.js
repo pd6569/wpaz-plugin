@@ -8,11 +8,13 @@ class Note {
 
         appGlobals.numNotes = parseInt(appGlobals.numNotes) + 1;
 
-        this.id = "notes-" + sequence;
+        this.id = "note-" + sequence;
         this.sequence = sequence;
         this.title = title;
         this.note_content = note_content;
         this.scene_state = scene_state;
+
+        console.log("new note created. id: " + this.id);
 
         // add notes to global notes object
         this.addNote();
