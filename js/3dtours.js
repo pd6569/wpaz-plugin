@@ -56,7 +56,8 @@ class AnatomyTour {
         // actions
         this.$addAction = jQuery('#action-add');
         this.$actionsDropdownContainer = jQuery('#actions-dropdown-container');
-        this.$numActions = jQuery('#num-actions');
+        this.$numActionsLabel = jQuery('#num-actions');
+        this.$clearActions = jQuery('#toolbar-clear-actions');
         this.$actionStatusBox = jQuery('#action-status-box');
 
 
@@ -115,7 +116,7 @@ class AnatomyTour {
         this.$addAction.on('click', (event) => {
 
             this.numActions++;
-            this.$numActions.text(this.numActions + ' actions');
+            this.$numActionsLabel.text(this.numActions + ' actions');
 
             /*let actionId = "action-" + this.numActions;
             let $actionItem = jQuery("<li id='" + actionId + "' class='list-group-item'><a>" + this.numActions + ". Updated Camera Position</a></li>")
@@ -182,6 +183,12 @@ class AnatomyTour {
             });
 
 
+        });
+
+        this.$clearActions.on('click', () => {
+            this.numActions = 0;
+            this.$numActionsLabel.text('0 actions');
+            this.$actionsDropdownContainer.empty();
         });
 
         // Load notes data
