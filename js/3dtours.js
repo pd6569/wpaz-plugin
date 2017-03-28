@@ -23,17 +23,18 @@ class AnatomyTour {
         this.numActions = 0;
         this.storedActions = [];
 
-        // templates
-        this.itemTemplates = {};
-
         // user
         this.isUserAdmin = ajax_object.wp_az_user_role;
 
+        // Track changes
+        this.changesMade = false;
+
+        // Human loaded
         this.human.on('human.ready', () => {
             console.log("Human is now ready for action");
+
             appGlobals['humanLoaded'] = true;
             this.updateCameraInfo();
-            this.setToolbarListeners();
             this.setInitialSceneState(this.human, (sceneState) => {
                 this.sceneObjects = sceneState.objects;
             });
@@ -42,7 +43,9 @@ class AnatomyTour {
 
         // DOM
 
-        /* edit notes */
+        /**********************
+         *    NOTE CONTAINER  *
+         **********************/
 
         // note top navigation
         this.$noteNavLeft = jQuery('#note-nav-left');
@@ -68,221 +71,57 @@ class AnatomyTour {
         this.$clearActions = jQuery('#toolbar-clear-actions');
         this.$actionStatusBox = jQuery('#action-status-box');
 
+        // Toolbar
+        this.$toolbarReset = jQuery('#toolbar-reset');
+
         // save/add notes
         this.$saveBtn = jQuery('#notes-save-btn');
         this.$addNewNotesSection = jQuery('#notes-add-new-btn');
 
 
-        /* timeline */
+        /*********************
+         *      TIMELINE     *
+         *********************/
+
         this.$notesTimelineContainer = jQuery('#notes-timeline');
         this.$editNote = jQuery('.edit-note');
 
-        // Track changes
-        this.changesMade = false;
 
-        // DOM Event listeners
-        this.$noteTitle.on("change keyup paste", () => {
-            this.changesMade = true;
-            console.log("title changed. Changes made: " + this.changesMade);
-        });
-        this.$noteText.on("change keyup paste", () => {
-            this.changesMade = true;
-            console.log("content changed. Changes made: " + this.changesMade);
-        });
+        /*******************************
+         *  set DOM Event listeners    *
+         *******************************/
 
-        this.$noteNavLeft.on('click', () => {
-            this.navigateNotes('left');
-        });
+        // Note container
+        this.$noteNavLeft.on('click', () => { this.navigateNotes('left'); });
+        this.$noteNavRight.on('click', () => { this.navigateNotes('right'); });
+        this.$noteTitle.on("change keyup paste", () => { this.changesMade = true; });
+        this.$noteText.on("change keyup paste", () => { this.changesMade = true; });
 
-        this.$noteNavRight.on('click', () => {
-            this.navigateNotes('right');
-        });
+        // Actions
+        this.$addAction.on('click', (event) => { this.addAction(); });
+        this.$clearActions.on('click', () => { this.clearActions(); });
 
-        /*let setActiveNote = this.setActiveNote;*/
+        // Toolbar
+        this.$toolbarReset.on('click', event => { this.human.send("scene.restore", JSON.parse(appGlobals.currentNote.scene_state)); });
 
-        this.$editNote.on('click', function (event) {
-            event.preventDefault();
-            let $noteItem = jQuery(this).closest('div.note-item');
-            let id = $noteItem.attr('id');
-            console.log("edit note. id: " + id);
-            /*setActiveNote(id, true);*/
-            self.setActiveNote(id, true, self);
-        });
+        // Save/Add new
+        this.$saveBtn.on('click', (event) => { this.saveNotes(this.$noteTitle.val(), this.$noteText.val()); });
+        this.$addNewNotesSection.on('click', (event) => { this.addNoteSection(); });
 
-        this.$addNewNotesSection.on('click', (event) => {
-            event.preventDefault();
-            console.log("addNewNotes");
-
-            // get current notes info
-            let id = appGlobals.currentNote.id;
-            let title = this.$noteTitle.val();
-            let note_content = this.$noteText.val();
-
-            this.saveNotes(title, note_content);
-
-            this.addNotesSection();
-
-        });
-
-        this.$saveBtn.on('click', (event) => {
-            event.preventDefault();
-            console.log("Save notes.");
-
-            // get notes data
-            let title = this.$noteTitle.val();
-            let note_content = this.$noteText.val();
-
-            this.saveNotes(title, note_content);
-
-
-        });
-
-        this.$addAction.on('click', (event) => {
-
-            this.numActions++;
-            this.$numActionsLabel.text(this.numActions + ' actions');
-
-            /*let actionId = "action-" + this.numActions;
-            let $actionItem = jQuery("<li id='" + actionId + "' class='list-group-item'><a>" + this.numActions + ". Updated Camera Position</a></li>")
-
-            event.preventDefault();
-            this.$actionsDropdownContainer.append($actionItem);
-
-            // create new camera action
-            let action = new Action(this.numActions, 'camera', this.cameraInfo);
-            this.storedActions.push(action);
-            console.log("action stored: " + JSON.stringify(action));
-
-            $actionItem.on('click', (event) => {
-                this.human.send('camera.set', {
-                    position: action.data.position,
-                    up: action.data.up,
-                    animate: true
-                })
-            })*/
-
-
-            let actionId = "action-" + this.numActions;
-            let $actionItem = jQuery("<li id='" + actionId + "' class='list-group-item'><a> Action " + this.numActions + "</a></li>")
-
-            event.preventDefault();
-            this.$actionsDropdownContainer.append($actionItem);
-
-            /*// create new camera action
-            let action = new Action(this.numActions, 'camera', this.cameraInfo);
-            this.storedActions.push(action);
-            console.log("action stored: " + JSON.stringify(action));
-
-            $actionItem.on('click', (event) => {
-                this.human.send('camera.set', {
-                    position: action.data.position,
-                    up: action.data.up,
-                    animate: true
-                })
-            })
-            */
-
-            // create new generic action
-            this.getSceneState((sceneState) => {
-                let genAction = new Action(this.numActions, 'general', sceneState);
-                console.log("Scene state saved as action");
-                Utils.updateActionStatusBox("Action added to this note set.");
-
-                $actionItem.on('click', (event) => {
-                    event.preventDefault();
-
-                    this.human.send('camera.set', {
-                        position: genAction.data.camera.eye,
-                        target: genAction.data.camera.look,
-                        up: genAction.data.camera.up,
-                        animate: true
-                    }, () => {
-                        this.human.send('scene.restore', sceneState)
-                    });
-
-
-
-                })
-
-            });
-
-
-        });
-
-        this.$clearActions.on('click', () => {
-            this.numActions = 0;
-            this.$numActionsLabel.text('0 actions');
-            this.$actionsDropdownContainer.empty();
-        });
+        // Timeline
+        this.$editNote.on('click', (event) => { this.editNote(jQuery(event.target).closest('div.note-item').attr('id')) });
 
         // Load notes data
         this.loadNotes();
         this.getItemTemplates();
 
+        // Anatomy scanner
         if(!this.isUserAdmin) {
             this.setScanner();
         }
     }
 
-    setActiveNote(id, scrollToTop, appSelfRef){
-        let note = appGlobals.notes[id];
-
-        // get title/content
-        let $title = jQuery('.notes-title');
-        let $content = jQuery('.notes-text');
-
-        // save current note first if changes made
-        if (appSelfRef){
-            if (appSelfRef.isUserAdmin && appSelfRef.changesMade == true) {
-                appSelfRef.saveNotes($title.val(), $content.val());
-            }
-        } else if (this.isUserAdmin && this.changesMade == true) {
-            this.saveNotes($title.val(), $content.val());
-        }
-
-        // update note properties
-        jQuery('#current-note-label').text('Note ' + note.sequence);
-
-        // update title and content
-        if (this.isUserAdmin) {
-            $title.val(note.title);
-            $content.val(note.note_content);
-        } else {
-            $title.text(note.title);
-            $content.text(note.note_content);
-        }
-
-        // load scene
-        this.human.send("scene.restore", JSON.parse(note.scene_state));
-
-        // reset variables
-        this.changesMade = false;
-
-        // scroll to top
-        if (scrollToTop) {
-            jQuery('html, body').animate({
-                scrollTop: 0
-            }, 500);
-        }
-
-        appGlobals.currentNote = note;
-    }
-
-    navigateNotes(direction){
-       console.log("Navigate: " + direction);
-
-       let nextNote;
-       let noteSeq = parseInt(appGlobals.currentNote.sequence);
-
-        direction == 'right' ? noteSeq++ : noteSeq--;
-
-        Object.keys(appGlobals.notes).forEach((noteId) => {
-            if (appGlobals.notes[noteId].sequence == noteSeq) {
-                this.setActiveNote(noteId, false);
-            }
-        })
-    }
-
+    // INIT
     getItemTemplates(){
 
         let $notesTimelineContainer = this.$notesTimelineContainer;
@@ -300,22 +139,6 @@ class AnatomyTour {
                 appGlobals.templates.NOTE_SECTION = (data.templates['NOTE_SECTION']);
             },
             type: 'GET'
-        });
-    }
-
-    addNotesSection(){
-        this.$noteTitle.val("");
-        this.$noteText.val("");
-
-        let sequence = (parseInt(appGlobals.numNotes) + 1);
-        let addNote = new Note(sequence, "", "", "");
-
-        this.$currentNoteLabel.text("Note " + addNote.sequence);
-        this.$numNotesLabel.text(appGlobals.numNotes + " notes");
-
-        this.human.send('scene.capture', (sceneState) => {
-            addNote.setSceneState(JSON.stringify(sceneState));
-            appGlobals.currentNote = addNote;
         });
     }
 
@@ -361,35 +184,35 @@ class AnatomyTour {
         });
     }
 
-    loadSingleNote(noteSequenceNumber) {
+    setScanner(){
+        //ignores 'left', 'right', and 'bones of the' when searching for matching anatomy objects.
+        let toStrip = /^left\s|right\s|bones\sof\sthe\s/i;
 
-        /*console.log("loadSingleNote: " + noteSequenceNumber);
-
-        let data = {
-            action: 'load_single_note',
-            wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
-            wp_az_post_id: ajax_object.wp_az_post_id,
-            wp_az_sequence: noteSequenceNumber
-        };
-
-        //!* Process the AJAX POST request
-        jQuery.get(ajax_object.wp_az_ajax_url, data, response => {
-            if (response.status == 'success' && response.notes != null && response.scene_state != null) {
-                let noteToLoad = new Note(response.notes.sequence, response.notes.title, response.notes.note_content, response.scene_state);
-                console.log("Noted loaded: " + noteToLoad.title + " sequence: " + noteToLoad.sequence);
-                this.saveNotes(() => {
-                    console.log("save notes and then set title: " + noteToLoad.title);
-                    this.$noteSequenceNum.text(noteToLoad.sequence);
-                    this.$noteTitle.val(noteToLoad.title);
-                    this.$noteText.val(noteToLoad.note_content);
-                    this.currentNote = noteToLoad;
-                })
-            } else {
-                console.log("Failed to load note, or no note" + JSON.stringify(response));
-            }
-        });*/
-
+        this.$humanWidget.scanner({toStrip: toStrip, formatData: {
+            prefix: function(dataId) {
+                return '<a class="anatomy-object" data-id="' + dataId + '">'
+            },
+            suffix: "</a>"
+        }});
     }
+
+    // NOTE NAVIGATION
+    navigateNotes(direction){
+        console.log("Navigate: " + direction);
+
+        let nextNote;
+        let noteSeq = parseInt(appGlobals.currentNote.sequence);
+
+        direction == 'right' ? noteSeq++ : noteSeq--;
+
+        Object.keys(appGlobals.notes).forEach((noteId) => {
+            if (appGlobals.notes[noteId].sequence == noteSeq) {
+                this.setActiveNote(noteId, false);
+            }
+        })
+    }
+
+    // NOTE EDITOR
 
     saveNotes(title, note_content, callback){
         Utils.setSavingStatus("Saving...");
@@ -448,6 +271,115 @@ class AnatomyTour {
         });
     }
 
+    setActiveNote(id, scrollToTop){
+        let note = appGlobals.notes[id];
+
+        // get title/content
+        let $title = jQuery('.notes-title');
+        let $content = jQuery('.notes-text');
+
+        // save current note first if changes made
+        if (this.isUserAdmin && this.changesMade == true) {
+            this.saveNotes($title.val(), $content.val());
+        }
+
+        // update note properties
+        jQuery('#current-note-label').text('Note ' + note.sequence);
+
+        // update title and content
+        if (this.isUserAdmin) {
+            $title.val(note.title);
+            $content.val(note.note_content);
+        } else {
+            $title.text(note.title);
+            $content.text(note.note_content);
+        }
+
+        // load scene
+        this.human.send("scene.restore", JSON.parse(note.scene_state));
+
+        // reset variables
+        this.changesMade = false;
+
+        // scroll to top
+        if (scrollToTop) {
+            jQuery('html, body').animate({
+                scrollTop: 0
+            }, 500);
+        }
+
+        appGlobals.currentNote = note;
+    }
+
+    addNoteSection(){
+
+        // save current notes first
+        this.saveNotes(this.$noteTitle.val(), this.$noteText.val());
+
+        this.$noteTitle.val("");
+        this.$noteText.val("");
+
+        let sequence = (parseInt(appGlobals.numNotes) + 1);
+        let addNote = new Note(sequence, "", "", "");
+
+        this.$currentNoteLabel.text("Note " + addNote.sequence);
+        this.$numNotesLabel.text(appGlobals.numNotes + " notes");
+
+        this.human.send('scene.capture', (sceneState) => {
+            addNote.setSceneState(JSON.stringify(sceneState));
+            appGlobals.currentNote = addNote;
+        });
+    }
+
+    // ACTIONS
+    addAction() {
+        this.numActions++;
+        this.$numActionsLabel.text(this.numActions + ' actions');
+
+        let actionId = "action-" + this.numActions;
+        let $actionItem = jQuery("<li id='" + actionId + "' class='list-group-item'><a> Action " + this.numActions + "</a></li>")
+
+        this.$actionsDropdownContainer.append($actionItem);
+
+        // create new generic action
+        this.getSceneState((sceneState) => {
+            let genAction = new Action(this.numActions, 'general', sceneState);
+            console.log("Scene state saved as action");
+            Utils.updateActionStatusBox("Action added to this note set.");
+
+            $actionItem.on('click', (event) => {
+                event.preventDefault();
+
+                this.human.send('camera.set', {
+                    position: genAction.data.camera.eye,
+                    target: genAction.data.camera.look,
+                    up: genAction.data.camera.up,
+                    animate: true
+                }, () => {
+                    this.human.send('scene.restore', sceneState)
+                });
+
+
+
+            })
+
+        });
+
+    }
+
+    clearActions() {
+        this.numActions = 0;
+        this.$numActionsLabel.text('0 actions');
+        this.$actionsDropdownContainer.empty();
+    }
+
+    // TIMELINE
+    editNote(noteId){
+        this.setActiveNote(noteId, true);
+    }
+
+
+    // BIODIGITAL API FUNCTIONS
     getCameraInfoFromSceneState(sceneState) {
         return sceneState.eye;
     }
@@ -472,7 +404,6 @@ class AnatomyTour {
     }
 
     getSceneState(callback){
-
         this.human.send('scene.capture', (sceneState) => {
             callback(sceneState);
             return sceneState;
@@ -481,7 +412,6 @@ class AnatomyTour {
 
     setInitialSceneState(human, callback){
         console.log("setInitialSceneState. currentNote: " + appGlobals.currentNote.title);
-
         if (Object.keys(appGlobals.currentNote).length !== 0){
             console.log("setInitialSceneState restore previous scene state");
             let scene_state = JSON.parse(appGlobals.currentNote['scene_state']);
@@ -489,18 +419,6 @@ class AnatomyTour {
 
             if (callback) callback(scene_state);
         }
-    }
-
-    setScanner(){
-        //ignores 'left', 'right', and 'bones of the' when searching for matching anatomy objects.
-        let toStrip = /^left\s|right\s|bones\sof\sthe\s/i;
-
-        this.$humanWidget.scanner({toStrip: toStrip, formatData: {
-            prefix: function(dataId) {
-                return '<a class="anatomy-object" data-id="' + dataId + '">'
-            },
-            suffix: "</a>"
-        }});
     }
 
     updateCameraInfo() {
@@ -512,19 +430,6 @@ class AnatomyTour {
         })
     }
 
-    setToolbarListeners() {
-
-        // get DOM elements
-        console.log("setToolbarListeners");
-
-        let $toolbarReset = jQuery('#toolbar-reset');
-
-        $toolbarReset.on('click', event => {
-            console.log("reset scene.");
-            this.human.send("scene.restore", JSON.parse(appGlobals.currentNote.scene_state));
-        })
-
-    }
 }
 
 jQuery(document).ready(function() {
