@@ -17,10 +17,7 @@ class AnatomyTour {
         this.sceneInfo = {};
         this.sceneObjects = {};
 
-        // notes variables
-        this.numNotes = 0;
-
-        // actions varibles
+        // actions variables
         this.numActions = 0;
         this.storedActions = [];
 
@@ -45,16 +42,21 @@ class AnatomyTour {
 
         /* edit notes */
 
+        // note top navigation
+        this.$noteNavLeft = jQuery('#note-nav-left');
+        this.$noteNavRight = jQuery('#note-nav-right');
+
         // note properties
         this.$currentNoteLabel = jQuery('#current-note-label');
         this.$numNotesLabel = jQuery('#total-notes-label');
 
-        this.$notesContainer = jQuery('#wpaz-notes-container');
+        // edit note container
+        this.$editNoteContainer = jQuery('#wpaz-notes-container');
         this.$postTitle = jQuery('.post-title');
         this.$noteSequenceNum = jQuery('.notes-sequence');
         this.$noteSequenceNum.text("1");
-        this.$notesTitle = jQuery('.notes-title');
-        this.$notesText = jQuery('.notes-text');
+        this.$noteTitle = jQuery('.notes-title');
+        this.$noteText = jQuery('.notes-text');
         this.$savingStatus = jQuery('.saving-status');
 
         // actions
@@ -64,7 +66,7 @@ class AnatomyTour {
         this.$clearActions = jQuery('#toolbar-clear-actions');
         this.$actionStatusBox = jQuery('#action-status-box');
 
-
+        // save/add notes
         this.$saveBtn = jQuery('#notes-save-btn');
         this.$addNewNotesSection = jQuery('#notes-add-new-btn');
 
@@ -74,29 +76,25 @@ class AnatomyTour {
         this.$editNote = jQuery('.edit-note');
 
 
+
         // DOM Event listeners
+
+        this.$noteNavLeft.on('click', () => {
+            this.navigateNotes('left');
+        });
+
+        this.$noteNavRight.on('click', () => {
+            this.navigateNotes('right');
+        });
+
+        let setActiveNote = this.setActiveNote;
 
         this.$editNote.on('click', function (event) {
             event.preventDefault();
             let $noteItem = jQuery(this).closest('div.note-item');
             let id = $noteItem.attr('id');
-            let sequence = $noteItem.attr('sequence');
-            let title = $noteItem.find('.note-title').text();
-            let note_content = $noteItem.find('.note-content').text();
-            console.log("edit note. id: " + id + " sequence: " + sequence + " title: " + title);
-
-            let noteToEdit = appGlobals.notes[id];
-
-            jQuery('#current-note-label').text('Note ' + noteToEdit.sequence);
-            jQuery('.notes-title').val(noteToEdit.title);
-            jQuery('.notes-text').val(noteToEdit.note_content);
-
-            // scroll to top
-            jQuery('html, body').animate({
-                scrollTop: 0
-            }, 500);
-
-            appGlobals.currentNote = noteToEdit;
+            console.log("edit note. id: " + id);
+            setActiveNote(id, true);
         });
 
         this.$addNewNotesSection.on('click', (event) => {
@@ -105,8 +103,8 @@ class AnatomyTour {
 
             // get current notes info
             let id = appGlobals.currentNote.id;
-            let title = this.$notesTitle.val();
-            let note_content = this.$notesText.val();
+            let title = this.$noteTitle.val();
+            let note_content = this.$noteText.val();
 
             this.saveNotes(title, note_content);
 
@@ -119,8 +117,8 @@ class AnatomyTour {
             console.log("Save notes.");
 
             // get notes data
-            let title = this.$notesTitle.val();
-            let note_content = this.$notesText.val();
+            let title = this.$noteTitle.val();
+            let note_content = this.$noteText.val();
 
             this.saveNotes(title, note_content);
 
@@ -214,6 +212,46 @@ class AnatomyTour {
         }
     }
 
+    setActiveNote(id, scrollToTop){
+        let noteToEdit = appGlobals.notes[id];
+
+        jQuery('#current-note-label').text('Note ' + noteToEdit.sequence);
+
+        if (this.isUserAdmin) {
+            jQuery('.notes-title').val(noteToEdit.title);
+            jQuery('.notes-text').val(noteToEdit.note_content);
+        } else {
+            jQuery('.notes-title').text(noteToEdit.title);
+            jQuery('.notes-text').text(noteToEdit.note_content);
+        }
+
+        // scroll to top
+        if (scrollToTop) {
+            jQuery('html, body').animate({
+                scrollTop: 0
+            }, 500);
+        }
+
+        appGlobals.currentNote = noteToEdit;
+    }
+
+    navigateNotes(direction){
+       console.log("Navigate: " + direction);
+
+       let nextNote;
+       let noteSeq = parseInt(appGlobals.currentNote.sequence);
+
+        direction == 'right' ? noteSeq++ : noteSeq--;
+
+        Object.keys(appGlobals.notes).forEach((noteId) => {
+            if (appGlobals.notes[noteId].sequence == noteSeq) {
+                this.setActiveNote(noteId);
+            }
+        })
+    }
+
+
+
     getItemTemplates(){
 
         let $notesTimelineContainer = this.$notesTimelineContainer;
@@ -235,8 +273,8 @@ class AnatomyTour {
     }
 
     addNotesSection(){
-        this.$notesTitle.val("");
-        this.$notesText.val("");
+        this.$noteTitle.val("");
+        this.$noteText.val("");
 
         let sequence = (parseInt(appGlobals.numNotes) + 1);
         let addNote = new Note(sequence, "", "", "");
@@ -311,8 +349,8 @@ class AnatomyTour {
                 this.saveNotes(() => {
                     console.log("save notes and then set title: " + noteToLoad.title);
                     this.$noteSequenceNum.text(noteToLoad.sequence);
-                    this.$notesTitle.val(noteToLoad.title);
-                    this.$notesText.val(noteToLoad.note_content);
+                    this.$noteTitle.val(noteToLoad.title);
+                    this.$noteText.val(noteToLoad.note_content);
                     this.currentNote = noteToLoad;
                 })
             } else {
@@ -325,7 +363,7 @@ class AnatomyTour {
     saveNotes(title, note_content, callback){
         Utils.setSavingStatus("Saving...");
 
-        // update UI
+        // update timeline UI
         let $updateNote = this.$notesTimelineContainer.find('#' + appGlobals.currentNote.id);
         if (($updateNote).length !== 0) {
             // update note

@@ -20,4 +20,5 @@ let appGlobals = {
     // load status
     notesLoaded: false,
     humanLoaded: false,
+
 };

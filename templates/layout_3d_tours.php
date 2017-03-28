@@ -33,105 +33,98 @@
             </div>
             <div id="wpaz-notes" class="col-md-4">
 
-                <?php if (current_user_can('administrator')): ?>
-
                 <div id="wpaz-notes-container">
-                    <h2 class="post-title text-center"><?php echo $post->post_title ?></span></h2>
-                    <div id="note-properties">
-                        <span id="current-note-label" class="label label-primary">Note 1</span>
-                        <span id="total-notes-label" class="label label-success"><?php echo count($notes) . ' notes' ?></span>
-                    </div>
-                    <form>
-                        <div class="form-group">
-                            <input type="notes-title" class="form-control notes-title" placeholder="Enter title" value="<?php echo $notes[0]->title ?>">
+
+                    <div class="note-header">
+
+                        <h2 class="post-title text-center">
+                            <span id="note-nav-left" class="glyphicon glyphicon-chevron-left pull-left chapter-nav" aria-hidden="true"></span>
+		                    <?php echo $post->post_title ?>
+                            <span id="note-nav-right" class="glyphicon glyphicon-chevron-right pull-right chapter-nav" aria-hidden="true"></span>
+                        </h2>
+                        <div id="note-properties">
+                            <span id="current-note-label" class="label label-primary">Note 1</span>
+                            <span id="total-notes-label" class="label label-success"><?php echo count($notes) . ' notes' ?></span>
                         </div>
-                        <textarea class="notes-text form-control" rows="10" placeholder="Enter notes"><?php echo $notes[0]->note_content ?></textarea>
-                    </form>
 
-                    <div id="toolbar-buttons" class="container">
+                    </div>
 
-                        <div class="row toolbar-row">
-                            <div class="col-md-6 actions-buttons">
-                                <div class="btn-group" role="group" aria-label="...">
-                                    <button id="action-add" type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="actions-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                        Actions
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul id="actions-dropdown-container" class="dropdown-menu" aria-labelledby="actions-dropdown">
-                                    </ul>
+	                <?php if (current_user_can('administrator')): ?>
+
+                    <div class="active-note-container-admin">
+
+                        <div class="edit-note-container">
+                            <form>
+                                <div class="form-group">
+                                    <input type="notes-title" class="form-control notes-title" placeholder="Enter title" value="<?php echo $notes[0]->title ?>">
                                 </div>
-                                <span id="num-actions" class="label label-info">0 actions</span>
+                                <textarea class="notes-text form-control" rows="10" placeholder="Enter notes">
+                                    <?php echo $notes[0]->note_content ?>
+                                </textarea>
+                            </form>
+                        </div>
+
+                        <div id="toolbar-buttons" class="container">
+
+                            <div class="row toolbar-row">
+                                <div class="col-md-6 actions-buttons">
+                                    <div class="btn-group" role="group" aria-label="...">
+                                        <button id="action-add" type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="actions-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                            Actions
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul id="actions-dropdown-container" class="dropdown-menu" aria-labelledby="actions-dropdown">
+                                        </ul>
+                                    </div>
+                                    <span id="num-actions" class="label label-info">0 actions</span>
+                                </div>
+
+                                <div class="col-md-6 reset-buttons">
+                                    <div class="pull-right">
+                                        <div class="btn-group" role="group" aria-label="...">
+                                            <button id="toolbar-reset" type="button" class="btn btn-default">Reset</button>
+                                            <button id="toolbar-clear-actions" type="button" class="btn btn-default">Clear Actions</button>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
 
-                            <div class="col-md-6 reset-buttons">
-                                <div class="pull-right">
-                                    <div class="btn-group" role="group" aria-label="...">
-                                        <button id="toolbar-reset" type="button" class="btn btn-default">Reset</button>
-                                        <button id="toolbar-clear-actions" type="button" class="btn btn-default">Clear Actions</button>
+                            <div class="row">
+                                <div class="col-md-12 save-actions">
+                                    <div id="buttons-container">
+                                        <span class="saving-status hidden"></span>
+                                        <button id="notes-save-btn" type="button" class="btn btn-primary notes-button pull-right">Save</button>
+                                        <button id="notes-add-new-btn" type="button" class="btn btn-success notes-button pull-right">Add new</button>
                                     </div>
                                 </div>
                             </div>
 
-                        </div>
+                            <div id="action-status-box" class="alert alert-info hidden" role="alert"></div>
 
-                        <div class="row">
-                            <div class="col-md-12 save-actions">
-                                <div id="buttons-container">
-                                    <span class="saving-status hidden"></span>
-                                    <button id="notes-save-btn" type="button" class="btn btn-primary notes-button pull-right">Save</button>
-                                    <button id="notes-add-new-btn" type="button" class="btn btn-success notes-button pull-right">Add new</button>
-                                </div>
-                            </div>
-                        </div>
-
-
-                    <!--<div id="toolbar" class="dropdown">
-                        <div class="btn-group" role="group" aria-label="...">
-                            <button id="action-add" type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-                            <button class="btn btn-default dropdown-toggle" type="button" id="actions-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                Actions
-                                <span class="caret"></span>
-                            </button>
-                            <ul id="actions-dropdown-container" class="dropdown-menu" aria-labelledby="actions-dropdown">
-                            </ul>
-                        </div>
-                        <span id="num-actions" class="label label-info">6 actions</span>
-
-                        <div class="pull-right">
-                            <div class="btn-group" role="group" aria-label="...">
-                                <button id="toolbar-reset" type="button" class="btn btn-default">Reset</button>
-                                <button id="toolbar-clear-actions" type="button" class="btn btn-default">Clear Actions</button>
-                            </div>
                         </div>
 
                     </div>
 
-                    <div id="buttons-container">
-                        <span class="saving-status hidden"></span>
-                        <button id="notes-save-btn" type="button" class="btn btn-primary notes-button pull-right">Save</button>
-                        <button id="notes-add-new-btn" type="button" class="btn btn-success notes-button pull-right">Add new</button>
-                    </div>-->
+                    <?php else: ?>
 
-                    <div id="action-status-box" class="alert alert-info hidden" role="alert"></div>
+                <!--USERS LAYOUT-->
 
-                </div>
-
-                <?php else: ?>
-
-                <div id="wpaz-notes-container">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h2 class="text-center notes-title"><?php echo $notes[0]->title ?></h2>
-                        </div>
-                        <div class="panel-body notes-text" data-scantext data-target="embedded-human">
-                            <?php echo $notes[0]->note_content ?>
+                    <div class="active-note-container-user">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h2 class="notes-title text-center">
+				                    <?php echo $notes[0]->title ?>
+                                </h2>
+                            </div>
+                            <div class="panel-body notes-text" data-scantext data-target="embedded-human">
+			                    <?php echo $notes[0]->note_content ?>
+                            </div>
                         </div>
                     </div>
-                </div>
 
                 <?php endif ?>
-
 
             </div>
         </div>
