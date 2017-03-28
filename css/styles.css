@@ -19,6 +19,11 @@
 #wpaz-notes-container {
 }
 
+.chapter-nav:hover {
+    cursor: pointer;
+    color: #337ab7;
+}
+
 #note-properties {
     margin-bottom: 5px;
 }
@@ -67,6 +72,10 @@
  ***********************************************/
 .note-actions {
     margin-left: 15px;
+}
+
+.note-title:hover {
+    cursor: pointer;
 }
 
 /* icon hover animation */

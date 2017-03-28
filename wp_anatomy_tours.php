@@ -262,6 +262,8 @@ class wp_az_anatomy_tours {
 		);
 
 		// try to update notes if available
+		if (current_user_can('administrator')):
+
 		$update = $wpdb->update(
 				$table_name,
 				$notes_data,
@@ -279,6 +281,8 @@ class wp_az_anatomy_tours {
 				$notes_data
 			);
 		}
+
+		endif;
 
 		// success
 		wp_send_json (array(

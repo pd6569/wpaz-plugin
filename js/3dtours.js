@@ -85,7 +85,8 @@ class AnatomyTour {
 
         this.$notesTimelineContainer = jQuery('#notes-timeline');
         this.$editNote = jQuery('.edit-note');
-
+        this.$noteToolsTimeline = jQuery('.note-actions');
+        this.$noteTitleTimeline = jQuery('.note-title');
 
         /*******************************
          *  set DOM Event listeners    *
@@ -110,6 +111,7 @@ class AnatomyTour {
 
         // Timeline
         this.$editNote.on('click', (event) => { this.editNote(jQuery(event.target).closest('div.note-item').attr('id')) });
+        this.$noteTitleTimeline.on('click', (event) => { this.setActiveNote(jQuery(event.target).closest('div.note-item').attr('id'), true)});
 
         // Load notes data
         this.loadNotes();
@@ -118,7 +120,13 @@ class AnatomyTour {
         // Anatomy scanner
         if(!this.isUserAdmin) {
             this.setScanner();
+        } else {
+            this.setAdminUi();
         }
+    }
+
+    setAdminUi(){
+        this.$noteToolsTimeline.removeClass('hidden');
     }
 
     // INIT
@@ -389,7 +397,6 @@ class AnatomyTour {
     }
 
     registerCallbacks() {
-
         this.human.on("camera.updated", (cameraInfo) => {
             this.cameraInfo = cameraInfo;
         });
