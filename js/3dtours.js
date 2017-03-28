@@ -44,13 +44,17 @@ class AnatomyTour {
         // DOM
 
         /* edit notes */
+
+        // note properties
+        this.$currentNoteLabel = jQuery('#current-note-label');
+        this.$numNotesLabel = jQuery('#total-notes-label');
+
         this.$notesContainer = jQuery('#wpaz-notes-container');
         this.$postTitle = jQuery('.post-title');
         this.$noteSequenceNum = jQuery('.notes-sequence');
         this.$noteSequenceNum.text("1");
         this.$notesTitle = jQuery('.notes-title');
         this.$notesText = jQuery('.notes-text');
-
         this.$savingStatus = jQuery('.saving-status');
 
         // actions
@@ -226,6 +230,10 @@ class AnatomyTour {
 
         let sequence = (parseInt(appGlobals.numNotes) + 1);
         let addNote = new Note(sequence, "", "", "");
+
+        this.$currentNoteLabel.text("Note " + addNote.sequence);
+        this.$numNotesLabel.text(appGlobals.numNotes + " notes");
+
         this.human.send('scene.capture', (sceneState) => {
             addNote.setSceneState(JSON.stringify(sceneState));
             appGlobals.currentNote = addNote;

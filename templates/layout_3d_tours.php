@@ -36,7 +36,11 @@
                 <?php if (current_user_can('administrator')): ?>
 
                 <div id="wpaz-notes-container">
-                    <h2 class="post-title text-center">Notes: <span class="notes-sequence"></span></h2>
+                    <h2 class="post-title text-center"><?php echo $post->post_title ?></span></h2>
+                    <div id="note-properties">
+                        <span id="current-note-label" class="label label-primary">Note 1</span>
+                        <span id="total-notes-label" class="label label-success"><?php echo count($notes) . ' notes' ?></span>
+                    </div>
                     <form>
                         <div class="form-group">
                             <input type="notes-title" class="form-control notes-title" placeholder="Enter title" value="<?php echo $notes[0]->title ?>">

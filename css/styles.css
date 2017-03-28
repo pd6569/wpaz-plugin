@@ -19,6 +19,10 @@
 #wpaz-notes-container {
 }
 
+#note-properties {
+    margin-bottom: 5px;
+}
+
 #action-status-box {
     margin-top: 10px;
     padding: 10px;
