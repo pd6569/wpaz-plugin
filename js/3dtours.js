@@ -76,17 +76,20 @@ class AnatomyTour {
 
         // DOM Event listeners
 
-        let self = this;
-
-        this.$editNote.on('click', function(event){
+        this.$editNote.on('click', function (event) {
             event.preventDefault();
             let $noteItem = jQuery(this).closest('div.note-item');
+            let id = $noteItem.attr('id');
             let sequence = $noteItem.attr('sequence');
             let title = $noteItem.find('.note-title').text();
             let note_content = $noteItem.find('.note-content').text();
-            console.log("edit note. sequence: " + sequence + " title: " + title);
+            console.log("edit note. id: " + id + " sequence: " + sequence + " title: " + title);
 
-            self.loadSingleNote(sequence);
+            let noteToEdit = appGlobals.notes[id];
+            jQuery('.notes-title').val(noteToEdit.title);
+            jQuery('.notes-text').val(noteToEdit.note_content);
+
+            appGlobals.currentNote = noteToEdit;
         });
 
         this.$addNewNotesSection.on('click', (event) => {
