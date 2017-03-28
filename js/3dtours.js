@@ -75,9 +75,18 @@ class AnatomyTour {
         this.$notesTimelineContainer = jQuery('#notes-timeline');
         this.$editNote = jQuery('.edit-note');
 
-
+        // Track changes
+        this.changesMade = false;
 
         // DOM Event listeners
+        this.$noteTitle.on("change keyup paste", () => {
+            this.changesMade = true;
+            console.log("title changed. Changes made: " + this.changesMade);
+        });
+        this.$noteText.on("change keyup paste", () => {
+            this.changesMade = true;
+            console.log("content changed. Changes made: " + this.changesMade);
+        });
 
         this.$noteNavLeft.on('click', () => {
             this.navigateNotes('left');
@@ -213,17 +222,37 @@ class AnatomyTour {
     }
 
     setActiveNote(id, scrollToTop){
-        let noteToEdit = appGlobals.notes[id];
+        let note = appGlobals.notes[id];
 
-        jQuery('#current-note-label').text('Note ' + noteToEdit.sequence);
+        // get title/content
+        let $title = jQuery('.notes-title');
+        let $content = jQuery('.notes-text');
 
-        if (this.isUserAdmin) {
-            jQuery('.notes-title').val(noteToEdit.title);
-            jQuery('.notes-text').val(noteToEdit.note_content);
+        // save current note first if changes made
+        if (this.isUserAdmin && this.changesMade == true) {
+            console.log("set active note. changes made, save note");
+            this.saveNotes($title.val(), $content.val());
         } else {
-            jQuery('.notes-title').text(noteToEdit.title);
-            jQuery('.notes-text').text(noteToEdit.note_content);
+            console.log("set active note. user not admin or no changes made")
         }
+
+        // update note properties
+        jQuery('#current-note-label').text('Note ' + note.sequence);
+
+        // update title and content
+        if (this.isUserAdmin) {
+            $title.val(note.title);
+            $content.val(note.note_content);
+        } else {
+            $title.text(note.title);
+            $content.text(note.note_content);
+        }
+
+        // load scene
+        this.human.send("scene.restore", JSON.parse(note.scene_state));
+
+        // reset variables
+        this.changesMade = false;
 
         // scroll to top
         if (scrollToTop) {
@@ -232,7 +261,7 @@ class AnatomyTour {
             }, 500);
         }
 
-        appGlobals.currentNote = noteToEdit;
+        appGlobals.currentNote = note;
     }
 
     navigateNotes(direction){
@@ -249,8 +278,6 @@ class AnatomyTour {
             }
         })
     }
-
-
 
     getItemTemplates(){
 
@@ -380,22 +407,27 @@ class AnatomyTour {
             this.$notesTimelineContainer.append($noteSection);
         }
 
+        let noteToSave = new Note(appGlobals.currentNote.sequence, title, note_content, null, true);
+        console.log("noteToSave: " + noteToSave.title + " seq: " + noteToSave.sequence + " globals count: " + appGlobals.numNotes);
+
         this.human.send('scene.capture', (sceneState) => {
             this.currentSceneState = sceneState;
 
             // update current note properties
-            appGlobals.currentNote.setNoteContent(note_content);
+            /*appGlobals.currentNote.setNoteContent(note_content);
             appGlobals.currentNote.setTitle(title);
-            appGlobals.currentNote.setSceneState(JSON.stringify(sceneState));
+            appGlobals.currentNote.setSceneState(JSON.stringify(sceneState));*/
 
-            let note = appGlobals.currentNote;
+            noteToSave.setSceneState(JSON.stringify(sceneState));
+
+            console.log("save current note: " + noteToSave.title + " sequence: " + noteToSave.sequence);
 
             //!* Data to make available via the $_POST variable
             let data = {
                 action: 'save_notes',
                 wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
                 wp_az_post_id: ajax_object.wp_az_post_id,
-                wp_az_note_object: note
+                wp_az_note_object: noteToSave
             };
 
             //!* Process the AJAX POST request

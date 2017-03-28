@@ -4,9 +4,9 @@
 
 class Note {
 
-    constructor (sequence, title, note_content, scene_state) {
+    constructor (sequence, title, note_content, scene_state, doNotAdd) {
 
-        appGlobals.numNotes = parseInt(appGlobals.numNotes) + 1;
+
 
         this.id = "note-" + sequence;
         this.sequence = sequence;
@@ -17,7 +17,10 @@ class Note {
         console.log("new note created. id: " + this.id);
 
         // add notes to global notes object
-        this.addNote();
+        if (!doNotAdd) {
+            appGlobals.numNotes = parseInt(appGlobals.numNotes) + 1;
+            this.addNote();
+        }
     }
 
     getId(){
