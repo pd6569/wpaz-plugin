@@ -62,7 +62,7 @@ class AnatomyTour {
         this.$noteSequenceNum.text("1");
         this.$noteTitle = jQuery('.notes-title');
         this.$noteText = jQuery('.notes-text');
-        this.$savingStatus = jQuery('.saving-status');
+        this.$savingStatus = jQuery('.update-status');
 
         // actions
         this.$addAction = jQuery('#action-add');
@@ -130,12 +130,23 @@ class AnatomyTour {
     // Class methods
 
     deleteNote(){
-
         console.log("delete Note");
+
+        Utils.setNoteUpdateStatus("Deleting...");
+
         let noteToDelete = appGlobals.currentNote;
 
+        // update data
+        Note.removeNote(noteToDelete.id);
+
+        // add new note
+
         // remove from timeline
-        jQuery('#' + noteToDelete.id).fadeOut();
+        let $noteToDelete = jQuery('#' + noteToDelete.id);
+        $noteToDelete.fadeOut(() => {
+            //remove DOM element
+            $noteToDelete.remove();
+        });
 
         // clear fields
         this.$noteTitle.val("");
@@ -151,9 +162,11 @@ class AnatomyTour {
             },
             error: function() {
                 console.log("Failed to delete note");
+                Utils.setNoteUpdateStatus("Failed to delete note.", 3000);
             },
             success: function(data) {
                 console.log("Note deleted: " + JSON.stringify(data));
+                Utils.setNoteUpdateStatus("Note deleted.", 3000);
             },
             type: 'POST'
         });
@@ -258,7 +271,7 @@ class AnatomyTour {
     // NOTE EDITOR
 
     saveNotes(title, note_content, callback){
-        Utils.setSavingStatus("Saving...");
+        Utils.setNoteUpdateStatus("Saving...");
 
         // update timeline UI
         let $updateNote = this.$notesTimelineContainer.find('#' + appGlobals.currentNote.id);
@@ -299,14 +312,14 @@ class AnatomyTour {
                 if (response.status == 'success') {
                     // Show success message, then fade out the button after 2 seconds
                     console.log("Noted saved! " + JSON.stringify(response));
-                    Utils.setSavingStatus("Notes saved.", 3000);
+                    Utils.setNoteUpdateStatus("Notes saved.", 3000);
 
                     // execute callback function
                     if(callback) callback();
                 } else {
                     // Re-enable the button and revert to original text
                     console.log("Failed. " + JSON.stringify(response));
-                    Utils.setSavingStatus("Saving notes failed.", 3000);
+                    Utils.setNoteUpdateStatus("Saving notes failed.", 3000);
 
                 }
             });

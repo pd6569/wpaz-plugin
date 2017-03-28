@@ -23,13 +23,13 @@ class Utils {
         jQuery('.wpaz-spinner').addClass('hidden');
     }
 
-    static setSavingStatus(statusText, timeoutMillis){
-        let $savingStatus = jQuery('.saving-status');
-        $savingStatus.text(statusText).removeClass('hidden').show();
+    static setNoteUpdateStatus(statusText, timeoutMillis){
+        let $updateStatus = jQuery('.update-status');
+        $updateStatus.text(statusText).removeClass('hidden').show();
 
         if (timeoutMillis){
             setTimeout(() => {
-                $savingStatus.fadeOut();
+                $updateStatus.fadeOut();
             }, timeoutMillis)
         }
 

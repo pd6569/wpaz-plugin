@@ -94,7 +94,7 @@
                             <div class="row">
                                 <div class="col-md-12 save-actions">
                                     <div id="buttons-container">
-                                        <span class="saving-status hidden"></span>
+
                                         <button id="notes-save-btn" type="button" class="btn btn-primary notes-button pull-right">Save</button>
                                         <button id="notes-add-new-btn" type="button" class="btn btn-success notes-button pull-right">Add new</button>
                                         <button id="notes-delete-btn" type="button" class="btn btn-danger notes-button pull-right">Delete</button>
@@ -103,6 +103,7 @@
                             </div>
 
                             <div id="action-status-box" class="alert alert-info hidden" role="alert"></div>
+                            <div class="update-status hidden"></div>
 
                         </div>
 

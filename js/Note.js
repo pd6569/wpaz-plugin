@@ -71,10 +71,12 @@ class Note {
         console.log("new note added to global notes: " + JSON.stringify(this.title));
     }
 
-    removeNote(id){
+    static removeNote(id){
         if (appGlobals.notes[id]) {
+            console.log("delete note: " + appGlobals.notes[id].title + " sequence: " + appGlobals.notes[id].sequence);
             delete appGlobals.notes[id];
             appGlobals.numNotes = parseInt(appGlobals.numNotes) - 1;
+            console.log("Note deleted. Num notes: " + appGlobals.numNotes);
         } else {
             console.log("removeNote failed. Could not delete note with id: " + id);
         }
