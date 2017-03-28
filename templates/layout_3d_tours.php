@@ -44,20 +44,25 @@
                         <textarea class="notes-text form-control" rows="10" placeholder="Enter notes"><?php echo $notes[0]->note_content ?></textarea>
                     </form>
 
-                    <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="actions-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            Actions
-                            <span class="caret"></span>
-                        </button>
-                        <ul id="actions-dropdown-container" class="dropdown-menu" aria-labelledby="actions-dropdown">
-                        </ul>
-                    </div>
-
-                    <div class="actions-toolbar">
+                    <div id="toolbar" class="dropdown">
                         <div class="btn-group" role="group" aria-label="...">
                             <button id="action-add" type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-                            <button id="toolbar-reset" type="button" class="btn btn-default">Reset</button>
+                            <button class="btn btn-default dropdown-toggle" type="button" id="actions-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                Actions
+                                <span class="caret"></span>
+                            </button>
+                            <ul id="actions-dropdown-container" class="dropdown-menu" aria-labelledby="actions-dropdown">
+                            </ul>
                         </div>
+                        <span id="num-actions" class="label label-info">6 actions</span>
+
+                        <div class="pull-right">
+                            <div class="btn-group" role="group" aria-label="...">
+                                <button id="toolbar-reset" type="button" class="btn btn-default">Reset</button>
+                                <button id="toolbar-clear-actions" type="button" class="btn btn-default">Clear Actions</button>
+                            </div>
+                        </div>
+
                     </div>
 
                     <div id="buttons-container">
