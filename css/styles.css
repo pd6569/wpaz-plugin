@@ -17,7 +17,6 @@
  *************************/
 
 #wpaz-notes-container {
-    padding: 10px;
 }
 
 #action-status-box {
@@ -48,6 +47,15 @@
 #wpaz-notes-container .saving-status {
     font-size: medium;
     font-style: italic;
+}
+
+#toolbar-buttons {
+    padding: 0px;
+}
+
+.toolbar-row {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 /***********************************************

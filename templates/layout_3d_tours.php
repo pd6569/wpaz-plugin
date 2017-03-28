@@ -44,7 +44,45 @@
                         <textarea class="notes-text form-control" rows="10" placeholder="Enter notes"><?php echo $notes[0]->note_content ?></textarea>
                     </form>
 
-                    <div id="toolbar" class="dropdown">
+                    <div id="toolbar-buttons" class="container">
+
+                        <div class="row toolbar-row">
+                            <div class="col-md-6 actions-buttons">
+                                <div class="btn-group" role="group" aria-label="...">
+                                    <button id="action-add" type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="actions-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        Actions
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul id="actions-dropdown-container" class="dropdown-menu" aria-labelledby="actions-dropdown">
+                                    </ul>
+                                </div>
+                                <span id="num-actions" class="label label-info">6 actions</span>
+                            </div>
+
+                            <div class="col-md-6 reset-buttons">
+                                <div class="pull-right">
+                                    <div class="btn-group" role="group" aria-label="...">
+                                        <button id="toolbar-reset" type="button" class="btn btn-default">Reset</button>
+                                        <button id="toolbar-clear-actions" type="button" class="btn btn-default">Clear Actions</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 save-actions">
+                                <div id="buttons-container">
+                                    <span class="saving-status hidden"></span>
+                                    <button id="notes-save-btn" type="button" class="btn btn-primary notes-button pull-right">Save</button>
+                                    <button id="notes-add-new-btn" type="button" class="btn btn-success notes-button pull-right">Add new</button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    <!--<div id="toolbar" class="dropdown">
                         <div class="btn-group" role="group" aria-label="...">
                             <button id="action-add" type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
                             <button class="btn btn-default dropdown-toggle" type="button" id="actions-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -69,7 +107,7 @@
                         <span class="saving-status hidden"></span>
                         <button id="notes-save-btn" type="button" class="btn btn-primary notes-button pull-right">Save</button>
                         <button id="notes-add-new-btn" type="button" class="btn btn-success notes-button pull-right">Add new</button>
-                    </div>
+                    </div>-->
 
                     <div id="action-status-box" class="alert alert-info hidden" role="alert"></div>
 

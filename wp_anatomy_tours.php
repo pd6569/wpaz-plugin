@@ -142,7 +142,7 @@ class wp_az_anatomy_tours {
 
 			// styles
 			wp_enqueue_style('wp_az_bootstrap', plugins_url('css/bootstrap.css', __FILE__));
-			wp_enqueue_style('wp_az_3d_tours_main_style', plugins_url('css/styles.css', __FILE__), null, '1.0');
+			wp_enqueue_style('wp_az_3d_tours_main_style', plugins_url('css/styles.css?v=' . time(), __FILE__));
 
 			// scripts
 			wp_enqueue_script('wp_az_bootstrap', plugins_url('lib/bootstrap.js', __FILE__), null, null, true);
