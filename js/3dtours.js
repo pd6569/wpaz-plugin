@@ -7,6 +7,8 @@ class AnatomyTour {
     constructor() {
         console.log("anatomy tours loaded");
 
+        let self = this;
+
         // get BioDigital Human
         this.human = new HumanAPI("embedded-human");
         this.$humanWidget = jQuery('#embedded-human');
@@ -96,14 +98,15 @@ class AnatomyTour {
             this.navigateNotes('right');
         });
 
-        let setActiveNote = this.setActiveNote;
+        /*let setActiveNote = this.setActiveNote;*/
 
         this.$editNote.on('click', function (event) {
             event.preventDefault();
             let $noteItem = jQuery(this).closest('div.note-item');
             let id = $noteItem.attr('id');
             console.log("edit note. id: " + id);
-            setActiveNote(id, true);
+            /*setActiveNote(id, true);*/
+            self.setActiveNote(id, true, self);
         });
 
         this.$addNewNotesSection.on('click', (event) => {
@@ -221,7 +224,7 @@ class AnatomyTour {
         }
     }
 
-    setActiveNote(id, scrollToTop){
+    setActiveNote(id, scrollToTop, appSelfRef){
         let note = appGlobals.notes[id];
 
         // get title/content
@@ -229,11 +232,12 @@ class AnatomyTour {
         let $content = jQuery('.notes-text');
 
         // save current note first if changes made
-        if (this.isUserAdmin && this.changesMade == true) {
-            console.log("set active note. changes made, save note");
+        if (appSelfRef){
+            if (appSelfRef.isUserAdmin && appSelfRef.changesMade == true) {
+                appSelfRef.saveNotes($title.val(), $content.val());
+            }
+        } else if (this.isUserAdmin && this.changesMade == true) {
             this.saveNotes($title.val(), $content.val());
-        } else {
-            console.log("set active note. user not admin or no changes made")
         }
 
         // update note properties
@@ -274,7 +278,7 @@ class AnatomyTour {
 
         Object.keys(appGlobals.notes).forEach((noteId) => {
             if (appGlobals.notes[noteId].sequence == noteSeq) {
-                this.setActiveNote(noteId);
+                this.setActiveNote(noteId, false);
             }
         })
     }
@@ -408,15 +412,9 @@ class AnatomyTour {
         }
 
         let noteToSave = new Note(appGlobals.currentNote.sequence, title, note_content, null, true);
-        console.log("noteToSave: " + noteToSave.title + " seq: " + noteToSave.sequence + " globals count: " + appGlobals.numNotes);
 
         this.human.send('scene.capture', (sceneState) => {
             this.currentSceneState = sceneState;
-
-            // update current note properties
-            /*appGlobals.currentNote.setNoteContent(note_content);
-            appGlobals.currentNote.setTitle(title);
-            appGlobals.currentNote.setSceneState(JSON.stringify(sceneState));*/
 
             noteToSave.setSceneState(JSON.stringify(sceneState));
 
