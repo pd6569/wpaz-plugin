@@ -328,7 +328,7 @@ class wp_az_anatomy_tours {
 		$post_id = intval($_GET['wp_az_post_id']);
 
 		$notes = $wpdb->get_results(
-			"SELECT title, note_content, sequence, scene_state
+			"SELECT title, uid, note_content, sequence, scene_state
                   FROM $table_name 
                   WHERE post_id = $post_id
                   ORDER BY sequence ASC" );

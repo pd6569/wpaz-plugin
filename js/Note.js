@@ -4,28 +4,32 @@
 
 class Note {
 
-    constructor (sequence, title, note_content, scene_state, doNotAdd) {
+    constructor (sequence, title, note_content, scene_state, uid) {
 
 
 
-        this.id = "note-" + Utils.generateUID();
+        this.uid = uid || Utils.generateUID();
         this.sequence = sequence;
         this.title = title;
         this.note_content = note_content;
         this.scene_state = scene_state;
 
-        console.log("new note created. id: " + this.id);
+        console.log("new note created. uid: " + this.uid);
 
         // add notes to global notes object
-        if (!doNotAdd) {
-            appGlobals.numNotes = parseInt(appGlobals.numNotes) + 1;
-            this.addNote();
-            this.updateSequenceIndex();
-        }
+
+        appGlobals.numNotes = parseInt(appGlobals.numNotes) + 1;
+        this.addNote();
+        this.updateSequenceIndex();
+
     }
 
-    getId(){
-        return this.id;
+    getUid(){
+        return this.uid;
+    }
+
+    setUid(uid){
+        this.uid = uid;
     }
 
     getSequence(){
@@ -67,29 +71,29 @@ class Note {
     }
 
     addNote() {
-        appGlobals.notes[this.id] = this;
+        appGlobals.notes[this.uid] = this;
         console.log("new note added to global notes: " + JSON.stringify(this.title));
     }
 
-    static removeNote(id){
-        if (appGlobals.notes[id]) {
-            console.log("delete note: " + appGlobals.notes[id].title + " sequence: " + appGlobals.notes[id].sequence);
-            delete appGlobals.notes[id];
+    static removeNote(uid){
+        if (appGlobals.notes[uid]) {
+            console.log("delete note: " + appGlobals.notes[uid].title + " sequence: " + appGlobals.notes[uid].sequence);
+            delete appGlobals.notes[uid];
             appGlobals.numNotes = parseInt(appGlobals.numNotes) - 1;
             console.log("Note deleted. Num notes: " + appGlobals.numNotes);
         } else {
-            console.log("removeNote failed. Could not delete note with id: " + id);
+            console.log("removeNote failed. Could not delete note with uid: " + uid);
         }
     }
 
     // update notes collection
     updateNotes(){
-        appGlobals.notes[this.id] = this;
-        console.log("appGlobal.notes updated. id: " + this.id);
+        appGlobals.notes[this.uid] = this;
+        console.log("appGlobal.notes updated. uid: " + this.uid);
     }
 
     // Sequence index
     updateSequenceIndex(){
-        appGlobals.sequenceIndex.push([this.id, this.sequence])
+        appGlobals.sequenceIndex.push([this.uid, this.sequence])
     }
 }

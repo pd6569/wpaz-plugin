@@ -111,9 +111,11 @@ class AnatomyTour {
         this.$addNewNotesSection.on('click', (event) => { this.addNoteSection(); });
         this.$deleteNoteBtn.on('click', (event) => { this.deleteNote(); });
 
-        // Timeline
-        this.$editNote.on('click', (event) => { this.editNote(jQuery(event.target).closest('div.note-item').attr('id')) });
-        this.$noteTitleTimeline.on('click', (event) => { this.setActiveNote(jQuery(event.target).closest('div.note-item').attr('id'), true)});
+        // Timeline - DYNAMIC EVENT LISTENERS
+        this.$notesTimelineContainer.on('click', '.edit-note', (event) => { console.log("edit Note"); this.editNote(jQuery(event.target).closest('div.note-item').attr('id')) });
+        this.$notesTimelineContainer.on('click', '.note-title', (event) => { this.setActiveNote(jQuery(event.target).closest('div.note-item').attr('id'), true)});
+
+
 
         // Load notes data
         this.loadNotes();
@@ -137,12 +139,12 @@ class AnatomyTour {
         let noteToDelete = appGlobals.currentNote;
 
         // update data
-        Note.removeNote(noteToDelete.id);
+        Note.removeNote(noteToDelete.uid);
 
         // add new note
 
         // remove from timeline
-        let $noteToDelete = jQuery('#' + noteToDelete.id);
+        let $noteToDelete = jQuery('#' + noteToDelete.uid);
         $noteToDelete.fadeOut(() => {
             //remove DOM element
             $noteToDelete.remove();
@@ -220,11 +222,12 @@ class AnatomyTour {
                     let numNotes = 0;
                     notesArray.forEach(function(note){
                         numNotes++;
-                        let addNote = new Note(note.sequence, note.title, note.note_content, note.scene_state);
-                        if (numNotes == 1) appGlobals.currentNote = addNote;
+                        console.log("note uid: " + note.uid);
+                        let addNote = new Note(note.sequence, note.title, note.note_content, note.scene_state, note.uid);
+                        if (addNote.sequence == 1) appGlobals.currentNote = addNote;
                     });
 
-                    console.log("appGlobals notes object created. currentNote: " + appGlobals.currentNote.title + " total number of notes " + appGlobals.numNotes);
+                    console.log("appGlobals notes object created. currentNote: " + appGlobals.currentNote.title + " total number of notes " + appGlobals.numNotes + " uid: " + appGlobals.currentNote.uid);
                     if (appGlobals.humanLoaded == true) setInitialSceneState(human, null);
 
                 } else {
@@ -274,8 +277,7 @@ class AnatomyTour {
         Utils.setNoteUpdateStatus("Saving...");
 
         // update timeline UI
-        let id = '#' + appGlobals.currentNote.id;
-        let $updateNote = this.$notesTimelineContainer.find(id);
+        let $updateNote = this.$notesTimelineContainer.find('#' + appGlobals.currentNote.uid);
         if (($updateNote).length !== 0) {
             // update note
             $updateNote.find('.note-title').text(title);
@@ -284,9 +286,10 @@ class AnatomyTour {
             // append new note
             let noteSectionHtml = appGlobals.templates.NOTE_SECTION;
             let $noteSection = jQuery(jQuery.parseHTML(noteSectionHtml));
-            $noteSection.find('.note-item').attr('id', id);
+            $noteSection.find('.note-item').attr('id', appGlobals.currentNote.uid);
             $noteSection.find('.note-title').html(title);
             $noteSection.find('.note-content').html(note_content);
+            $noteSection.find('.note-actions').removeClass('hidden');
 
             this.$notesTimelineContainer.append($noteSection);
         }
@@ -302,7 +305,7 @@ class AnatomyTour {
 
             noteToSave.setSceneState(JSON.stringify(sceneState));
 
-            console.log("save current note: " + noteToSave.title + " sequence: " + noteToSave.sequence + " id: " + noteToSave.id + " note Content: " + noteToSave.note_content);
+            console.log("save current note: " + noteToSave.title + " sequence: " + noteToSave.sequence + " uid: " + noteToSave.uid + " note Content: " + noteToSave.note_content);
 
             //!* Data to make available via the $_POST variable
             let data = {
@@ -332,8 +335,8 @@ class AnatomyTour {
         });
     }
 
-    setActiveNote(id, scrollToTop){
-        let note = appGlobals.notes[id];
+    setActiveNote(uid, scrollToTop){
+        let note = appGlobals.notes[uid];
 
         // get title/content
         let $title = jQuery('.notes-title');

@@ -1,6 +1,6 @@
 <div class="col-md-8">
 
-	<div id="note-<?php echo $note->sequence ?>" class="panel panel-primary note-item" sequence="<?php echo $note->sequence?>">
+	<div id="<?php echo $note->uid ?>" class="panel panel-primary note-item" sequence="<?php echo $note->sequence?>">
 		<div class="panel-heading">
 			<h3 class="panel-title">
                 <a><span class="note-title"><?php echo $note->title ?></span></a>

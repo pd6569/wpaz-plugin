@@ -7,7 +7,7 @@
     $table_name = $wpdb->prefix . 'anatomy_tours_notes';
 
     $notes = $wpdb->get_results(
-            "SELECT title, note_content, sequence, scene_state
+            "SELECT title, uid, note_content, sequence, scene_state
                   FROM $table_name 
                   WHERE post_id = $post->ID
                   ORDER BY sequence ASC" );
