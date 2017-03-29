@@ -105,25 +105,18 @@ class Note {
             }
             appGlobals.sequenceIndex.splice(indexRemove, 1);
 
-            console.log("removed note from array: " + JSON.stringify(appGlobals.sequenceIndex));
-
-            // Update sequences
+            // Reset sequences for notes
             for (let i = 0; i < appGlobals.sequenceIndex.length; i++) {
                 let newSequence = i + 1;
                 appGlobals.sequenceIndex[i][1] = newSequence;
             }
 
-            console.log("updated sequence: " + JSON.stringify(appGlobals.sequenceIndex));
-
+            // Update object with new sequence
             appGlobals.sequenceIndex.forEach((note) => {
                 let uid = note[0];
                 let sequence = note[1];
-                console.log("old note sequence. id: " + appGlobals.notes[uid].uid + " sequence: " + appGlobals.notes[uid].sequence);
                 appGlobals.notes[uid].sequence = sequence;
-                console.log("new note sequence. id: " + appGlobals.notes[uid].uid + " sequence: " + appGlobals.notes[uid].sequence);
             });
-
-
 
             console.log("Note deleted. Num notes: " + appGlobals.numNotes);
         } else {

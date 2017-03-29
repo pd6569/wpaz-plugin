@@ -131,66 +131,7 @@ class AnatomyTour {
 
     // Class methods
 
-    deleteNote(){
-        console.log("delete Note");
 
-        Utils.setNoteUpdateStatus("Deleting...");
-
-        let noteToDelete = appGlobals.currentNote;
-        let noteToDeleteSequence = parseInt(appGlobals.currentNote.sequence);
-
-        // update data
-        Note.removeNote(noteToDelete.uid);
-
-        // set active note as previous note
-        let index;
-        let activeNoteUID;
-        console.log("noteToDeleteSeq: " + noteToDeleteSequence);
-        if (noteToDeleteSequence === 1) {
-            if (appGlobals.sequenceIndex.length > 0) {
-                activeNoteUID = appGlobals.sequenceIndex[0][0];
-            } else {
-                let note = new Note(1, "", "", "");
-                activeNoteUID = note.getUid();
-            }
-        } else {
-            index = noteToDeleteSequence - 2;
-            activeNoteUID = appGlobals.sequenceIndex[index][0];
-        }
-
-        // set new current note
-        appGlobals.currentNote = appGlobals.notes[activeNoteUID];
-
-        console.log("activeNoteUID: " + activeNoteUID);
-        this.setActiveNote(activeNoteUID);
-
-        // remove from timeline
-        let $noteToDelete = jQuery('#' + noteToDelete.uid);
-        $noteToDelete.fadeOut(() => {
-            //remove DOM element
-            $noteToDelete.remove();
-        });
-
-        jQuery.ajax({
-            url: ajax_object.wp_az_ajax_url,
-            data: {
-                action: 'delete_note',
-                wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
-                wp_az_post_id: ajax_object.wp_az_post_id,
-                wp_az_note_uid: noteToDelete.uid
-            },
-            error: function() {
-                console.log("Failed to delete note");
-                Utils.setNoteUpdateStatus("Failed to delete note.", 3000);
-            },
-            success: function(data) {
-                console.log("Note deleted: " + JSON.stringify(data));
-                Utils.setNoteUpdateStatus("Note deleted.", 3000);
-            },
-            type: 'POST'
-        });
-
-    }
 
     setAdminUi(){
         this.$noteToolsTimeline.removeClass('hidden');
@@ -311,8 +252,6 @@ class AnatomyTour {
             this.$notesTimelineContainer.append($noteSection);
         }
 
-        /*let noteToSave = new Note(appGlobals.currentNote.sequence, title, note_content, null, true);*/
-
         let noteToSave = appGlobals.currentNote;
         noteToSave.setTitle(title);
         noteToSave.setNoteContent(note_content);
@@ -352,6 +291,75 @@ class AnatomyTour {
         });
     }
 
+    deleteNote(uid){
+        console.log("delete Note");
+
+        Utils.setNoteUpdateStatus("Deleting...");
+
+        let noteToDelete;
+
+        if (!uid){
+            noteToDelete = appGlobals.currentNote;
+        } else {
+            noteToDelete = appGlobals.notes[uid];
+        }
+        let noteToDeleteSequence = parseInt(noteToDelete.sequence);
+
+        // update data
+        Note.removeNote(noteToDelete.uid);
+
+        // set active note as previous note upon deletion
+        let index;
+        let activeNoteUID;
+        console.log("noteToDeleteSeq: " + noteToDeleteSequence);
+        if (noteToDeleteSequence === 1) {
+            if (appGlobals.sequenceIndex.length > 0) {
+                activeNoteUID = appGlobals.sequenceIndex[0][0];
+            } else {
+                let note = new Note(1, "", "", "");
+                activeNoteUID = note.getUid();
+            }
+        } else {
+            index = noteToDeleteSequence - 2;
+            activeNoteUID = appGlobals.sequenceIndex[index][0];
+        }
+
+        // set current note as previous
+        appGlobals.currentNote = appGlobals.notes[activeNoteUID];
+
+        // display previous note
+        this.setActiveNote(activeNoteUID);
+
+        // remove from timeline
+        let $noteToDelete = jQuery('#' + noteToDelete.uid);
+        $noteToDelete.fadeOut(() => {
+            //remove DOM element
+            $noteToDelete.remove();
+        });
+
+        // ajax call to delete note from database AND resequence other notes
+        jQuery.ajax({
+            url: ajax_object.wp_az_ajax_url,
+            data: {
+                action: 'delete_note',
+                wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
+                wp_az_post_id: ajax_object.wp_az_post_id,
+                wp_az_note_uid: noteToDelete.uid,
+                wp_az_sequence_index: appGlobals.sequenceIndex
+            },
+            error: function() {
+                console.log("Failed to delete note");
+                Utils.setNoteUpdateStatus("Failed to delete note.", 3000);
+            },
+            success: function(data) {
+                console.log("Note deleted: " + JSON.stringify(data));
+                Utils.setNoteUpdateStatus("Note deleted.", 3000);
+            },
+            type: 'POST'
+        });
+
+    }
+
     setActiveNote(uid, scrollToTop){
         let note = appGlobals.notes[uid];
 
@@ -366,6 +374,7 @@ class AnatomyTour {
 
         // update note properties
         jQuery('#current-note-label').text('Note ' + note.sequence);
+        jQuery('#total-notes-label').text(appGlobals.numNotes + ' notes');
 
         // update title and content
         if (this.isUserAdmin) {

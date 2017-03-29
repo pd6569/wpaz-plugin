@@ -235,6 +235,31 @@ class wp_az_anatomy_tours {
 		add_option('wp_az_db_version', $wp_az_db_version);
 
 	}
+
+	private function resequence_notes($sequence_index, $post_id) {
+
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'anatomy_tours_notes';
+
+		foreach ($sequence_index as $note_sequence) {
+			$uid = $note_sequence[0];
+			$sequence = $note_sequence[1];
+
+			$sequence_data = array(
+				uid         => $uid,
+				sequence    => $sequence
+			);
+
+			$wpdb->update(
+				$table_name,
+				$sequence_data,
+				array (
+					post_id  => $post_id,
+					uid      => $uid
+				)
+			);
+		}
+	}
 	
 	/**********************
 	 *  AJAX FUNCTIONS    *
@@ -362,6 +387,7 @@ class wp_az_anatomy_tours {
 
 		$post_id = intval($_POST['wp_az_post_id']);
 		$uid = $_POST['wp_az_note_uid'];
+		$sequence_index = $_POST['wp_az_sequence_index'];
 
 		$wpdb->delete(
 			$table_name,
@@ -369,12 +395,16 @@ class wp_az_anatomy_tours {
 				post_id => $post_id,
 				uid => $uid));
 
+		this.$this->resequence_notes($sequence_index, $post_id);
+
 		wp_send_json(array (
 			'status' => "success",
-			'message' => "Note deleted: " . $uid,
+			'message' => "Note deleted: " . $uid
 		));
 
 	}
+
+
 
 
 }
