@@ -101,7 +101,7 @@ class AnatomyTour {
 
         // Actions
         this.$addAction.on('click', (event) => { this.addAction(); });
-        this.$clearActions.on('click', () => { this.clearActions(); });
+        this.$clearActions.on('click', () => { this.clearActions(appGlobals.currentNote.uid); });
 
         // Toolbar
         this.$toolbarReset.on('click', event => { this.human.send("scene.restore", JSON.parse(appGlobals.currentNote.scene_state)); });
@@ -372,6 +372,9 @@ class AnatomyTour {
             this.saveNotes($title.val(), $content.val());
         }
 
+        // reset variables
+        this.changesMade = false;
+
         // update note properties
         jQuery('#current-note-label').text('Note ' + note.sequence);
         jQuery('#total-notes-label').text(appGlobals.numNotes + ' notes');
@@ -390,12 +393,10 @@ class AnatomyTour {
             this.human.send("scene.restore", JSON.parse(note.scene_state));
         }
 
-        // clear and load actions
+        // clear previous actions, load new actions
         this.clearActions();
         if (appGlobals.actions[note.uid]) this.loadActions(note.uid);
 
-        // reset variables
-        this.changesMade = false;
 
         // scroll to top
         if (scrollToTop) {
@@ -523,10 +524,11 @@ class AnatomyTour {
         })
     }
 
-    clearActions() {
+    clearActions(noteUID) {
         this.numActions = 0;
         this.$numActionsLabel.text('0 actions');
         this.$actionsDropdownContainer.empty();
+        if (noteUID) appGlobals.actions[appGlobals.currentNote.uid] = [];
     }
 
     // TIMELINE
