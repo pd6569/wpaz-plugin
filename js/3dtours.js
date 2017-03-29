@@ -390,6 +390,10 @@ class AnatomyTour {
             this.human.send("scene.restore", JSON.parse(note.scene_state));
         }
 
+        // clear and load actions
+        this.clearActions();
+        if (appGlobals.actions[note.uid]) this.loadActions(note.uid);
+
         // reset variables
         this.changesMade = false;
 
@@ -425,7 +429,7 @@ class AnatomyTour {
 
     // ACTIONS
     addAction() {
-        this.numActions++;
+        /*this.numActions++;
         this.$numActionsLabel.text(this.numActions + ' actions');
 
         let actionId = "action-" + this.numActions;
@@ -451,12 +455,72 @@ class AnatomyTour {
                     this.human.send('scene.restore', sceneState)
                 });
 
+            })
 
+        });*/
+
+        this.numActions++;
+        this.$numActionsLabel.text(this.numActions + ' actions');
+
+        // create action, add to array
+        let noteId = appGlobals.currentNote.uid;
+        let action = new Action(noteId, this.numActions, appGlobals.actions.GENERAL);
+        if(appGlobals.actions[noteId]) {
+            appGlobals.actions[noteId].push(action);
+        } else {
+            appGlobals.actions[noteId] = [action];
+        }
+
+        let $actionItem = jQuery("<li id='" + action.uid + "' class='list-group-item'><a> Action " + this.numActions + "</a></li>");
+
+        this.$actionsDropdownContainer.append($actionItem);
+
+        // create new generic action
+        this.getSceneState((sceneState) => {
+            action.setSceneState(sceneState);
+            console.log("Scene state saved as action");
+            Utils.updateActionStatusBox("Action added to this note set.");
+
+            $actionItem.on('click', (event) => {
+                event.preventDefault();
+
+                this.human.send('camera.set', {
+                    position: action.scene_state.camera.eye,
+                    target: action.scene_state.camera.look,
+                    up: action.scene_state.camera.up,
+                    animate: true
+                }, () => {
+                    this.human.send('scene.restore', sceneState)
+                });
 
             })
 
         });
 
+    }
+
+    loadActions(noteUID){
+        let actions = appGlobals.actions[noteUID];
+        actions.forEach((action) => {
+
+            this.numActions++;
+            this.$numActionsLabel.text(this.numActions + ' actions');
+
+            let $actionItem = jQuery("<li id='" + action.uid + "' class='list-group-item'><a> Action " + action.action_order + "</a></li>");
+            this.$actionsDropdownContainer.append($actionItem);
+
+            $actionItem.on('click', (event) => {
+                event.preventDefault();
+                this.human.send('camera.set', {
+                    position: action.scene_state.camera.eye,
+                    target: action.scene_state.camera.look,
+                    up: action.scene_state.camera.up,
+                    animate: true
+                }, () => {
+                    this.human.send('scene.restore', action.scene_state)
+                });
+            })
+        })
     }
 
     clearActions() {

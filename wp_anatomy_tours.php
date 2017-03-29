@@ -222,9 +222,11 @@ class wp_az_anatomy_tours {
 
 		$sql .= "CREATE TABLE $table_actions (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
+		uid tinyint NOT NULL,
 		post_id mediumint(9) NOT NULL,
-		notes_id mediumint(9) NOT NULL,
-		action_type text,
+		note_id mediumint(9) NOT NULL,
+		action_order tinyint NOT NULL,
+		type tinytext,
 		scene_state text,
 		PRIMARY KEY  (id)
 		) $charset_collate;";

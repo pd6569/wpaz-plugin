@@ -22,4 +22,10 @@ let appGlobals = {
     notesLoaded: false,
     humanLoaded: false,
 
+    // actions
+    actions: {},
+    actionTypes: {
+        GENERAL: 'general'
+    }
+
 };
