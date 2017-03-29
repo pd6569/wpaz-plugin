@@ -226,7 +226,7 @@ class wp_az_anatomy_tours {
 		post_id mediumint(9) NOT NULL,
 		note_id tinytext NOT NULL,
 		action_order tinyint NOT NULL,
-		type tinytext NOT NULL,
+		action_type tinytext NOT NULL,
 		scene_state text,
 		action_data text,
 		PRIMARY KEY  (id)
@@ -310,7 +310,7 @@ class wp_az_anatomy_tours {
 					'note_id'       => $action['note_id'],
 					'post_id'       => $post_id,
 					'action_order'  => $action['action_order'],
-					'type'          => $action['type'],
+					'action_type'   => $action['action_type'],
 					'scene_state'   => $action['scene_state'],
 					'action_data'   => $action['action_data']
 				);
@@ -331,9 +331,10 @@ class wp_az_anatomy_tours {
 					);
 				}
 
+				$actions_db_updated = true;
 			}
 
-			$actions_db_updated = true;
+
 		}
 
 		// try to update notes if available
@@ -368,7 +369,7 @@ class wp_az_anatomy_tours {
 			'title'                 => $notes['title'],
 			'note_content'          => $notes['note_content'],
 			'sequence'              => $notes['sequence'],
-			'actionschanged'        => $actions_db_updated,
+			'actions'               => $actions_db_updated,
 		));
 
 
@@ -397,6 +398,7 @@ class wp_az_anatomy_tours {
 
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'anatomy_tours_notes';
+		$table_actions = $wpdb->prefix . 'anatomy_tours_actions';
 
 		$post_id = intval($_GET['wp_az_post_id']);
 
@@ -410,9 +412,17 @@ class wp_az_anatomy_tours {
 			$note->scene_state = $scene_state;
 		}
 
+		$actionsQuery = $wpdb->get_results(
+			"SELECT *
+					FROM $table_actions
+					WHERE post_id = $post_id
+					ORDER BY note_id"
+		);
+
 		wp_send_json(array (
-			'status' => "success",
-			'notes' => $notes,
+			'status'    => "success",
+			'notes'     => $notes,
+			'actions'   => stripslashes_deep($actionsQuery),
 		));
 
 	}

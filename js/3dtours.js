@@ -2,6 +2,8 @@
  * Created by peter on 22/03/2017.
  */
 
+//TODO: on first load actions do not load
+
 class AnatomyTour {
 
     constructor() {
@@ -161,8 +163,11 @@ class AnatomyTour {
 
     loadNotes(){
         console.log("loadNotes");
+
+        Utils.setNoteUpdateStatus("Loading notes data...");
         let human = this.human;
         let setInitialSceneState = this.setInitialSceneState;
+        let loadActions = this.loadActions;
 
         jQuery.ajax({
             url: ajax_object.wp_az_ajax_url,
@@ -175,8 +180,11 @@ class AnatomyTour {
                 console.log("Failed to load notes");
             },
             success: function(data) {
-                console.log("Notes loaded from server. human loaded: " + appGlobals['humanLoaded']);
+                console.log("Notes loaded from server." + JSON.stringify(data));
                 let notesArray = data.notes;
+                let actionsArray = data.actions;
+
+                // Create notes objects and update global data
                 if (notesArray.length > 0){
                     let numNotes = 0;
                     notesArray.forEach(function(note){
@@ -196,7 +204,19 @@ class AnatomyTour {
                         console.log("no notes to load. New note created.");
                     });
                 }
+
+                // Create actions objects and update global data
+                actionsArray.forEach(function(action){
+                    if (appGlobals.actions[action.note_id]) {
+                        appGlobals.actions[action.note_id].push(action);
+                    } else {
+                        appGlobals.actions[action.note_id] = [action];
+                    }
+                });
+
                 appGlobals.notesLoaded = true;
+
+                Utils.setNoteUpdateStatus("Notes data load complete.", 3000);
             },
             type: 'GET'
         });
@@ -434,6 +454,9 @@ class AnatomyTour {
 
         this.$currentNoteLabel.text("Note " + addNote.sequence);
         this.$numNotesLabel.text(appGlobals.numNotes + " notes");
+
+        // clear actions
+        this.clearActions();
 
         this.human.send('scene.capture', (sceneState) => {
             addNote.setSceneState(JSON.stringify(sceneState));
