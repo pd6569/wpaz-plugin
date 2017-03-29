@@ -361,17 +361,17 @@ class wp_az_anatomy_tours {
 		$table_name = $wpdb->prefix . 'anatomy_tours_notes';
 
 		$post_id = intval($_POST['wp_az_post_id']);
-		$sequence = intval($_POST['wp_az_note_sequence']);
+		$uid = $_POST['wp_az_note_uid'];
 
 		$wpdb->delete(
 			$table_name,
 			array(
 				post_id => $post_id,
-				sequence => $sequence));
+				uid => $uid));
 
 		wp_send_json(array (
 			'status' => "success",
-			'message' => "Note deleted: " . $sequence,
+			'message' => "Note deleted: " . $uid,
 		));
 
 	}

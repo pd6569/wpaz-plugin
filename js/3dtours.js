@@ -137,11 +137,32 @@ class AnatomyTour {
         Utils.setNoteUpdateStatus("Deleting...");
 
         let noteToDelete = appGlobals.currentNote;
+        let noteToDeleteSequence = parseInt(appGlobals.currentNote.sequence);
 
         // update data
         Note.removeNote(noteToDelete.uid);
 
-        // add new note
+        // set active note as previous note
+        let index;
+        let activeNoteUID;
+        console.log("noteToDeleteSeq: " + noteToDeleteSequence);
+        if (noteToDeleteSequence === 1) {
+            if (appGlobals.sequenceIndex.length > 0) {
+                activeNoteUID = appGlobals.sequenceIndex[0][0];
+            } else {
+                let note = new Note(1, "", "", "");
+                activeNoteUID = note.getUid();
+            }
+        } else {
+            index = noteToDeleteSequence - 2;
+            activeNoteUID = appGlobals.sequenceIndex[index][0];
+        }
+
+        // set new current note
+        appGlobals.currentNote = appGlobals.notes[activeNoteUID];
+
+        console.log("activeNoteUID: " + activeNoteUID);
+        this.setActiveNote(activeNoteUID);
 
         // remove from timeline
         let $noteToDelete = jQuery('#' + noteToDelete.uid);
@@ -150,17 +171,13 @@ class AnatomyTour {
             $noteToDelete.remove();
         });
 
-        // clear fields
-        this.$noteTitle.val("");
-        this.$noteText.val("");
-
         jQuery.ajax({
             url: ajax_object.wp_az_ajax_url,
             data: {
                 action: 'delete_note',
                 wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
                 wp_az_post_id: ajax_object.wp_az_post_id,
-                wp_az_note_sequence: noteToDelete.sequence
+                wp_az_note_uid: noteToDelete.uid
             },
             error: function() {
                 console.log("Failed to delete note");
@@ -257,10 +274,10 @@ class AnatomyTour {
 
     // NOTE NAVIGATION
     navigateNotes(direction){
-        console.log("Navigate: " + direction);
-
         let nextNote;
         let noteSeq = parseInt(appGlobals.currentNote.sequence);
+
+        console.log("Navigate: " + direction + "current seq: " + noteSeq);
 
         direction == 'right' ? noteSeq++ : noteSeq--;
 
@@ -360,7 +377,9 @@ class AnatomyTour {
         }
 
         // load scene
-        this.human.send("scene.restore", JSON.parse(note.scene_state));
+        if (note.scene_state != null && note.scene_state != "" && note.scene_state.length > 0){
+            this.human.send("scene.restore", JSON.parse(note.scene_state));
+        }
 
         // reset variables
         this.changesMade = false;

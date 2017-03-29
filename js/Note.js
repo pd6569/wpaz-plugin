@@ -75,16 +75,6 @@ class Note {
         console.log("new note added to global notes: " + JSON.stringify(this.title));
     }
 
-    static removeNote(uid){
-        if (appGlobals.notes[uid]) {
-            console.log("delete note: " + appGlobals.notes[uid].title + " sequence: " + appGlobals.notes[uid].sequence);
-            delete appGlobals.notes[uid];
-            appGlobals.numNotes = parseInt(appGlobals.numNotes) - 1;
-            console.log("Note deleted. Num notes: " + appGlobals.numNotes);
-        } else {
-            console.log("removeNote failed. Could not delete note with uid: " + uid);
-        }
-    }
 
     // update notes collection
     updateNotes(){
@@ -96,4 +86,49 @@ class Note {
     updateSequenceIndex(){
         appGlobals.sequenceIndex.push([this.uid, this.sequence])
     }
+
+    /* STATIC FUNCTIONS */
+
+    static removeNote(uid){
+        if (appGlobals.notes[uid]) {
+            console.log("delete note: " + appGlobals.notes[uid].uid + " sequence: " + appGlobals.notes[uid].sequence);
+            delete appGlobals.notes[uid];
+            appGlobals.numNotes = parseInt(appGlobals.numNotes) - 1;
+
+            // Update sequence index
+            let indexRemove;
+            for (let i = 0; i < appGlobals.sequenceIndex.length ; i++){
+                if (appGlobals.sequenceIndex[i][0] === uid){
+                    indexRemove = i;
+                    break;
+                }
+            }
+            appGlobals.sequenceIndex.splice(indexRemove, 1);
+
+            console.log("removed note from array: " + JSON.stringify(appGlobals.sequenceIndex));
+
+            // Update sequences
+            for (let i = 0; i < appGlobals.sequenceIndex.length; i++) {
+                let newSequence = i + 1;
+                appGlobals.sequenceIndex[i][1] = newSequence;
+            }
+
+            console.log("updated sequence: " + JSON.stringify(appGlobals.sequenceIndex));
+
+            appGlobals.sequenceIndex.forEach((note) => {
+                let uid = note[0];
+                let sequence = note[1];
+                console.log("old note sequence. id: " + appGlobals.notes[uid].uid + " sequence: " + appGlobals.notes[uid].sequence);
+                appGlobals.notes[uid].sequence = sequence;
+                console.log("new note sequence. id: " + appGlobals.notes[uid].uid + " sequence: " + appGlobals.notes[uid].sequence);
+            });
+
+
+
+            console.log("Note deleted. Num notes: " + appGlobals.numNotes);
+        } else {
+            console.log("removeNote failed. Could not delete note with uid: " + uid);
+        }
+    }
+
 }
