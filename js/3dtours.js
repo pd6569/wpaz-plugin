@@ -274,7 +274,8 @@ class AnatomyTour {
         Utils.setNoteUpdateStatus("Saving...");
 
         // update timeline UI
-        let $updateNote = this.$notesTimelineContainer.find('#' + appGlobals.currentNote.id);
+        let id = '#' + appGlobals.currentNote.id;
+        let $updateNote = this.$notesTimelineContainer.find(id);
         if (($updateNote).length !== 0) {
             // update note
             $updateNote.find('.note-title').text(title);
@@ -283,21 +284,25 @@ class AnatomyTour {
             // append new note
             let noteSectionHtml = appGlobals.templates.NOTE_SECTION;
             let $noteSection = jQuery(jQuery.parseHTML(noteSectionHtml));
-            $noteSection.find('.note-item').attr('id', 'pwnage');
+            $noteSection.find('.note-item').attr('id', id);
             $noteSection.find('.note-title').html(title);
             $noteSection.find('.note-content').html(note_content);
 
             this.$notesTimelineContainer.append($noteSection);
         }
 
-        let noteToSave = new Note(appGlobals.currentNote.sequence, title, note_content, null, true);
+        /*let noteToSave = new Note(appGlobals.currentNote.sequence, title, note_content, null, true);*/
+
+        let noteToSave = appGlobals.currentNote;
+        noteToSave.setTitle(title);
+        noteToSave.setNoteContent(note_content);
 
         this.human.send('scene.capture', (sceneState) => {
             this.currentSceneState = sceneState;
 
             noteToSave.setSceneState(JSON.stringify(sceneState));
 
-            console.log("save current note: " + noteToSave.title + " sequence: " + noteToSave.sequence);
+            console.log("save current note: " + noteToSave.title + " sequence: " + noteToSave.sequence + " id: " + noteToSave.id + " note Content: " + noteToSave.note_content);
 
             //!* Data to make available via the $_POST variable
             let data = {

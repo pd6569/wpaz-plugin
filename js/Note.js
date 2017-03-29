@@ -8,7 +8,7 @@ class Note {
 
 
 
-        this.id = "note-" + sequence;
+        this.id = "note-" + Utils.generateUID();
         this.sequence = sequence;
         this.title = title;
         this.note_content = note_content;

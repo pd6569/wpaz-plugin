@@ -209,6 +209,7 @@ class wp_az_anatomy_tours {
 
 		$sql = "CREATE TABLE $table_notes (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
+		uid tinytext NOT NULL,
 		post_id mediumint(9) NOT NULL,
 		created datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
 		last_modified datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
@@ -255,6 +256,7 @@ class wp_az_anatomy_tours {
 		$table_name = $wpdb->prefix . 'anatomy_tours_notes';
 		$notes_data = array (
 			'post_id'              => $post_id,
+			'uid'                  => $notes['uid'],
 			'last_modified'        => current_time('mysql'),
 			'title'                => $notes['title'],
 			'note_content'         => $notes['note_content'],
@@ -270,7 +272,7 @@ class wp_az_anatomy_tours {
 				$notes_data,
 				array (
 					post_id  => $post_id,
-					sequence => $notes['sequence']
+					uid      => $notes['uid']
 				)
 			);
 
@@ -290,6 +292,7 @@ class wp_az_anatomy_tours {
 			'status'                => 'success',
 			'message'               => 'Notes saved',
 			'post_id'               => $post_id,
+			'uid'                   => $notes['uid'],
 			'title'                 => $notes['title'],
 			'note_content'          => $notes['note_content'],
 			'sequence'              => $notes['sequence'],
