@@ -278,6 +278,7 @@ class wp_az_anatomy_tours {
 		$post_id = intval($_POST['wp_az_post_id']);
 		$notes = $_POST['wp_az_note_object'];
 		$actions = $_POST['wp_az_actions'];
+		$actions_changed = $_POST['wp_az_actions_changed'];
 
 		// write to database
 		global $wpdb;
@@ -301,7 +302,7 @@ class wp_az_anatomy_tours {
 			array( note_id => $notes[uid] )
 		);
 
-		if ($actions) {
+		if ($actions && $actions_changed) {
 			foreach ($actions as $action) {
 
 				$action_data = array (
@@ -331,6 +332,8 @@ class wp_az_anatomy_tours {
 				}
 
 			}
+
+			$actions_db_updated = true;
 		}
 
 		// try to update notes if available
@@ -365,6 +368,7 @@ class wp_az_anatomy_tours {
 			'title'                 => $notes['title'],
 			'note_content'          => $notes['note_content'],
 			'sequence'              => $notes['sequence'],
+			'actionschanged'        => $actions_db_updated,
 		));
 
 

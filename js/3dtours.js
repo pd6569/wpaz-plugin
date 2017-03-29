@@ -28,6 +28,7 @@ class AnatomyTour {
 
         // Track changes
         this.changesMade = false;
+        this.actionsChanged = false;
 
         // Human loaded
         this.human.on('human.ready', () => {
@@ -215,7 +216,7 @@ class AnatomyTour {
 
     // NOTE NAVIGATION
     navigateNotes(direction){
-        let nextNote;
+
         let noteSeq = parseInt(appGlobals.currentNote.sequence);
 
         console.log("Navigate: " + direction + "current seq: " + noteSeq);
@@ -257,6 +258,8 @@ class AnatomyTour {
         noteToSave.setTitle(title);
         noteToSave.setNoteContent(note_content);
 
+        // Check if changes made to actions, save variable
+        let actionsChanged = this.actionsChanged;
 
         this.human.send('scene.capture', (sceneState) => {
             this.currentSceneState = sceneState;
@@ -272,6 +275,7 @@ class AnatomyTour {
                 wp_az_post_id: ajax_object.wp_az_post_id,
                 wp_az_note_object: noteToSave,
                 wp_az_actions: actions,
+                wp_az_actions_changed: actionsChanged,
 
             };
 
@@ -293,6 +297,10 @@ class AnatomyTour {
             });
 
         });
+
+        // reset tracking  variables
+        this.actionsChanged = false;
+        this.changesMade = false;
     }
 
     deleteNote(uid){
@@ -372,12 +380,13 @@ class AnatomyTour {
         let $content = jQuery('.notes-text');
 
         // save current note first if changes made
-        if (this.isUserAdmin && this.changesMade == true) {
+        if (this.isUserAdmin && this.changesMade == true || this.actionsChanged) {
             this.saveNotes($title.val(), $content.val());
         }
 
-        // reset variables
+        // reset tracking variables
         this.changesMade = false;
+        this.actionsChanged = false;
 
         // update note properties
         jQuery('#current-note-label').text('Note ' + note.sequence);
@@ -465,6 +474,7 @@ class AnatomyTour {
         });*/
 
         this.numActions++;
+        this.actionsChanged = true;
         this.$numActionsLabel.text(this.numActions + ' actions');
 
         // create action, add to array
