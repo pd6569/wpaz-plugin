@@ -253,8 +253,10 @@ class AnatomyTour {
         }
 
         let noteToSave = appGlobals.currentNote;
+        let actions = appGlobals.actions[noteToSave.uid];
         noteToSave.setTitle(title);
         noteToSave.setNoteContent(note_content);
+
 
         this.human.send('scene.capture', (sceneState) => {
             this.currentSceneState = sceneState;
@@ -268,7 +270,9 @@ class AnatomyTour {
                 action: 'save_notes',
                 wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
                 wp_az_post_id: ajax_object.wp_az_post_id,
-                wp_az_note_object: noteToSave
+                wp_az_note_object: noteToSave,
+                wp_az_actions: actions,
+
             };
 
             //!* Process the AJAX POST request
@@ -465,7 +469,7 @@ class AnatomyTour {
 
         // create action, add to array
         let noteId = appGlobals.currentNote.uid;
-        let action = new Action(noteId, this.numActions, appGlobals.actions.GENERAL);
+        let action = new Action(noteId, this.numActions, appGlobals.actionTypes.GENERAL);
         if(appGlobals.actions[noteId]) {
             appGlobals.actions[noteId].push(action);
         } else {
@@ -478,7 +482,7 @@ class AnatomyTour {
 
         // create new generic action
         this.getSceneState((sceneState) => {
-            action.setSceneState(sceneState);
+            action.setSceneState(JSON.stringify(sceneState));
             console.log("Scene state saved as action");
             Utils.updateActionStatusBox("Action added to this note set.");
 

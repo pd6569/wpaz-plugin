@@ -222,12 +222,13 @@ class wp_az_anatomy_tours {
 
 		$sql .= "CREATE TABLE $table_actions (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
-		uid tinyint NOT NULL,
+		uid tinytext NOT NULL,
 		post_id mediumint(9) NOT NULL,
-		note_id mediumint(9) NOT NULL,
+		note_id tinytext NOT NULL,
 		action_order tinyint NOT NULL,
-		type tinytext,
+		type tinytext NOT NULL,
 		scene_state text,
+		action_data text,
 		PRIMARY KEY  (id)
 		) $charset_collate;";
 
@@ -276,11 +277,14 @@ class wp_az_anatomy_tours {
 
 		$post_id = intval($_POST['wp_az_post_id']);
 		$notes = $_POST['wp_az_note_object'];
+		$actions = $_POST['wp_az_actions'];
 
 		// write to database
 		global $wpdb;
 
-		$table_name = $wpdb->prefix . 'anatomy_tours_notes';
+		$notes_table = $wpdb->prefix . 'anatomy_tours_notes';
+		$actions_table = $wpdb->prefix . 'anatomy_tours_actions';
+
 		$notes_data = array (
 			'post_id'              => $post_id,
 			'uid'                  => $notes['uid'],
@@ -291,11 +295,49 @@ class wp_az_anatomy_tours {
 			'scene_state'          => $notes['scene_state']
 		);
 
+		// delete all actions data first
+		$wpdb->delete(
+			$actions_table,
+			array( note_id => $notes[uid] )
+		);
+
+		if ($actions) {
+			foreach ($actions as $action) {
+
+				$action_data = array (
+					'uid'           => $action['uid'],
+					'note_id'       => $action['note_id'],
+					'post_id'       => $post_id,
+					'action_order'  => $action['action_order'],
+					'type'          => $action['type'],
+					'scene_state'   => $action['scene_state'],
+					'action_data'   => $action['action_data']
+				);
+
+				$update = $wpdb->update(
+					$actions_table,
+					$action_data,
+					array (
+						post_id => $post_id,
+						uid     => $action->uid
+					)
+				);
+
+				if (!$update) {
+					$wpdb->insert(
+						$actions_table,
+						$action_data
+					);
+				}
+
+			}
+		}
+
 		// try to update notes if available
 		if (current_user_can('administrator')):
 
 		$update = $wpdb->update(
-				$table_name,
+				$notes_table,
 				$notes_data,
 				array (
 					post_id  => $post_id,
@@ -307,7 +349,7 @@ class wp_az_anatomy_tours {
 		if (!$update) {
 			$notes_data['created'] = current_time('mysql');
 			$wpdb->insert(
-				$table_name,
+				$notes_table,
 				$notes_data
 			);
 		}

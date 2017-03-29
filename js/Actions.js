@@ -4,14 +4,14 @@
 
 class Action {
 
-    constructor(note_id, action_order, type, scene_state = "", data = {}) {
+    constructor(note_id, action_order, type, scene_state = "", action_data = {}) {
 
         this.note_id = note_id;
         this.uid = Utils.generateUID();
         this.action_order = action_order;
         this.type = type;
         this.scene_state = scene_state;
-        this.data = data;
+        this.action_data = action_data;
     }
 
     setNoteId(note_id){
@@ -30,8 +30,8 @@ class Action {
         this.scene_state = scene_state;
     }
 
-    setData(data){
-        this.data = data;
+    setData(action_data){
+        this.action_data = action_data;
     }
 
 
