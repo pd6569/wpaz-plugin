@@ -490,9 +490,9 @@ class AnatomyTour {
                 event.preventDefault();
 
                 this.human.send('camera.set', {
-                    position: action.scene_state.camera.eye,
-                    target: action.scene_state.camera.look,
-                    up: action.scene_state.camera.up,
+                    position: sceneState.camera.eye,
+                    target: sceneState.camera.look,
+                    up: sceneState.camera.up,
                     animate: true
                 }, () => {
                     this.human.send('scene.restore', sceneState)
@@ -516,13 +516,14 @@ class AnatomyTour {
 
             $actionItem.on('click', (event) => {
                 event.preventDefault();
+                let sceneState = JSON.parse(action.scene_state);
                 this.human.send('camera.set', {
-                    position: action.scene_state.camera.eye,
-                    target: action.scene_state.camera.look,
-                    up: action.scene_state.camera.up,
+                    position: sceneState.camera.eye,
+                    target: sceneState.camera.look,
+                    up: sceneState.camera.up,
                     animate: true
                 }, () => {
-                    this.human.send('scene.restore', action.scene_state)
+                    this.human.send('scene.restore', sceneState)
                 });
             })
         })
