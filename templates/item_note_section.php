@@ -6,6 +6,7 @@
                 <a><span class="note-title"><?php echo $note->title ?></span></a>
                 <span class="glyphicon glyphicon-trash pull-right delete-note note-actions hvr-grow hidden" aria-hidden="true"></span>
                 <span class="glyphicon glyphicon-pencil pull-right edit-note note-actions hvr-grow hidden" aria-hidden="true"></span>
+
             </h3>
 
 		</div>

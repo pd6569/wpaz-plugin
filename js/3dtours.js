@@ -2,8 +2,6 @@
  * Created by peter on 22/03/2017.
  */
 
-//TODO: on first load actions do not load
-
 class AnatomyTour {
 
     constructor() {
@@ -69,6 +67,8 @@ class AnatomyTour {
 
         // actions
         this.$addAction = jQuery('#action-add');
+        this.$previousAction = jQuery('#action-previous');
+        this.$nextAction = jQuery('#action-next');
         this.$actionsDropdownContainer = jQuery('#actions-dropdown-container');
         this.$numActionsLabel = jQuery('#num-actions');
         this.$clearActions = jQuery('#toolbar-clear-actions');
@@ -104,6 +104,8 @@ class AnatomyTour {
 
         // Actions
         this.$addAction.on('click', (event) => { this.addAction(); });
+        this.$nextAction.on('click', (event) => { this.navigateActions('next')});
+        this.$previousAction.on('click', (event) => { this.navigateActions('previous')});
         this.$clearActions.on('click', () => { this.clearActions(appGlobals.currentNote.uid); });
 
         // Toolbar
@@ -135,7 +137,9 @@ class AnatomyTour {
 
     // Class methods
 
-
+    navigateActions(direction){
+        console.log("Navigate actions: " + direction);
+    }
 
     setAdminUi(){
         this.$noteToolsTimeline.removeClass('hidden');
@@ -164,11 +168,12 @@ class AnatomyTour {
 
     loadNotes(){
         console.log("loadNotes");
+        
+        let appObj = this;
 
         Utils.setNoteUpdateStatus("Loading notes data...");
         let human = this.human;
         let setInitialSceneState = this.setInitialSceneState;
-        let loadActions = this.loadActions;
 
         jQuery.ajax({
             url: ajax_object.wp_az_ajax_url,
@@ -214,6 +219,8 @@ class AnatomyTour {
                         appGlobals.actions[action.note_id] = [action];
                     }
                 });
+                
+                appObj.loadActions(appGlobals.currentNote.uid, appObj);
 
                 appGlobals.notesLoaded = true;
 
@@ -254,6 +261,7 @@ class AnatomyTour {
     // NOTE EDITOR
 
     saveNotes(title, note_content, callback){
+        if (!this.isUserAdmin) return;
         Utils.setNoteUpdateStatus("Saving...");
 
         // update timeline UI
@@ -325,6 +333,7 @@ class AnatomyTour {
     }
 
     deleteNote(uid){
+        if (!this.isUserAdmin) { console.log("Nice try..."); return };
         console.log("delete Note");
 
         Utils.setNoteUpdateStatus("Deleting...");
@@ -429,7 +438,7 @@ class AnatomyTour {
 
         // clear previous actions, load new actions
         this.clearActions();
-        if (appGlobals.actions[note.uid]) this.loadActions(note.uid);
+        if (appGlobals.actions[note.uid]) this.loadActions(note.uid, this);
 
 
         // scroll to top
@@ -444,6 +453,7 @@ class AnatomyTour {
     }
 
     addNoteSection(){
+        if (!this.isUserAdmin) {console.log("Nice try..."); return};
 
         // save current notes first
         this.saveNotes(this.$noteTitle.val(), this.$noteText.val());
@@ -468,35 +478,6 @@ class AnatomyTour {
 
     // ACTIONS
     addAction() {
-        /*this.numActions++;
-        this.$numActionsLabel.text(this.numActions + ' actions');
-
-        let actionId = "action-" + this.numActions;
-        let $actionItem = jQuery("<li id='" + actionId + "' class='list-group-item'><a> Action " + this.numActions + "</a></li>")
-
-        this.$actionsDropdownContainer.append($actionItem);
-
-        // create new generic action
-        this.getSceneState((sceneState) => {
-            let genAction = new Action(this.numActions, 'general', sceneState);
-            console.log("Scene state saved as action");
-            Utils.updateActionStatusBox("Action added to this note set.");
-
-            $actionItem.on('click', (event) => {
-                event.preventDefault();
-
-                this.human.send('camera.set', {
-                    position: genAction.data.camera.eye,
-                    target: genAction.data.camera.look,
-                    up: genAction.data.camera.up,
-                    animate: true
-                }, () => {
-                    this.human.send('scene.restore', sceneState)
-                });
-
-            })
-
-        });*/
 
         this.numActions++;
         this.actionsChanged = true;
@@ -539,8 +520,8 @@ class AnatomyTour {
 
     }
 
-    loadActions(noteUID){
-        let actions = appGlobals.actions[noteUID];
+    loadActions(noteUID, appObj){
+        /*let actions = appGlobals.actions[noteUID];
         actions.forEach((action) => {
 
             this.numActions++;
@@ -562,6 +543,32 @@ class AnatomyTour {
                 });
             })
         })
+*/
+        let actions = appGlobals.actions[noteUID];
+        if (actions){
+            actions.forEach((action) => {
+
+                appObj.numActions++;
+                appObj.$numActionsLabel.text(appObj.numActions + ' actions');
+
+                let $actionItem = jQuery("<li id='" + action.uid + "' class='list-group-item'><a> Action " + action.action_order + "</a></li>");
+                appObj.$actionsDropdownContainer.append($actionItem);
+
+                $actionItem.on('click', (event) => {
+                    event.preventDefault();
+                    let sceneState = JSON.parse(action.scene_state);
+                    appObj.human.send('camera.set', {
+                        position: sceneState.camera.eye,
+                        target: sceneState.camera.look,
+                        up: sceneState.camera.up,
+                        animate: true
+                    }, () => {
+                        appObj.human.send('scene.restore', sceneState)
+                    });
+                })
+            })
+        }
+
     }
 
     clearActions(noteUID) {

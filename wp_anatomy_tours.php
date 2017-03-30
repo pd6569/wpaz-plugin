@@ -39,8 +39,11 @@ class wp_az_anatomy_tours {
 
 		$this->hooks();
 
+		global $wp_az_is_user_admin;
+
 		// generate item templates
 		wp_az_generate_item_templates();
+
 	}
 	
 	public function hooks(){
@@ -65,15 +68,10 @@ class wp_az_anatomy_tours {
 	public function set_content($content){
 
 		global $post;
+		global $wp_az_is_user_admin;
 		global $layout_template_names;
 
 		if ($post->post_type == '3d-tours') {
-
-			/*if (current_user_can('administrator')) :
-				$content = wp_az_get_template($layout_template_names['3D_TOURS']);
-			else :
-				$content = wp_az_get_template($layout_template_names['3D_TOURS_PUBLIC']);
-			endif;*/
 
 			$content = wp_az_get_template_html($layout_template_names['3D_TOURS']);
 
