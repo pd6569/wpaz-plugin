@@ -9,7 +9,6 @@ let appGlobals = {
     sequenceIndex: [],
     numNotes: 0,
     actions: {},
-    firstSceneSet: false,
     firstSceneUrl: "",
 
     // templates

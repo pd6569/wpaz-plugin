@@ -166,12 +166,15 @@ class AnatomyTour {
             return;
         }
 
-        if (parseInt(appGlobals.currentNote.sequence) === 1 && !appGlobals.firstSceneSet){
+    /*    if (parseInt(appGlobals.currentNote.sequence) === 1){
             this.$modalAlert.find('.modal-title').text("First scene");
             this.$modalAlert.find('.modal-body').text("Do you want this scene to be displayed when the page first loads?");
             this.$modalAlert.find('#modal-btn-1').text("Yes").on('click', () => {
                 console.log("set as first scene");
+                appGlobals.firstSceneSet = true;
+                appGlobals.firstSceneUrl = sceneUrl;
                 this.$modalAlert.modal('hide');
+                this.saveFirstSceneUrl();
             });
             this.$modalAlert.find('#modal-btn-2').text("No").on('click', () => {
                 console.log("do not set as first scene");
@@ -185,7 +188,26 @@ class AnatomyTour {
                 }, 500)
 
             });
-        }
+        }*/
+    }
+
+    saveFirstSceneUrl() {
+        jQuery.ajax({
+            url: ajax_object.wp_az_ajax_url,
+            data: {
+                action: 'update_first_scene_url',
+                wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
+                wp_az_post_id: ajax_object.wp_az_post_id,
+                wp_az_first_scene_url: appGlobals.firstSceneUrl
+            },
+            error: function() {
+                console.log("Failed to save first scene URL");
+            },
+            success: function(data) {
+                console.log("First scene url successfully updated. " + JSON.stringify(data));
+            },
+            type: 'POST'
+        });
     }
 
     setAdminUi(){
