@@ -71,6 +71,7 @@ class AnatomyTour {
         this.$nextAction = jQuery('#action-next');
         this.$actionsDropdownContainer = jQuery('#actions-dropdown-container');
         this.$numActionsLabel = jQuery('#num-actions');
+        this.$currentActionLabel = jQuery('#current-action');
         this.$clearActions = jQuery('#toolbar-clear-actions');
         this.$actionStatusBox = jQuery('#action-status-box');
 
@@ -136,10 +137,6 @@ class AnatomyTour {
     }
 
     // Class methods
-
-    navigateActions(direction){
-        console.log("Navigate actions: " + direction);
-    }
 
     setAdminUi(){
         this.$noteToolsTimeline.removeClass('hidden');
@@ -219,8 +216,14 @@ class AnatomyTour {
                         appGlobals.actions[action.note_id] = [action];
                     }
                 });
-                
+
+                // load actions
                 appObj.loadActions(appGlobals.currentNote.uid, appObj);
+
+                // set current action to first
+                if (appGlobals.actions[appGlobals.currentNote.uid]){
+                    appObj.setCurrentAction(appGlobals.actions[appGlobals.currentNote.uid][0]);
+                }
 
                 appGlobals.notesLoaded = true;
 
@@ -241,6 +244,8 @@ class AnatomyTour {
             suffix: "</a>"
         }});
     }
+
+
 
     // NOTE NAVIGATION
     navigateNotes(direction){
@@ -436,9 +441,12 @@ class AnatomyTour {
             this.human.send("scene.restore", JSON.parse(note.scene_state));
         }
 
-        // clear previous actions, load new actions
+        // clear previous actions, load new actions, set current action
         this.clearActions();
-        if (appGlobals.actions[note.uid]) this.loadActions(note.uid, this);
+        if (appGlobals.actions[note.uid]) {
+            this.loadActions(note.uid, this);
+            this.setCurrentAction(appGlobals.actions[note.uid][0]);
+        }
 
 
         // scroll to top
@@ -502,21 +510,84 @@ class AnatomyTour {
             console.log("Scene state saved as action");
             Utils.updateActionStatusBox("Action added to this note set.");
 
+            // Set current action
+            this.setCurrentAction(action);
+
             $actionItem.on('click', (event) => {
                 event.preventDefault();
 
-                this.human.send('camera.set', {
-                    position: sceneState.camera.eye,
-                    target: sceneState.camera.look,
-                    up: sceneState.camera.up,
-                    animate: true
-                }, () => {
-                    this.human.send('scene.restore', sceneState)
-                });
+                switch(action.action_type){
+                    case appGlobals.actionTypes.GENERAL:
+                        this.doAction(action, this);
+                        break;
+                }
 
             })
 
         });
+
+    }
+
+    navigateActions(direction){
+        console.log("Navigate actions: " + direction);
+
+        let actions = appGlobals.actions[appGlobals.currentNote.uid];
+
+        if (actions) {
+
+            let numActions = actions.length;
+            let currentActionOrder = parseInt(appGlobals.currentAction.action_order);
+
+            if (direction === "next"){
+                if (currentActionOrder < numActions){
+                    this.doAction(actions[currentActionOrder], this);
+                }  else {
+                    console.log("Reached last action");
+                    return;
+                }
+            } else {
+                if (currentActionOrder > 1){
+                    this.doAction(actions[currentActionOrder - 2], this);
+                } else {
+                    console.log("Reached first action");
+                    return;
+                }
+            }
+
+        }
+
+
+    }
+
+    setCurrentAction(action){
+        console.log("setCurrentAction: " + JSON.stringify(action.action_order));
+        appGlobals.currentAction = action;
+        this.$currentActionLabel.text("Action " + action.action_order);
+    }
+
+    // DO ACTION METHODS
+    doAction(action, appObj){
+        console.log("doAction");
+        switch(action.action_type){
+            case appGlobals.actionTypes.GENERAL:
+                
+                appObj.human.send('camera.set', {
+                    position: JSON.parse(action.scene_state).camera.eye,
+                    target: JSON.parse(action.scene_state).camera.look,
+                    up: JSON.parse(action.scene_state).camera.up,
+                    animate: true
+                }, () => {
+                    appObj.human.send('scene.restore', JSON.parse(action.scene_state))
+                });
+
+                appObj.setCurrentAction(action);
+
+                break;
+
+            default:
+                break;
+
+        }
 
     }
 
@@ -556,7 +627,7 @@ class AnatomyTour {
 
                 $actionItem.on('click', (event) => {
                     event.preventDefault();
-                    let sceneState = JSON.parse(action.scene_state);
+                    /*let sceneState = JSON.parse(action.scene_state);
                     appObj.human.send('camera.set', {
                         position: sceneState.camera.eye,
                         target: sceneState.camera.look,
@@ -565,6 +636,8 @@ class AnatomyTour {
                     }, () => {
                         appObj.human.send('scene.restore', sceneState)
                     });
+                    */
+                    appObj.doAction(action, appObj);
                 })
             })
         }
@@ -574,6 +647,7 @@ class AnatomyTour {
     clearActions(noteUID) {
         this.numActions = 0;
         this.$numActionsLabel.text('0 actions');
+        this.$currentActionLabel.text('Action 1');
         this.$actionsDropdownContainer.empty();
         if (noteUID) appGlobals.actions[appGlobals.currentNote.uid] = [];
     }

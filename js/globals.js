@@ -23,7 +23,8 @@ let appGlobals = {
     humanLoaded: false,
 
     // actions
-    actions: {},
+    actions: {}, // note uid : array of ordered actions
+    currentAction: {},
     actionTypes: {
         GENERAL: 'general'
     }

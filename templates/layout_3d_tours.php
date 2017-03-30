@@ -79,8 +79,10 @@
                                         <ul id="actions-dropdown-container" class="dropdown-menu" aria-labelledby="actions-dropdown">
                                         </ul>
                                     </div>
-
-                                    <span id="num-actions" class="label label-info">0 actions</span>
+                                    <div class="action-properties">
+                                        <span id="current-action" class="label label-info">Action 1</span>
+                                        <span id="num-actions" class="label label-info">0 actions</span>
+                                    </div>
                                     <div class="btn-group pull-right" role="group" aria-label="...">
                                         <button id="toolbar-reset" type="button" class="btn btn-default">Reset</button>
                                         <button id="toolbar-clear-actions" type="button" class="btn btn-default">Clear Actions</button>
@@ -92,11 +94,11 @@
                             <div class="row">
                                 <div class="col-md-12 save-actions">
                                     <div id="buttons-container">
-
                                         <button id="notes-save-btn" type="button" class="btn btn-primary notes-button pull-right">Save</button>
                                         <button id="notes-add-new-btn" type="button" class="btn btn-success notes-button pull-right">Add new</button>
                                         <button id="notes-delete-btn" type="button" class="btn btn-danger notes-button pull-right">Delete</button>
                                     </div>
+
                                 </div>
                             </div>
 
@@ -120,6 +122,16 @@
                             </div>
                             <div class="panel-body notes-text" data-scantext data-target="embedded-human">
 			                    <?php echo $notes[0]->note_content ?>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="btn-group" role="group" aria-label="...">
+                                <button id="action-previous" type="button" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
+                                <button id="action-next" type="button" class="btn btn-default"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></button>
+                            </div>
+                            <div class="action-properties">
+                                <span id="current-action" class="label label-info">Action 1</span>
+                                <span id="num-actions" class="label label-info">0 actions</span>
                             </div>
                         </div>
                     </div>
