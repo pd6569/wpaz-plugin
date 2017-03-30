@@ -60,4 +60,12 @@ class Utils {
         return firstPart + secondPart;
     }
 
+    static compare(a, b){
+        if (a.action_order < b.action_order)
+            return -1;
+        if (a.action_order > b.action_order)
+            return 1;
+        return 0;
+    }
+
 }

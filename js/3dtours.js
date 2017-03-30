@@ -96,7 +96,12 @@ class AnatomyTour {
             this.$humanWidget.attr('src', sceneUrl);
 
             if (appGlobals.currentNote.sequence === 1 && !appGlobals.firstSceneSet){
-                this.$modalAlert.modal('show');
+
+                this.human = new HumanAPI("embedded-human");
+                this.human.on('human.ready', () => {
+                    console.log("new scene loaded");
+                    this.$modalAlert.modal('show');
+                });
             }
 
         });
@@ -234,11 +239,18 @@ class AnatomyTour {
 
                 // Create actions objects and update global data
                 actionsArray.forEach(function(action){
+                    console.log("adding action to array order: " + action.action_order);
                     if (appGlobals.actions[action.note_id]) {
                         appGlobals.actions[action.note_id].push(action);
                     } else {
                         appGlobals.actions[action.note_id] = [action];
                     }
+                });
+
+                // sort actions into order
+                Object.keys(appGlobals.actions).forEach((noteId) => {
+                    let actionsToSort = appGlobals.actions[noteId];
+                    actionsToSort.sort(Utils.compare);
                 });
 
                 // load actions
