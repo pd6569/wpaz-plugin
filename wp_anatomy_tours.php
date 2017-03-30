@@ -26,8 +26,8 @@ define('TMPL_URL_LAYOUT_3D_TOURS', WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . "/templates/
 define('TMPL_URL_ITEM_NOTE_SECTION', WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . "/templates/item_note_section.php");
 
 
-require_once (WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . '\functions.php');
-require_once (WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . '\templates.php');
+require_once (WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . '/functions.php');
+require_once (WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . '/templates.php');
 
 // Database
 $wp_az_db_version = '1.0';
@@ -200,6 +200,7 @@ class wp_az_anatomy_tours {
 		global $wp_az_db_version;
 
 		$table_notes = $wpdb->prefix . 'anatomy_tours_notes';
+		$table_notes_meta = $wpdb->prefix . 'anatomy_tours_notes_meta';
 		$table_actions = $wpdb->prefix . 'anatomy_tours_actions';
 
 
@@ -227,6 +228,17 @@ class wp_az_anatomy_tours {
 		action_type tinytext NOT NULL,
 		scene_state text,
 		action_data text,
+		PRIMARY KEY  (id)
+		) $charset_collate;";
+
+
+
+		$sql .= "CREATE TABLE $table_notes_meta (
+		id mediumint(9) NOT NULL AUTO_INCREMENT,
+		post_id mediumint(9) NOT NULL,
+		created datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+		first_scene_url tinytext NOT NULL,
+		num_notes tinyint,
 		PRIMARY KEY  (id)
 		) $charset_collate;";
 

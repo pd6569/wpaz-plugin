@@ -33,7 +33,7 @@ let appGlobals = {
     scenePresets: {
         head: {
             bone: "",
-            muscle: "https://human.biodigital.com/widget?be=1m9f&background=255,255,255,51,64,77&ui-annotations=true&ui-tools=true&dk=6f2c42f37ce7c183993a87afb2df8d136fecc7c7",
+            muscle: "https://human.biodigital.com/widget?be=1mCV&background=255,255,255,51,64,77&ui-nav=false&ui-fullscreen=false&ui-share=false&dk=6f2c42f37ce7c183993a87afb2df8d136fecc7c7",
             artery: "",
             vein: "",
             vessel: "",

@@ -26,7 +26,7 @@
                         width="100%"
                         height="600"
                         allowFullScreen="true"
-                        src="https://human.biodigital.com/widget?be=1l2x&background=255,255,255,51,64,77&ui-all=true&dk=6f2c42f37ce7c183993a87afb2df8d136fecc7c7">
+                        src="https://human.biodigital.com/widget?be=1mCN&background=255,255,255,51,64,77&dk=6f2c42f37ce7c183993a87afb2df8d136fecc7c7">
                 </iframe>
                 <a href="https://www.biodigital.com"></a>
                 </iframe>
@@ -143,7 +143,7 @@
             </div>
         </div>
 
-
+        <?php if (current_user_can('administrator')): ?>
 
         <div id="wpaz-scene-selector" class="row">
 
@@ -154,7 +154,7 @@
                         Body <span class="caret"></span>
                     </button>
                     <ul id="scene-selector-body" class="dropdown-menu">
-                        <li><a class="scene-selector-option" data-region="body" data-structure="bone">Bones</a></li>
+                        <li><a class="scene-selector-option" data-region="body" data-structure="bone">Bones</a><span class="glyphicon glyphicon-star-empty pull-right"></span></li>
                         <li><a class="scene-selector-option" data-region="body" data-structure="muscle">Muscles</a></li>
                         <li><a class="scene-selector-option" data-region="body" data-structure="nerve">Nerves</a></li>
                         <li><a class="scene-selector-option" data-region="body" data-structure="artery">Arteries</a></li>
@@ -296,6 +296,7 @@
 
         </div>
 
+        <?php endif ?>
 
 
         <div id="notes-timeline" class="row">
