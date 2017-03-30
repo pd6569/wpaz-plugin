@@ -11,6 +11,11 @@
     margin-bottom: 10px;
 }
 
+/* Modal popup */
+.modal {
+    top: 25%;
+}
+
 
 /*************************
  *    NOTES CONTAINER    *

@@ -4,11 +4,12 @@
 
 let appGlobals = {
 
-    // data
+    // app data
     notes: {},
     sequenceIndex: [],
     numNotes: 0,
     actions: {},
+    firstSceneSet: false,
 
     // templates
     templates: {

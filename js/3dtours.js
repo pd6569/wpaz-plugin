@@ -94,6 +94,11 @@ class AnatomyTour {
             let structure = $sceneSelected.attr('data-structure');
             let sceneUrl = appGlobals.scenePresets[region][structure];
             this.$humanWidget.attr('src', sceneUrl);
+
+            if (appGlobals.currentNote.sequence === 1 && !appGlobals.firstSceneSet){
+                this.$modalAlert.modal('show');
+            }
+
         });
 
 
@@ -106,6 +111,11 @@ class AnatomyTour {
         this.$editNote = jQuery('.edit-note');
         this.$noteToolsTimeline = jQuery('.note-actions');
         this.$noteTitleTimeline = jQuery('.note-title');
+
+        // Modal alert dialog
+        this.$modalAlert = jQuery('#wpaz-modal-alert');
+
+
 
         /*******************************
          *  set DOM Event listeners    *
