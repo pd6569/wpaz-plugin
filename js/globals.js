@@ -10,6 +10,7 @@ let appGlobals = {
     numNotes: 0,
     actions: {},
     firstSceneSet: false,
+    firstSceneUrl: "",
 
     // templates
     templates: {
@@ -33,6 +34,7 @@ let appGlobals = {
     // scene presets - naming must match data attributes in layout file
     scenePresets: {
         head: {
+            all: "https://human.biodigital.com/widget?be=1mDY&background=255,255,255,51,64,77&ui-nav=false&ui-fullscreen=false&ui-share=false&dk=6f2c42f37ce7c183993a87afb2df8d136fecc7c7",
             bone: "",
             muscle: "https://human.biodigital.com/widget?be=1mCV&background=255,255,255,51,64,77&ui-nav=false&ui-fullscreen=false&ui-share=false&dk=6f2c42f37ce7c183993a87afb2df8d136fecc7c7",
             artery: "",
@@ -43,6 +45,7 @@ let appGlobals = {
             organ: "",
         },
         neck: {
+            all: "",
             bone: "",
             muscle: "",
             artery: "",
@@ -53,6 +56,7 @@ let appGlobals = {
             organ: "",
         },
         thorax: {
+            all: "",
             bone: "",
             muscle: "",
             artery: "",
@@ -63,6 +67,7 @@ let appGlobals = {
             organ: "",
         },
         back: {
+            all: "",
             bone: "",
             muscle: "",
             artery: "",
@@ -73,6 +78,7 @@ let appGlobals = {
             organ: "",
         },
         abdomen: {
+            all: "",
             bone: "",
             muscle: "",
             artery: "",
@@ -83,6 +89,7 @@ let appGlobals = {
             organ: "",
         },
         pelvis: {
+            all: "",
             bone: "",
             muscle: "",
             artery: "",
@@ -93,6 +100,7 @@ let appGlobals = {
             organ: "",
         },
         upperLimb: {
+            all: "",
             bone: "",
             muscle: "",
             artery: "",
@@ -103,6 +111,7 @@ let appGlobals = {
             organ: "",
         },
         lowerLimb: {
+            all: "",
             bone: "",
             muscle: "",
             artery: "",
@@ -113,6 +122,7 @@ let appGlobals = {
             organ: "",
         },
         body: {
+            all: "",
             bone: "",
             muscle: "",
             artery: "",

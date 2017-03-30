@@ -61,9 +61,9 @@ class Utils {
     }
 
     static compare(a, b){
-        if (a.action_order < b.action_order)
+        if (parseInt(a.action_order) < parseInt(b.action_order))
             return -1;
-        if (a.action_order > b.action_order)
+        if (parseInt(a.action_order) > parseInt(b.action_order))
             return 1;
         return 0;
     }

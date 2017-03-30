@@ -88,26 +88,8 @@ class AnatomyTour {
          ***********************/
 
         this.$sceneSelectorOption = jQuery('.scene-selector-option');
-        this.$sceneSelectorOption.on('click', (event) => {
-            let $sceneSelected = jQuery(event.target);
-            let region = $sceneSelected.attr('data-region');
-            let structure = $sceneSelected.attr('data-structure');
-            let sceneUrl = appGlobals.scenePresets[region][structure];
-            this.$humanWidget.attr('src', sceneUrl);
+        this.$sceneSelectorOption.on('click', (event) => { this.loadScene(jQuery(event.target)) });
 
-            if (parseInt(appGlobals.currentNote.sequence) === 1 && !appGlobals.firstSceneSet){
-                console.log("check if want to save as load scene");
-                this.human = new HumanAPI("embedded-human");
-                this.human.on('human.ready', () => {
-                    console.log("new scene loaded");
-                    setTimeout(() => {
-                        this.$modalAlert.modal('show');
-                    }, 500)
-
-                });
-            }
-
-        });
 
 
 
@@ -169,6 +151,42 @@ class AnatomyTour {
     }
 
     // Class methods
+
+    loadScene($sceneOption) {
+
+        console.log("loadScene");
+
+        let region = $sceneOption.attr('data-region');
+        let structure = $sceneOption.attr('data-structure');
+        let sceneUrl = appGlobals.scenePresets[region][structure];
+        if (sceneUrl != null && sceneUrl != "") {
+            this.$humanWidget.attr('src', sceneUrl);
+        } else {
+            console.log("No scene for this option yet");
+            return;
+        }
+
+        if (parseInt(appGlobals.currentNote.sequence) === 1 && !appGlobals.firstSceneSet){
+            this.$modalAlert.find('.modal-title').text("First scene");
+            this.$modalAlert.find('.modal-body').text("Do you want this scene to be displayed when the page first loads?");
+            this.$modalAlert.find('#modal-btn-1').text("Yes").on('click', () => {
+                console.log("set as first scene");
+                this.$modalAlert.modal('hide');
+            });
+            this.$modalAlert.find('#modal-btn-2').text("No").on('click', () => {
+                console.log("do not set as first scene");
+                this.$modalAlert.modal('hide');
+            });
+            this.human = new HumanAPI("embedded-human");
+            this.human.on('human.ready', () => {
+                console.log("new scene loaded");
+                setTimeout(() => {
+                    this.$modalAlert.modal('show');
+                }, 500)
+
+            });
+        }
+    }
 
     setAdminUi(){
         this.$noteToolsTimeline.removeClass('hidden');

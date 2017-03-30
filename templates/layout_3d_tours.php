@@ -40,7 +40,8 @@
                                 Body <span class="caret"></span>
                             </button>
                             <ul id="scene-selector-body" class="dropdown-menu">
-                                <li><a class="scene-selector-option" data-region="body" data-structure="bone">Bones</a><span class="glyphicon glyphicon-star-empty pull-right"></span></li>
+                                <li><a class="scene-selector-option" data-region="body" data-structure="all">All</a></li>
+                                <li><a class="scene-selector-option" data-region="body" data-structure="bone">Bones</a></li>
                                 <li><a class="scene-selector-option" data-region="body" data-structure="muscle">Muscles</a></li>
                                 <li><a class="scene-selector-option" data-region="body" data-structure="nerve">Nerves</a></li>
                                 <li><a class="scene-selector-option" data-region="body" data-structure="artery">Arteries</a></li>
@@ -56,6 +57,7 @@
                                 Head <span class="caret"></span>
                             </button>
                             <ul id="scene-selector-body" class="dropdown-menu">
+                                <li><a class="scene-selector-option" data-region="head" data-structure="all">All</a></li>
                                 <li><a class="scene-selector-option" data-region="head" data-structure="bone">Bones</a></li>
                                 <li><a class="scene-selector-option" data-region="head" data-structure="muscle">Muscles</a></li>
                                 <li><a class="scene-selector-option" data-region="head" data-structure="nerve">Nerves</a></li>
@@ -72,6 +74,7 @@
                                 Neck <span class="caret"></span>
                             </button>
                             <ul id="scene-selector-body" class="dropdown-menu">
+                                <li><a class="scene-selector-option" data-region="neck" data-structure="all">All</a></li>
                                 <li><a class="scene-selector-option" data-region="neck" data-structure="bone">Bones</a></li>
                                 <li><a class="scene-selector-option" data-region="neck" data-structure="muscle">Muscles</a></li>
                                 <li><a class="scene-selector-option" data-region="neck" data-structure="nerve">Nerves</a></li>
@@ -88,6 +91,7 @@
                                 Thorax <span class="caret"></span>
                             </button>
                             <ul id="scene-selector-body" class="dropdown-menu">
+                                <li><a class="scene-selector-option" data-region="thorax" data-structure="all">All</a></li>
                                 <li><a class="scene-selector-option" data-region="thorax" data-structure="bone">Bones</a></li>
                                 <li><a class="scene-selector-option" data-region="thorax" data-structure="muscle">Muscles</a></li>
                                 <li><a class="scene-selector-option" data-region="thorax" data-structure="nerve">Nerves</a></li>
@@ -104,6 +108,7 @@
                                 Back <span class="caret"></span>
                             </button>
                             <ul id="scene-selector-body" class="dropdown-menu">
+                                <li><a class="scene-selector-option" data-region="back" data-structure="all">All</a></li>
                                 <li><a class="scene-selector-option" data-region="back" data-structure="bone">Bones</a></li>
                                 <li><a class="scene-selector-option" data-region="back" data-structure="muscle">Muscles</a></li>
                                 <li><a class="scene-selector-option" data-region="back" data-structure="nerve">Nerves</a></li>
@@ -120,6 +125,7 @@
                                 Abdomen <span class="caret"></span>
                             </button>
                             <ul id="scene-selector-body" class="dropdown-menu">
+                                <li><a class="scene-selector-option" data-region="abdomen" data-structure="all">All</a></li>
                                 <li><a class="scene-selector-option" data-region="abdomen" data-structure="bone">Bones</a></li>
                                 <li><a class="scene-selector-option" data-region="abdomen" data-structure="muscle">Muscles</a></li>
                                 <li><a class="scene-selector-option" data-region="abdomen" data-structure="nerve">Nerves</a></li>
@@ -136,6 +142,7 @@
                                 Pelvis <span class="caret"></span>
                             </button>
                             <ul id="scene-selector-body" class="dropdown-menu">
+                                <li><a class="scene-selector-option" data-region="pelvis" data-structure="all">All</a></li>
                                 <li><a class="scene-selector-option" data-region="pelvis" data-structure="bone">Bones</a></li>
                                 <li><a class="scene-selector-option" data-region="pelvis" data-structure="muscle">Muscles</a></li>
                                 <li><a class="scene-selector-option" data-region="pelvis" data-structure="nerve">Nerves</a></li>
@@ -152,6 +159,7 @@
                                 Upper Limb <span class="caret"></span>
                             </button>
                             <ul id="scene-selector-body" class="dropdown-menu">
+                                <li><a class="scene-selector-option" data-region="upperLimb" data-structure="all">All</a></li>
                                 <li><a class="scene-selector-option" data-region="upperLimb" data-structure="bone">Bones</a></li>
                                 <li><a class="scene-selector-option" data-region="upperLimb" data-structure="muscle">Muscles</a></li>
                                 <li><a class="scene-selector-option" data-region="upperLimb" data-structure="nerve">Nerves</a></li>
@@ -168,6 +176,7 @@
                                 Lower Limb <span class="caret"></span>
                             </button>
                             <ul id="scene-selector-body" class="dropdown-menu">
+                                <li><a class="scene-selector-option" data-region="lowerLimb" data-structure="all">All</a></li>
                                 <li><a class="scene-selector-option" data-region="lowerLimb" data-structure="bone">Bones</a></li>
                                 <li><a class="scene-selector-option" data-region="lowerLimb" data-structure="muscle">Muscles</a></li>
                                 <li><a class="scene-selector-option" data-region="lowerLimb" data-structure="nerve">Nerves</a></li>
@@ -322,13 +331,13 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="wpaz-alert-label">Modal title</h4>
+                <h4 class="modal-title" id="wpaz-alert-label"></h4>
             </div>
             <div class="modal-body">
             </div>
             <div class="modal-footer">
-                <button id="modal-btn-1" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button id="modal-btn-2" type="button" class="btn btn-primary">Save changes</button>
+                <button id="modal-btn-1" type="button" class="btn btn-default"></button>
+                <button id="modal-btn-2" type="button" class="btn btn-default"></button>
             </div>
         </div>
     </div>
