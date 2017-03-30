@@ -95,12 +95,15 @@ class AnatomyTour {
             let sceneUrl = appGlobals.scenePresets[region][structure];
             this.$humanWidget.attr('src', sceneUrl);
 
-            if (appGlobals.currentNote.sequence === 1 && !appGlobals.firstSceneSet){
-
+            if (parseInt(appGlobals.currentNote.sequence) === 1 && !appGlobals.firstSceneSet){
+                console.log("check if want to save as load scene");
                 this.human = new HumanAPI("embedded-human");
                 this.human.on('human.ready', () => {
                     console.log("new scene loaded");
-                    this.$modalAlert.modal('show');
+                    setTimeout(() => {
+                        this.$modalAlert.modal('show');
+                    }, 500)
+
                 });
             }
 
