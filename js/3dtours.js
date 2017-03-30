@@ -83,6 +83,20 @@ class AnatomyTour {
         this.$addNewNotesSection = jQuery('#notes-add-new-btn');
         this.$deleteNoteBtn = jQuery('#notes-delete-btn');
 
+        /***********************
+         *  SCENE SELECTOR     *
+         ***********************/
+
+        this.$sceneSelectorOption = jQuery('.scene-selector-option');
+        this.$sceneSelectorOption.on('click', (event) => {
+            let $sceneSelected = jQuery(event.target);
+            let region = $sceneSelected.attr('data-region');
+            let structure = $sceneSelected.attr('data-structure');
+            let sceneUrl = appGlobals.scenePresets[region][structure];
+            this.$humanWidget.attr('src', sceneUrl);
+        });
+
+
 
         /*********************
          *      TIMELINE     *

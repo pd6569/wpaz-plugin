@@ -67,7 +67,7 @@
                         <div id="toolbar-buttons" class="container">
 
                             <div class="row toolbar-row">
-                                <div class="col-md-12 actions-buttons">
+                                <div class="col-md-6 actions-buttons">
                                     <div class="btn-group" role="group" aria-label="...">
                                         <button id="action-add" type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
                                         <button id="action-previous" type="button" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
@@ -83,6 +83,8 @@
                                         <span id="current-action" class="label label-info">Action 1</span>
                                         <span id="num-actions" class="label label-info">0 actions</span>
                                     </div>
+                                </div>
+                                <div class="col-md-6 actions-buttons">
                                     <div class="btn-group pull-right" role="group" aria-label="...">
                                         <button id="toolbar-reset" type="button" class="btn btn-default">Reset</button>
                                         <button id="toolbar-clear-actions" type="button" class="btn btn-default">Clear Actions</button>
@@ -140,6 +142,161 @@
 
             </div>
         </div>
+
+
+
+        <div id="wpaz-scene-selector" class="row">
+
+            <div class="col-md-8 text-center">
+
+                <div class="btn-group scene-selector scene-selector__whole-body">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Body <span class="caret"></span>
+                    </button>
+                    <ul id="scene-selector-body" class="dropdown-menu">
+                        <li><a class="scene-selector-option" data-region="body" data-structure="bone">Bones</a></li>
+                        <li><a class="scene-selector-option" data-region="body" data-structure="muscle">Muscles</a></li>
+                        <li><a class="scene-selector-option" data-region="body" data-structure="nerve">Nerves</a></li>
+                        <li><a class="scene-selector-option" data-region="body" data-structure="artery">Arteries</a></li>
+                        <li><a class="scene-selector-option" data-region="body" data-structures="vein">Veins</a></li>
+                        <li><a class="scene-selector-option" data-region="body" data-structures="vessel">All vessels</a></li>
+                        <li><a class="scene-selector-option" data-region="body" data-structures="lymph">Lymphatics</a></li>
+                        <li><a class="scene-selector-option" data-region="body" data-structures="organ">Viscera</a></li>
+                    </ul>
+                </div>
+
+                <div class="btn-group scene-selector scene-selector__head">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Head <span class="caret"></span>
+                    </button>
+                    <ul id="scene-selector-body" class="dropdown-menu">
+                        <li><a class="scene-selector-option" data-region="head" data-structure="bone">Bones</a></li>
+                        <li><a class="scene-selector-option" data-region="head" data-structure="muscle">Muscles</a></li>
+                        <li><a class="scene-selector-option" data-region="head" data-structure="nerve">Nerves</a></li>
+                        <li><a class="scene-selector-option" data-region="head" data-structure="artery">Arteries</a></li>
+                        <li><a class="scene-selector-option" data-region="head" data-structures="vein">Veins</a></li>
+                        <li><a class="scene-selector-option" data-region="head" data-structures="vessel">All vessels</a></li>
+                        <li><a class="scene-selector-option" data-region="head" data-structures="lymph">Lymphatics</a></li>
+                        <li><a class="scene-selector-option" data-region="head" data-structures="organ">Viscera</a></li>
+                    </ul>
+                </div>
+
+                <div class="btn-group scene-selector scene-selector__neck">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Neck <span class="caret"></span>
+                    </button>
+                    <ul id="scene-selector-body" class="dropdown-menu">
+                        <li><a class="scene-selector-option" data-region="neck" data-structure="bone">Bones</a></li>
+                        <li><a class="scene-selector-option" data-region="neck" data-structure="muscle">Muscles</a></li>
+                        <li><a class="scene-selector-option" data-region="neck" data-structure="nerve">Nerves</a></li>
+                        <li><a class="scene-selector-option" data-region="neck" data-structure="artery">Arteries</a></li>
+                        <li><a class="scene-selector-option" data-region="neck" data-structures="vein">Veins</a></li>
+                        <li><a class="scene-selector-option" data-region="neck" data-structures="vessel">All vessels</a></li>
+                        <li><a class="scene-selector-option" data-region="neck" data-structures="lymph">Lymphatics</a></li>
+                        <li><a class="scene-selector-option" data-region="neck" data-structures="organ">Viscera</a></li>
+                    </ul>
+                </div>
+
+                <div class="btn-group scene-selector scene-selector__thorax">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Thorax <span class="caret"></span>
+                    </button>
+                    <ul id="scene-selector-body" class="dropdown-menu">
+                        <li><a class="scene-selector-option" data-region="thorax" data-structure="bone">Bones</a></li>
+                        <li><a class="scene-selector-option" data-region="thorax" data-structure="muscle">Muscles</a></li>
+                        <li><a class="scene-selector-option" data-region="thorax" data-structure="nerve">Nerves</a></li>
+                        <li><a class="scene-selector-option" data-region="thorax" data-structure="artery">Arteries</a></li>
+                        <li><a class="scene-selector-option" data-region="thorax" data-structures="vein">Veins</a></li>
+                        <li><a class="scene-selector-option" data-region="thorax" data-structures="vessel">All vessels</a></li>
+                        <li><a class="scene-selector-option" data-region="thorax" data-structures="lymph">Lymphatics</a></li>
+                        <li><a class="scene-selector-option" data-region="thorax" data-structures="organ">Viscera</a></li>
+                    </ul>
+                </div>
+
+                <div class="btn-group scene-selector scene-selector__back">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Back <span class="caret"></span>
+                    </button>
+                    <ul id="scene-selector-body" class="dropdown-menu">
+                        <li><a class="scene-selector-option" data-region="back" data-structure="bone">Bones</a></li>
+                        <li><a class="scene-selector-option" data-region="back" data-structure="muscle">Muscles</a></li>
+                        <li><a class="scene-selector-option" data-region="back" data-structure="nerve">Nerves</a></li>
+                        <li><a class="scene-selector-option" data-region="back" data-structure="artery">Arteries</a></li>
+                        <li><a class="scene-selector-option" data-region="back" data-structures="vein">Veins</a></li>
+                        <li><a class="scene-selector-option" data-region="back" data-structures="vessel">All vessels</a></li>
+                        <li><a class="scene-selector-option" data-region="back" data-structures="lymph">Lymphatics</a></li>
+                        <li><a class="scene-selector-option" data-region="back" data-structures="organ">Viscera</a></li>
+                    </ul>
+                </div>
+
+                <div class="btn-group scene-selector scene-selector__abdomen">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Abdomen <span class="caret"></span>
+                    </button>
+                    <ul id="scene-selector-body" class="dropdown-menu">
+                        <li><a class="scene-selector-option" data-region="abdomen" data-structure="bone">Bones</a></li>
+                        <li><a class="scene-selector-option" data-region="abdomen" data-structure="muscle">Muscles</a></li>
+                        <li><a class="scene-selector-option" data-region="abdomen" data-structure="nerve">Nerves</a></li>
+                        <li><a class="scene-selector-option" data-region="abdomen" data-structure="artery">Arteries</a></li>
+                        <li><a class="scene-selector-option" data-region="abdomen" data-structures="vein">Veins</a></li>
+                        <li><a class="scene-selector-option" data-region="abdomen" data-structures="vessel">All vessels</a></li>
+                        <li><a class="scene-selector-option" data-region="abdomen" data-structures="lymph">Lymphatics</a></li>
+                        <li><a class="scene-selector-option" data-region="abdomen" data-structures="organ">Viscera</a></li>
+                    </ul>
+                </div>
+
+                <div class="btn-group scene-selector scene-selector__pelvis">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Pelvis <span class="caret"></span>
+                    </button>
+                    <ul id="scene-selector-body" class="dropdown-menu">
+                        <li><a class="scene-selector-option" data-region="pelvis" data-structure="bone">Bones</a></li>
+                        <li><a class="scene-selector-option" data-region="pelvis" data-structure="muscle">Muscles</a></li>
+                        <li><a class="scene-selector-option" data-region="pelvis" data-structure="nerve">Nerves</a></li>
+                        <li><a class="scene-selector-option" data-region="pelvis" data-structure="artery">Arteries</a></li>
+                        <li><a class="scene-selector-option" data-region="pelvis" data-structures="vein">Veins</a></li>
+                        <li><a class="scene-selector-option" data-region="pelvis" data-structures="vessel">All vessels</a></li>
+                        <li><a class="scene-selector-option" data-region="pelvis" data-structures="lymph">Lymphatics</a></li>
+                        <li><a class="scene-selector-option" data-region="pelvis" data-structures="organ">Viscera</a></li>
+                    </ul>
+                </div>
+
+                <div class="btn-group scene-selector scene-selector__upper-limb">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Upper Limb <span class="caret"></span>
+                    </button>
+                    <ul id="scene-selector-body" class="dropdown-menu">
+                        <li><a class="scene-selector-option" data-region="upperLimb" data-structure="bone">Bones</a></li>
+                        <li><a class="scene-selector-option" data-region="upperLimb" data-structure="muscle">Muscles</a></li>
+                        <li><a class="scene-selector-option" data-region="upperLimb" data-structure="nerve">Nerves</a></li>
+                        <li><a class="scene-selector-option" data-region="upperLimb" data-structure="artery">Arteries</a></li>
+                        <li><a class="scene-selector-option" data-region="upperLimb" data-structures="vein">Veins</a></li>
+                        <li><a class="scene-selector-option" data-region="upperLimb" data-structures="vessel">All vessels</a></li>
+                        <li><a class="scene-selector-option" data-region="upperLimb" data-structures="lymph">Lymphatics</a></li>
+                        <li><a class="scene-selector-option" data-region="upperLimb" data-structures="organ">Viscera</a></li>
+                    </ul>
+                </div>
+
+                <div class="btn-group scene-selector scene-selector__lower-limb">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Lower Limb <span class="caret"></span>
+                    </button>
+                    <ul id="scene-selector-body" class="dropdown-menu">
+                        <li><a class="scene-selector-option" data-region="lowerLimb" data-structure="bone">Bones</a></li>
+                        <li><a class="scene-selector-option" data-region="lowerLimb" data-structure="muscle">Muscles</a></li>
+                        <li><a class="scene-selector-option" data-region="lowerLimb" data-structure="nerve">Nerves</a></li>
+                        <li><a class="scene-selector-option" data-region="lowerLimb" data-structure="artery">Arteries</a></li>
+                        <li><a class="scene-selector-option" data-region="lowerLimb" data-structures="vein">Veins</a></li>
+                        <li><a class="scene-selector-option" data-region="lowerLimb" data-structures="vessel">All vessels</a></li>
+                        <li><a class="scene-selector-option" data-region="lowerLimb" data-structures="lymph">Lymphatics</a></li>
+                        <li><a class="scene-selector-option" data-region="lowerLimb" data-structures="organ">Viscera</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+
 
         <div id="notes-timeline" class="row">
 		    <?php

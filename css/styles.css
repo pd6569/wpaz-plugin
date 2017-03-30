@@ -67,6 +67,23 @@
     margin-bottom: 10px;
 }
 
+/****************************************
+ *            SCENE SELECTOR            *
+ ****************************************/
+
+#wpaz-scene-selector {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#wpaz-scene-selector .dropdown-menu {
+    list-style: none;
+}
+
+#wpaz-scene-selector .dropdown-menu:hover {
+    cursor: pointer;
+}
+
 /***********************************************
  *         NOTES TIMELINE                      *
  ***********************************************/
