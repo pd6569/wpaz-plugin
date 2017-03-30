@@ -441,19 +441,29 @@ class wp_az_anatomy_tours {
 	public function delete_note() {
 
 		global $wpdb;
-		$table_name = $wpdb->prefix . 'anatomy_tours_notes';
+		$table_notes = $wpdb->prefix . 'anatomy_tours_notes';
+		$table_actions = $wpdb->prefix . 'anatomy_tours_actions';
 
 		$post_id = intval($_POST['wp_az_post_id']);
 		$uid = $_POST['wp_az_note_uid'];
 		$sequence_index = $_POST['wp_az_sequence_index'];
 
+		// delete notes
 		$wpdb->delete(
-			$table_name,
+			$table_notes,
 			array(
 				post_id => $post_id,
 				uid => $uid));
 
 		this.$this->resequence_notes($sequence_index, $post_id);
+
+		// delete actions
+		$wpdb->delete (
+			$table_actions,
+			array (
+				note_id => $uid
+			)
+		);
 
 		wp_send_json(array (
 			'status' => "success",

@@ -439,6 +439,7 @@ class AnatomyTour {
         }
 
         appGlobals.currentNote = note;
+
     }
 
     addNoteSection(){
