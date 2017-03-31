@@ -152,7 +152,38 @@ class AnatomyTour {
     // Class methods
 
     setHumanUi(){
-
+        console.log("setHumanUi");
+        let displayConfig;
+        if(this.isUserAdmin){
+            displayConfig = {
+                audio: false,
+                fullscreen: false,
+                help: false,
+                nav: true,
+                center: true,
+                zoomIn: true,
+                zoomOut: true,
+                info: false,
+                share: false,
+                tools: true,
+                objectTree: true,
+            };
+        } else {
+            displayConfig = {
+                audio: false,
+                fullscreen: false,
+                help: false,
+                nav: true,
+                center: true,
+                zoomIn: true,
+                zoomOut: true,
+                info: false,
+                share: false,
+                tools: false,
+                objectTree: false,
+            };
+        }
+        this.human.send('ui.setDisplay', displayConfig);
     }
 
     setAppUi(){
@@ -234,7 +265,7 @@ class AnatomyTour {
                         appGlobals.currentNote = new Note(1, "", "", sceneStateStr);
 
                         // save new note
-                        appObj.saveNotes("", "");
+                        appObj.saveNotes("", "", true);
                     });
                 }
 
@@ -303,7 +334,7 @@ class AnatomyTour {
 
     // NOTE EDITOR
 
-    saveNotes(title, note_content, callback){
+    saveNotes(title, note_content, doNotAppend, callback){
         if (!this.isUserAdmin) return;
         Utils.setNoteUpdateStatus("Saving...");
 
@@ -317,14 +348,16 @@ class AnatomyTour {
             $updateNote.find('.note-content').text(note_content);
         } else {
             // append new note
-            let noteSectionHtml = appGlobals.templates.NOTE_SECTION;
-            let $noteSection = jQuery(jQuery.parseHTML(noteSectionHtml));
-            $noteSection.find('.note-item').attr('id', appGlobals.currentNote.uid);
-            $noteSection.find('.note-title').html(title);
-            $noteSection.find('.note-content').html(note_content);
-            $noteSection.find('.note-actions').removeClass('hidden');
+            if (!doNotAppend){
+                let noteSectionHtml = appGlobals.templates.NOTE_SECTION;
+                let $noteSection = jQuery(jQuery.parseHTML(noteSectionHtml));
+                $noteSection.find('.note-item').attr('id', appGlobals.currentNote.uid);
+                $noteSection.find('.note-title').html(title);
+                $noteSection.find('.note-content').html(note_content);
+                $noteSection.find('.note-actions').removeClass('hidden');
 
-            this.$notesTimelineContainer.append($noteSection);
+                this.$notesTimelineContainer.append($noteSection);
+            }
         }
 
         let noteToSave = appGlobals.currentNote;
@@ -697,6 +730,7 @@ class AnatomyTour {
             this.human = new HumanAPI("embedded-human");
             this.human.on('human.ready', () => {
                 console.log("new scene loaded");
+                this.setHumanUi();
                 setTimeout(() => {
                     this.$modalAlert.modal('show');
                 }, 500)

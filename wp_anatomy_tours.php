@@ -10,6 +10,8 @@ License:     GPL2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 */
 
+//TODO: update AJAX json responses
+
 // Exit if accessed directly
 if (!defined( 'ABSPATH')) {
 	exit;
