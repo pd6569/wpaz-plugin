@@ -3,7 +3,7 @@
 	<div id="<?php echo $note->uid ?>" class="panel panel-primary note-item" sequence="<?php echo $note->sequence?>">
 		<div class="panel-heading">
 			<h3 class="panel-title">
-                <a><span class="note-title"><?php echo $note->title ?></span></a>
+                <a><span class="note-title"><?php if(empty($note->title)): echo "No title"; else: echo $note->title; endif; ?></span></a>
                 <span class="glyphicon glyphicon-trash pull-right delete-note note-actions hvr-grow hidden" aria-hidden="true"></span>
                 <span class="glyphicon glyphicon-pencil pull-right edit-note note-actions hvr-grow hidden" aria-hidden="true"></span>
 

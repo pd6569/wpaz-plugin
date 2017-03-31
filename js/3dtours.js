@@ -307,6 +307,8 @@ class AnatomyTour {
         if (!this.isUserAdmin) return;
         Utils.setNoteUpdateStatus("Saving...");
 
+        if (title == "" || title == null || title.length == 0) title = "No title";
+
         // update timeline UI
         let $updateNote = this.$notesTimelineContainer.find('#' + appGlobals.currentNote.uid);
         if (($updateNote).length !== 0) {
