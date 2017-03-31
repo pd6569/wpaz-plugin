@@ -33,15 +33,15 @@ let appGlobals = {
     // scene presets - naming must match data attributes in layout file
     scenePresets: {
         head: {
-            all: "https://human.biodigital.com/widget?be=1mHr&background=255,255,255,51,64,77&dk=6f2c42f37ce7c183993a87afb2df8d136fecc7c7",
-            bone: "https://human.biodigital.com/widget?be=1mHv&background=255,255,255,51,64,77&ui-nav=false&dk=6f2c42f37ce7c183993a87afb2df8d136fecc7c7",
+            all: "https://human.biodigital.com/widget?be=1mHr&background=255,255,255,51,64,77&ui-nav=false&ui-fullscreen=false&ui-share=false&dk=6f2c42f37ce7c183993a87afb2df8d136fecc7c7",
+            bone: "https://human.biodigital.com/widget?be=1mHv&background=255,255,255,51,64,77&ui-nav=false&ui-fullscreen=false&ui-share=false&dk=6f2c42f37ce7c183993a87afb2df8d136fecc7c7",
             muscle: "https://human.biodigital.com/widget?be=1mCV&background=255,255,255,51,64,77&ui-nav=false&ui-fullscreen=false&ui-share=false&dk=6f2c42f37ce7c183993a87afb2df8d136fecc7c7",
-            artery: "https://human.biodigital.com/widget?be=1mI8&background=255,255,255,51,64,77&ui-nav=false&dk=6f2c42f37ce7c183993a87afb2df8d136fecc7c7",
-            vein: "https://human.biodigital.com/widget?be=1mI5&background=255,255,255,51,64,77&ui-nav=false&dk=6f2c42f37ce7c183993a87afb2df8d136fecc7c7",
-            vessel: "https://human.biodigital.com/widget?be=1mI3&background=255,255,255,51,64,77&ui-nav=false&dk=6f2c42f37ce7c183993a87afb2df8d136fecc7c7",
-            nerve: "https://human.biodigital.com/widget?be=1mHz&background=255,255,255,51,64,77&ui-nav=false&dk=6f2c42f37ce7c183993a87afb2df8d136fecc7c7",
-            lymph: "https://human.biodigital.com/widget?be=1mID&background=255,255,255,51,64,77&ui-nav=false&dk=6f2c42f37ce7c183993a87afb2df8d136fecc7c7",
-            organ: "https://human.biodigital.com/widget?be=1mII&background=255,255,255,51,64,77&ui-nav=false&dk=6f2c42f37ce7c183993a87afb2df8d136fecc7c7",
+            artery: "https://human.biodigital.com/widget?be=1mI8&background=255,255,255,51,64,77&ui-nav=false&ui-fullscreen=false&ui-share=false&dk=6f2c42f37ce7c183993a87afb2df8d136fecc7c7",
+            vein: "https://human.biodigital.com/widget?be=1mI5&background=255,255,255,51,64,77&ui-nav=false&ui-fullscreen=false&ui-share=false&dk=6f2c42f37ce7c183993a87afb2df8d136fecc7c7",
+            vessel: "https://human.biodigital.com/widget?be=1mI3&background=255,255,255,51,64,77&ui-nav=false&ui-fullscreen=false&ui-share=false&dk=6f2c42f37ce7c183993a87afb2df8d136fecc7c7",
+            nerve: "https://human.biodigital.com/widget?be=1mHz&background=255,255,255,51,64,77&ui-nav=false&ui-fullscreen=false&ui-share=false&dk=6f2c42f37ce7c183993a87afb2df8d136fecc7c7",
+            lymph: "https://human.biodigital.com/widget?be=1mID&background=255,255,255,51,64,77&ui-nav=false&ui-fullscreen=false&ui-share=false&dk=6f2c42f37ce7c183993a87afb2df8d136fecc7c7",
+            organ: "https://human.biodigital.com/widget?be=1mII&background=255,255,255,51,64,77&ui-nav=false&ui-fullscreen=false&ui-share=false&dk=6f2c42f37ce7c183993a87afb2df8d136fecc7c7",
         },
         neck: {
             all: "",
