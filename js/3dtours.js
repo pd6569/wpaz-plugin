@@ -227,10 +227,14 @@ class AnatomyTour {
                     if (appGlobals.humanLoaded == true) setInitialSceneState(human, null);
 
                 } else {
+
+                    // No stored notes - create brand new note
                     human.send('scene.capture', (sceneState) => {
                         let sceneStateStr = JSON.stringify(sceneState);
                         appGlobals.currentNote = new Note(1, "", "", sceneStateStr);
-                        console.log("no notes to load. New note created.");
+
+                        // save new note
+                        appObj.saveNotes("", "");
                     });
                 }
 
@@ -261,6 +265,7 @@ class AnatomyTour {
                 appGlobals.notesLoaded = true;
 
                 Utils.setNoteUpdateStatus("Notes data load complete.", 3000);
+
             },
             type: 'GET'
         });
@@ -699,7 +704,7 @@ class AnatomyTour {
     }
 
     updateFirstSceneUrl() {
-
+        console.log("updateFirstScene: " + appGlobals.firstSceneUrl);
         Utils.setNoteUpdateStatus("Saving first scene...");
         jQuery.ajax({
             url: ajax_object.wp_az_ajax_url,
