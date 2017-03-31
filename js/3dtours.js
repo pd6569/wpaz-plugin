@@ -23,8 +23,9 @@ class AnatomyTour {
         this.numActions = 0;
         this.storedActions = [];
 
-        // user
+        // ajax data
         this.isUserAdmin = ajax_object.wp_az_user_role;
+        appGlobals.firstSceneUrl = this.$humanWidget.attr('src');
 
         // Track changes
         this.changesMade = false;
@@ -166,12 +167,11 @@ class AnatomyTour {
             return;
         }
 
-        if (parseInt(appGlobals.currentNote.sequence) === 1){
+        if (parseInt(appGlobals.currentNote.sequence) === 1 && sceneUrl !== appGlobals.firstSceneUrl){
             this.$modalAlert.find('.modal-title').text("First scene");
             this.$modalAlert.find('.modal-body').text("Do you want this scene to be displayed when the page first loads?");
             this.$modalAlert.find('#modal-btn-1').text("Yes").on('click', () => {
                 console.log("set as first scene");
-                appGlobals.firstSceneSet = true;
                 appGlobals.firstSceneUrl = sceneUrl;
                 this.$modalAlert.modal('hide');
                 this.updateFirstSceneUrl();
