@@ -358,8 +358,33 @@ class AnatomyTour {
                 $noteSection.find('.note-title').html(title);
                 $noteSection.find('.note-content').html(note_content);
                 $noteSection.find('.note-actions').removeClass('hidden');
+                let $imageContainer = $noteSection.find('.note-image');
 
-                this.$notesTimelineContainer.append($noteSection);
+                let originalBackgroundData;
+
+                this.human.send("ui.getBackground", (backgroundData) => {
+                    originalBackgroundData = backgroundData;
+                });
+
+                let backgroundColor = 'white';
+
+                let backgroundData = { colors: [backgroundColor, backgroundColor] };
+
+                this.human.send("ui.setBackground", backgroundData);
+
+                this.human.send("ui.snapshot", {}, (imgSrc) => {
+                    console.log("Snapshot captured.");
+                    this.human.send("ui.setBackground", originalBackgroundData)
+                    console.log(imgSrc);
+                    jQuery("<img>", {
+                        "src": imgSrc,
+                        "width": "250px",
+                        "height": "250px"})
+                        .appendTo($imageContainer);
+
+                    this.$notesTimelineContainer.append($noteSection);
+                });
+
             }
         }
 

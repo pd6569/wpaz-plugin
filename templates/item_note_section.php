@@ -18,7 +18,9 @@
 				</div>
 
 				<div class="col-md-6">
+                    <div class="note-image">
 
+                    </div>
 				</div>
 			</div>
 
