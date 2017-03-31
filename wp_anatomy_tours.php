@@ -509,10 +509,10 @@ class wp_az_anatomy_tours {
 
 		if ($update){
 			$status = 'success';
-			$message = 'updated URL';
+			$message = 'First scene saved.';
 		} else {
 			$status = 'failed';
-			$message = 'failed to update URL';
+			$message = 'Failed to save first scene.';
 		}
 
 		wp_send_json(array(

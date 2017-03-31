@@ -33,14 +33,16 @@ class AnatomyTour {
 
         // Human loaded
         this.human.on('human.ready', () => {
-            console.log("Human is now ready for action");
 
+            //TODO: update/delete these functions
+            console.log("Human is now ready for action");
             appGlobals['humanLoaded'] = true;
             this.updateCameraInfo();
             this.setInitialSceneState(this.human, (sceneState) => {
                 this.sceneObjects = sceneState.objects;
             });
             this.registerCallbacks();
+            this.setHumanUi();
         });
 
         // DOM
@@ -143,75 +145,27 @@ class AnatomyTour {
         this.loadNotes();
         this.getItemTemplates();
 
-        // Anatomy scanner
-        if(!this.isUserAdmin) {
-            this.setScanner();
-        } else {
-            this.setAdminUi();
-        }
+        // set UI
+        this.setAppUi();
     }
 
     // Class methods
 
-    loadScene($sceneOption) {
+    setHumanUi(){
 
-        console.log("loadScene");
+    }
 
-        let region = $sceneOption.attr('data-region');
-        let structure = $sceneOption.attr('data-structure');
-        let sceneUrl = appGlobals.scenePresets[region][structure];
-        if (sceneUrl != null && sceneUrl != "") {
-            this.$humanWidget.attr('src', sceneUrl);
+    setAppUi(){
+
+        if (this.isUserAdmin){
+
+            // Admin UI
+            this.$noteToolsTimeline.removeClass('hidden');
+
         } else {
-            console.log("No scene for this option yet");
-            return;
+            // User UI
+            this.setScanner();
         }
-
-        if (parseInt(appGlobals.currentNote.sequence) === 1 && sceneUrl !== appGlobals.firstSceneUrl){
-            this.$modalAlert.find('.modal-title').text("First scene");
-            this.$modalAlert.find('.modal-body').text("Do you want this scene to be displayed when the page first loads?");
-            this.$modalAlert.find('#modal-btn-1').text("Yes").on('click', () => {
-                console.log("set as first scene");
-                appGlobals.firstSceneUrl = sceneUrl;
-                this.$modalAlert.modal('hide');
-                this.updateFirstSceneUrl();
-            });
-            this.$modalAlert.find('#modal-btn-2').text("No").on('click', () => {
-                console.log("do not set as first scene");
-                this.$modalAlert.modal('hide');
-            });
-            this.human = new HumanAPI("embedded-human");
-            this.human.on('human.ready', () => {
-                console.log("new scene loaded");
-                setTimeout(() => {
-                    this.$modalAlert.modal('show');
-                }, 500)
-
-            });
-        }
-    }
-
-    updateFirstSceneUrl() {
-        jQuery.ajax({
-            url: ajax_object.wp_az_ajax_url,
-            data: {
-                action: 'update_first_scene_url',
-                wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
-                wp_az_note_id: appGlobals.currentNote.uid,
-                wp_az_first_scene_url: appGlobals.firstSceneUrl
-            },
-            error: function() {
-                console.log("Failed to save first scene URL");
-            },
-            success: function(data) {
-                console.log("First scene url successfully updated. " + JSON.stringify(data));
-            },
-            type: 'POST'
-        });
-    }
-
-    setAdminUi(){
-        this.$noteToolsTimeline.removeClass('hidden');
     }
 
     // INIT
@@ -704,6 +658,67 @@ class AnatomyTour {
         this.setActiveNote(noteId, true);
     }
 
+
+    // Preset scenes
+    loadScene($sceneOption) {
+
+        console.log("loadScene");
+
+        let region = $sceneOption.attr('data-region');
+        let structure = $sceneOption.attr('data-structure');
+        let sceneUrl = appGlobals.scenePresets[region][structure];
+        if (sceneUrl != null && sceneUrl != "") {
+            this.$humanWidget.attr('src', sceneUrl);
+        } else {
+            console.log("No scene for this option yet");
+            return;
+        }
+
+        if (parseInt(appGlobals.currentNote.sequence) === 1 && sceneUrl !== appGlobals.firstSceneUrl){
+            this.$modalAlert.find('.modal-title').text("First scene");
+            this.$modalAlert.find('.modal-body').text("Do you want this scene to be displayed when the page first loads?");
+            this.$modalAlert.find('#modal-btn-1').text("Yes").on('click', () => {
+                console.log("set as first scene");
+                appGlobals.firstSceneUrl = sceneUrl;
+                this.$modalAlert.modal('hide');
+                this.updateFirstSceneUrl();
+            });
+            this.$modalAlert.find('#modal-btn-2').text("No").on('click', () => {
+                console.log("do not set as first scene");
+                this.$modalAlert.modal('hide');
+            });
+            this.human = new HumanAPI("embedded-human");
+            this.human.on('human.ready', () => {
+                console.log("new scene loaded");
+                setTimeout(() => {
+                    this.$modalAlert.modal('show');
+                }, 500)
+
+            });
+        }
+    }
+
+    updateFirstSceneUrl() {
+
+        Utils.setNoteUpdateStatus("Saving first scene...");
+        jQuery.ajax({
+            url: ajax_object.wp_az_ajax_url,
+            data: {
+                action: 'update_first_scene_url',
+                wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
+                wp_az_note_id: appGlobals.currentNote.uid,
+                wp_az_first_scene_url: appGlobals.firstSceneUrl
+            },
+            error: function() {
+                console.log("Failed to save first scene URL");
+            },
+            success: function(data) {
+                console.log("First scene url successfully updated. " + JSON.stringify(data));
+                Utils.setNoteUpdateStatus(data.message, 3000);
+            },
+            type: 'POST'
+        });
+    }
 
     // BIODIGITAL API FUNCTIONS
     getCameraInfoFromSceneState(sceneState) {
