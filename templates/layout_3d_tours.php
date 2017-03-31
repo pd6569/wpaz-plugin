@@ -7,7 +7,7 @@
     $table_name = $wpdb->prefix . 'anatomy_tours_notes';
 
     $notes = $wpdb->get_results(
-            "SELECT title, uid, note_content, sequence, scene_state
+            "SELECT title, uid, note_content, sequence, scene_state, url
                   FROM $table_name 
                   WHERE post_id = $post->ID
                   ORDER BY sequence ASC" );
@@ -26,7 +26,7 @@
                         width="100%"
                         height="600"
                         allowFullScreen="true"
-                        src="https://human.biodigital.com/widget?be=1mCN&background=255,255,255,51,64,77&dk=6f2c42f37ce7c183993a87afb2df8d136fecc7c7">
+                        src="<?php if (!empty($notes[0]->url)): echo $notes[0]->url; else: echo "https://human.biodigital.com/widget?be=1mCN&background=255,255,255,51,64,77&dk=6f2c42f37ce7c183993a87afb2df8d136fecc7c7"; endif; ?>"
                 </iframe>
                 <a href="https://www.biodigital.com"></a>
                 </iframe>
