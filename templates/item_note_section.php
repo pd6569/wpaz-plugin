@@ -18,13 +18,7 @@
 				</div>
 
 				<div class="col-md-6">
-					<ul class="list-group">
-						<li class="list-group-item">Action 1</li>
-						<li class="list-group-item">Action 2</li>
-						<li class="list-group-item">Action 3</li>
-						<li class="list-group-item">Action 4</li>
-						<li class="list-group-item">Action 5</li>
-					</ul>
+
 				</div>
 			</div>
 

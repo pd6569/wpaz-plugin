@@ -77,6 +77,7 @@ class AnatomyTour {
         this.$currentActionLabel = jQuery('#current-action');
         this.$clearActions = jQuery('#toolbar-clear-actions');
         this.$actionStatusBox = jQuery('#action-status-box');
+        this.$takeSnapshot = jQuery('#action-snapshot');
 
         // Toolbar
         this.$toolbarReset = jQuery('#toolbar-reset');
@@ -125,6 +126,7 @@ class AnatomyTour {
         this.$nextAction.on('click', (event) => { this.navigateActions('next')});
         this.$previousAction.on('click', (event) => { this.navigateActions('previous')});
         this.$clearActions.on('click', () => { this.clearActions(appGlobals.currentNote.uid); });
+        this.$takeSnapshot.on('click', () => {this.takeSnapshot()});
 
         // Toolbar
         this.$toolbarReset.on('click', event => { this.human.send("scene.restore", JSON.parse(appGlobals.currentNote.scene_state)); });
@@ -150,6 +152,8 @@ class AnatomyTour {
     }
 
     // Class methods
+
+    // INIT
 
     setHumanUi(){
         console.log("setHumanUi");
@@ -199,7 +203,6 @@ class AnatomyTour {
         }
     }
 
-    // INIT
     getItemTemplates(){
 
         let $notesTimelineContainer = this.$notesTimelineContainer;
@@ -636,6 +639,28 @@ class AnatomyTour {
         console.log("setCurrentAction: " + JSON.stringify(action.action_order));
         appGlobals.currentAction = action;
         this.$currentActionLabel.text("Action " + action.action_order);
+    }
+
+    takeSnapshot(backgroundColor){
+
+        let originalBackgroundData;
+
+        this.human.send("ui.getBackground", (backgroundData) => {
+            originalBackgroundData = backgroundData;
+        });
+
+        if (!backgroundColor) backgroundColor = 'white';
+
+        let backgroundData = { colors: [backgroundColor, backgroundColor] };
+
+        this.human.send("ui.setBackground", backgroundData);
+
+        this.human.send("ui.snapshot", {
+            openInTab: true
+        }, (imgSrc) => {
+            console.log("Snapshot captured.");
+            this.human.send("ui.setBackground", originalBackgroundData)
+        });
     }
 
     // DO ACTION METHODS
