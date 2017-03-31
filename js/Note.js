@@ -4,15 +4,14 @@
 
 class Note {
 
-    constructor (sequence, title, note_content, scene_state, uid) {
-
-
+    constructor (sequence, title, note_content, scene_state, uid, load_url) {
 
         this.uid = uid || Utils.generateUID();
         this.sequence = sequence;
         this.title = title;
         this.note_content = note_content;
         this.scene_state = scene_state;
+        load_url ? this.load_url = load_url : this.load_url = null;
 
         console.log("new note created. uid: " + this.uid);
 
@@ -68,6 +67,10 @@ class Note {
         this.scene_state = sceneState;
         this.updateNotes();
         console.log("scene_state updated");
+    }
+
+    setLoadingUrl(loadUrl) {
+        this.load_url
     }
 
     addNote() {

@@ -60,6 +60,7 @@ class wp_az_anatomy_tours {
 		add_action('wp_ajax_send_item_templates', array($this, 'send_item_templates'));
 		add_action('wp_ajax_nopriv_send_item_templates', array($this, 'send_item_templates'));
 		add_action('wp_ajax_delete_note', array($this, 'delete_note'));
+		add_action('wp_ajax_update_first_scene_url', array($this, 'update_first_scene_url'));
 
 		register_activation_hook(__FILE__, array($this, 'plugin_activate'));
 		register_deactivation_hook(__FILE__, array($this, 'plugin_deactivate'));
@@ -214,6 +215,7 @@ class wp_az_anatomy_tours {
 		note_content text NOT NULL,
 		sequence tinyint NOT NULL,
 		scene_state text,
+		url tinytext,
 		PRIMARY KEY  (id)
 		) $charset_collate;";
 
@@ -264,6 +266,8 @@ class wp_az_anatomy_tours {
 	/**********************
 	 *  AJAX FUNCTIONS    *
 	 **********************/
+
+	//TODO: use wpdb->prepare function to sanitise SQL queries
 
 	public function save_notes(){
 
@@ -374,6 +378,11 @@ class wp_az_anatomy_tours {
 
 	public function load_single_note(){
 
+		// first check if data is being sent and that it is the data we want
+		if (!isset($_POST['wp_az_3d_tours_nonce'])) {
+			wp_die('Your request failed permission check.');
+		}
+
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'anatomy_tours_notes';
 
@@ -438,6 +447,11 @@ class wp_az_anatomy_tours {
 
 	public function delete_note() {
 
+		// first check if data is being sent and that it is the data we want
+		if (!isset($_POST['wp_az_3d_tours_nonce'])) {
+			wp_die('Your request failed permission check.');
+		}
+
 		global $wpdb;
 		$table_notes = $wpdb->prefix . 'anatomy_tours_notes';
 		$table_actions = $wpdb->prefix . 'anatomy_tours_actions';
@@ -468,6 +482,43 @@ class wp_az_anatomy_tours {
 			'message' => "Note deleted: " . $uid
 		));
 
+	}
+
+	public function update_first_scene_url() {
+
+		// first check if data is being sent and that it is the data we want
+		if (!isset($_POST['wp_az_3d_tours_nonce'])) {
+			wp_die('Your request failed permission check.');
+		}
+
+		global $wpdb;
+		$table_notes = $wpdb->prefix . 'anatomy_tours_notes';
+
+		$note_id = $_POST['wp_az_note_id'];
+		$url = $_POST['wp_az_first_scene_url'];
+
+		$update = $wpdb->update(
+			$table_notes,
+			array(
+				url => $url
+			),
+			array(
+				uid => $note_id
+			)
+		);
+
+		if ($update){
+			$status = 'success';
+			$message = 'updated URL';
+		} else {
+			$status = 'failed';
+			$message = 'failed to update URL';
+		}
+
+		wp_send_json(array(
+			'status'        => $status,
+			'message'       => $message
+		));
 	}
 
 }

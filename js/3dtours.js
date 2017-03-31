@@ -166,7 +166,7 @@ class AnatomyTour {
             return;
         }
 
-    /*    if (parseInt(appGlobals.currentNote.sequence) === 1){
+        if (parseInt(appGlobals.currentNote.sequence) === 1){
             this.$modalAlert.find('.modal-title').text("First scene");
             this.$modalAlert.find('.modal-body').text("Do you want this scene to be displayed when the page first loads?");
             this.$modalAlert.find('#modal-btn-1').text("Yes").on('click', () => {
@@ -174,7 +174,7 @@ class AnatomyTour {
                 appGlobals.firstSceneSet = true;
                 appGlobals.firstSceneUrl = sceneUrl;
                 this.$modalAlert.modal('hide');
-                this.saveFirstSceneUrl();
+                this.updateFirstSceneUrl();
             });
             this.$modalAlert.find('#modal-btn-2').text("No").on('click', () => {
                 console.log("do not set as first scene");
@@ -188,16 +188,16 @@ class AnatomyTour {
                 }, 500)
 
             });
-        }*/
+        }
     }
 
-    saveFirstSceneUrl() {
+    updateFirstSceneUrl() {
         jQuery.ajax({
             url: ajax_object.wp_az_ajax_url,
             data: {
                 action: 'update_first_scene_url',
                 wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
-                wp_az_post_id: ajax_object.wp_az_post_id,
+                wp_az_note_id: appGlobals.currentNote.uid,
                 wp_az_first_scene_url: appGlobals.firstSceneUrl
             },
             error: function() {
@@ -671,29 +671,7 @@ class AnatomyTour {
     }
 
     loadActions(noteUID, appObj){
-        /*let actions = appGlobals.actions[noteUID];
-        actions.forEach((action) => {
 
-            this.numActions++;
-            this.$numActionsLabel.text(this.numActions + ' actions');
-
-            let $actionItem = jQuery("<li id='" + action.uid + "' class='list-group-item'><a> Action " + action.action_order + "</a></li>");
-            this.$actionsDropdownContainer.append($actionItem);
-
-            $actionItem.on('click', (event) => {
-                event.preventDefault();
-                let sceneState = JSON.parse(action.scene_state);
-                this.human.send('camera.set', {
-                    position: sceneState.camera.eye,
-                    target: sceneState.camera.look,
-                    up: sceneState.camera.up,
-                    animate: true
-                }, () => {
-                    this.human.send('scene.restore', sceneState)
-                });
-            })
-        })
-*/
         let actions = appGlobals.actions[noteUID];
         if (actions){
             actions.forEach((action) => {
@@ -706,16 +684,6 @@ class AnatomyTour {
 
                 $actionItem.on('click', (event) => {
                     event.preventDefault();
-                    /*let sceneState = JSON.parse(action.scene_state);
-                    appObj.human.send('camera.set', {
-                        position: sceneState.camera.eye,
-                        target: sceneState.camera.look,
-                        up: sceneState.camera.up,
-                        animate: true
-                    }, () => {
-                        appObj.human.send('scene.restore', sceneState)
-                    });
-                    */
                     appObj.doAction(action, appObj);
                 })
             })
