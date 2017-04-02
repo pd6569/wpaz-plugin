@@ -142,7 +142,6 @@ class AnatomyTour {
         this.$notesTimelineContainer.on('click', '.delete-note', (event) => { console.log("delete Note"); this.deleteNote(jQuery(event.target).closest('div.note-item').attr('id')) });
 
 
-
         // Load notes data
         this.loadNotes();
         this.getItemTemplates();
@@ -201,6 +200,18 @@ class AnatomyTour {
             // User UI
             this.setScanner();
         }
+
+        /*tinymce.init({
+            selector: 'textarea',
+            height: 500,
+            menubar: false,
+            plugins: [
+                'advlist autolink lists link image charmap print preview anchor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table contextmenu paste code'
+            ],
+            toolbar: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+        });*/
     }
 
     getItemTemplates(){
@@ -243,7 +254,7 @@ class AnatomyTour {
                 console.log("Failed to load notes");
             },
             success: function(data) {
-                console.log("Notes loaded from server." + JSON.stringify(data));
+                console.log("Notes loaded from server.");
                 let notesArray = data.notes;
                 let actionsArray = data.actions;
 
@@ -338,6 +349,8 @@ class AnatomyTour {
     // NOTE EDITOR
 
     saveNotes(title, note_content, doNotAppend, callback){
+
+        console.log("title: " + title + " note_content: " + note_content);
         if (!this.isUserAdmin) return;
         Utils.setNoteUpdateStatus("Saving...");
 
@@ -396,25 +409,55 @@ class AnatomyTour {
         // Check if changes made to actions, save variable
         let actionsChanged = this.actionsChanged;
 
-        this.human.send('scene.capture', (sceneState) => {
-            this.currentSceneState = sceneState;
+        let data;
 
-            noteToSave.setSceneState(JSON.stringify(sceneState));
+        if (appGlobals.humanLoaded) {
+            this.human.send('scene.capture', (sceneState) => {
+                this.currentSceneState = sceneState;
 
-            console.log("save current note: " + noteToSave.title + " sequence: " + noteToSave.sequence + " uid: " + noteToSave.uid + " note Content: " + noteToSave.note_content);
+                noteToSave.setSceneState(JSON.stringify(sceneState));
 
-            //!* Data to make available via the $_POST variable
-            let data = {
+                console.log("save current note: " + noteToSave.title + " sequence: " + noteToSave.sequence + " uid: " + noteToSave.uid + " note Content: " + noteToSave.note_content);
+
+                //!* Data to make available via the $_POST variable
+                data = {
+                    action: 'save_notes',
+                    wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
+                    wp_az_post_id: ajax_object.wp_az_post_id,
+                    wp_az_note_object: noteToSave,
+                    wp_az_actions: actions,
+                    wp_az_actions_changed: actionsChanged,
+
+                };
+
+                saveToDb(data);
+
+            });
+        } else {
+
+            noteToSave.setSceneState(appGlobals.currentNote.scene_state);
+
+            data = {
                 action: 'save_notes',
                 wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
                 wp_az_post_id: ajax_object.wp_az_post_id,
                 wp_az_note_object: noteToSave,
                 wp_az_actions: actions,
                 wp_az_actions_changed: actionsChanged,
-
             };
 
-            //!* Process the AJAX POST request
+            saveToDb(data);
+        }
+
+
+        // reset tracking  variables
+        this.actionsChanged = false;
+        this.changesMade = false;
+
+        function saveToDb (data) {
+
+            console.log("saveToDb");
+
             jQuery.post(ajax_object.wp_az_ajax_url, data, response => {
                 if (response.status == 'success') {
                     // Show success message, then fade out the button after 2 seconds
@@ -430,12 +473,7 @@ class AnatomyTour {
 
                 }
             });
-
-        });
-
-        // reset tracking  variables
-        this.actionsChanged = false;
-        this.changesMade = false;
+        }
     }
 
     deleteNote(uid){
