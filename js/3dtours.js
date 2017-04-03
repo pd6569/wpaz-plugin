@@ -132,7 +132,7 @@ class AnatomyTour {
         this.$toolbarReset.on('click', event => { this.human.send("scene.restore", JSON.parse(appGlobals.currentNote.scene_state)); });
 
         // Save/Add new
-        this.$saveBtn.on('click', (event) => { this.saveNotes(this.$noteTitle.val(), this.$noteText.val()); });
+        this.$saveBtn.on('click', (event) => { this.saveNotes(this.$noteTitle.val(), tinymce.activeEditor.getContent()); });
         this.$addNewNotesSection.on('click', (event) => { this.addNoteSection(); });
         this.$deleteNoteBtn.on('click', (event) => { this.deleteNote(); });
 
@@ -201,17 +201,17 @@ class AnatomyTour {
             this.setScanner();
         }
 
-        /*tinymce.init({
+        tinymce.init({
             selector: 'textarea',
             height: 500,
             menubar: false,
-            plugins: [
+            /*plugins: [
                 'advlist autolink lists link image charmap print preview anchor',
                 'searchreplace visualblocks code fullscreen',
                 'insertdatetime media table contextmenu paste code'
-            ],
+            ],*/
             toolbar: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-        });*/
+        });
     }
 
     getItemTemplates(){
@@ -274,9 +274,11 @@ class AnatomyTour {
                 } else {
 
                     // No stored notes - create brand new note
+                    appGlobals.currentNote = new Note(1, "", "", "");
+
                     human.send('scene.capture', (sceneState) => {
                         let sceneStateStr = JSON.stringify(sceneState);
-                        appGlobals.currentNote = new Note(1, "", "", sceneStateStr);
+                        appGlobals.currentNote.setSceneState(sceneStateStr);
 
                         // save new note
                         appObj.saveNotes("", "", true);
@@ -350,7 +352,7 @@ class AnatomyTour {
 
     saveNotes(title, note_content, doNotAppend, callback){
 
-        console.log("title: " + title + " note_content: " + note_content);
+        console.log("saveNotes");
         if (!this.isUserAdmin) return;
         Utils.setNoteUpdateStatus("Saving...");
 
@@ -361,10 +363,11 @@ class AnatomyTour {
         if (($updateNote).length !== 0) {
             // update note
             $updateNote.find('.note-title').text(title);
-            $updateNote.find('.note-content').text(note_content);
+            $updateNote.find('.note-content').html(note_content);
         } else {
             // append new note
             if (!doNotAppend){
+                console.log("Append note");
                 let noteSectionHtml = appGlobals.templates.NOTE_SECTION;
                 let $noteSection = jQuery(jQuery.parseHTML(noteSectionHtml));
                 $noteSection.find('.note-item').attr('id', appGlobals.currentNote.uid);
@@ -375,28 +378,33 @@ class AnatomyTour {
 
                 let originalBackgroundData;
 
-                this.human.send("ui.getBackground", (backgroundData) => {
-                    originalBackgroundData = backgroundData;
-                });
+                if (appGlobals.humanLoaded){
+                    this.human.send("ui.getBackground", (backgroundData) => {
+                        originalBackgroundData = backgroundData;
+                    });
 
-                let backgroundColor = 'white';
+                    let backgroundColor = 'white';
 
-                let backgroundData = { colors: [backgroundColor, backgroundColor] };
+                    let backgroundData = { colors: [backgroundColor, backgroundColor] };
 
-                this.human.send("ui.setBackground", backgroundData);
+                    this.human.send("ui.setBackground", backgroundData);
 
-                this.human.send("ui.snapshot", {}, (imgSrc) => {
-                    console.log("Snapshot captured.");
-                    this.human.send("ui.setBackground", originalBackgroundData)
-                    console.log(imgSrc);
-                    jQuery("<img>", {
-                        "src": imgSrc,
-                        "width": "250px",
-                        "height": "250px"})
-                        .appendTo($imageContainer);
+                    this.human.send("ui.snapshot", {}, (imgSrc) => {
+                        console.log("Snapshot captured.");
+                        this.human.send("ui.setBackground", originalBackgroundData)
+                        console.log(imgSrc);
+                        jQuery("<img>", {
+                            "src": imgSrc,
+                            "width": "250px",
+                            "height": "250px"})
+                            .appendTo($imageContainer);
 
+                        this.$notesTimelineContainer.append($noteSection);
+                    });
+                } else {
                     this.$notesTimelineContainer.append($noteSection);
-                });
+                }
+
 
             }
         }
@@ -555,7 +563,7 @@ class AnatomyTour {
 
         // save current note first if changes made
         if (this.isUserAdmin && this.changesMade == true || this.actionsChanged) {
-            this.saveNotes($title.val(), $content.val());
+            this.saveNotes($title.val(), tinymce.activeEditor.getContent());
         }
 
         // reset tracking variables
@@ -569,7 +577,7 @@ class AnatomyTour {
         // update title and content
         if (this.isUserAdmin) {
             $title.val(note.title);
-            $content.val(note.note_content);
+            tinymce.activeEditor.setContent(note.note_content);
         } else {
             $title.text(note.title);
             $content.text(note.note_content);
@@ -603,10 +611,10 @@ class AnatomyTour {
         if (!this.isUserAdmin) {console.log("Nice try..."); return};
 
         // save current notes first
-        this.saveNotes(this.$noteTitle.val(), this.$noteText.val());
+        this.saveNotes(this.$noteTitle.val(), tinymce.activeEditor.getContent());
 
         this.$noteTitle.val("");
-        this.$noteText.val("");
+        tinymce.activeEditor.setContent("");
 
         let sequence = (parseInt(appGlobals.numNotes) + 1);
         let addNote = new Note(sequence, "", "", "");
@@ -617,10 +625,15 @@ class AnatomyTour {
         // clear actions
         this.clearActions();
 
-        this.human.send('scene.capture', (sceneState) => {
-            addNote.setSceneState(JSON.stringify(sceneState));
+        if (appGlobals.humanLoaded){
+            this.human.send('scene.capture', (sceneState) => {
+                addNote.setSceneState(JSON.stringify(sceneState));
+                appGlobals.currentNote = addNote;
+            });
+        } else {
             appGlobals.currentNote = addNote;
-        });
+        }
+
     }
 
     // ACTIONS
