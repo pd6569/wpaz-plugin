@@ -193,6 +193,8 @@
 
             </div>
 
+            <?php if ($post->ID != WP_AZ_TOOL_3D_BODY_POST_ID) : ?>
+
             <div id="wpaz-notes" class="col-md-4">
 
                 <div id="wpaz-notes-container">
@@ -312,8 +314,11 @@
             </div>
         </div>
 
+            <?php endif ?>
+
         </div>
 
+        <?php if ($post->ID != WP_AZ_TOOL_3D_BODY_POST_ID) : ?>
         <div class="row">
 
             <div id="notes-timeline" class="row">
@@ -327,6 +332,7 @@
         </div>
 
         </div>
+        <?php endif ?>
     </div>
 </div>
 
