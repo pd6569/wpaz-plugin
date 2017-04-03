@@ -19,6 +19,7 @@
     <div class="container">
 
         <div class="row">
+
             <div id="wpaz-model-container" class="col-md-8">
                 <iframe
                         id="embedded-human"
@@ -26,10 +27,9 @@
                         width="100%"
                         height="600"
                         allowFullScreen="true"
-                        src="<?php if (!empty($notes[0]->url)): echo $notes[0]->url; else: echo "https://human.biodigital.com/widget?be=1mHv&background=255,255,255,51,64,77&ui-nav=false&ui-fullscreen=false&ui-share=false&dk=6f2c42f37ce7c183993a87afb2df8d136fecc7c7"; endif; ?>"
+                        src="<?php if (!empty($notes[0]->url)): echo $notes[0]->url; else: echo "https://human.biodigital.com/widget?be=1mHv&background=255,255,255,51,64,77&ui-nav=false&ui-fullscreen=false&ui-share=false&dk=6f2c42f37ce7c183993a87afb2df8d136fecc7c7"; endif; ?>">
                 </iframe>
-                <a href="https://www.biodigital.com"></a>
-                </iframe>
+
 
 	            <?php if (current_user_can('administrator')): ?>
 
@@ -192,6 +192,7 @@
 	            <?php endif ?>
 
             </div>
+
             <div id="wpaz-notes" class="col-md-4">
 
                 <div id="wpaz-notes-container">
@@ -311,10 +312,11 @@
             </div>
         </div>
 
+        </div>
 
+        <div class="row">
 
-
-        <div id="notes-timeline" class="row">
+            <div id="notes-timeline" class="row">
 		    <?php
                 if ($notes != null):
                     foreach($notes as $note){
@@ -324,6 +326,7 @@
             ?>
         </div>
 
+        </div>
     </div>
 </div>
 
