@@ -92,9 +92,7 @@ class AnatomyTour {
          ***********************/
 
         this.$sceneSelectorOption = jQuery('.scene-selector-option');
-        this.$sceneSelectorOption.on('click', (event) => { this.loadScene(jQuery(event.target)) });
-
-
+        this.$sceneSelectImageBtn = jQuery('#scene-selector-image');
 
 
         /*********************
@@ -108,12 +106,19 @@ class AnatomyTour {
 
         // Modal alert dialog
         this.$modalAlert = jQuery('#wpaz-modal-alert');
-
+        this.$modalTitle = this.$modalAlert.find('.modal-title');
+        this.$modalBody = this.$modalAlert.find('.modal-body');
+        this.$modalBtn1 = this.$modalAlert.find('#modal-btn-1');
+        this.$modalBtn2 = this.$modalAlert.find('#modal-btn-2');
 
 
         /*******************************
          *  set DOM Event listeners    *
          *******************************/
+
+        // Scene selector
+        this.$sceneSelectorOption.on('click', (event) => { this.loadScene(jQuery(event.target)) });
+        this.$sceneSelectImageBtn.on('click', (event) => {this.loadImage()});
 
         // Note container
         this.$noteNavLeft.on('click', () => { this.navigateNotes('left'); });
@@ -150,7 +155,18 @@ class AnatomyTour {
         this.setAppUi();
     }
 
-    // Class methods
+    /****************************
+     *      CLASS METHODS       *
+     ****************************/
+
+    loadImage(){
+        console.log("loadImage");
+        this.$modalTitle.text("Load Image");
+        this.$modalBody.text("Select image to use");
+        this.$modalBtn1.text("Cancel");
+        this.$modalBtn2.text("OK");
+        this.$modalAlert.modal('show');
+    }
 
     // INIT
 
@@ -555,6 +571,7 @@ class AnatomyTour {
     }
 
     setActiveNote(uid, scrollToTop){
+        console.log("setActiveNote");
         let note = appGlobals.notes[uid];
 
         // get title/content
@@ -580,7 +597,7 @@ class AnatomyTour {
             tinymce.activeEditor.setContent(note.note_content);
         } else {
             $title.text(note.title);
-            $content.text(note.note_content);
+            $content.html(note.note_content);
         }
 
         // load scene

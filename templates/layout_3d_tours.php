@@ -35,6 +35,8 @@
 
                     <div id="wpaz-scene-selector" class="text-center">
 
+                        <button id="scene-selector-image" type="button" class="btn btn-default pull-left"><span class="glyphicon glyphicon-picture" aria-hidden="true"></span></button>
+
                         <div class="btn-group scene-selector scene-selector__whole-body dropup">
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Body <span class="caret"></span>
