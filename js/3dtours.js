@@ -144,6 +144,26 @@ class AnatomyTour {
                 this.$postTitle.text(newTitle);
                 this.$mainToolbarActiveNotes.find('a').text(newTitle);
                 this.$modalAlert.modal('hide');
+
+                let data = {
+                    title: newTitle,
+                };
+
+                console.log("rest nonce: " + ajax_object.wp_az_nonce);
+                jQuery.ajax({
+                    method: 'POST',
+                    url: ajax_object.wp_az_root + 'wp/v2/3d-tours',
+                    data: data,
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('X-WP-Nonce', ajax_object.wp_az_nonce);
+                    },
+                    success: function(response) {
+                        console.log("success: " + JSON.stringify(response));
+                    },
+                    error: function(response) {
+                        console.log("failed: " + JSON.stringify(response));
+                    }
+                })
             })
         });
 
