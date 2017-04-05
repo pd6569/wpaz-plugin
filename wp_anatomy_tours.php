@@ -57,15 +57,18 @@ class wp_az_anatomy_tours {
 		add_action('wp_enqueue_scripts', array($this,'enqueue'), 50); // ensure styles are enqueued AFTER theme!
 		add_filter('the_content', array($this, 'set_content'));
 		
-		// Ajax hooks
+		// Ajax hooks logged in users
 		add_action('wp_ajax_save_notes', array($this, 'save_notes' ));
 		add_action('wp_ajax_load_notes', array($this, 'load_notes'));
-		add_action('wp_ajax_nopriv_load_notes', array($this, 'load_notes'));
 		add_action('wp_ajax_load_single_note', array($this, 'load_single_note'));
 		add_action('wp_ajax_send_item_templates', array($this, 'send_item_templates'));
-		add_action('wp_ajax_nopriv_send_item_templates', array($this, 'send_item_templates'));
 		add_action('wp_ajax_delete_note', array($this, 'delete_note'));
 		add_action('wp_ajax_update_first_scene_url', array($this, 'update_first_scene_url'));
+		add_action('wp_ajax_update_post_title', array($this, 'update_post_title'));
+
+		// AJAX for logged out users
+		add_action('wp_ajax_nopriv_load_notes', array($this, 'load_notes'));
+		add_action('wp_ajax_nopriv_send_item_templates', array($this, 'send_item_templates'));
 
 		register_activation_hook(__FILE__, array($this, 'plugin_activate'));
 		register_deactivation_hook(__FILE__, array($this, 'plugin_deactivate'));
@@ -524,6 +527,29 @@ class wp_az_anatomy_tours {
 		wp_send_json(array(
 			'status'        => $status,
 			'message'       => $message
+		));
+	}
+
+	public function update_post_title(){
+
+		// first check if data is being sent and that it is the data we want
+		if (!isset($_POST['wp_az_3d_tours_nonce'])) {
+			wp_die('Your request failed permission check.');
+		}
+
+		$post_id = intval($_POST['wp_az_post_id']);
+		$new_title = sanitize_text_field($_POST['wp_az_new_post_title']);
+
+		$update_post = array(
+			'ID'            => $post_id,
+			'post_title'    => $new_title,
+		);
+
+		wp_update_post($update_post);
+
+		wp_send_json(array(
+			'status'        => 'success',
+			'message'       => 'post title updated'
 		));
 	}
 

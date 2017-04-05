@@ -121,23 +121,7 @@ class AnatomyTour {
         this.$sceneSelectImageBtn.on('click', (event) => {this.loadImage()});
 
         // Note container
-        this.$postTitle.on('click', () => {
-            console.log("Post title clicked");
-            Utils.resetModal();
-            Utils.showModal({
-                title: "Edit title",
-                body:
-                    "<input id='edit-post-title' type='text' class='form-control' placeholder='Enter title' value=''>",
-            });
-            this.$modalBtn1.on('click', () => {
-                this.$modalAlert.modal('hide');
-            });
-            this.$modalBtn2.on('click', () => {
-                let newTitle = jQuery('#edit-post-title').val();
-                this.$modalAlert.modal('hide');
-                this.$postTitle.text(newTitle);
-            })
-        });
+        this.$postTitle.on('click', () => { this.editPostTitle(); });
 
         this.$noteNavLeft.on('click', () => { this.navigateNotes('left'); });
         this.$noteNavRight.on('click', () => { this.navigateNotes('right'); });
@@ -176,15 +160,6 @@ class AnatomyTour {
     /****************************
      *      CLASS METHODS       *
      ****************************/
-
-    loadImage(){
-        console.log("loadImage");
-        this.$modalTitle.text("Load Image");
-        this.$modalBody.text("Select image to use");
-        this.$modalBtn1.text("Cancel");
-        this.$modalBtn2.text("OK");
-        this.$modalAlert.modal('show');
-    }
 
     // INIT
 
@@ -383,6 +358,47 @@ class AnatomyTour {
     }
 
     // NOTE EDITOR
+
+    editPostTitle() {
+        console.log("editPostTitle");
+        let newTitle;
+        Utils.resetModal();
+        Utils.showModal({
+            title: "Edit title",
+            body:
+            "<input id='edit-post-title' type='text' class='form-control' placeholder='Enter title' value='" + this.$postTitle.text() + "'>",
+        });
+        this.$modalBtn1.on('click', () => {
+            this.$modalAlert.modal('hide');
+        });
+        this.$modalBtn2.on('click', () => {
+            newTitle = jQuery('#edit-post-title').val();
+            this.$modalAlert.modal('hide');
+            this.$postTitle.text(newTitle);
+
+            Utils.setNoteUpdateStatus("Saving post title...");
+
+            // Update post title in Db
+            jQuery.ajax({
+                url: ajax_object.wp_az_ajax_url,
+                data: {
+                    action: 'update_post_title',
+                    wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
+                    wp_az_post_id: ajax_object.wp_az_post_id,
+                    wp_az_new_post_title: newTitle
+                },
+                error: function() {
+                    console.log("Failed to update title");
+                    Utils.setNoteUpdateStatus("Failed to update title", 3000);
+                },
+                success: function(data) {
+                    console.log("Note deleted: " + JSON.stringify(data));
+                    Utils.setNoteUpdateStatus("Title updated", 3000);
+                },
+                type: 'POST'
+            });
+        });
+    }
 
     saveNotes(title, note_content, doNotAppend, callback){
 
@@ -895,6 +911,15 @@ class AnatomyTour {
             },
             type: 'POST'
         });
+    }
+
+    loadImage(){
+        console.log("loadImage");
+        this.$modalTitle.text("Load Image");
+        this.$modalBody.text("Select image to use");
+        this.$modalBtn1.text("Cancel");
+        this.$modalBtn2.text("OK");
+        this.$modalAlert.modal('show');
     }
 
     // BIODIGITAL API FUNCTIONS
