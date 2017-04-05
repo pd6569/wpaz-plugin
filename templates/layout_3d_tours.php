@@ -18,6 +18,18 @@
 
     <div class="container">
 
+        <?php if (current_user_can('administrator')) : ?>
+            <div class="row">
+                <div id="wpaz-main-toolbar" class="col-md-12">
+                    <ul class="nav nav-tabs">
+                        <li role="presentation" class="active"><a href="#" id="toolbar-active-note">Active Note</a></li>
+                        <li role="presentation"><a href="#" id="toolbar-my-notes">My Note Sets</a></li>
+                        <li role="presentation"><a href="#" id="toolbar-create-new">Create new</a></li>
+                    </ul>
+                </div>
+            </div>
+        <?php endif ?>
+
         <div class="row">
 
             <div id="wpaz-model-container" class="col-md-8">
