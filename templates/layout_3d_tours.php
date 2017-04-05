@@ -203,9 +203,9 @@
 
                     <div class="note-header">
 
-                        <h2 class="post-title text-center">
+                        <h2 class="text-center">
                             <span id="note-nav-left" class="glyphicon glyphicon-chevron-left pull-left chapter-nav" aria-hidden="true"></span>
-		                    <?php echo $post->post_title ?>
+                            <span id="post-title"><?php echo $post->post_title ?></span>
                             <span id="note-nav-right" class="glyphicon glyphicon-chevron-right pull-right chapter-nav" aria-hidden="true"></span>
                         </h2>
                         <div id="note-properties">
@@ -222,7 +222,7 @@
                         <div class="edit-note-container">
                             <form>
                                 <div class="form-group">
-                                    <input type="notes-title" class="form-control notes-title" placeholder="Enter title" value="<?php echo $notes[0]->title ?>">
+                                    <input type="text" class="form-control notes-title" placeholder="Enter title" value="<?php echo $notes[0]->title ?>">
                                 </div>
                                 <textarea class="notes-text form-control" rows="10" placeholder="Enter notes">
                                     <?php echo $notes[0]->note_content ?>

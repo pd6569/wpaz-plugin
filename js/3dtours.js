@@ -61,7 +61,7 @@ class AnatomyTour {
 
         // edit note container
         this.$editNoteContainer = jQuery('#wpaz-notes-container');
-        this.$postTitle = jQuery('.post-title');
+        this.$postTitle = jQuery('#post-title');
         this.$noteSequenceNum = jQuery('.notes-sequence');
         this.$noteSequenceNum.text("1");
         this.$noteTitle = jQuery('.notes-title');
@@ -121,6 +121,24 @@ class AnatomyTour {
         this.$sceneSelectImageBtn.on('click', (event) => {this.loadImage()});
 
         // Note container
+        this.$postTitle.on('click', () => {
+            console.log("Post title clicked");
+            Utils.resetModal();
+            Utils.showModal({
+                title: "Edit title",
+                body:
+                    "<input id='edit-post-title' type='text' class='form-control' placeholder='Enter title' value=''>",
+            });
+            this.$modalBtn1.on('click', () => {
+                this.$modalAlert.modal('hide');
+            });
+            this.$modalBtn2.on('click', () => {
+                let newTitle = jQuery('#edit-post-title').val();
+                this.$modalAlert.modal('hide');
+                this.$postTitle.text(newTitle);
+            })
+        });
+
         this.$noteNavLeft.on('click', () => { this.navigateNotes('left'); });
         this.$noteNavRight.on('click', () => { this.navigateNotes('right'); });
         this.$noteTitle.on("change keyup paste", () => { this.changesMade = true; });

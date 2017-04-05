@@ -27,7 +27,7 @@ define('WP_AZ_ANATOMY_TOURS_VERSION', 1.0);
 define('TMPL_URL_LAYOUT_3D_TOURS', WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . "/templates/layout_3d_tours.php");
 define('TMPL_URL_ITEM_NOTE_SECTION', WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . "/templates/item_note_section.php");
 
-# 3D body tool
+# 3D body tool page (public use)
 define('WP_AZ_TOOL_3D_BODY_POST_ID', '7520');
 
 
@@ -208,13 +208,13 @@ class wp_az_anatomy_tours {
 		$table_notes = $wpdb->prefix . 'anatomy_tours_notes';
 		$table_actions = $wpdb->prefix . 'anatomy_tours_actions';
 
-
 		$charset_collate = $wpdb->get_charset_collate();
 
 		$sql = "CREATE TABLE $table_notes (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
 		uid tinytext NOT NULL,
-		post_id mediumint(9) NOT NULL,
+		notebook_id mediumint(9) NOT NULL;
+		post_id mediumint(9),
 		created datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
 		last_modified datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
 		title tinytext NOT NULL,
