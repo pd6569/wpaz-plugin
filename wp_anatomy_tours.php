@@ -216,7 +216,7 @@ class wp_az_anatomy_tours {
 		$sql = "CREATE TABLE $table_notes (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
 		uid tinytext NOT NULL,
-		notebook_id mediumint(9) NOT NULL;
+		notebook_id mediumint(9) NOT NULL,
 		post_id mediumint(9),
 		created datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
 		last_modified datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
