@@ -16,6 +16,10 @@
     top: 25%;
 }
 
+.modal-error {
+    color: red;
+}
+
 
 /*************************
  *    NOTES CONTAINER    *

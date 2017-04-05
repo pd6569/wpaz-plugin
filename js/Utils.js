@@ -71,6 +71,7 @@ class Utils {
     static resetModal(){
         let $modalAlert = jQuery('#wpaz-modal-alert');
         let $modalTitle = $modalAlert.find('.modal-title');
+        let $modalError = $modalAlert.find('.modal-error p');
         let $modalBody = $modalAlert.find('.modal-body');
         let $modalBtn1 = $modalAlert.find('#modal-btn-1');
         let $modalBtn2 = $modalAlert.find('#modal-btn-2');
@@ -78,6 +79,7 @@ class Utils {
         // Set default text, remove existing event listeners
         $modalTitle.text("");
         $modalBody.empty();
+        $modalError.empty();
         $modalBtn1.off();
         $modalBtn2.off();
         $modalBtn1.text("Cancel");
@@ -103,5 +105,21 @@ class Utils {
         modalObj.btn2 ? $modalBtn1.text(modalObj.btn2) : $modalBtn2.text("OK");
 
         $modalAlert.modal('show');
+    }
+
+    static resetAppState(){
+
+        appGlobals.post_id = 0;
+        appGlobals.notes = {};
+        appGlobals.sequenceIndex = [];
+        appGlobals.numNotes = 0;
+        appGlobals.actions = {};
+        appGlobals.firstSceneUrl = appGlobals.scenePresets.head.bone;
+        appGlobals.currentNote = {};
+        appGlobals.notesLoaded = false;
+        appGlobals.humanLoaded = false;
+        appGlobals.actions = {};
+        appGlobals.currentAction = {};
+
     }
 }

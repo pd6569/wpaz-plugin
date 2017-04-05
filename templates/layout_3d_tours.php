@@ -22,9 +22,12 @@
             <div class="row">
                 <div id="wpaz-main-toolbar" class="col-md-12">
                     <ul class="nav nav-tabs">
-                        <li role="presentation" class="active"><a href="#" id="toolbar-active-note">Active Note</a></li>
-                        <li role="presentation"><a href="#" id="toolbar-my-notes">My Note Sets</a></li>
-                        <li role="presentation"><a href="#" id="toolbar-create-new">Create new</a></li>
+                        <li id="toolbar-active-note" role="presentation" class="active">
+                            <a href="#">
+                                <?php echo $post->post_title ?>
+                            </a></li>
+                        <li id="toolbar-my-notes" role="presentation"><a href="#">My Notes</a></li>
+                        <li id="toolbar-create-new" role="presentation"><a href="#">Create new</a></li>
                     </ul>
                 </div>
             </div>
@@ -359,6 +362,7 @@
             </div>
             <div class="modal-body">
             </div>
+            <div class="modal-error text-center hidden"><p></p></div>
             <div class="modal-footer">
                 <button id="modal-btn-1" type="button" class="btn btn-default"></button>
                 <button id="modal-btn-2" type="button" class="btn btn-default"></button>

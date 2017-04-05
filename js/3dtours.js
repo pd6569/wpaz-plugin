@@ -25,6 +25,7 @@ class AnatomyTour {
 
         // ajax data
         this.isUserAdmin = ajax_object.wp_az_user_role;
+        appGlobals.post_id = ajax_object.wp_az_post_id;
         appGlobals.firstSceneUrl = this.$humanWidget.attr('src');
 
         // Track changes
@@ -46,6 +47,14 @@ class AnatomyTour {
         });
 
         // DOM
+
+        /***********************
+         *      MAIN TOOLBAR   *
+         ***********************/
+        this.$mainToolbar = jQuery('#wpaz-main-toolbar');
+        this.$mainToolbarActiveNotes = jQuery('#toolbar-active-note');
+        this.$mainToolbarMyNotes = jQuery('#toolbar-my-notes');
+        this.$mainToolbarCreateNew = jQuery('#toolbar-create-new');
 
         /**********************
          *    NOTE CONTAINER  *
@@ -108,6 +117,7 @@ class AnatomyTour {
         this.$modalAlert = jQuery('#wpaz-modal-alert');
         this.$modalTitle = this.$modalAlert.find('.modal-title');
         this.$modalBody = this.$modalAlert.find('.modal-body');
+        this.$modalError = this.$modalAlert.find('.modal-error p');
         this.$modalBtn1 = this.$modalAlert.find('#modal-btn-1');
         this.$modalBtn2 = this.$modalAlert.find('#modal-btn-2');
 
@@ -115,6 +125,27 @@ class AnatomyTour {
         /*******************************
          *  set DOM Event listeners    *
          *******************************/
+
+        // Main Toolbar
+        this.$mainToolbarActiveNotes.on('click', () => { console.log("active notes")});
+        this.$mainToolbarMyNotes.on('click', () => { console.log("my notes")});
+        this.$mainToolbarCreateNew.on('click', () => {
+            console.log("create new");
+            Utils.resetModal();
+            Utils.showModal({
+                title: "Create New Notes",
+                body: "<input id='create-new-note-set' type='text' class='form-control' placeholder='Enter title' value=''>",
+            });
+            this.$modalBtn1.on('click', () => { this.$modalAlert.modal('hide')});
+            this.$modalBtn2.on('click', () => {
+                console.log("create new note set somehow...");
+                let newTitle = jQuery('#create-new-note-set').val();
+                this.clearActiveNotes();
+                this.$postTitle.text(newTitle);
+                this.$mainToolbarActiveNotes.find('a').text(newTitle);
+                this.$modalAlert.modal('hide');
+            })
+        });
 
         // Scene selector
         this.$sceneSelectorOption.on('click', (event) => { this.loadScene(jQuery(event.target)) });
@@ -160,6 +191,26 @@ class AnatomyTour {
     /****************************
      *      CLASS METHODS       *
      ****************************/
+
+    clearActiveNotes(){
+        console.log("clearActiveNotes");
+
+        // save notes first
+        this.saveNotes(this.$noteTitle.val(), tinymce.activeEditor.getContent());
+
+        // Delete all data
+        Utils.resetAppState();
+
+        //TODO: Save scene state to note
+        appGlobals.currentNote = new Note(1, "", "", "");
+
+        this.setActiveNote(appGlobals.currentNote.uid, true);
+
+        // clear UI
+        this.$postTitle.text("");
+        this.$notesTimelineContainer.empty();
+
+    }
 
     // INIT
 
@@ -441,7 +492,7 @@ class AnatomyTour {
 
                     this.human.send("ui.snapshot", {}, (imgSrc) => {
                         console.log("Snapshot captured.");
-                        this.human.send("ui.setBackground", originalBackgroundData)
+                        this.human.send("ui.setBackground", originalBackgroundData);
                         console.log(imgSrc);
                         jQuery("<img>", {
                             "src": imgSrc,
@@ -852,13 +903,19 @@ class AnatomyTour {
 
 
     // Preset scenes
-    loadScene($sceneOption) {
+    loadScene($sceneOption, url, callback) {
 
         console.log("loadScene");
 
-        let region = $sceneOption.attr('data-region');
-        let structure = $sceneOption.attr('data-structure');
-        let sceneUrl = appGlobals.scenePresets[region][structure];
+        let sceneUrl;
+
+        if ($sceneOption && !url) {
+            let region = $sceneOption.attr('data-region');
+            let structure = $sceneOption.attr('data-structure');
+            sceneUrl = appGlobals.scenePresets[region][structure];
+        } else {
+            sceneUrl = url;
+        }
         if (sceneUrl != null && sceneUrl != "") {
             this.$humanWidget.attr('src', sceneUrl);
         } else {
@@ -886,7 +943,7 @@ class AnatomyTour {
                 setTimeout(() => {
                     this.$modalAlert.modal('show');
                 }, 500)
-
+                callback();
             });
         }
     }
