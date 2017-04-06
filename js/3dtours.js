@@ -24,7 +24,8 @@ class AnatomyTour {
         this.storedActions = [];
 
         // ajax data
-        this.isUserAdmin = ajax_object.wp_az_user_role;
+        this.userIsEditor = ajax_object.wp_az_user_role;
+        appGlobals.context = ajax_object.wp_az_context;
         appGlobals.post_id = ajax_object.wp_az_post_id;
         appGlobals.firstSceneUrl = this.$humanWidget.attr('src');
 
@@ -185,19 +186,10 @@ class AnatomyTour {
         this.$notesTimelineContainer.on('click', '.delete-note', (event) => { console.log("delete Note"); this.deleteNote(jQuery(event.target).closest('div.note-item').attr('id')) });
 
         // check if page is notes dashboard
-        if (ajax_object.wp_az_is_notes_dashboard){
+        if (appGlobals.context === 'NOTES_DASHBOARD'){
+            console.log("context: " + appGlobals.context);
             this.createPostInDb("New Notes");
-
-            //TODO: encapsulate into single function - also used in load notes
-            appGlobals.currentNote = new Note(1, "", "", "");
-
-            this.human.send('scene.capture', (sceneState) => {
-                let sceneStateStr = JSON.stringify(sceneState);
-                appGlobals.currentNote.setSceneState(sceneStateStr);
-
-                // save new note
-                appObj.saveNotes("", "", true);
-            });
+            appGlobals.currentNote = new Note(1, "", "", appGlobals.scenePresets.head.bone);
 
         } else {
             // Load notes data
@@ -265,7 +257,7 @@ class AnatomyTour {
     setHumanUi(){
         console.log("setHumanUi");
         let displayConfig;
-        if(this.isUserAdmin){
+        if(this.userIsEditor){
             displayConfig = {
                 audio: false,
                 fullscreen: false,
@@ -299,7 +291,7 @@ class AnatomyTour {
 
     setAppUi(){
 
-        if (this.isUserAdmin){
+        if (this.userIsEditor){
 
             // Admin UI
             this.$noteToolsTimeline.removeClass('hidden');
@@ -502,7 +494,7 @@ class AnatomyTour {
     saveNotes(title, note_content, doNotAppend, callback){
 
         console.log("saveNotes");
-        if (!this.isUserAdmin) return;
+        if (!this.userIsEditor) return;
         Utils.setNoteUpdateStatus("Saving...");
 
         if (title == "" || title == null || title.length == 0) title = "No title";
@@ -634,7 +626,7 @@ class AnatomyTour {
     }
 
     deleteNote(uid){
-        if (!this.isUserAdmin) { console.log("Nice try..."); return };
+        if (!this.userIsEditor) { console.log("Nice try..."); return };
         console.log("delete Note");
 
         Utils.setNoteUpdateStatus("Deleting...");
@@ -712,7 +704,7 @@ class AnatomyTour {
         let $content = jQuery('.notes-text');
 
         // save current note first if changes made
-        if (this.isUserAdmin && this.changesMade == true || this.actionsChanged) {
+        if (this.userIsEditor && this.changesMade == true || this.actionsChanged) {
             this.saveNotes($title.val(), tinymce.activeEditor.getContent());
         }
 
@@ -725,7 +717,7 @@ class AnatomyTour {
         jQuery('#total-notes-label').text(appGlobals.numNotes + ' notes');
 
         // update title and content
-        if (this.isUserAdmin) {
+        if (this.userIsEditor) {
             $title.val(note.title);
             tinymce.activeEditor.setContent(note.note_content);
         } else {
@@ -758,7 +750,7 @@ class AnatomyTour {
     }
 
     addNoteSection(){
-        if (!this.isUserAdmin) {console.log("Nice try..."); return};
+        if (!this.userIsEditor) {console.log("Nice try..."); return};
 
         // save current notes first
         this.saveNotes(this.$noteTitle.val(), tinymce.activeEditor.getContent());

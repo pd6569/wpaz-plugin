@@ -33,6 +33,11 @@ define('TMPL_URL_ITEM_NOTE_SECTION', WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . "/template
 define('WP_AZ_TOOL_3D_BODY_POST_ID', '7552');
 define('WP_AZ_NOTES_DASHBOARD_POST_ID', '7554');
 
+# App contexts
+define('WP_AZ_CONTEXT_NOTES_PAGE', 'NOTES_PAGE');
+define('WP_AZ_CONTEXT_3D_BODY', '3D_BODY');
+define('WP_AZ_CONTEXT_NOTES_DASHBOARD', 'NOTES_DASHBOARD');
+
 
 require_once (WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . '/functions.php');
 require_once (WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . '/templates.php');
@@ -179,7 +184,7 @@ class wp_az_anatomy_tours {
 				'wp_az_user_role'           => current_user_can('access_s2member_level1'),
 				'wp_az_item_templates'      => $item_templates['NOTE_SECTION'],
 				'wp_az_current_user_id'     => get_current_user_id(),
-				'wp_az_is_notes_dashboard'  => $isNotesDashboard
+				'wp_az_context'             => wp_az_get_context()
 			));
 		}
 
