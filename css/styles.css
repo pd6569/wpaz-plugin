@@ -1,4 +1,6 @@
 
+/* CSS THEME HACKS - NEED CHANGING IF THEME CHANGES - REPLACE WITH BETTER SOLUTION*/
+
 #main .wf-wrap {
     width: 100%;
 }
@@ -6,6 +8,20 @@
 #wpaz-3d-tours-layout .container {
     width: 100%;
 }
+
+.page-title {
+    display: none;
+}
+
+#sidebar {
+    display:none;
+}
+
+.content {
+    width: 100%;
+}
+
+/* END HACKS */
 
 #wpaz-toolbar {
     margin-bottom: 10px;

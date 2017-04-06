@@ -145,25 +145,10 @@ class AnatomyTour {
                 this.$mainToolbarActiveNotes.find('a').text(newTitle);
                 this.$modalAlert.modal('hide');
 
-                let data = {
-                    title: newTitle,
-                };
 
-                console.log("rest nonce: " + ajax_object.wp_az_nonce);
-                jQuery.ajax({
-                    method: 'POST',
-                    url: ajax_object.wp_az_root + 'wp/v2/3d-tours',
-                    data: data,
-                    beforeSend: function(xhr) {
-                        xhr.setRequestHeader('X-WP-Nonce', ajax_object.wp_az_nonce);
-                    },
-                    success: function(response) {
-                        console.log("success: " + JSON.stringify(response));
-                    },
-                    error: function(response) {
-                        console.log("failed: " + JSON.stringify(response));
-                    }
-                })
+                // CREATE NEW POST IN DB
+                this.createPostInDb(newTitle);
+
             })
         });
 
@@ -199,9 +184,26 @@ class AnatomyTour {
         this.$notesTimelineContainer.on('click', '.edit-note', (event) => { console.log("edit Note"); this.editNote(jQuery(event.target).closest('div.note-item').attr('id')) });
         this.$notesTimelineContainer.on('click', '.delete-note', (event) => { console.log("delete Note"); this.deleteNote(jQuery(event.target).closest('div.note-item').attr('id')) });
 
+        // check if page is notes dashboard
+        if (ajax_object.wp_az_is_notes_dashboard){
+            this.createPostInDb("New Notes");
 
-        // Load notes data
-        this.loadNotes();
+            //TODO: encapsulate into single function - also used in load notes
+            appGlobals.currentNote = new Note(1, "", "", "");
+
+            this.human.send('scene.capture', (sceneState) => {
+                let sceneStateStr = JSON.stringify(sceneState);
+                appGlobals.currentNote.setSceneState(sceneStateStr);
+
+                // save new note
+                appObj.saveNotes("", "", true);
+            });
+
+        } else {
+            // Load notes data
+            this.loadNotes();
+        }
+
         this.getItemTemplates();
 
         // set UI
@@ -211,6 +213,32 @@ class AnatomyTour {
     /****************************
      *      CLASS METHODS       *
      ****************************/
+
+    createPostInDb(title){
+
+        let data = {
+            title: title,
+        };
+
+        jQuery.ajax({
+            method: 'POST',
+            url: ajax_object.wp_az_root + 'wp/v2/3d-tours',
+            data: data,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('X-WP-Nonce', ajax_object.wp_az_nonce);
+            },
+            success: function(response) {
+                console.log("success: " + JSON.stringify(response));
+
+                appGlobals.post_id = response.id;
+
+            },
+            error: function(response) {
+                console.log("failed: " + JSON.stringify(response));
+            }
+        })
+
+    }
 
     clearActiveNotes(){
         console.log("clearActiveNotes");
@@ -455,7 +483,7 @@ class AnatomyTour {
                 data: {
                     action: 'update_post_title',
                     wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
-                    wp_az_post_id: ajax_object.wp_az_post_id,
+                    wp_az_post_id: appGlobals.post_id,
                     wp_az_new_post_title: newTitle
                 },
                 error: function() {
@@ -552,7 +580,7 @@ class AnatomyTour {
                 data = {
                     action: 'save_notes',
                     wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
-                    wp_az_post_id: ajax_object.wp_az_post_id,
+                    wp_az_post_id: appGlobals.post_id,
                     wp_az_note_object: noteToSave,
                     wp_az_actions: actions,
                     wp_az_actions_changed: actionsChanged,
@@ -569,7 +597,7 @@ class AnatomyTour {
             data = {
                 action: 'save_notes',
                 wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
-                wp_az_post_id: ajax_object.wp_az_post_id,
+                wp_az_post_id: appGlobals.post_id,
                 wp_az_note_object: noteToSave,
                 wp_az_actions: actions,
                 wp_az_actions_changed: actionsChanged,

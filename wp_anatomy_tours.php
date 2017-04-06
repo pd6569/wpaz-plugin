@@ -11,6 +11,8 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 */
 
 //TODO: update AJAX json responses
+//TODO: switch to REST api where possible
+//TODO: create separate post type 'user-notes' and add custom REST controller to allow users to update/delete/edit these posts
 
 // Exit if accessed directly
 if (!defined( 'ABSPATH')) {
@@ -28,7 +30,8 @@ define('TMPL_URL_LAYOUT_3D_TOURS', WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . "/templates/
 define('TMPL_URL_ITEM_NOTE_SECTION', WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . "/templates/item_note_section.php");
 
 # 3D body tool page (public use)
-define('WP_AZ_TOOL_3D_BODY_POST_ID', '7520');
+define('WP_AZ_TOOL_3D_BODY_POST_ID', '7552');
+define('WP_AZ_NOTES_DASHBOARD_POST_ID', '7554');
 
 
 require_once (WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . '/functions.php');
@@ -43,8 +46,6 @@ class wp_az_anatomy_tours {
 	public function __construct() {
 
 		$this->hooks();
-
-		global $wp_az_is_user_admin;
 
 		// generate item templates
 		wp_az_generate_item_templates();
@@ -77,10 +78,9 @@ class wp_az_anatomy_tours {
 	public function set_content($content){
 
 		global $post;
-		global $wp_az_is_user_admin;
 		global $layout_template_names;
 
-		if ($post->post_type == '3d-tours') {
+		if (wp_az_show_plugin_layout()){
 
 			$content = wp_az_get_template_html($layout_template_names['3D_TOURS']);
 
@@ -147,8 +147,10 @@ class wp_az_anatomy_tours {
 		global $post;
 		global $item_templates;
 
+		$isNotesDashboard = is_page(WP_AZ_NOTES_DASHBOARD_POST_ID);
+
 		// modify post object here
-		if ($post->post_type == '3d-tours'){
+		if (wp_az_show_plugin_layout()){
 
 			// styles
 			wp_enqueue_style('wp_az_bootstrap', plugins_url('css/bootstrap.css', __FILE__));
@@ -169,14 +171,15 @@ class wp_az_anatomy_tours {
 
 			// sends ajax script to wp_az_3d_tours_main script
 			wp_localize_script( 'wp_az_3d_tours_main', 'ajax_object', array(
-				'wp_az_root'             => esc_url_raw(rest_url()),
-				'wp_az_ajax_url'         => admin_url('admin-ajax.php'),
-				'wp_az_3d_tours_nonce'   => wp_create_nonce('wp_az_3d_tours_nonce'),
-				'wp_az_nonce'            => wp_create_nonce('wp_rest'),
-				'wp_az_post_id'          => $post->ID,
-				'wp_az_user_role'        => current_user_can('administrator'),
-				'wp_az_item_templates'   => $item_templates['NOTE_SECTION'],
-				'wp_az_current_user_id'  => get_current_user_id()
+				'wp_az_root'                => esc_url_raw(rest_url()),
+				'wp_az_ajax_url'            => admin_url('admin-ajax.php'),
+				'wp_az_3d_tours_nonce'      => wp_create_nonce('wp_az_3d_tours_nonce'),
+				'wp_az_nonce'               => wp_create_nonce('wp_rest'),
+				'wp_az_post_id'             => $post->ID,
+				'wp_az_user_role'           => current_user_can('access_s2member_level1'),
+				'wp_az_item_templates'      => $item_templates['NOTE_SECTION'],
+				'wp_az_current_user_id'     => get_current_user_id(),
+				'wp_az_is_notes_dashboard'  => $isNotesDashboard
 			));
 		}
 
@@ -219,8 +222,7 @@ class wp_az_anatomy_tours {
 
 		$sql = "CREATE TABLE $table_notes (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
-		uid tinytext NOT NULL,
-		notebook_id mediumint(9) NOT NULL,
+		uid tinytext NOT NULL,	  
 		post_id mediumint(9),
 		created datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
 		last_modified datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
@@ -352,7 +354,7 @@ class wp_az_anatomy_tours {
 		}
 
 		// try to update notes if available
-		if (current_user_can('administrator')):
+		if (current_user_can('access_s2member_level1')):
 
 		$update = $wpdb->update(
 				$notes_table,

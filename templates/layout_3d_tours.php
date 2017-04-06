@@ -1,5 +1,7 @@
 <?php
 
+//TODO: ONLY ALLOW USER WHO CREATED NOTE TO EDIT IT!
+
     global $wpdb;
     global $post;
     global $item_template_names;
@@ -18,7 +20,7 @@
 
     <div class="container">
 
-        <?php if (current_user_can('administrator')) : ?>
+        <?php if (current_user_can('access_s2member_level1') && !is_page(WP_AZ_TOOL_3D_BODY_POST_ID)) : ?>
             <div class="row">
                 <div id="wpaz-main-toolbar" class="col-md-12">
                     <ul class="nav nav-tabs">
@@ -46,11 +48,13 @@
                 </iframe>
 
 
-	            <?php if (current_user_can('administrator')): ?>
+	            <?php if (current_user_can('access_s2member_level1') || is_page(WP_AZ_TOOL_3D_BODY_POST_ID)): ?>
 
                     <div id="wpaz-scene-selector" class="text-center">
 
+	                    <?php if (!is_page(WP_AZ_TOOL_3D_BODY_POST_ID)) : ?>
                         <button id="scene-selector-image" type="button" class="btn btn-default pull-left"><span class="glyphicon glyphicon-picture" aria-hidden="true"></span></button>
+                        <?php endif ?>
 
                         <div class="btn-group scene-selector scene-selector__whole-body dropup">
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -230,7 +234,7 @@
 
                     </div>
 
-	                <?php if (current_user_can('administrator')): ?>
+	                <?php if (current_user_can('access_s2member_level1')): ?>
 
                     <div class="active-note-container-admin">
 
