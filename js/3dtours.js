@@ -33,6 +33,9 @@ class AnatomyTour {
         this.changesMade = false;
         this.actionsChanged = false;
 
+        // Track saves
+        this.firstSave = true;
+
         // Human loaded
         this.human.on('human.ready', () => {
 
@@ -185,17 +188,9 @@ class AnatomyTour {
         this.$notesTimelineContainer.on('click', '.edit-note', (event) => { console.log("edit Note"); this.editNote(jQuery(event.target).closest('div.note-item').attr('id')) });
         this.$notesTimelineContainer.on('click', '.delete-note', (event) => { console.log("delete Note"); this.deleteNote(jQuery(event.target).closest('div.note-item').attr('id')) });
 
-        // check if page is notes dashboard
-        if (appGlobals.context === 'NOTES_DASHBOARD'){
-            console.log("context: " + appGlobals.context);
-            this.createPostInDb("New Notes");
-            appGlobals.currentNote = new Note(1, "", "", appGlobals.scenePresets.head.bone);
 
-        } else {
-            // Load notes data
-            this.loadNotes();
-        }
-
+        // load notes
+        this.loadNotes();
         this.getItemTemplates();
 
         // set UI
@@ -206,7 +201,7 @@ class AnatomyTour {
      *      CLASS METHODS       *
      ****************************/
 
-    createPostInDb(title){
+    createPostInDb(title, callback){
 
         let data = {
             title: title,
@@ -223,6 +218,8 @@ class AnatomyTour {
                 console.log("success: " + JSON.stringify(response));
 
                 appGlobals.post_id = response.id;
+
+                if (callback) callback();
 
             },
             error: function(response) {
@@ -335,13 +332,18 @@ class AnatomyTour {
     }
 
     loadNotes(){
-        console.log("loadNotes");
+        console.log("loadNotes. Context: " + appGlobals.context);
         
         let appObj = this;
-
-        Utils.setNoteUpdateStatus("Loading notes data...");
         let human = this.human;
         let setInitialSceneState = this.setInitialSceneState;
+
+        if (appGlobals.context === appGlobals.contextType.NOTES_DASHBOARD){
+            createNewNote();
+            return;
+        }
+
+        Utils.setNoteUpdateStatus("Loading notes data...");
 
         jQuery.ajax({
             url: ajax_object.wp_az_ajax_url,
@@ -374,15 +376,19 @@ class AnatomyTour {
                 } else {
 
                     // No stored notes - create brand new note
-                    appGlobals.currentNote = new Note(1, "", "", "");
+                    console.log("no stored notes, new note created");
+
+                    createNewNote(true);
+                    /*appGlobals.currentNote = new Note(1, "", "", "");
 
                     human.send('scene.capture', (sceneState) => {
+                        console.log("scene state captured for new note");
                         let sceneStateStr = JSON.stringify(sceneState);
                         appGlobals.currentNote.setSceneState(sceneStateStr);
 
                         // save new note
                         appObj.saveNotes("", "", true);
-                    });
+                    });*/
                 }
 
                 // Create actions objects and update global data
@@ -416,6 +422,20 @@ class AnatomyTour {
             },
             type: 'GET'
         });
+
+        function createNewNote(save){
+            console.log("createNewNote");
+            appGlobals.currentNote = new Note(1, "", "", "");
+
+            human.send('scene.capture', (sceneState) => {
+                console.log("scene state captured for new note");
+                let sceneStateStr = JSON.stringify(sceneState);
+                appGlobals.currentNote.setSceneState(sceneStateStr);
+
+                // save new note
+                if (save) appObj.saveNotes("", "", true);
+            });
+        }
     }
 
     setScanner(){
@@ -449,7 +469,6 @@ class AnatomyTour {
     }
 
     // NOTE EDITOR
-
     editPostTitle() {
         console.log("editPostTitle");
         let newTitle;
@@ -469,8 +488,18 @@ class AnatomyTour {
 
             Utils.setNoteUpdateStatus("Saving post title...");
 
+            if (appGlobals.context === appGlobals.contextType.NOTES_DASHBOARD && this.firstSave){
+                console.log("context is dashboard and notes have not yet been saved");
+                this.createPostInDb("New Notes", () => {
+                    this.firstSave = false;
+                    this.updatePostTitle(newTitle)
+                });
+                return;
+            }
+
             // Update post title in Db
-            jQuery.ajax({
+            this.updatePostTitle(newTitle);
+            /*jQuery.ajax({
                 url: ajax_object.wp_az_ajax_url,
                 data: {
                     action: 'update_post_title',
@@ -487,15 +516,49 @@ class AnatomyTour {
                     Utils.setNoteUpdateStatus("Title updated", 3000);
                 },
                 type: 'POST'
-            });
+            });*/
+        });
+    }
+
+    updatePostTitle(title){
+        console.log("updatePostTitle");
+        // Update post title in Db
+        jQuery.ajax({
+            url: ajax_object.wp_az_ajax_url,
+            data: {
+                action: 'update_post_title',
+                wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
+                wp_az_post_id: appGlobals.post_id,
+                wp_az_new_post_title: title
+            },
+            error: function() {
+                console.log("Failed to update title");
+                Utils.setNoteUpdateStatus("Failed to update title", 3000);
+            },
+            success: function(data) {
+                console.log("Note deleted: " + JSON.stringify(data));
+                Utils.setNoteUpdateStatus("Title updated", 3000);
+            },
+            type: 'POST'
         });
     }
 
     saveNotes(title, note_content, doNotAppend, callback){
 
         console.log("saveNotes");
+
         if (!this.userIsEditor) return;
+
         Utils.setNoteUpdateStatus("Saving...");
+
+        if (appGlobals.context === appGlobals.contextType.NOTES_DASHBOARD && this.firstSave){
+            console.log("context is dashboard and notes have not yet been saved");
+            this.createPostInDb("New Notes", () => {
+                this.firstSave = false;
+                this.saveNotes(this.$noteTitle.val(), tinymce.activeEditor.getContent());
+            });
+            return;
+        }
 
         if (title == "" || title == null || title.length == 0) title = "No title";
 
@@ -596,12 +659,14 @@ class AnatomyTour {
             };
 
             saveToDb(data);
+
         }
 
 
         // reset tracking  variables
         this.actionsChanged = false;
         this.changesMade = false;
+        this.firstSave = false;
 
         function saveToDb (data) {
 
@@ -615,8 +680,8 @@ class AnatomyTour {
 
                     // execute callback function
                     if(callback) callback();
+
                 } else {
-                    // Re-enable the button and revert to original text
                     console.log("Failed. " + JSON.stringify(response));
                     Utils.setNoteUpdateStatus("Saving notes failed.", 3000);
 
@@ -1050,13 +1115,13 @@ class AnatomyTour {
     }
 
     setInitialSceneState(human, callback){
-        console.log("setInitialSceneState. currentNote: " + appGlobals.currentNote.title);
-        if (Object.keys(appGlobals.currentNote).length !== 0){
-            console.log("setInitialSceneState restore previous scene state");
-            let scene_state = JSON.parse(appGlobals.currentNote['scene_state']);
-            human.send("scene.restore", scene_state);
-
-            if (callback) callback(scene_state);
+        console.log("setInitialSceneState.");
+        if (appGlobals.currentNote){
+            if (appGlobals.currentNote.scene_state !== ""){
+                let scene_state = JSON.parse(appGlobals.currentNote['scene_state']);
+                human.send("scene.restore", scene_state);
+                if (callback) callback(scene_state);
+            }
         }
     }
 

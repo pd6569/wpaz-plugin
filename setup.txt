@@ -1,0 +1,8 @@
+/********** SETUP INSTRUCTIONS ************/
+
+Setup two pages
+1. Create Notes - set S2 member page level restriction #1
+2. 3D Body
+
+Save Ids of both pages to main plugin file
+

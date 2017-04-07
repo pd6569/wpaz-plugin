@@ -11,7 +11,14 @@ let appGlobals = {
     numNotes: 0,
     actions: {},
     firstSceneUrl: "",
+
+    // Context
     context: "", // 3D_BODY, NOTES_PAGE, NOTES_DASHBOARD
+    contextType: {
+        '3D_BODY': "3D_BODY",
+        'NOTES_PAGE': "NOTES_PAGE",
+        'NOTES_DASHBOARD': "NOTES_DASHBOARD",
+    },
 
     // templates
     templates: {
