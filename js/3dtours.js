@@ -485,6 +485,7 @@ class AnatomyTour {
             newTitle = jQuery('#edit-post-title').val();
             this.$modalAlert.modal('hide');
             this.$postTitle.text(newTitle);
+            this.$mainToolbarActiveNotes.find('a').text(newTitle);
 
             Utils.setNoteUpdateStatus("Saving post title...");
 

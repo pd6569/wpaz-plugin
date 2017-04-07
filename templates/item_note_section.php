@@ -4,8 +4,11 @@
 		<div class="panel-heading">
 			<h3 class="panel-title">
                 <a><span class="note-title"><?php if(empty($note->title)): echo "No title"; else: echo $note->title; endif; ?></span></a>
+
+                <?php if ($userIsEditor) : ?>
                 <span class="glyphicon glyphicon-trash pull-right delete-note note-actions hvr-grow hidden" aria-hidden="true"></span>
                 <span class="glyphicon glyphicon-pencil pull-right edit-note note-actions hvr-grow hidden" aria-hidden="true"></span>
+                <?php endif ?>
 
             </h3>
 

@@ -13,6 +13,15 @@
                   FROM $table_name 
                   WHERE post_id = $post->ID
                   ORDER BY sequence ASC" );
+
+    $userIsEditor = false;
+
+    if (current_user_can('access_s2member_level1') && $post->post_author == get_current_user_id()
+        || current_user_can('access_s2member_level1') && is_page(WP_AZ_NOTES_DASHBOARD_POST_ID)
+        || current_user_can('administrator')) {
+        $userIsEditor = true;
+    }
+
     ?>
 
 
@@ -20,7 +29,7 @@
 
     <div class="container">
 
-        <?php if (current_user_can('access_s2member_level1') && !is_page(WP_AZ_TOOL_3D_BODY_POST_ID)) : ?>
+        <?php if ($userIsEditor && !is_page(WP_AZ_TOOL_3D_BODY_POST_ID)) : ?>
             <div class="row">
                 <div id="wpaz-main-toolbar" class="col-md-12">
                     <ul class="nav nav-tabs">
@@ -48,7 +57,7 @@
                 </iframe>
 
 
-	            <?php if (current_user_can('access_s2member_level1') || is_page(WP_AZ_TOOL_3D_BODY_POST_ID)): ?>
+	            <?php if ($userIsEditor || is_page(WP_AZ_TOOL_3D_BODY_POST_ID)): ?>
 
                     <div id="wpaz-scene-selector" class="text-center">
 
@@ -234,7 +243,7 @@
 
                     </div>
 
-	                <?php if (current_user_can('access_s2member_level1')): ?>
+	                <?php if ($userIsEditor) : ?>
 
                     <div class="active-note-container-admin">
 
@@ -305,7 +314,7 @@
 
                     <?php else: ?>
 
-                <!--USERS LAYOUT-->
+                <!--USERS/NON-EDITOR LAYOUT-->
 
                     <div class="active-note-container-user">
                         <div class="panel panel-default">
