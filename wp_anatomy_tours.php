@@ -122,6 +122,7 @@ class wp_az_anatomy_tours {
 			'show_in_rest'      => true,
 			'publicly_queryable'=> true,
 			'show_ui'           => true,
+			'map_meta_cap'      => true,
 			'show_in_nav'       => true,
 			'query_var'         => true,
 			'hierarchical'      => false,
@@ -130,7 +131,8 @@ class wp_az_anatomy_tours {
 			'menu_position'     => 20,
 			'show_in_admin_bar' => true,
 			'menu_icon'         => 'dashicons-location-alt',
-			'rewrite'            => array('slug' => '3d-tours', 'with_front' => 'true')
+			'rewrite'           => array('slug' => '3d-tours', 'with_front' => 'true'),
+			'capability_type'   => '3d-tours'
 		);
 
 		// register post type

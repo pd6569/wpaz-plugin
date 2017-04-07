@@ -1,5 +1,13 @@
 /********** SETUP INSTRUCTIONS ************/
 
+// Plugin dependencies
+- S2 Member Framework
+- Capability manager enhanced: enable capabilities for level 1 s2member and admin for the new custom post type (3d-tours).
+
+// Other external setup things
+- Update anatomyzone site plugin
+
+// Setup instruction for plugin
 Setup two pages
 1. Create Notes - set S2 member page level restriction #1
 2. 3D Body
