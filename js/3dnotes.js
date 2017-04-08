@@ -24,7 +24,8 @@ class AnatomyNotes {
         this.storedActions = [];
 
         // ajax data
-        this.userIsEditor = ajax_object.wp_az_user_role;
+        this.userRole = ajax_object.wp_az_user_role;
+        this.userIsEditor = ajax_object.wp_az_user_can_edit;
         appGlobals.context = ajax_object.wp_az_context;
         appGlobals.post_id = ajax_object.wp_az_post_id;
         appGlobals.firstSceneUrl = this.$humanWidget.attr('src');
@@ -207,9 +208,17 @@ class AnatomyNotes {
             title: title,
         };
 
+        let url;
+
+        if (this.userRole === appGlobals.userRoles.ADMIN){
+            url = ajax_object.wp_az_root + 'wp/v2/3d-notes'
+        } else {
+            url = ajax_object.wp_az_root + 'wp/v2/user-notes'
+        }
+
         jQuery.ajax({
             method: 'POST',
-            url: ajax_object.wp_az_root + 'wp/v2/3d-notes',
+            url: url,
             data: data,
             beforeSend: function(xhr) {
                 xhr.setRequestHeader('X-WP-Nonce', ajax_object.wp_az_nonce);
@@ -597,7 +606,6 @@ class AnatomyNotes {
                     this.human.send("ui.snapshot", {}, (imgSrc) => {
                         console.log("Snapshot captured.");
                         this.human.send("ui.setBackground", originalBackgroundData);
-                        console.log(imgSrc);
                         jQuery("<img>", {
                             "src": imgSrc,
                             "width": "250px",

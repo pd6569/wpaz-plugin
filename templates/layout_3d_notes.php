@@ -16,13 +16,7 @@
                   WHERE post_id = $post->ID
                   ORDER BY sequence ASC" );
 
-    $userIsEditor = false;
-
-    if (current_user_can('access_s2member_level1') && $post->post_author == get_current_user_id()
-        || current_user_can('access_s2member_level1') && is_page($wp_az_notes_dashboard_id)
-        || current_user_can('administrator')) {
-        $userIsEditor = true;
-    }
+    $user_is_editor = wp_az_user_can_edit_notes();
 
     ?>
 
@@ -31,7 +25,7 @@
 
     <div class="container">
 
-        <?php if ($userIsEditor && !is_page($wp_az_3d_body_id)) : ?>
+        <?php if ( $user_is_editor && !is_page($wp_az_3d_body_id)) : ?>
             <div class="row">
                 <div id="wpaz-main-toolbar" class="col-md-12">
                     <ul class="nav nav-tabs">
@@ -59,7 +53,7 @@
                 </iframe>
 
 
-	            <?php if ($userIsEditor || is_page($wp_az_3d_body_id)): ?>
+	            <?php if ( $user_is_editor || is_page($wp_az_3d_body_id)): ?>
 
                     <div id="wpaz-scene-selector" class="text-center">
 
@@ -245,7 +239,7 @@
 
                     </div>
 
-	                <?php if ($userIsEditor) : ?>
+	                <?php if ($user_is_editor) : ?>
 
                     <div class="active-note-container-admin">
 

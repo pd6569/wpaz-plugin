@@ -2,15 +2,15 @@
 
 // Plugin dependencies
 - S2 Member Framework
-- Capability manager enhanced: enable capabilities for level 1 s2member and admin for the new custom post type (3d-tours).
+- Capability manager enhanced: enable capabilities for level 2 s2member and admin for the new custom post type (3d-notes and user-notes).
 
 // Other external setup things
 - Update anatomyzone site plugin
 
-// Setup instruction for plugin
-Setup two pages
-1. Create Notes - set S2 member page level restriction #1
-2. 3D Body
+// How plugin works
 
-Save Ids of both pages to main plugin file
+Plugin creates two post types - 3d-notes and user-notes.
+Admin role creates and publishes posts under 3d-notes post type, users create notes which are published to user-notes.
+
+
 

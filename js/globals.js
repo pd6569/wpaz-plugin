@@ -12,6 +12,14 @@ let appGlobals = {
     actions: {},
     firstSceneUrl: "",
 
+    // user role constants
+    userRoles: {
+        ADMIN: 'administrator',
+        S2_MEMBER_LEVEL1: 's2_member_level1',
+        S2_MEMBER_LEVEL2: 's2_member_level2',
+        SUBSCRIBER: 'subscriber'
+    },
+
     // Context
     context: "", // 3D_BODY, NOTES_PAGE, NOTES_DASHBOARD
     contextType: {

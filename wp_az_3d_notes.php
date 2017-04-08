@@ -214,8 +214,6 @@ class wp_az_3d_notes {
 		global $wp_az_notes_dashboard_id;
 		global $item_templates;
 
-		$isNotesDashboard = is_page($wp_az_notes_dashboard_id);
-
 		// modify post object here
 		if (wp_az_show_plugin_layout()){
 
@@ -243,7 +241,8 @@ class wp_az_3d_notes {
 				'wp_az_3d_notes_nonce'      => wp_create_nonce('wp_az_3d_notes_nonce'),
 				'wp_az_nonce'               => wp_create_nonce('wp_rest'),
 				'wp_az_post_id'             => $post->ID,
-				'wp_az_user_role'           => current_user_can('access_s2member_level1'),
+				'wp_az_user_can_edit'       => wp_az_user_can_edit_notes(),
+				'wp_az_user_role'           => wp_az_get_user_role(),
 				'wp_az_item_templates'      => $item_templates['NOTE_SECTION'],
 				'wp_az_current_user_id'     => get_current_user_id(),
 				'wp_az_context'             => wp_az_get_context()
@@ -456,7 +455,7 @@ class wp_az_3d_notes {
 		}
 
 		// try to update notes if available
-		if (current_user_can('access_s2member_level1')):
+		if (current_user_can('access_s2member_level2')):
 
 		$update = $wpdb->update(
 				$notes_table,
