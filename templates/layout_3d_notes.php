@@ -31,7 +31,12 @@
                     <ul class="nav nav-tabs">
                         <li id="toolbar-active-note" role="presentation" class="active">
                             <a href="#">
-                                <?php echo $post->post_title ?>
+                                <?php if (!is_page($wp_az_notes_dashboard_id)) {
+                                    echo $post->post_title;
+                                } else {
+                                    echo "No title";
+                                }
+                                ?>
                             </a></li>
                         <li id="toolbar-my-notes" role="presentation"><a href="#">My Notes</a></li>
                         <li id="toolbar-create-new" role="presentation"><a href="#">Create new</a></li>
@@ -229,7 +234,14 @@
 
                         <h2 class="text-center">
                             <span id="note-nav-left" class="glyphicon glyphicon-chevron-left pull-left chapter-nav" aria-hidden="true"></span>
-                            <span id="post-title"><?php echo $post->post_title ?></span>
+                            <span id="post-title">
+                                <?php if (!is_page($wp_az_notes_dashboard_id)) {
+		                            echo $post->post_title;
+	                            } else {
+		                            echo "No title";
+	                            }
+	                            ?>
+                            </span>
                             <span id="note-nav-right" class="glyphicon glyphicon-chevron-right pull-right chapter-nav" aria-hidden="true"></span>
                         </h2>
                         <div id="note-properties">
