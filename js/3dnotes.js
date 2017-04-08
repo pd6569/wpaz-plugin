@@ -207,6 +207,7 @@ class AnatomyNotes {
         let data = {
             title: title,
             status: 'publish',
+            excerpt: 'Notes for ' + title
         };
 
         let url;
@@ -501,7 +502,7 @@ class AnatomyNotes {
 
             if (appGlobals.context === appGlobals.contextType.NOTES_DASHBOARD && this.firstSave){
                 console.log("context is dashboard and notes have not yet been saved");
-                this.createPostInDb("New Notes", () => {
+                this.createPostInDb(newTitle, () => {
                     this.firstSave = false;
                     this.updatePostTitle(newTitle)
                 });
