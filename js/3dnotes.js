@@ -206,6 +206,7 @@ class AnatomyNotes {
 
         let data = {
             title: title,
+            status: 'publish',
         };
 
         let url;
