@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: AnatomyZone 3D Tours Plugin
+Plugin Name: AnatomyZone 3D Notes Plugin
 Plugin URI:  https://anatomyzone.com
-Description: Interactive 3D anatomy tours
+Description: Interactive 3D anatomy notes
 Version:     1.0.0
 Author:      Peter de Souza
 Author URI:  http://www.anatomyzone.com
@@ -19,15 +19,15 @@ if (!defined( 'ABSPATH')) {
 	exit;
 }
 
-define('WP_AZ_ANATOMY_TOURS_PLUGIN_DIR', untrailingslashit(plugin_dir_path(__FILE__)));
-define('WP_AZ_ANATOMY_TOURS_PLUGIN_URL', plugin_dir_url(__FILE__));
-define('WP_AZ_ANATOMY_TOURS_PLUGIN_FILE', __FILE__);
-define('WP_AZ_ANATOMY_TOURS_PLUGIN_BASENAME', plugin_basename(__FILE__));
-define('WP_AZ_ANATOMY_TOURS_VERSION', 1.0);
+define('WP_AZ_PLUGIN_DIR', untrailingslashit(plugin_dir_path(__FILE__)));
+define('WP_AZ_PLUGIN_URL', plugin_dir_url(__FILE__));
+define('WP_AZ_PLUGIN_FILE', __FILE__);
+define('WP_AZ_PLUGIN_BASENAME', plugin_basename(__FILE__));
+define('WP_AZ_VERSION', 1.0);
 
 # templates
-define('TMPL_URL_LAYOUT_3D_TOURS', WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . "/templates/layout_3d_tours.php");
-define('TMPL_URL_ITEM_NOTE_SECTION', WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . "/templates/item_note_section.php");
+define('TMPL_URL_LAYOUT_3D_NOTES', WP_AZ_PLUGIN_DIR . "/templates/layout_3d_notes.php");
+define('TMPL_URL_ITEM_NOTE_SECTION', WP_AZ_PLUGIN_DIR . "/templates/item_note_section.php");
 
 # 3D body tool page (public use)
 define('WP_AZ_TOOL_3D_BODY_POST_ID', '7552');
@@ -38,15 +38,22 @@ define('WP_AZ_CONTEXT_NOTES_PAGE', 'NOTES_PAGE');
 define('WP_AZ_CONTEXT_3D_BODY', '3D_BODY');
 define('WP_AZ_CONTEXT_NOTES_DASHBOARD', 'NOTES_DASHBOARD');
 
+# Post types
+define('WP_AZ_ADMIN_NOTES_POST_TYPE', '3d-notes');
+define('WP_AZ_USER_NOTES_POST_TYPE', 'user-notes');
 
-require_once (WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . '/functions.php');
-require_once (WP_AZ_ANATOMY_TOURS_PLUGIN_DIR . '/templates.php');
+
+require_once ( WP_AZ_PLUGIN_DIR . '/functions.php');
+require_once ( WP_AZ_PLUGIN_DIR . '/templates.php');
 
 // Database
 $wp_az_db_version = '1.0';
 
+// Static page Id
+global $wp_az_3d_body_id;
+global $wp_az_notes_dashboard_id;
 
-class wp_az_anatomy_tours {
+class wp_az_3d_notes {
 
 	public function __construct() {
 
@@ -58,7 +65,8 @@ class wp_az_anatomy_tours {
 	}
 	
 	public function hooks(){
-		add_action('init', array($this,'register_anatomy_tours')); //register location content type
+		add_action('init', array($this,'register_3d_notes')); //register admin notes post type
+		add_action('init', array($this,'register_user_notes')); //register user notes post type
 		add_action('admin_enqueue_scripts', array($this,'enqueueAdmin'));
 		add_action('wp_enqueue_scripts', array($this,'enqueue'), 50); // ensure styles are enqueued AFTER theme!
 		add_filter('the_content', array($this, 'set_content'));
@@ -82,37 +90,37 @@ class wp_az_anatomy_tours {
 
 	public function set_content($content){
 
-		global $post;
 		global $layout_template_names;
 
 		if (wp_az_show_plugin_layout()){
 
-			$content = wp_az_get_template_html($layout_template_names['3D_TOURS']);
+			$content = wp_az_get_template_html($layout_template_names['3D_NOTES']);
 
 		}
-
 
 		return $content;
 	}
 
-	public function register_anatomy_tours(){
+	// INIT
+
+	public function register_3d_notes(){
 
 		// Labels for post type
 		$labels = array(
-			'name'               => 'Anatomy Tours',
-			'singular_name'      => 'Anatomy Tour',
-			'menu_name'          => 'Anatomy Tours',
-			'name_admin_bar'     => 'Anatomy Tour',
+			'name'               => '3D Notes',
+			'singular_name'      => '3D Note',
+			'menu_name'          => '3D Notes',
+			'name_admin_bar'     => '3D Note',
 			'add_new'            => 'Add New',
-			'add_new_item'       => 'Add New Anatomy Tour',
-			'new_item'           => 'New Anatomy Tour',
-			'edit_item'          => 'Edit Anatomy Tour',
-			'view_item'          => 'View Anatomy Tour',
-			'all_items'          => 'All Anatomy Tours',
-			'search_items'       => 'Search Anatomy Tours',
-			'parent_item_colon'  => 'Parent Anatomy Tour:',
-			'not_found'          => 'No Anatomy Tours found.',
-			'not_found_in_trash' => 'No Anatomy Tours found in Trash.',
+			'add_new_item'       => 'Add New 3D Note',
+			'new_item'           => 'New 3D Note',
+			'edit_item'          => 'Edit 3D Note',
+			'view_item'          => 'View 3D Note',
+			'all_items'          => 'All 3D Notes',
+			'search_items'       => 'Search 3D Notes',
+			'parent_item_colon'  => 'Parent 3D Note:',
+			'not_found'          => 'No 3D Notes found.',
+			'not_found_in_trash' => 'No 3D Notes found in Trash.',
 		);
 
 		// arguments for post type
@@ -131,19 +139,64 @@ class wp_az_anatomy_tours {
 			'menu_position'     => 20,
 			'show_in_admin_bar' => true,
 			'menu_icon'         => 'dashicons-location-alt',
-			'rewrite'           => array('slug' => '3d-tours', 'with_front' => 'true'),
-			'capability_type'   => '3d-tours'
+			'rewrite'           => array('slug' => WP_AZ_ADMIN_NOTES_POST_TYPE, 'with_front' => 'true'),
+			'capability_type'   => WP_AZ_ADMIN_NOTES_POST_TYPE
 		);
 
 		// register post type
-		register_post_type('3d-tours', $args);
+		register_post_type(WP_AZ_ADMIN_NOTES_POST_TYPE, $args);
+
+	}
+
+	public function register_user_notes(){
+
+		// Labels for post type
+		$labels = array(
+			'name'               => 'User Notes',
+			'singular_name'      => 'User Note',
+			'menu_name'          => 'User Notes',
+			'name_admin_bar'     => 'User Note',
+			'add_new'            => 'Add New',
+			'add_new_item'       => 'Add New User Note',
+			'new_item'           => 'New User Note',
+			'edit_item'          => 'Edit User Note',
+			'view_item'          => 'View User Note',
+			'all_items'          => 'All User Notes',
+			'search_items'       => 'Search User Notes',
+			'parent_item_colon'  => 'Parent User Note:',
+			'not_found'          => 'No User Notes found.',
+			'not_found_in_trash' => 'No User Notes found in Trash.',
+		);
+
+		// arguments for post type
+		$args = array(
+			'labels'            => $labels,
+			'public'            => true,
+			'show_in_rest'      => true,
+			'publicly_queryable'=> true,
+			'show_ui'           => true,
+			'map_meta_cap'      => true,
+			'show_in_nav'       => true,
+			'query_var'         => true,
+			'hierarchical'      => false,
+			'supports'          => array('title','thumbnail','editor'),
+			'has_archive'       => true,
+			'menu_position'     => 20,
+			'show_in_admin_bar' => true,
+			'menu_icon'         => 'dashicons-format-aside',
+			'rewrite'           => array('slug' => WP_AZ_USER_NOTES_POST_TYPE, 'with_front' => 'true'),
+			'capability_type'   => WP_AZ_USER_NOTES_POST_TYPE
+		);
+
+		// register post type
+		register_post_type(WP_AZ_USER_NOTES_POST_TYPE, $args);
 
 	}
 
 	public function enqueueAdmin() {
 
 		$screen = get_current_screen();
-		if (!($screen->base == 'post' && $screen->post_type == '3d-tours')) return;
+		if (!($screen->base == 'post' && $screen->post_type == WP_AZ_ADMIN_NOTES_POST_TYPE)) return;
 
 		// enqueue admin scripts
 
@@ -161,7 +214,7 @@ class wp_az_anatomy_tours {
 
 			// styles
 			wp_enqueue_style('wp_az_bootstrap', plugins_url('css/bootstrap.css', __FILE__));
-			wp_enqueue_style('wp_az_3d_tours_main_style', plugins_url('css/styles.css?v=' . time(), __FILE__));
+			wp_enqueue_style('wp_az_main_style', plugins_url('css/styles.css?v=' . time(), __FILE__));
 
 			// scripts
 			wp_enqueue_script('wp_az_bootstrap', plugins_url('lib/bootstrap.js', __FILE__), null, null, true);
@@ -173,14 +226,14 @@ class wp_az_anatomy_tours {
 			wp_enqueue_script('wp_az_note', plugins_url('js/Note.js', __FILE__), array('jquery'), '1.0', true);
 			wp_enqueue_script('wp_az_actions', plugins_url('js/Actions.js', __FILE__), array('jquery'), '1.0', true);
 			wp_enqueue_script('wp_az_utils', plugins_url('js/Utils.js', __FILE__), array('jquery'), '1.0', true);
-			wp_enqueue_script('wp_az_3d_tours_main', plugins_url('js/3dtours.js', __FILE__), array('jquery'), '1.0', true);
+			wp_enqueue_script('wp_az_3d_notes_main', plugins_url('js/3dnotes.js', __FILE__), array('jquery'), '1.0', true);
 
 
-			// sends ajax script to wp_az_3d_tours_main script
-			wp_localize_script( 'wp_az_3d_tours_main', 'ajax_object', array(
+			// sends ajax script to main JS script
+			wp_localize_script( 'wp_az_3d_notes_main', 'ajax_object', array(
 				'wp_az_root'                => esc_url_raw(rest_url()),
 				'wp_az_ajax_url'            => admin_url('admin-ajax.php'),
-				'wp_az_3d_tours_nonce'      => wp_create_nonce('wp_az_3d_tours_nonce'),
+				'wp_az_3d_notes_nonce'      => wp_create_nonce('wp_az_3d_notes_nonce'),
 				'wp_az_nonce'               => wp_create_nonce('wp_rest'),
 				'wp_az_post_id'             => $post->ID,
 				'wp_az_user_role'           => current_user_can('access_s2member_level1'),
@@ -195,8 +248,12 @@ class wp_az_anatomy_tours {
 	//triggered on activation of the plugin (called only once)
 	public function plugin_activate() {
 
-		// call out custom content type function
-		$this->register_anatomy_tours();
+		// call custom content type function
+		$this->register_3d_notes();
+		$this->register_user_notes();
+
+		// create static pages
+		$this->create_static_pages();
 
 		// flush permalinks
 		flush_rewrite_rules();
@@ -213,6 +270,32 @@ class wp_az_anatomy_tours {
 		flush_rewrite_rules();
 	}
 
+	public function create_static_pages(){
+
+		global $wp_az_3d_body_id;
+		global $wp_az_notes_dashboard_id;
+
+		// Create 3d body page
+		$body_3d = array(
+			'post_title'    => '3D Body',
+			'post_content'  => 'Interact with 3D Body',
+			'post_status'   => 'publish',
+			'post_type'     => 'page'
+		);
+
+		// Create notes dashboard page
+		$notes_dashboard = array(
+			'post_title'    => 'Notes Dashboard',
+			'post_content'  => 'Notes Dashboard',
+			'post_status'   => 'publish',
+			'post_type'     => 'page'
+		);
+
+		$wp_az_3d_body_id = wp_insert_post($body_3d);
+		$wp_az_notes_dashboard_id = wp_insert_post($notes_dashboard);
+
+	}
+
 	/*********************
 	 * PRIVATE FUNCTIONS *
 	 *********************/
@@ -222,8 +305,11 @@ class wp_az_anatomy_tours {
 		global $wpdb;
 		global $wp_az_db_version;
 
-		$table_notes = $wpdb->prefix . 'anatomy_tours_notes';
-		$table_actions = $wpdb->prefix . 'anatomy_tours_actions';
+		global $table_notes;
+		global $table_actions;
+
+		$table_notes = $wpdb->prefix . 'az_notes';
+		$table_actions = $wpdb->prefix . 'az_actions';
 
 		$charset_collate = $wpdb->get_charset_collate();
 
@@ -263,7 +349,8 @@ class wp_az_anatomy_tours {
 	private function resequence_notes($sequence_index, $post_id) {
 
 		global $wpdb;
-		$table_name = $wpdb->prefix . 'anatomy_tours_notes';
+
+		$table_name = $wpdb->prefix . 'az_notes';
 
 		foreach ($sequence_index as $note_sequence) {
 			$uid = $note_sequence[0];
@@ -294,7 +381,7 @@ class wp_az_anatomy_tours {
 	public function save_notes(){
 
 		// first check if data is being sent and that it is the data we want
-		if (!isset($_POST['wp_az_3d_tours_nonce']) || !isset($_POST['wp_az_note_object']) || !isset($_POST['wp_az_post_id'])) {
+		if (!isset($_POST['wp_az_3d_notes_nonce']) || !isset($_POST['wp_az_note_object']) || !isset($_POST['wp_az_post_id'])) {
 			wp_die('Your request failed permission check.');
 		}
 
@@ -306,8 +393,8 @@ class wp_az_anatomy_tours {
 		// write to database
 		global $wpdb;
 
-		$notes_table = $wpdb->prefix . 'anatomy_tours_notes';
-		$actions_table = $wpdb->prefix . 'anatomy_tours_actions';
+		$notes_table = $wpdb->prefix . 'az_notes';
+		$actions_table = $wpdb->prefix . 'az_actions';
 
 		$notes_data = array (
 			'post_id'              => $post_id,
@@ -401,12 +488,12 @@ class wp_az_anatomy_tours {
 	public function load_single_note(){
 
 		// first check if data is being sent and that it is the data we want
-		if (!isset($_POST['wp_az_3d_tours_nonce'])) {
+		if (!isset($_POST['wp_az_3d_notes_nonce'])) {
 			wp_die('Your request failed permission check.');
 		}
 
 		global $wpdb;
-		$table_name = $wpdb->prefix . 'anatomy_tours_notes';
+		$table_name = $wpdb->prefix . 'az_notes';
 
 		$post_id = intval($_GET['wp_az_post_id']);
 		$sequence = intval($_GET['wp_az_sequence']);
@@ -425,8 +512,8 @@ class wp_az_anatomy_tours {
 	public function load_notes(){
 
 		global $wpdb;
-		$table_name = $wpdb->prefix . 'anatomy_tours_notes';
-		$table_actions = $wpdb->prefix . 'anatomy_tours_actions';
+		$table_name = $wpdb->prefix . 'az_notes';
+		$table_actions = $wpdb->prefix . 'az_actions';
 
 		$post_id = intval($_GET['wp_az_post_id']);
 
@@ -470,13 +557,13 @@ class wp_az_anatomy_tours {
 	public function delete_note() {
 
 		// first check if data is being sent and that it is the data we want
-		if (!isset($_POST['wp_az_3d_tours_nonce'])) {
+		if (!isset($_POST['wp_az_3d_notes_nonce'])) {
 			wp_die('Your request failed permission check.');
 		}
 
 		global $wpdb;
-		$table_notes = $wpdb->prefix . 'anatomy_tours_notes';
-		$table_actions = $wpdb->prefix . 'anatomy_tours_actions';
+		$table_notes = $wpdb->prefix . 'az_notes';
+		$table_actions = $wpdb->prefix . 'az_actions';
 
 		$post_id = intval($_POST['wp_az_post_id']);
 		$uid = $_POST['wp_az_note_uid'];
@@ -509,12 +596,12 @@ class wp_az_anatomy_tours {
 	public function update_first_scene_url() {
 
 		// first check if data is being sent and that it is the data we want
-		if (!isset($_POST['wp_az_3d_tours_nonce'])) {
+		if (!isset($_POST['wp_az_3d_notes_nonce'])) {
 			wp_die('Your request failed permission check.');
 		}
 
 		global $wpdb;
-		$table_notes = $wpdb->prefix . 'anatomy_tours_notes';
+		$table_notes = $wpdb->prefix . 'az_notes';
 
 		$note_id = $_POST['wp_az_note_id'];
 		$url = $_POST['wp_az_first_scene_url'];
@@ -546,7 +633,7 @@ class wp_az_anatomy_tours {
 	public function update_post_title(){
 
 		// first check if data is being sent and that it is the data we want
-		if (!isset($_POST['wp_az_3d_tours_nonce'])) {
+		if (!isset($_POST['wp_az_3d_notes_nonce'])) {
 			wp_die('Your request failed permission check.');
 		}
 
@@ -568,6 +655,6 @@ class wp_az_anatomy_tours {
 
 }
 
-global $anatomy_tours;
+global $anatomy_notes;
 
-$anatomy_tours = new wp_az_anatomy_tours();
+$anatomy_notes = new wp_az_3d_notes();

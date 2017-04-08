@@ -2,10 +2,10 @@
  * Created by peter on 22/03/2017.
  */
 
-class AnatomyTour {
+class AnatomyNotes {
 
     constructor() {
-        console.log("anatomy tours loaded");
+        console.log("anatomy notes loaded");
 
         let self = this;
 
@@ -209,7 +209,7 @@ class AnatomyTour {
 
         jQuery.ajax({
             method: 'POST',
-            url: ajax_object.wp_az_root + 'wp/v2/3d-tours',
+            url: ajax_object.wp_az_root + 'wp/v2/3d-notes',
             data: data,
             beforeSend: function(xhr) {
                 xhr.setRequestHeader('X-WP-Nonce', ajax_object.wp_az_nonce);
@@ -319,7 +319,7 @@ class AnatomyTour {
             url: ajax_object.wp_az_ajax_url,
             data: {
                 action: 'send_item_templates',
-                wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
+                wp_az_3d_notes_nonce: ajax_object.wp_az_3d_notes_nonce,
             },
             error: function() {
                 console.log("Failed to get item templates");
@@ -349,7 +349,7 @@ class AnatomyTour {
             url: ajax_object.wp_az_ajax_url,
             data: {
                 action: 'load_notes',
-                wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
+                wp_az_3d_notes_nonce: ajax_object.wp_az_3d_notes_nonce,
                 wp_az_post_id: ajax_object.wp_az_post_id,
             },
             error: function() {
@@ -504,7 +504,7 @@ class AnatomyTour {
                 url: ajax_object.wp_az_ajax_url,
                 data: {
                     action: 'update_post_title',
-                    wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
+                    wp_az_3d_notes_nonce: ajax_object.wp_az_3d_notes_nonce,
                     wp_az_post_id: appGlobals.post_id,
                     wp_az_new_post_title: newTitle
                 },
@@ -528,7 +528,7 @@ class AnatomyTour {
             url: ajax_object.wp_az_ajax_url,
             data: {
                 action: 'update_post_title',
-                wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
+                wp_az_3d_notes_nonce: ajax_object.wp_az_3d_notes_nonce,
                 wp_az_post_id: appGlobals.post_id,
                 wp_az_new_post_title: title
             },
@@ -635,7 +635,7 @@ class AnatomyTour {
                 //!* Data to make available via the $_POST variable
                 data = {
                     action: 'save_notes',
-                    wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
+                    wp_az_3d_notes_nonce: ajax_object.wp_az_3d_notes_nonce,
                     wp_az_post_id: appGlobals.post_id,
                     wp_az_note_object: noteToSave,
                     wp_az_actions: actions,
@@ -652,7 +652,7 @@ class AnatomyTour {
 
             data = {
                 action: 'save_notes',
-                wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
+                wp_az_3d_notes_nonce: ajax_object.wp_az_3d_notes_nonce,
                 wp_az_post_id: appGlobals.post_id,
                 wp_az_note_object: noteToSave,
                 wp_az_actions: actions,
@@ -743,7 +743,7 @@ class AnatomyTour {
             url: ajax_object.wp_az_ajax_url,
             data: {
                 action: 'delete_note',
-                wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
+                wp_az_3d_notes_nonce: ajax_object.wp_az_3d_notes_nonce,
                 wp_az_post_id: ajax_object.wp_az_post_id,
                 wp_az_note_uid: noteToDelete.uid,
                 wp_az_sequence_index: appGlobals.sequenceIndex
@@ -1061,7 +1061,7 @@ class AnatomyTour {
             url: ajax_object.wp_az_ajax_url,
             data: {
                 action: 'update_first_scene_url',
-                wp_az_3d_tours_nonce: ajax_object.wp_az_3d_tours_nonce,
+                wp_az_3d_notes_nonce: ajax_object.wp_az_3d_notes_nonce,
                 wp_az_note_id: appGlobals.currentNote.uid,
                 wp_az_first_scene_url: appGlobals.firstSceneUrl
             },
@@ -1138,7 +1138,7 @@ class AnatomyTour {
 }
 
 jQuery(document).ready(function() {
-    new AnatomyTour();
+    new AnatomyNotes();
 });
 
 

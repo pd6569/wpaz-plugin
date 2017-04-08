@@ -6,11 +6,7 @@
  * Time: 10:54
  */
 
-# returns templates as strings that can be passed as variable
 
-/*define('TMPL_NAME_3D_TOURS', "3d_tours");
-define('TMPL_NAME_3D_TOURS_PUBLIC', "3d_tours_public");
-define('TMPL_NAME_NOTE_SECTION', "note_section");*/
 
 global $item_template_names;
 global $layout_template_names;
@@ -23,9 +19,15 @@ $item_template_names = array(
 );
 
 $layout_template_names = array(
-	'3D_TOURS'          => '3d_tours',
+	'3D_NOTES'          => '3d_notes',
 );
 
+/**
+ * @param $template_name
+ *
+ * @return string|void
+ *
+ */
 function wp_az_get_template_html($template_name){
 
 	global $layout_template_names;
@@ -33,8 +35,8 @@ function wp_az_get_template_html($template_name){
 
 	switch($template_name){
 
-		case $layout_template_names['3D_TOURS']:
-			return wp_az_return_output(TMPL_URL_LAYOUT_3D_TOURS);
+		case $layout_template_names['3D_NOTES']:
+			return wp_az_return_output(TMPL_URL_LAYOUT_3D_NOTES);
 
 		case $item_template_names['NOTE_SECTION']:
 			return wp_az_return_output(TMPL_URL_ITEM_NOTE_SECTION);

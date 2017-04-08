@@ -6,7 +6,7 @@
     global $post;
     global $item_template_names;
 
-    $table_name = $wpdb->prefix . 'anatomy_tours_notes';
+    $table_name = $wpdb->prefix . 'az_notes';
 
     $notes = $wpdb->get_results(
             "SELECT title, uid, note_content, sequence, scene_state, url
@@ -25,7 +25,7 @@
     ?>
 
 
-<div id="wpaz-3d-tours-layout">
+<div id="wpaz-3d-notes-layout">
 
     <div class="container">
 
