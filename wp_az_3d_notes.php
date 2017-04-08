@@ -29,10 +29,6 @@ define('WP_AZ_VERSION', 1.0);
 define('TMPL_URL_LAYOUT_3D_NOTES', WP_AZ_PLUGIN_DIR . "/templates/layout_3d_notes.php");
 define('TMPL_URL_ITEM_NOTE_SECTION', WP_AZ_PLUGIN_DIR . "/templates/item_note_section.php");
 
-# 3D body tool page (public use)
-define('WP_AZ_TOOL_3D_BODY_POST_ID', '7552');
-define('WP_AZ_NOTES_DASHBOARD_POST_ID', '7554');
-
 # App contexts
 define('WP_AZ_CONTEXT_NOTES_PAGE', 'NOTES_PAGE');
 define('WP_AZ_CONTEXT_3D_BODY', '3D_BODY');
@@ -67,6 +63,7 @@ class wp_az_3d_notes {
 	public function hooks(){
 		add_action('init', array($this,'register_3d_notes')); //register admin notes post type
 		add_action('init', array($this,'register_user_notes')); //register user notes post type
+		add_action('init', array($this, 'set_globals_from_options'));
 		add_action('admin_enqueue_scripts', array($this,'enqueueAdmin'));
 		add_action('wp_enqueue_scripts', array($this,'enqueue'), 50); // ensure styles are enqueued AFTER theme!
 		add_filter('the_content', array($this, 'set_content'));
@@ -193,6 +190,15 @@ class wp_az_3d_notes {
 
 	}
 
+	public function set_globals_from_options(){
+		global $wp_az_notes_dashboard_id;
+		global $wp_az_3d_body_id;
+
+		$wp_az_notes_dashboard_id = get_option('wp_az_notes_dashboard_post_id');
+		$wp_az_3d_body_id = get_option('wp_az_3d_body_post_id');
+
+	}
+
 	public function enqueueAdmin() {
 
 		$screen = get_current_screen();
@@ -205,9 +211,10 @@ class wp_az_3d_notes {
 	public function enqueue() {
 
 		global $post;
+		global $wp_az_notes_dashboard_id;
 		global $item_templates;
 
-		$isNotesDashboard = is_page(WP_AZ_NOTES_DASHBOARD_POST_ID);
+		$isNotesDashboard = is_page($wp_az_notes_dashboard_id);
 
 		// modify post object here
 		if (wp_az_show_plugin_layout()){
@@ -272,9 +279,6 @@ class wp_az_3d_notes {
 
 	public function create_static_pages(){
 
-		global $wp_az_3d_body_id;
-		global $wp_az_notes_dashboard_id;
-
 		// Create 3d body page
 		$body_3d = array(
 			'post_title'    => '3D Body',
@@ -293,6 +297,10 @@ class wp_az_3d_notes {
 
 		$wp_az_3d_body_id = wp_insert_post($body_3d);
 		$wp_az_notes_dashboard_id = wp_insert_post($notes_dashboard);
+
+		// add to options
+		update_option( 'wp_az_3d_body_post_id', $wp_az_3d_body_id, 'yes');
+		update_option( 'wp_az_notes_dashboard_post_id', $wp_az_notes_dashboard_id, 'yes');
 
 	}
 
