@@ -315,7 +315,7 @@ class AnatomyNotes {
         if (this.userIsEditor){
 
             // Admin UI
-            this.$noteToolsTimeline.removeClass('hidden');
+
 
         } else {
             // User UI
@@ -1063,7 +1063,14 @@ class AnatomyNotes {
                 }, 500)
                 callback();
             });
+            return;
         }
+
+        this.human = new HumanAPI("embedded-human");
+        this.human.on('human.ready', () => {
+            console.log("new scene loaded");
+            this.setHumanUi();
+        });
     }
 
     updateFirstSceneUrl() {

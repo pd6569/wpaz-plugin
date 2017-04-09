@@ -6,8 +6,8 @@
                 <a><span class="note-title"><?php if(empty($note->title)): echo "No title"; else: echo $note->title; endif; ?></span></a>
 
                 <?php if ($user_is_editor) : ?>
-                <span class="glyphicon glyphicon-trash pull-right delete-note note-actions hvr-grow hidden" aria-hidden="true"></span>
-                <span class="glyphicon glyphicon-pencil pull-right edit-note note-actions hvr-grow hidden" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-trash pull-right delete-note note-actions hvr-grow" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-pencil pull-right edit-note note-actions hvr-grow" aria-hidden="true"></span>
                 <?php endif ?>
 
             </h3>
