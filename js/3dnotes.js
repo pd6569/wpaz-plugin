@@ -82,6 +82,7 @@ class AnatomyNotes {
         this.$noteText = jQuery('.notes-text');
         this.$savingStatus = jQuery('.update-status');
 
+
         // actions
         this.$addAction = jQuery('#action-add');
         this.$previousAction = jQuery('#action-previous');
@@ -163,11 +164,23 @@ class AnatomyNotes {
 
         // Note container
         this.$postTitle.on('click', () => { this.editPostTitle(); });
-
         this.$noteNavLeft.on('click', () => { this.navigateNotes('left'); });
         this.$noteNavRight.on('click', () => { this.navigateNotes('right'); });
         this.$noteTitle.on("change keyup paste", () => { this.changesMade = true; });
-        this.$noteText.on("change keyup paste", () => { this.changesMade = true; });
+
+        // tinyMCE Note Editor
+        jQuery(document).on( 'tinymce-editor-init', ( event, editor ) => {
+
+            console.log("tinyMCE ready");
+            this.$noteEditor = editor;
+
+            this.$noteEditor.on('KeyUp', (e) => {
+                console.log("KeyUp");
+                this.changesMade = true;
+            })
+
+        });
+
 
         // Actions
         this.$addAction.on('click', (event) => { this.addAction(); });
@@ -180,7 +193,7 @@ class AnatomyNotes {
         this.$toolbarReset.on('click', event => { this.human.send("scene.restore", JSON.parse(appGlobals.currentNote.scene_state)); });
 
         // Save/Add new
-        this.$saveBtn.on('click', (event) => { this.saveNotes(this.$noteTitle.val(), tinymce.activeEditor.getContent()); });
+        this.$saveBtn.on('click', (event) => { this.saveNotes(this.$noteTitle.val(), this.$noteEditor.getContent()); });
         this.$addNewNotesSection.on('click', (event) => { this.addNoteSection(); });
         this.$deleteNoteBtn.on('click', (event) => { this.deleteNote(); });
 
@@ -244,7 +257,7 @@ class AnatomyNotes {
         console.log("clearActiveNotes");
 
         // save notes first
-        this.saveNotes(this.$noteTitle.val(), tinymce.activeEditor.getContent());
+        this.saveNotes(this.$noteTitle.val(), this.$noteEditor.getContent());
 
         // Delete all data
         Utils.resetAppState();
@@ -309,17 +322,6 @@ class AnatomyNotes {
             this.setScanner();
         }
 
-        tinymce.init({
-            selector: 'textarea',
-            height: 500,
-            menubar: false,
-            /*plugins: [
-                'advlist autolink lists link image charmap print preview anchor',
-                'searchreplace visualblocks code fullscreen',
-                'insertdatetime media table contextmenu paste code'
-            ],*/
-            toolbar: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-        });
     }
 
     getItemTemplates(){
@@ -557,7 +559,7 @@ class AnatomyNotes {
 
     saveNotes(title, note_content, doNotAppend, callback){
 
-        console.log("saveNotes");
+        console.log("saveNotes: " + note_content);
 
         if (!this.userIsEditor) return;
 
@@ -567,7 +569,7 @@ class AnatomyNotes {
             console.log("context is dashboard and notes have not yet been saved");
             this.createPostInDb("New Notes", () => {
                 this.firstSave = false;
-                this.saveNotes(this.$noteTitle.val(), tinymce.activeEditor.getContent());
+                this.saveNotes(this.$noteTitle.val(), this.$noteEditor.getContent());
             });
             return;
         }
@@ -781,7 +783,7 @@ class AnatomyNotes {
 
         // save current note first if changes made
         if (this.userIsEditor && this.changesMade == true || this.actionsChanged) {
-            this.saveNotes($title.val(), tinymce.activeEditor.getContent());
+            this.saveNotes($title.val(), this.$noteEditor.getContent());
         }
 
         // reset tracking variables
@@ -795,7 +797,7 @@ class AnatomyNotes {
         // update title and content
         if (this.userIsEditor) {
             $title.val(note.title);
-            tinymce.activeEditor.setContent(note.note_content);
+            this.$noteEditor.setContent(note.note_content);
         } else {
             $title.text(note.title);
             $content.html(note.note_content);
@@ -829,10 +831,10 @@ class AnatomyNotes {
         if (!this.userIsEditor) {console.log("Nice try..."); return};
 
         // save current notes first
-        this.saveNotes(this.$noteTitle.val(), tinymce.activeEditor.getContent());
+        this.saveNotes(this.$noteTitle.val(), this.$noteEditor.getContent());
 
         this.$noteTitle.val("");
-        tinymce.activeEditor.setContent("");
+        this.$noteEditor.setContent("");
 
         let sequence = (parseInt(appGlobals.numNotes) + 1);
         let addNote = new Note(sequence, "", "", "");

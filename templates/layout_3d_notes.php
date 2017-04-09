@@ -260,10 +260,14 @@
                                 <div class="form-group">
                                     <input type="text" class="form-control notes-title" placeholder="Enter title" value="<?php echo $notes[0]->title ?>">
                                 </div>
-                                <textarea class="notes-text form-control" rows="10" placeholder="Enter notes">
-                                    <?php echo $notes[0]->note_content ?>
-                                </textarea>
                             </form>
+
+	                        <?php wp_editor( $notes[0]->note_content, 'notetexteditor', array(
+		                        'media_buttons'       => false,
+                            ));
+
+	                        ?>
+
                         </div>
 
                         <div id="toolbar-buttons" class="container">

@@ -12,7 +12,6 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 //TODO: update AJAX json responses
 //TODO: switch to REST api where possible
-//TODO: create separate post type 'user-notes' and add custom REST controller to allow users to update/delete/edit these posts
 
 // Exit if accessed directly
 if (!defined( 'ABSPATH')) {
@@ -224,7 +223,7 @@ class wp_az_3d_notes {
 			// scripts
 			wp_enqueue_script('wp_az_bootstrap', plugins_url('lib/bootstrap.js', __FILE__), null, null, true);
 			wp_enqueue_script('wp_az_handlebars', plugins_url('lib/handlebars-v4.0.5.js', __FILE__), null, null, true);
-			wp_enqueue_script('wp_az_tinymce', plugins_url('lib/tinymce.js', __FILE__, null, null, true));
+			/*wp_enqueue_script('wp_az_tinymce', plugins_url('lib/tinymce.js', __FILE__, null, null, true));*/
 			wp_enqueue_script('wp_az_biodigital_human', plugins_url('lib/human-api.min.js', __FILE__), null, null, true);
 			wp_enqueue_script('wp_az_biodigital_human_components', plugins_url('lib/human-components.js', __FILE__), null, null, true);
 			wp_enqueue_script('wp_az_globals', plugins_url('js/globals.js', __FILE__), array('jquery'), '1.0', true);
@@ -408,7 +407,7 @@ class wp_az_3d_notes {
 			'uid'                  => $notes['uid'],
 			'last_modified'        => current_time('mysql'),
 			'title'                => $notes['title'],
-			'note_content'         => $notes['note_content'],
+			'note_content'         => stripslashes_deep($notes['note_content']),
 			'sequence'             => $notes['sequence'],
 			'scene_state'          => $notes['scene_state']
 		);
