@@ -75,6 +75,7 @@ class wp_az_3d_notes {
 		add_action('wp_ajax_delete_note', array($this, 'delete_note'));
 		add_action('wp_ajax_update_first_scene_url', array($this, 'update_first_scene_url'));
 		add_action('wp_ajax_update_post_title', array($this, 'update_post_title'));
+		add_action('wp_ajax_upload_snapshot', array($this, 'upload_snapshot'));
 
 		// AJAX for logged out users
 		add_action('wp_ajax_nopriv_load_notes', array($this, 'load_notes'));
@@ -222,10 +223,9 @@ class wp_az_3d_notes {
 
 			// scripts
 			wp_enqueue_script('wp_az_bootstrap', plugins_url('lib/bootstrap.js', __FILE__), null, null, true);
-			wp_enqueue_script('wp_az_handlebars', plugins_url('lib/handlebars-v4.0.5.js', __FILE__), null, null, true);
-			/*wp_enqueue_script('wp_az_tinymce', plugins_url('lib/tinymce.js', __FILE__, null, null, true));*/
 			wp_enqueue_script('wp_az_biodigital_human', plugins_url('lib/human-api.min.js', __FILE__), null, null, true);
 			wp_enqueue_script('wp_az_biodigital_human_components', plugins_url('lib/human-components.js', __FILE__), null, null, true);
+			wp_enqueue_script('wp_az_fabric', plugins_url('lib/fabric.js', __FILE__), null, null, true);
 			wp_enqueue_script('wp_az_globals', plugins_url('js/globals.js', __FILE__), array('jquery'), '1.0', true);
 			wp_enqueue_script('wp_az_note', plugins_url('js/Note.js', __FILE__), array('jquery'), '1.0', true);
 			wp_enqueue_script('wp_az_actions', plugins_url('js/Actions.js', __FILE__), array('jquery'), '1.0', true);
@@ -659,6 +659,24 @@ class wp_az_3d_notes {
 		));
 	}
 
+	public function upload_snapshot() {
+
+		// first check if data is being sent and that it is the data we want
+		if (!isset($_POST['wp_az_3d_notes_nonce'])) {
+			wp_die('Your request failed permission check.');
+		}
+
+		$img = $_POST['wp_az_img_data'];
+		$post_id = $_POST['wp_az_post_id'];
+
+		wp_az_save_image($img, "image_test", $post_id);
+
+		wp_send_json(array(
+			'status'        => 'success',
+			'message'       => 'media updated. '
+		));
+
+	}
 }
 
 global $anatomy_notes;

@@ -61,6 +61,11 @@ class AnatomyNotes {
         this.$mainToolbarMyNotes = jQuery('#toolbar-my-notes');
         this.$mainToolbarCreateNew = jQuery('#toolbar-create-new');
 
+        /*************************
+         *      MODEL CONTAINER  *
+         *************************/
+        this.$modelContainer = jQuery('#wpaz-model-container');
+
         /**********************
          *    NOTE CONTAINER  *
          **********************/
@@ -939,24 +944,60 @@ class AnatomyNotes {
 
     takeSnapshot(backgroundColor){
 
-        let originalBackgroundData;
+        // resize
+        this.$modelContainer
+            .removeClass('col-md-8')
+            .addClass('col-md-12');
+        let height = this.$humanWidget.width();
+        this.$humanWidget.attr("height", height);
 
-        this.human.send("ui.getBackground", (backgroundData) => {
-            originalBackgroundData = backgroundData;
-        });
+        setTimeout(() => {
+            let originalBackgroundData;
 
-        if (!backgroundColor) backgroundColor = 'white';
+            this.human.send("ui.getBackground", (backgroundData) => {
+                originalBackgroundData = backgroundData;
+            });
 
-        let backgroundData = { colors: [backgroundColor, backgroundColor] };
+            if (!backgroundColor) backgroundColor = 'white';
 
-        this.human.send("ui.setBackground", backgroundData);
+            let backgroundData = { colors: [backgroundColor, backgroundColor] };
 
-        this.human.send("ui.snapshot", {
-            openInTab: true
-        }, (imgSrc) => {
-            console.log("Snapshot captured.");
-            this.human.send("ui.setBackground", originalBackgroundData)
-        });
+            this.human.send("ui.setBackground", backgroundData);
+
+            this.human.send("ui.snapshot", {
+                openInTab: true
+            }, (imgSrc) => {
+                console.log("Snapshot captured.");
+                this.human.send("ui.setBackground", originalBackgroundData);
+                this.$modelContainer
+                    .removeClass('col-md-12')
+                    .addClass('col-md-8');
+                this.$humanWidget.attr("height", "600");
+
+                // Save media
+
+                jQuery.ajax({
+                    url: ajax_object.wp_az_ajax_url,
+                    data: {
+                        action: 'upload_snapshot',
+                        wp_az_3d_notes_nonce: ajax_object.wp_az_3d_notes_nonce,
+                        wp_az_post_id: appGlobals.post_id,
+                        wp_az_img_data: imgSrc
+                    },
+                    error: function() {
+                        console.log("Failed to upload media");
+                        Utils.setNoteUpdateStatus("Failed to upload media.", 3000);
+                    },
+                    success: function(data) {
+                        console.log("Medial uploaded: " + JSON.stringify(data));
+                        Utils.setNoteUpdateStatus("Media uploaded.", 3000);
+                    },
+                    type: 'POST'
+                });
+
+            });
+        }, 10);
+
     }
 
     // DO ACTION METHODS
@@ -1060,7 +1101,7 @@ class AnatomyNotes {
                 this.setHumanUi();
                 setTimeout(() => {
                     this.$modalAlert.modal('show');
-                }, 500)
+                }, 500);
                 callback();
             });
             return;
