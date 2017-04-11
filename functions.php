@@ -115,6 +115,7 @@ function wp_az_save_image( $base64_img, $title, $post_id) {
 
 	wp_update_attachment_metadata( $attach_id, $attach_data );
 
+	return $attach_id;
 
 }
 

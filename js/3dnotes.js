@@ -321,7 +321,6 @@ class AnatomyNotes {
 
             // Admin UI
 
-
         } else {
             // User UI
             this.setScanner();
@@ -942,7 +941,7 @@ class AnatomyNotes {
         this.$currentActionLabel.text("Action " + action.action_order);
     }
 
-    takeSnapshot(backgroundColor){
+    takeSnapshot(backgroundColor, callback){
 
         // resize
         this.$modelContainer
@@ -965,7 +964,8 @@ class AnatomyNotes {
             this.human.send("ui.setBackground", backgroundData);
 
             this.human.send("ui.snapshot", {
-                openInTab: true
+                openInTab: false
+
             }, (imgSrc) => {
                 console.log("Snapshot captured.");
                 this.human.send("ui.setBackground", originalBackgroundData);
@@ -975,7 +975,6 @@ class AnatomyNotes {
                 this.$humanWidget.attr("height", "600");
 
                 // Save media
-
                 jQuery.ajax({
                     url: ajax_object.wp_az_ajax_url,
                     data: {
@@ -989,12 +988,26 @@ class AnatomyNotes {
                         Utils.setNoteUpdateStatus("Failed to upload media.", 3000);
                     },
                     success: function(data) {
-                        console.log("Medial uploaded: " + JSON.stringify(data));
+                        console.log("Media uploaded: " + JSON.stringify(data));
                         Utils.setNoteUpdateStatus("Media uploaded.", 3000);
+
+
                     },
                     type: 'POST'
                 });
 
+                let $updateNote = this.$notesTimelineContainer.find('#' + appGlobals.currentNote.uid);
+                let $imageContainer = $updateNote.find('.note-image');
+
+                jQuery("<img>", {
+                    "src": imgSrc,
+                    "width": "300px",
+                    "height": "300px"})
+                    .appendTo($imageContainer);
+
+                if (callback) {
+                    callback(imgSrc)
+                }
             });
         }, 10);
 

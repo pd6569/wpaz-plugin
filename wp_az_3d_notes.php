@@ -669,11 +669,16 @@ class wp_az_3d_notes {
 		$img = $_POST['wp_az_img_data'];
 		$post_id = $_POST['wp_az_post_id'];
 
-		wp_az_save_image($img, "image_test", $post_id);
+		$attach_id = wp_az_save_image($img, "image_test", $post_id);
+		if ($attach_id) {
+			$attach_src = wp_get_attachment_image_src($attach_id, 'medium');
+		}
 
 		wp_send_json(array(
-			'status'        => 'success',
-			'message'       => 'media updated. '
+			'status'            => 'success',
+			'message'           => 'media updated. ',
+			'attachment_id'     => $attach_id,
+			'attachment_src'    => $attach_src
 		));
 
 	}
