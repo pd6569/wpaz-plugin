@@ -943,6 +943,8 @@ class AnatomyNotes {
 
     takeSnapshot(backgroundColor, callback){
 
+        Utils.setNoteUpdateStatus("Saving snapshot...");
+
         // resize
         this.$modelContainer
             .removeClass('col-md-8')
@@ -974,6 +976,9 @@ class AnatomyNotes {
                     .addClass('col-md-8');
                 this.$humanWidget.attr("height", "600");
 
+                let $updateNote = this.$notesTimelineContainer.find('#' + appGlobals.currentNote.uid);
+                let $imageContainer = $updateNote.find('.note-image');
+
                 // Save media
                 jQuery.ajax({
                     url: ajax_object.wp_az_ajax_url,
@@ -981,29 +986,28 @@ class AnatomyNotes {
                         action: 'upload_snapshot',
                         wp_az_3d_notes_nonce: ajax_object.wp_az_3d_notes_nonce,
                         wp_az_post_id: appGlobals.post_id,
-                        wp_az_img_data: imgSrc
+                        wp_az_img_data: imgSrc,
+                        wp_az_note_id: appGlobals.currentNote.uid
                     },
                     error: function() {
-                        console.log("Failed to upload media");
-                        Utils.setNoteUpdateStatus("Failed to upload media.", 3000);
+                        console.log("Failed to save snapshot");
+                        Utils.setNoteUpdateStatus("Failed to save snapshot", 3000);
                     },
                     success: function(data) {
-                        console.log("Media uploaded: " + JSON.stringify(data));
-                        Utils.setNoteUpdateStatus("Media uploaded.", 3000);
+                        console.log("Snapshot saved", data);
+                        Utils.setNoteUpdateStatus("Snapshot saved", 3000);
 
+                        let attachmentId = data['attachment_id'];
+                        let attachmentMedium = data['attachment_src_medium'];
+                        let attachmentLarge = data['attachment_src_large'];
 
+                        jQuery(
+                            "<a id='"+ attachmentId + "' class='dt-single-image' href='" + attachmentLarge + "' data-dt-img-description=''>" +
+                                "<img class='aligncenter size-medium' src='" + attachmentMedium + "' alt='' width='300' height='300' />" +
+                            "</a>").appendTo($imageContainer);
                     },
                     type: 'POST'
                 });
-
-                let $updateNote = this.$notesTimelineContainer.find('#' + appGlobals.currentNote.uid);
-                let $imageContainer = $updateNote.find('.note-image');
-
-                jQuery("<img>", {
-                    "src": imgSrc,
-                    "width": "300px",
-                    "height": "300px"})
-                    .appendTo($imageContainer);
 
                 if (callback) {
                     callback(imgSrc)

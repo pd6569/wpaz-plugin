@@ -16,6 +16,8 @@
                   WHERE post_id = $post->ID
                   ORDER BY sequence ASC" );
 
+    $attached_images = get_attached_media('image/jpeg', $post->ID);
+
     $user_is_editor = wp_az_user_can_edit_notes();
 
     ?>
@@ -263,7 +265,7 @@
                             </form>
 
 	                        <?php wp_editor( $notes[0]->note_content, 'notetexteditor', array(
-		                        'media_buttons'       => false,
+		                        'media_buttons'       => true,
                             ));
 
 	                        ?>

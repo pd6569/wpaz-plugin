@@ -314,7 +314,9 @@ class wp_az_3d_notes {
 		global $table_notes;
 		global $table_actions;
 
+
 		$table_notes = $wpdb->prefix . 'az_notes';
+		$table_notes_images = $wpdb->prefix . 'az_notes_images';
 		$table_actions = $wpdb->prefix . 'az_actions';
 
 		$charset_collate = $wpdb->get_charset_collate();
@@ -343,6 +345,15 @@ class wp_az_3d_notes {
 		scene_state text,
 		action_data text,
 		PRIMARY KEY  (id)
+		) $charset_collate;";
+
+		$sql .= "CREATE TABLE $table_notes_images (
+		id mediumint(9) NOT NULL AUTO_INCREMENT,
+		uid tinytext NOT NULL,
+		post_id mediumint(9) NOT NULL,
+		note_id tinytext NOT NULL,
+		image_order tinyint NOT NULL,
+		image_url tinytext NOT NULL,	
 		) $charset_collate;";
 
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -668,17 +679,23 @@ class wp_az_3d_notes {
 
 		$img = $_POST['wp_az_img_data'];
 		$post_id = $_POST['wp_az_post_id'];
+		$note_id = $_POST['wp_az_note_id'];
 
 		$attach_id = wp_az_save_image($img, "image_test", $post_id);
+
 		if ($attach_id) {
-			$attach_src = wp_get_attachment_image_src($attach_id, 'medium');
+			$attach_src_medium = wp_get_attachment_image_src($attach_id, 'medium')[0];
+			$attach_src_large = wp_get_attachment_image_src($attach_id, 'large')[0];
+
+			update_metadata ( 'post', $attach_id, '_az_note_id', $note_id);
 		}
 
 		wp_send_json(array(
 			'status'            => 'success',
 			'message'           => 'media updated. ',
 			'attachment_id'     => $attach_id,
-			'attachment_src'    => $attach_src
+			'attachment_src_medium'    => $attach_src_medium,
+			'attachment_src_large'      => $attach_src_large
 		));
 
 	}

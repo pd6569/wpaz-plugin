@@ -1,4 +1,4 @@
-<div class="col-md-8">
+<div class="col-md-12">
 
 	<div id="<?php echo $note->uid ?>" class="panel panel-primary note-item" sequence="<?php echo $note->sequence?>">
 		<div class="panel-heading">
@@ -22,7 +22,13 @@
 
 				<div class="col-md-6">
                     <div class="note-image">
-
+                        <?php
+                            foreach($attached_images as $image) {
+                                if ($note->uid == get_post_meta($image->ID, "_az_note_id", true)): ?>
+                                    <img src="<?php echo wp_get_attachment_image_src($image->ID,'medium')[0]; ?>" />
+                        <?php
+                                endif;
+                            } ?>
                     </div>
 				</div>
 			</div>
