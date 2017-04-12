@@ -161,6 +161,11 @@
     margin: 10px;
 }
 
+/* image editor toolbar */
+.tool-container .arrow {
+    display: none;
+}
+
 /************************************************
  * LOADING from http://tobiasahlin.com/spinkit/ *
  ************************************************/
