@@ -319,7 +319,7 @@ class AnatomyNotes {
 
         let url = ajax_object.wp_az_root + 'wp/v2/media/' + imgId;
 
-        console.log("deleteImage", imgId + " url: " + url);
+        Utils.showLoading();
 
         jQuery.ajax({
             method: 'DELETE',
@@ -332,6 +332,8 @@ class AnatomyNotes {
             },
             success: function(response) {
                 console.log("successfully deleted image: " + JSON.stringify(response));
+                jQuery('#' + imgId).fadeOut();
+                Utils.hideLoading();
 
             },
             error: function(response) {

@@ -8,19 +8,12 @@ class Utils {
 
     }
 
-    static showLoading($appendToElement) {
-        let html =
-            "<div class='wpaz-spinner'>" +
-                "<div class='double-bounce1'>" +
-                "</div>" +
-                "<div class='double-bounce2'>" +
-                "</div>" +
-            "</div>";
-        $appendToElement.append(html);
+    static showLoading() {
+        jQuery('.wpaz-loading-container').removeClass('hidden');
     }
 
     static hideLoading(){
-        jQuery('.wpaz-spinner').addClass('hidden');
+        jQuery('.wpaz-loading-container').addClass('hidden');
     }
 
     static setNoteUpdateStatus(statusText, timeoutMillis){

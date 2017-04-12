@@ -419,3 +419,11 @@
         <a id="toolbar-delete-image" href="#"><i class="fa fa-trash"></i></a>
     </div>
 <?php endif ?>
+
+<div class='wpaz-loading-container hidden'>
+    <div class='wpaz-spinner'>
+        <div class='double-bounce1'></div>
+        <div class='double-bounce2'></div>
+    </div>;
+</div>
+
