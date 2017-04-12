@@ -411,9 +411,11 @@
     </div>
 </div>
 
+<!-- toolbar for editing images -->
+
 <?php if ( $user_is_editor ) : ?>
     <div id="toolbar-options" class="hidden">
-        <a href="#"><i class="fa fa-pencil"></i></a>
-        <a href="#"><i class="fa fa-trash"></i></a>
+        <a id="toolbar-edit-image" href="#"><i class="fa fa-pencil"></i></a>
+        <a id="toolbar-delete-image" href="#"><i class="fa fa-trash"></i></a>
     </div>
 <?php endif ?>

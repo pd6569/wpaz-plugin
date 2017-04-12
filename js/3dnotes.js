@@ -125,6 +125,14 @@ class AnatomyNotes {
         this.$noteTitleTimeline = jQuery('.note-title');
         this.$noteImages = jQuery('.note-images');
 
+        // Note image toolbar
+        this.toolbarOptions = {
+            content: '#toolbar-options',
+            position: 'top',
+            style: 'dark',
+            event: 'hover',
+        }
+
         // Modal alert dialog
         this.$modalAlert = jQuery('#wpaz-modal-alert');
         this.$modalTitle = this.$modalAlert.find('.modal-title');
@@ -286,6 +294,27 @@ class AnatomyNotes {
 
     }
 
+    /**
+     *
+     * @param $image jquery object/objects (representing the image[s]) to attach toolbar button click listeners
+     */
+    setImgToolbarListeners($image) {
+
+        $image.on('toolbarItemClick', (event, buttonClicked) => {
+
+            let imgId = jQuery(event.target).closest('div').attr('id');
+            switch(buttonClicked.id){
+                case 'toolbar-edit-image':
+                    console.log("delete image id: " + imgId);
+                    break;
+                case 'toolbar-delete-image':
+                    console.log("edit image id: " + imgId);
+                    break;
+            }
+        });
+
+    }
+
     // INIT
 
     setHumanUi(){
@@ -330,12 +359,8 @@ class AnatomyNotes {
             // Admin UI
 
             // Enable toolbar editing for images
-            this.$noteImages.toolbar({
-                content: '#toolbar-options',
-                position: 'top',
-                style: 'dark',
-                event: 'hover',
-            })
+            this.$noteImages.toolbar(this.toolbarOptions);
+            this.setImgToolbarListeners(this.$noteImages);
 
         } else {
             // User UI
@@ -1020,6 +1045,7 @@ class AnatomyNotes {
                 // OK
                 this.$modalBtn2.on('click', () => {
 
+                    let self = this;
                     let imgTitle;
                     this.$imgTitle.val() == "" ? imgTitle = defaultTitle : imgTitle = this.$imgTitle.val();
                     let imgDesc = this.$imgDesc.val();
@@ -1063,10 +1089,18 @@ class AnatomyNotes {
                             let attachmentMedium = data['attachment_src_medium'];
                             let attachmentLarge = data['attachment_src_large'];
 
-                            jQuery(
-                                "<a rel='" + appGlobals.currentNote.uid + "' href='" + attachmentLarge + "' class='swipebox' title=''>" +
-                                "<img src='" + attachmentMedium + "' alt='image'>" +
-                                "</a>").appendTo($imageContainer);
+                            let $newImage = jQuery(
+                                "<div id='" + attachmentId + "'>" +
+                                    "<a rel='" + appGlobals.currentNote.uid + "' href='" + attachmentLarge + "' class='swipebox note-images' title=''>" +
+                                        "<img src='" + attachmentMedium + "' alt='image'>" +
+                                    "</a>" +
+                                "</div>");
+                            $newImage.appendTo($imageContainer);
+
+                            // add toolbar
+                            $newImage.find('a.note-images').toolbar(self.toolbarOptions);
+                            self.setImgToolbarListeners($newImage.find('a.note-images'));
+
                         },
                         type: 'POST'
                     });
