@@ -305,13 +305,39 @@ class AnatomyNotes {
             let imgId = jQuery(event.target).closest('div').attr('id');
             switch(buttonClicked.id){
                 case 'toolbar-edit-image':
-                    console.log("delete image id: " + imgId);
+                    console.log("edit image id: " + imgId);
                     break;
                 case 'toolbar-delete-image':
-                    console.log("edit image id: " + imgId);
+                    this.deleteImage(imgId);
                     break;
             }
         });
+
+    }
+
+    deleteImage(imgId){
+
+        let url = ajax_object.wp_az_root + 'wp/v2/media/' + imgId;
+
+        console.log("deleteImage", imgId + " url: " + url);
+
+        jQuery.ajax({
+            method: 'DELETE',
+            url: url,
+            data: {
+                force: true,
+            },
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('X-WP-Nonce', ajax_object.wp_az_nonce);
+            },
+            success: function(response) {
+                console.log("successfully deleted image: " + JSON.stringify(response));
+
+            },
+            error: function(response) {
+                console.log("failed to delete image: " + JSON.stringify(response));
+            }
+        })
 
     }
 
