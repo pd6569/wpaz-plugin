@@ -25,7 +25,9 @@
                         <?php
                             foreach($attached_images as $image) {
                                 if ($note->uid == get_post_meta($image->ID, "_az_note_id", true)): ?>
-                                    <img src="<?php echo wp_get_attachment_image_src($image->ID,'medium')[0]; ?>" />
+                                    <a rel="<?php echo $note->uid ?>" href="<?php echo wp_get_attachment_image_src($image->ID,'full')[0]; ?>" class="swipebox" title="">
+                                        <img src="<?php echo wp_get_attachment_image_src($image->ID,'medium')[0]; ?>" alt="image">
+                                    </a>
                         <?php
                                 endif;
                             } ?>

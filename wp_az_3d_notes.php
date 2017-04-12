@@ -218,11 +218,13 @@ class wp_az_3d_notes {
 		if (wp_az_show_plugin_layout()){
 
 			// styles
-			wp_enqueue_style('wp_az_bootstrap', plugins_url('css/bootstrap.css', __FILE__));
+			wp_enqueue_style('wp_az_bootstrap_style', plugins_url('lib/bootstrap.css', __FILE__));
+			wp_enqueue_style('wp_az_swipebox_style', plugins_url('lib/swipebox.css', __FILE__));
 			wp_enqueue_style('wp_az_main_style', plugins_url('css/styles.css?v=' . time(), __FILE__));
 
 			// scripts
 			wp_enqueue_script('wp_az_bootstrap', plugins_url('lib/bootstrap.js', __FILE__), null, null, true);
+			wp_enqueue_script('wp_az_swipebox', plugins_url('lib/jquery.swipebox.js', __FILE__), null, null);
 			wp_enqueue_script('wp_az_biodigital_human', plugins_url('lib/human-api.min.js', __FILE__), null, null, true);
 			wp_enqueue_script('wp_az_biodigital_human_components', plugins_url('lib/human-components.js', __FILE__), null, null, true);
 			wp_enqueue_script('wp_az_fabric', plugins_url('lib/fabric.js', __FILE__), null, null, true);

@@ -293,7 +293,7 @@ class AnatomyNotes {
                 zoomIn: true,
                 zoomOut: true,
                 info: false,
-                share: false,
+                share: true,
                 tools: true,
                 objectTree: true,
             };
@@ -325,6 +325,9 @@ class AnatomyNotes {
             // User UI
             this.setScanner();
         }
+
+        // Enable light box
+        jQuery('.swipebox').swipebox();
 
     }
 
