@@ -36,6 +36,17 @@
     color: red;
 }
 
+.modal-image-properties .form-group {
+    display: inline-block;
+    width: 50%;
+}
+.modal-image-properties .form-control {
+    margin: 10px;
+}
+.modal-image-properties .image-thumbnail {
+    width: 50%;
+}
+
 
 /*************************
  *    NOTES CONTAINER    *

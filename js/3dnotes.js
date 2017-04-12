@@ -128,6 +128,7 @@ class AnatomyNotes {
         this.$modalAlert = jQuery('#wpaz-modal-alert');
         this.$modalTitle = this.$modalAlert.find('.modal-title');
         this.$modalBody = this.$modalAlert.find('.modal-body');
+        this.$modalImageProps = this.$modalAlert.find('.modal-image-properties');
         this.$modalError = this.$modalAlert.find('.modal-error p');
         this.$modalBtn1 = this.$modalAlert.find('#modal-btn-1');
         this.$modalBtn2 = this.$modalAlert.find('#modal-btn-2');
@@ -862,6 +863,7 @@ class AnatomyNotes {
         }
 
     }
+    
 
     // ACTIONS
     addAction() {
@@ -979,6 +981,20 @@ class AnatomyNotes {
                     .addClass('col-md-8');
                 this.$humanWidget.attr("height", "600");
 
+                // Show image properties modal
+                Utils.resetModal();
+                Utils.showModal({
+                    title: "Edit snapshot",
+                    body: "",
+                });
+                this.$modalImageProps.removeClass('hidden');
+                this.$modalImageProps.find('.image-thumbnail img').attr('src', imgSrc);
+                this.$modalBtn1.on('click', () => {
+                    this.$modalAlert.modal('hide');
+                    return;
+                });
+
+                // Save media to server and append
                 let $updateNote = this.$notesTimelineContainer.find('#' + appGlobals.currentNote.uid);
                 let $imageContainer = $updateNote.find('.note-image');
 
@@ -1005,8 +1021,8 @@ class AnatomyNotes {
                         let attachmentLarge = data['attachment_src_large'];
 
                         jQuery(
-                            "<a id='"+ attachmentId + "' class='dt-single-image' href='" + attachmentLarge + "' data-dt-img-description=''>" +
-                                "<img class='aligncenter size-medium' src='" + attachmentMedium + "' alt='' width='300' height='300' />" +
+                            "<a rel='" + appGlobals.currentNote.uid + "' href='" + attachmentLarge + "' class='swipebox' title=''>" +
+                                "<img src='" + attachmentMedium + "' alt='image'>" +
                             "</a>").appendTo($imageContainer);
                     },
                     type: 'POST'
@@ -1016,7 +1032,7 @@ class AnatomyNotes {
                     callback(imgSrc)
                 }
             });
-        }, 10);
+        }, 50);
 
     }
 
@@ -1103,6 +1119,7 @@ class AnatomyNotes {
         }
 
         if (parseInt(appGlobals.currentNote.sequence) === 1 && sceneUrl !== appGlobals.firstSceneUrl){
+            Utils.resetModal();
             this.$modalAlert.find('.modal-title').text("First scene");
             this.$modalAlert.find('.modal-body').text("Do you want this scene to be displayed when the page first loads?");
             this.$modalAlert.find('#modal-btn-1').text("Yes").on('click', () => {

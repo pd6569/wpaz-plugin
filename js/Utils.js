@@ -73,12 +73,14 @@ class Utils {
         let $modalTitle = $modalAlert.find('.modal-title');
         let $modalError = $modalAlert.find('.modal-error p');
         let $modalBody = $modalAlert.find('.modal-body');
+        let $modalImageProps = $modalAlert.find('.modal-image-properties');
         let $modalBtn1 = $modalAlert.find('#modal-btn-1');
         let $modalBtn2 = $modalAlert.find('#modal-btn-2');
 
         // Set default text, remove existing event listeners
         $modalTitle.text("");
         $modalBody.empty();
+        $modalImageProps.addClass('hidden');
         $modalError.empty();
         $modalBtn1.off();
         $modalBtn2.off();
@@ -88,9 +90,8 @@ class Utils {
 
     /**
      *
-     * @param modalObj Object with properties: title - title text, body - html body text, btn1text - text on button 1,
-     *                                          btn2text - text on button 2, btn1click - function for button 1,
-     *                                          btn2click - function for button 2
+     * @param modalObj Object with properties: title - title text, body - html body text, btn1 - text on button 1,
+     *                                          btn2- text on button 2
      */
     static showModal(modalObj){
         let $modalAlert = jQuery('#wpaz-modal-alert');

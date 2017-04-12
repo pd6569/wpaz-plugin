@@ -389,6 +389,19 @@
             </div>
             <div class="modal-body">
             </div>
+            <div class="modal-image-properties hidden">
+                <div class="form-group">
+                    <form>
+                        <input type="text" class="form-control image-title" placeholder="Title" value="">
+                        <textarea class="form-control image-description" rows="5" placeholder="Description"></textarea>
+                        <input type="text" class="form-control image-caption" placeholder="Caption" value="">
+                        <input type="text" class="form-control image-alt" placeholder="Alt" value="">
+                    </form>
+                </div>
+                <div class="image-thumbnail pull-right">
+                    <img src="" width="100%" height="100%">
+                </div>
+            </div>
             <div class="modal-error text-center hidden"><p></p></div>
             <div class="modal-footer">
                 <button id="modal-btn-1" type="button" class="btn btn-default"></button>
