@@ -123,6 +123,7 @@ class AnatomyNotes {
         this.$editNote = jQuery('.edit-note');
         this.$noteToolsTimeline = jQuery('.note-actions');
         this.$noteTitleTimeline = jQuery('.note-title');
+        this.$noteImages = jQuery('.note-images');
 
         // Modal alert dialog
         this.$modalAlert = jQuery('#wpaz-modal-alert');
@@ -327,6 +328,14 @@ class AnatomyNotes {
         if (this.userIsEditor){
 
             // Admin UI
+
+            // Enable toolbar editing for images
+            this.$noteImages.toolbar({
+                content: '#toolbar-options',
+                position: 'top',
+                style: 'dark',
+                event: 'hover',
+            })
 
         } else {
             // User UI
@@ -606,7 +615,7 @@ class AnatomyNotes {
                 $noteSection.find('.note-title').html(title);
                 $noteSection.find('.note-content').html(note_content);
                 $noteSection.find('.note-actions').removeClass('hidden');
-                let $imageContainer = $noteSection.find('.note-image');
+                let $imageContainer = $noteSection.find('.note-image-container');
 
                 let originalBackgroundData;
 
@@ -1026,7 +1035,7 @@ class AnatomyNotes {
 
                     // Save media to server and append
                     let $updateNote = this.$notesTimelineContainer.find('#' + appGlobals.currentNote.uid);
-                    let $imageContainer = $updateNote.find('.note-image');
+                    let $imageContainer = $updateNote.find('.note-image-container');
 
                     // Save media
                     jQuery.ajax({

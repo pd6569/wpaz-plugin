@@ -21,13 +21,15 @@
 				</div>
 
 				<div class="col-md-6">
-                    <div class="note-image">
+                    <div class="note-image-container">
                         <?php
                             foreach($attached_images as $image) {
                                 if ($note->uid == get_post_meta($image->ID, "_az_note_id", true)): ?>
-                                    <a rel="<?php echo $note->uid ?>" href="<?php echo wp_get_attachment_image_src($image->ID,'full')[0]; ?>" class="swipebox" title="">
-                                        <img src="<?php echo wp_get_attachment_image_src($image->ID,'medium')[0]; ?>" alt="image">
-                                    </a>
+                                    <div id="<?php echo $image->ID ?>">
+                                        <a rel="<?php echo $note->uid ?>" href="<?php echo wp_get_attachment_image_src($image->ID,'full')[0]; ?>" class="swipebox note-images" title="<?php echo $image->post_excerpt ?>">
+                                            <img src="<?php echo wp_get_attachment_image_src($image->ID,'medium')[0]; ?>" alt="image">
+                                        </a>
+                                    </div>
                         <?php
                                 endif;
                             } ?>

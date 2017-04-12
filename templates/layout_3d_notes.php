@@ -410,3 +410,8 @@
         </div>
     </div>
 </div>
+
+<div id="toolbar-options" class="hidden">
+    <a href="#"><i class="fa fa-pencil"></i></a>
+    <a href="#"><i class="fa fa-trash"></i></a>
+</div>
