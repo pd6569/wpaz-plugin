@@ -1089,7 +1089,7 @@ class AnatomyNotes {
 
                     // Save media to server and append
                     let $updateNote = this.$notesTimelineContainer.find('#' + appGlobals.currentNote.uid);
-                    let $imageContainer = $updateNote.find('.note-image-container');
+                    let $imageContainer = $updateNote.find('.note-image-container .row');
 
                     // Save media
                     jQuery.ajax({
@@ -1118,10 +1118,12 @@ class AnatomyNotes {
                             let attachmentLarge = data['attachment_src_large'];
 
                             let $newImage = jQuery(
-                                "<div id='" + attachmentId + "'>" +
-                                    "<a rel='" + appGlobals.currentNote.uid + "' href='" + attachmentLarge + "' class='swipebox note-images' title=''>" +
-                                        "<img src='" + attachmentMedium + "' alt='image'>" +
-                                    "</a>" +
+                                "<div class='col-md-4 col-sm-4 col-xs-6'>" +
+                                    "<div id='" + attachmentId + "'>" +
+                                        "<a rel='" + appGlobals.currentNote.uid + "' href='" + attachmentLarge + "' class='swipebox note-images' title='" + imgCaption + "'>" +
+                                            "<img src='" + attachmentMedium + "' alt='image' width='100%' height='100%'>" +
+                                        "</a>" +
+                                    "</div>" +
                                 "</div>");
                             $newImage.appendTo($imageContainer);
 

@@ -154,11 +154,9 @@
     transform: scale(1.3);
 }
 
-.note-image .edit-image-overlay .delete-image {
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 10px;
+.note-images img {
+    border: solid 2px rgba(132, 132, 132, 0.2);
+    margin-bottom: 10px;
 }
 
 /* image editor toolbar */

@@ -9,6 +9,7 @@
 - Create template files for both custom post types.
 - set up permalinks for user-posts (e.g. with author/time/date)
 - change media settings for medium size image
+- Watermark plugin
 
 // How plugin works
 
