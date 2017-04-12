@@ -11,6 +11,7 @@ let appGlobals = {
     numNotes: 0,
     actions: {},
     firstSceneUrl: "",
+    numSnapshots: 0,
 
     // user role constants
     userRoles: {

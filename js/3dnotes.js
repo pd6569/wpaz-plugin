@@ -133,6 +133,12 @@ class AnatomyNotes {
         this.$modalBtn1 = this.$modalAlert.find('#modal-btn-1');
         this.$modalBtn2 = this.$modalAlert.find('#modal-btn-2');
 
+        // Image Properties
+        this.$imgTitle = jQuery('.modal-image-properties .image-title');
+        this.$imgDesc = jQuery('.modal-image-properties .image-description');
+        this.$imgCaption = jQuery('.modal-image-properties .image-caption');
+        this.$imgAlt = jQuery('.modal-image-properties .image-alt');
+
 
         /*******************************
          *  set DOM Event listeners    *
@@ -948,7 +954,7 @@ class AnatomyNotes {
 
     takeSnapshot(backgroundColor, callback){
 
-        Utils.setNoteUpdateStatus("Saving snapshot...");
+        appGlobals.numSnapshots++;
 
         // resize
         this.$modelContainer
@@ -987,50 +993,81 @@ class AnatomyNotes {
                     title: "Edit snapshot",
                     body: "",
                 });
+
                 this.$modalImageProps.removeClass('hidden');
+
+                // Set field defaults
+                let defaultTitle = "Snapshot " + appGlobals.numSnapshots;
+                this.$imgTitle.val(defaultTitle);
                 this.$modalImageProps.find('.image-thumbnail img').attr('src', imgSrc);
+
+                // Cancel
                 this.$modalBtn1.on('click', () => {
                     this.$modalAlert.modal('hide');
+                    Utils.resetModal();
                     return;
                 });
 
-                // Save media to server and append
-                let $updateNote = this.$notesTimelineContainer.find('#' + appGlobals.currentNote.uid);
-                let $imageContainer = $updateNote.find('.note-image');
+                // OK
+                this.$modalBtn2.on('click', () => {
 
-                // Save media
-                jQuery.ajax({
-                    url: ajax_object.wp_az_ajax_url,
-                    data: {
-                        action: 'upload_snapshot',
-                        wp_az_3d_notes_nonce: ajax_object.wp_az_3d_notes_nonce,
-                        wp_az_post_id: appGlobals.post_id,
-                        wp_az_img_data: imgSrc,
-                        wp_az_note_id: appGlobals.currentNote.uid
-                    },
-                    error: function() {
-                        console.log("Failed to save snapshot");
-                        Utils.setNoteUpdateStatus("Failed to save snapshot", 3000);
-                    },
-                    success: function(data) {
-                        console.log("Snapshot saved", data);
-                        Utils.setNoteUpdateStatus("Snapshot saved", 3000);
+                    let imgTitle;
+                    this.$imgTitle.val() == "" ? imgTitle = defaultTitle : imgTitle = this.$imgTitle.val();
+                    let imgDesc = this.$imgDesc.val();
+                    let imgCaption = this.$imgCaption.val();
+                    let imgAlt = this.$imgAlt.val();
 
-                        let attachmentId = data['attachment_id'];
-                        let attachmentMedium = data['attachment_src_medium'];
-                        let attachmentLarge = data['attachment_src_large'];
+                    console.log("title: " + imgTitle + " desc: " + imgDesc + " caption: " + imgCaption + "imgAlt: " + imgAlt);
 
-                        jQuery(
-                            "<a rel='" + appGlobals.currentNote.uid + "' href='" + attachmentLarge + "' class='swipebox' title=''>" +
+                    this.$modalAlert.modal('hide');
+                    Utils.resetModal();
+
+                    Utils.setNoteUpdateStatus("Saving snapshot...");
+
+                    // Save media to server and append
+                    let $updateNote = this.$notesTimelineContainer.find('#' + appGlobals.currentNote.uid);
+                    let $imageContainer = $updateNote.find('.note-image');
+
+                    // Save media
+                    jQuery.ajax({
+                        url: ajax_object.wp_az_ajax_url,
+                        data: {
+                            action: 'upload_snapshot',
+                            wp_az_3d_notes_nonce: ajax_object.wp_az_3d_notes_nonce,
+                            wp_az_post_id: appGlobals.post_id,
+                            wp_az_img_data: imgSrc,
+                            wp_az_img_title: imgTitle,
+                            wp_az_img_desc: imgDesc,
+                            wp_az_img_caption: imgCaption,
+                            wp_az_img_alt: imgAlt,
+                            wp_az_note_id: appGlobals.currentNote.uid
+                        },
+                        error: function() {
+                            console.log("Failed to save snapshot");
+                            Utils.setNoteUpdateStatus("Failed to save snapshot", 3000);
+                        },
+                        success: function(data) {
+                            console.log("Snapshot saved", data);
+                            Utils.setNoteUpdateStatus("Snapshot saved", 3000);
+
+                            let attachmentId = data['attachment_id'];
+                            let attachmentMedium = data['attachment_src_medium'];
+                            let attachmentLarge = data['attachment_src_large'];
+
+                            jQuery(
+                                "<a rel='" + appGlobals.currentNote.uid + "' href='" + attachmentLarge + "' class='swipebox' title=''>" +
                                 "<img src='" + attachmentMedium + "' alt='image'>" +
-                            "</a>").appendTo($imageContainer);
-                    },
-                    type: 'POST'
+                                "</a>").appendTo($imageContainer);
+                        },
+                        type: 'POST'
+                    });
+
+                    if (callback) {
+                        callback(imgSrc)
+                    }
+
                 });
 
-                if (callback) {
-                    callback(imgSrc)
-                }
             });
         }, 50);
 

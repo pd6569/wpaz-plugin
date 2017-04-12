@@ -81,7 +81,7 @@ function base64ToImage($base64_string, $output_file) {
 /**
  * Save the image on the server.
  */
-function wp_az_save_image( $base64_img, $title, $post_id) {
+function wp_az_save_image( $base64_img, $title, $desc, $caption, $post_id) {
 
 	// Upload dir.
 	$upload_dir  = wp_upload_dir();
@@ -100,7 +100,8 @@ function wp_az_save_image( $base64_img, $title, $post_id) {
 	$attachment = array(
 		'post_mime_type' => $file_type,
 		'post_title'     => preg_replace( '/\.[^.]+$/', '', basename( $hashed_filename ) ),
-		'post_content'   => '',
+		'post_content'   => $desc,
+		'post_excerpt'   => $caption,
 		'post_status'    => 'inherit',
 		'guid'           => $upload_dir['url'] . '/' . basename( $hashed_filename )
 	);

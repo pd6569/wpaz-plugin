@@ -680,16 +680,21 @@ class wp_az_3d_notes {
 		}
 
 		$img = $_POST['wp_az_img_data'];
+		$img_title = $_POST['wp_az_img_title'];
+		$img_desc = $_POST['wp_az_img_desc'];
+		$img_caption = $_POST['wp_az_img_caption'];
+		$img_alt = $_POST['wp_az_img_alt'];
 		$post_id = $_POST['wp_az_post_id'];
 		$note_id = $_POST['wp_az_note_id'];
 
-		$attach_id = wp_az_save_image($img, "image_test", $post_id);
+		$attach_id = wp_az_save_image($img, $img_title, $img_desc, $img_caption, $post_id);
 
 		if ($attach_id) {
 			$attach_src_medium = wp_get_attachment_image_src($attach_id, 'medium')[0];
 			$attach_src_large = wp_get_attachment_image_src($attach_id, 'large')[0];
 
 			update_metadata ( 'post', $attach_id, '_az_note_id', $note_id);
+			update_metadata ( 'post', $attach_id, '_wp_attachment_image_alt', $img_alt);
 		}
 
 		wp_send_json(array(
