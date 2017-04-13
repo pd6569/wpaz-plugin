@@ -60,17 +60,50 @@ class AnatomyNotes {
             let height = this.$humanWidget.height();
             let width = this.$humanWidget.width();
 
-            this.$canvas = jQuery(
+            let $canvasHtml = jQuery(
                 "<canvas id='myCanvas' width='" + width + "' height='" + height + "'>" +
                 "</canvas>");
 
-            this.$canvas.appendTo(this.$iframeContainer);
+            $canvasHtml.appendTo(this.$iframeContainer);
+            this.canvas = document.getElementById('myCanvas');
+            this.canvasCtx = this.canvas.getContext('2d');
+
+            this.canvas.addEventListener('click', (event) => {
+                let canvasX = event.offsetX;
+                let canvasY = event.offsetY;
+
+                this.human.send('scene.pick', {
+                    x: canvasX,
+                    y: canvasY,
+                }, (pickInfo) => {
+                    console.log("Picked: ", pickInfo);
+
+                    let objectId = pickInfo.objectId;
+                    let pos3d = [];
+                    pos3d['x'] = pickInfo.position.x;
+                    pos3d['y'] = pickInfo.position.y;
+                    pos3d['z'] = pickInfo.position.z;
+
+                    let posObj = pickInfo.position;
+
+                    console.log("position: ", pickInfo.position);
+
+                    this.human.send('annotations.create', {
+                        title: "What the fuck",
+                        description: "Added a new annotation programmatically",
+                        objectId: pickInfo.objectId,
+                        position: [pickInfo.position.x, pickInfo.position.y, pickInfo.position.z]
+                    }, (newAnnotation) => {
+                        console.log("New annotation created: " + JSON.stringify(newAnnotation));
+                    })
+                });
+            });
 
             // resize the canvas to fill browser window dynamically
             jQuery(window).on('resize', () => {
                 console.log("resize canvas");
-                this.$canvas.width(this.$humanWidget.width());
-                this.$canvas.height(this.$humanWidget.height());
+                this.canvas.width = this.$humanWidget.width();
+                this.canvas.height = this.$humanWidget.height();
             });
 
 
@@ -210,7 +243,11 @@ class AnatomyNotes {
         // Scene selector
         this.$sceneSelectorOption.on('click', (event) => { this.loadScene(jQuery(event.target)) });
         this.$sceneSelectImageBtn.on('click', (event) => {this.loadImage()});
-        this.$toggleCanvas.on('click', (event) => { this.$canvas.toggle()});
+        this.$toggleCanvas.on('click', (event) => {
+            jQuery('#myCanvas').toggle();
+        });
+
+
 
         // Note container
         this.$postTitle.on('click', () => { this.editPostTitle(); });
