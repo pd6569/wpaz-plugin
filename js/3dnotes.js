@@ -12,6 +12,7 @@ class AnatomyNotes {
         // get BioDigital Human
         this.human = new HumanAPI("embedded-human");
         this.$humanWidget = jQuery('#embedded-human');
+        this.$iframeContainer = jQuery('#iframe-container');
 
         // 3d model variables
         this.cameraInfo = {};
@@ -49,7 +50,33 @@ class AnatomyNotes {
             });
             this.registerCallbacks();
             this.setHumanUi();
+
+
+            /***********************************
+             *          CANVAS OVERLAY         *
+             ***********************************/
+
+                // Create canvas overlay
+            let height = this.$humanWidget.height();
+            let width = this.$humanWidget.width();
+
+            let $canvas = jQuery(
+                "<canvas id='myCanvas' width='" + width + "' height='" + height + "'>" +
+                "</canvas>");
+
+            $canvas.appendTo(this.$iframeContainer);
+
+            // resize the canvas to fill browser window dynamically
+            jQuery(window).on('resize', () => {
+                console.log("resize canvas");
+                $canvas.width(this.$humanWidget.width());
+                $canvas.height(this.$humanWidget.height());
+            });
+
+
+            /******** END CANVAS OVERLAY ********/
         });
+
 
         // DOM
 
@@ -361,6 +388,7 @@ class AnatomyNotes {
                 share: true,
                 tools: true,
                 objectTree: true,
+                annotations: true,
             };
         } else {
             displayConfig = {

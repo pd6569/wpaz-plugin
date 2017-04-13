@@ -18,3 +18,6 @@ Admin role creates and publishes posts under 3d-notes post type, users create no
 
 
 
+// BIODIGITAL API LIMITATIONS
+
+- Get 2d canvas coordinates on mouse click
