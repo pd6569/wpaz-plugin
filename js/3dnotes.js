@@ -60,17 +60,17 @@ class AnatomyNotes {
             let height = this.$humanWidget.height();
             let width = this.$humanWidget.width();
 
-            let $canvas = jQuery(
+            this.$canvas = jQuery(
                 "<canvas id='myCanvas' width='" + width + "' height='" + height + "'>" +
                 "</canvas>");
 
-            $canvas.appendTo(this.$iframeContainer);
+            this.$canvas.appendTo(this.$iframeContainer);
 
             // resize the canvas to fill browser window dynamically
             jQuery(window).on('resize', () => {
                 console.log("resize canvas");
-                $canvas.width(this.$humanWidget.width());
-                $canvas.height(this.$humanWidget.height());
+                this.$canvas.width(this.$humanWidget.width());
+                this.$canvas.height(this.$humanWidget.height());
             });
 
 
@@ -140,6 +140,7 @@ class AnatomyNotes {
 
         this.$sceneSelectorOption = jQuery('.scene-selector-option');
         this.$sceneSelectImageBtn = jQuery('#scene-selector-image');
+        this.$toggleCanvas = jQuery('#scene-selector-canvas-toggle');
 
 
         /*********************
@@ -158,7 +159,7 @@ class AnatomyNotes {
             position: 'top',
             style: 'dark',
             event: 'hover',
-        }
+        };
 
         // Modal alert dialog
         this.$modalAlert = jQuery('#wpaz-modal-alert');
@@ -209,6 +210,7 @@ class AnatomyNotes {
         // Scene selector
         this.$sceneSelectorOption.on('click', (event) => { this.loadScene(jQuery(event.target)) });
         this.$sceneSelectImageBtn.on('click', (event) => {this.loadImage()});
+        this.$toggleCanvas.on('click', (event) => { this.$canvas.toggle()});
 
         // Note container
         this.$postTitle.on('click', () => { this.editPostTitle(); });

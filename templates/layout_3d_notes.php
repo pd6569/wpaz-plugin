@@ -69,6 +69,7 @@
 
 	                    <?php if (!is_page($wp_az_3d_body_id)) : ?>
                         <button id="scene-selector-image" type="button" class="btn btn-default pull-left"><span class="glyphicon glyphicon-picture" aria-hidden="true"></span></button>
+                        <button id="scene-selector-canvas-toggle" type="button" class="btn btn-default pull-left"><span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span></button>
                         <?php endif ?>
 
                         <div class="btn-group scene-selector scene-selector__whole-body dropup">
