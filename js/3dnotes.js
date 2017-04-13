@@ -89,12 +89,39 @@ class AnatomyNotes {
                     console.log("position: ", pickInfo.position);
 
                     this.human.send('annotations.create', {
-                        title: "What the fuck",
-                        description: "Added a new annotation programmatically",
+                        title: "Title",
+                        description: "Description",
                         objectId: pickInfo.objectId,
                         position: [pickInfo.position.x, pickInfo.position.y, pickInfo.position.z]
                     }, (newAnnotation) => {
                         console.log("New annotation created: " + JSON.stringify(newAnnotation));
+
+                        Utils.resetModal();
+                        Utils.showModal({
+                            title: "Add annotation",
+                            body: ""
+                        });
+
+                        this.$modalAnnotations.removeClass('hidden');
+
+                        this.$modalBtn1.on('click', () => {
+                            this.$modalAlert.modal('hide');
+                            Utils.resetModal();
+                            this.human.send("annotations.destroy", newAnnotation.annotationId);
+                        });
+
+                        this.$modalBtn2.on('click', () => {
+                            let title = this.$annotationsTitle.val();
+                            let desc = this.$annotationsDescription.val();
+                            this.human.send("annotations.update", {
+                                annotationId: newAnnotation.annotationId,
+                                title: title,
+                                description: desc
+                            })
+                            this.$modalAlert.modal('hide');
+                            Utils.resetModal();
+                        })
+
                     })
                 });
             });
@@ -194,11 +221,15 @@ class AnatomyNotes {
             event: 'hover',
         };
 
-        // Modal alert dialog
+        /************************
+         *  Modal alert dialog  *
+         ************************/
+
         this.$modalAlert = jQuery('#wpaz-modal-alert');
         this.$modalTitle = this.$modalAlert.find('.modal-title');
         this.$modalBody = this.$modalAlert.find('.modal-body');
         this.$modalImageProps = this.$modalAlert.find('.modal-image-properties');
+        this.$modalAnnotations = this.$modalAlert.find('.modal-annotations');
         this.$modalError = this.$modalAlert.find('.modal-error p');
         this.$modalBtn1 = this.$modalAlert.find('#modal-btn-1');
         this.$modalBtn2 = this.$modalAlert.find('#modal-btn-2');
@@ -209,6 +240,9 @@ class AnatomyNotes {
         this.$imgCaption = jQuery('.modal-image-properties .image-caption');
         this.$imgAlt = jQuery('.modal-image-properties .image-alt');
 
+        // Annotations
+        this.$annotationsTitle = this.$modalAnnotations.find('.annotation-title');
+        this.$annotationsDescription = this.$modalAnnotations.find('.annotation-description');
 
         /*******************************
          *  set DOM Event listeners    *

@@ -406,6 +406,14 @@
                     <img src="" width="100%" height="100%">
                 </div>
             </div>
+            <div class="modal-annotations hidden">
+                <div class="form-group">
+                    <form>
+                        <input type="text" class="form-control annotation-title" placeholder="Title" value="">
+                        <textarea class="form-control annotation-description" rows="5" placeholder="Description"></textarea>
+                    </form>
+                </div>
+            </div>
             <div class="modal-error text-center hidden"><p></p></div>
             <div class="modal-footer">
                 <button id="modal-btn-1" type="button" class="btn btn-default"></button>
@@ -416,7 +424,6 @@
 </div>
 
 <!-- toolbar for editing images -->
-
 <?php if ( $user_is_editor ) : ?>
     <div id="toolbar-options" class="hidden">
         <a id="toolbar-edit-image" href="#"><i class="fa fa-pencil"></i></a>

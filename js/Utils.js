@@ -67,6 +67,7 @@ class Utils {
         let $modalError = $modalAlert.find('.modal-error p');
         let $modalBody = $modalAlert.find('.modal-body');
         let $modalImageProps = $modalAlert.find('.modal-image-properties');
+        let $modalAnnotations = $modalAlert.find('.modal-annotations');
         let $modalBtn1 = $modalAlert.find('#modal-btn-1');
         let $modalBtn2 = $modalAlert.find('#modal-btn-2');
 
@@ -74,6 +75,7 @@ class Utils {
         $modalTitle.text("");
         $modalBody.empty();
         $modalImageProps.addClass('hidden');
+        $modalAnnotations.addClass('hidden');
         $modalError.empty();
         $modalBtn1.off();
         $modalBtn2.off();

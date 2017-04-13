@@ -52,6 +52,11 @@
     width: 50%;
 }
 
+.modal-annotations .form-control{
+    margin: 10px;
+    width: 90%;
+}
+
 /******************************
  *    MODEL CANVAS OVERLAY    *
  ******************************/
