@@ -296,6 +296,14 @@
                                         <span id="current-action" class="label label-info">Action 1</span>
                                         <span id="num-actions" class="label label-info">0 actions</span>
                                     </div>
+                                    <div class="toolbar-annotations">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="annotations-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                            Annotations
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul id="annotations-dropdown-container" class="dropdown-menu" aria-labelledby="annotations-dropdown">
+                                        </ul>
+                                    </div>
                                 </div>
                                 <div class="col-md-6 actions-buttons">
                                     <div class="btn-group pull-right" role="group" aria-label="...">

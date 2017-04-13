@@ -89,8 +89,8 @@ class AnatomyNotes {
                     console.log("position: ", pickInfo.position);
 
                     this.human.send('annotations.create', {
-                        title: "Title",
-                        description: "Description",
+                        title: "",
+                        description: "",
                         objectId: pickInfo.objectId,
                         position: [pickInfo.position.x, pickInfo.position.y, pickInfo.position.z]
                     }, (newAnnotation) => {
@@ -117,7 +117,7 @@ class AnatomyNotes {
                                 annotationId: newAnnotation.annotationId,
                                 title: title,
                                 description: desc
-                            })
+                            });
                             this.$modalAlert.modal('hide');
                             Utils.resetModal();
                         })
@@ -185,6 +185,9 @@ class AnatomyNotes {
         this.$clearActions = jQuery('#toolbar-clear-actions');
         this.$actionStatusBox = jQuery('#action-status-box');
         this.$takeSnapshot = jQuery('#action-snapshot');
+
+        // Annotations
+        this.$annotationsDropdownContainer = jQuery('#annotations-dropdown-container');
 
         // Toolbar
         this.$toolbarReset = jQuery('#toolbar-reset');
@@ -590,6 +593,17 @@ class AnatomyNotes {
                         appGlobals.actions[action.note_id] = [action];
                     }
                 });
+
+                // Load annotations for first action of first note
+                if (appGlobals.actions[appGlobals.currentNote.uid]){
+                    let firstAction = appGlobals.actions[appGlobals.currentNote.uid][0];
+                    let annotations = JSON.parse(firstAction.scene_state)['annotations'];
+                    console.log("annotations for first action: ", annotations);
+                    for (let annotation of annotations) {
+                        let $annotationItem = jQuery("<li id='" + annotation.annotationId + "' class='list-group-item'><a>" + annotation.title + "</a></li>");
+                        appObj.$annotationsDropdownContainer.append($annotationItem);
+                    }
+                }
 
                 // sort actions into order
                 Object.keys(appGlobals.actions).forEach((noteId) => {
