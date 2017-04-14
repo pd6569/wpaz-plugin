@@ -309,6 +309,7 @@
                                     <div class="btn-group pull-right" role="group" aria-label="...">
                                         <button id="toolbar-reset" type="button" class="btn btn-default">Reset</button>
                                         <button id="toolbar-clear-actions" type="button" class="btn btn-default">Clear Actions</button>
+                                        <button id="toolbar-clear-annotations" type="button" class="btn btn-default">Clear Annotations</button>
                                     </div>
                                 </div>
 

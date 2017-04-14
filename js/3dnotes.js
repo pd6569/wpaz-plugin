@@ -96,7 +96,9 @@ class AnatomyNotes {
                     }, (newAnnotation) => {
                         console.log("New annotation created: " + JSON.stringify(newAnnotation));
 
-                        Utils.resetModal();
+                        this.showModal('annotations', newAnnotation);
+
+                        /*Utils.resetModal();
                         Utils.showModal({
                             title: "Add annotation",
                             body: ""
@@ -120,7 +122,7 @@ class AnatomyNotes {
                             });
                             this.$modalAlert.modal('hide');
                             Utils.resetModal();
-                        })
+                        })*/
 
                     })
                 });
@@ -338,6 +340,45 @@ class AnatomyNotes {
     /****************************
      *      CLASS METHODS       *
      ****************************/
+
+    showModal(modalType, data){
+
+        Utils.resetModal();
+
+        switch (modalType){
+
+            case 'annotations':
+                console.log("show annotations modal");
+                Utils.showModal({
+                    title: "Edit Annotation",
+                    body: ""
+                });
+
+                this.$modalAnnotations.removeClass('hidden');
+
+                this.$annotationsTitle.val(data.title);
+                this.$annotationsDescription.val(data.description);
+
+                this.$modalBtn1.on('click', () => {
+                    this.$modalAlert.modal('hide');
+                    Utils.resetModal();
+                    this.human.send("annotations.destroy", data.annotationId);
+                });
+
+                this.$modalBtn2.on('click', () => {
+                    let title = this.$annotationsTitle.val();
+                    let desc = this.$annotationsDescription.val();
+                    this.human.send("annotations.update", {
+                        annotationId: data.annotationId,
+                        title: title,
+                        description: desc
+                    });
+                    this.$modalAlert.modal('hide');
+                    Utils.resetModal();
+                });
+                break;
+        }
+    }
 
     createPostInDb(title, callback){
 
@@ -661,8 +702,14 @@ class AnatomyNotes {
         this.$annotationsDropdownContainer.empty();
 
         for (let annotation of annotations) {
-            let $annotationItem = jQuery("<li id='" + annotation.annotationId + "' class='list-group-item'><a>" + annotation.title + "</a></li>");
+            let $annotationItem = jQuery(
+                "<li id='" + annotation.annotationId + "' class='list-group-item'>" +
+                    "<a href='#'>" + annotation.title + "</a>" +
+                "</li>");
             this.$annotationsDropdownContainer.append($annotationItem);
+            $annotationItem.on('click', () => {
+                this.showModal('annotations', annotation);
+            })
         }
 
     }
