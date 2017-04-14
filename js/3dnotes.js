@@ -594,17 +594,6 @@ class AnatomyNotes {
                     }
                 });
 
-                // Load annotations for first action of first note
-                if (appGlobals.actions[appGlobals.currentNote.uid]){
-                    let firstAction = appGlobals.actions[appGlobals.currentNote.uid][0];
-                    let annotations = JSON.parse(firstAction.scene_state)['annotations'];
-                    console.log("annotations for first action: ", annotations);
-                    for (let annotation of annotations) {
-                        let $annotationItem = jQuery("<li id='" + annotation.annotationId + "' class='list-group-item'><a>" + annotation.title + "</a></li>");
-                        appObj.$annotationsDropdownContainer.append($annotationItem);
-                    }
-                }
-
                 // sort actions into order
                 Object.keys(appGlobals.actions).forEach((noteId) => {
                     let actionsToSort = appGlobals.actions[noteId];
@@ -618,6 +607,9 @@ class AnatomyNotes {
                 if (appGlobals.actions[appGlobals.currentNote.uid]){
                     appObj.setCurrentAction(appGlobals.actions[appGlobals.currentNote.uid][0]);
                 }
+
+                // load annotations
+                appObj.loadAnnotations(appGlobals.currentAction);
 
                 appGlobals.notesLoaded = true;
 
@@ -654,6 +646,26 @@ class AnatomyNotes {
         }});
     }
 
+    /****
+     *  Load annotations for a specific action into the note editor
+     *
+     * @param action - Action object for which to load annotations.
+     */
+    loadAnnotations(action) {
+
+        console.log("loadAnnotations");
+
+        let annotations = JSON.parse(action.scene_state)['annotations'];
+
+        // clear previous annotations
+        this.$annotationsDropdownContainer.empty();
+
+        for (let annotation of annotations) {
+            let $annotationItem = jQuery("<li id='" + annotation.annotationId + "' class='list-group-item'><a>" + annotation.title + "</a></li>");
+            this.$annotationsDropdownContainer.append($annotationItem);
+        }
+
+    }
 
 
     // NOTE NAVIGATION
@@ -1004,8 +1016,10 @@ class AnatomyNotes {
         if (appGlobals.actions[note.uid]) {
             this.loadActions(note.uid, this);
             this.setCurrentAction(appGlobals.actions[note.uid][0]);
-        }
 
+            // load annotations
+            this.loadAnnotations(appGlobals.currentAction);
+        }
 
         // scroll to top
         if (scrollToTop) {
@@ -1105,6 +1119,7 @@ class AnatomyNotes {
             if (direction === "next"){
                 if (currentActionOrder < numActions){
                     this.doAction(actions[currentActionOrder], this);
+                    this.loadAnnotations(actions[currentActionOrder]);
                 }  else {
                     console.log("Reached last action");
                     return;
@@ -1112,6 +1127,7 @@ class AnatomyNotes {
             } else {
                 if (currentActionOrder > 1){
                     this.doAction(actions[currentActionOrder - 2], this);
+                    this.loadAnnotations(actions[currentActionOrder - 2]);
                 } else {
                     console.log("Reached first action");
                     return;
