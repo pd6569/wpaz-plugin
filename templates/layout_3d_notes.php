@@ -304,6 +304,9 @@
                                         <ul id="annotations-dropdown-container" class="dropdown-menu" aria-labelledby="annotations-dropdown">
                                         </ul>
                                     </div>
+                                    <div class="annotation-properties">
+                                        <span id="num-annotations" class="label label-info">0 annotations</span>
+                                    </div>
                                 </div>
                                 <div class="col-md-6 actions-buttons">
                                     <div class="btn-group pull-right" role="group" aria-label="...">
@@ -312,7 +315,6 @@
                                         <button id="toolbar-clear-annotations" type="button" class="btn btn-default">Clear Annotations</button>
                                     </div>
                                 </div>
-
                             </div>
 
                             <div class="row">

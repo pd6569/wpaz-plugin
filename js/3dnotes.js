@@ -190,6 +190,7 @@ class AnatomyNotes {
 
         // Annotations
         this.$annotationsDropdownContainer = jQuery('#annotations-dropdown-container');
+        this.$numAnnotationsLabel = jQuery('#num-annotations');
 
         // Toolbar
         this.$toolbarReset = jQuery('#toolbar-reset');
@@ -700,8 +701,10 @@ class AnatomyNotes {
 
         // clear previous annotations
         this.$annotationsDropdownContainer.empty();
+        let numAnnotations = 0;
 
         for (let annotation of annotations) {
+            numAnnotations++;
             let $annotationItem = jQuery(
                 "<li id='" + annotation.annotationId + "' class='list-group-item'>" +
                     "<a href='#'>" + annotation.title + "</a>" +
@@ -711,6 +714,9 @@ class AnatomyNotes {
                 this.showModal('annotations', annotation);
             })
         }
+
+        // Update num annotations label
+        this.$numAnnotationsLabel.text(numAnnotations + " annotations");
 
     }
 
