@@ -47,6 +47,12 @@
             </div>
         <?php endif ?>
 
+        <div id="wpaz-my-notes" class="row hidden">
+            <div class="col-md-8">
+
+            </div>
+        </div>
+
         <div class="row">
 
             <div id="wpaz-model-container" class="col-md-8">

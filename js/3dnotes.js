@@ -95,7 +95,6 @@ class AnatomyNotes {
                         position: [pickInfo.position.x, pickInfo.position.y, pickInfo.position.z]
                     }, (newAnnotation) => {
                         console.log("New annotation created: " + JSON.stringify(newAnnotation));
-
                         this.showModal('annotations', newAnnotation);
 
                         /*Utils.resetModal();
@@ -373,6 +372,8 @@ class AnatomyNotes {
                         annotationId: data.annotationId,
                         title: title,
                         description: desc
+
+                        // add to annotations container
                     });
                     this.$modalAlert.modal('hide');
                     Utils.resetModal();
@@ -705,19 +706,24 @@ class AnatomyNotes {
 
         for (let annotation of annotations) {
             numAnnotations++;
-            let $annotationItem = jQuery(
-                "<li id='" + annotation.annotationId + "' class='list-group-item'>" +
-                    "<a href='#'>" + annotation.title + "</a>" +
-                "</li>");
-            this.$annotationsDropdownContainer.append($annotationItem);
-            $annotationItem.on('click', () => {
-                this.showModal('annotations', annotation);
-            })
+            this.addAnnotationToContainer(annotation);
         }
 
         // Update num annotations label
         this.$numAnnotationsLabel.text(numAnnotations + " annotations");
 
+    }
+
+    addAnnotationToContainer(annotation) {
+        console.log("addAnnotationToContainer");
+        let $annotationItem = jQuery(
+            "<li id='" + annotation.annotationId + "' class='list-group-item'>" +
+            "<a href='#'>" + annotation.title + "</a>" +
+            "</li>");
+        this.$annotationsDropdownContainer.append($annotationItem);
+        $annotationItem.on('click', () => {
+            this.showModal('annotations', annotation);
+        })
     }
 
 
