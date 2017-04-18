@@ -94,6 +94,7 @@ class AnatomyNotes {
                         position: [pickInfo.position.x, pickInfo.position.y, pickInfo.position.z]
                     }, (newAnnotation) => {
                         console.log("New annotation created: " + JSON.stringify(newAnnotation));
+                        newAnnotation.isNewAnnotation = true;
                         this.showModal('annotations', newAnnotation);
 
                         /*Utils.resetModal();
@@ -361,7 +362,9 @@ class AnatomyNotes {
                 this.$modalBtn1.on('click', () => {
                     this.$modalAlert.modal('hide');
                     Utils.resetModal();
-                    this.human.send("annotations.destroy", data.annotationId);
+                    if (data.isNewAnnotation) {
+                        this.human.send("annotations.destroy", data.annotationId);
+                    }
                 });
 
                 this.$modalBtn2.on('click', () => {
@@ -721,8 +724,6 @@ class AnatomyNotes {
         this.$annotationsDropdownContainer.append($annotationItem);
         $annotationItem.on('click', () => {
             this.showModal('annotations', annotation);
-
-
         })
     }
 
