@@ -51,7 +51,6 @@ class AnatomyNotes {
             this.registerCallbacks();
             this.setHumanUi();
 
-
             /***********************************
              *          CANVAS OVERLAY         *
              ***********************************/
@@ -348,7 +347,7 @@ class AnatomyNotes {
         switch (modalType){
 
             case 'annotations':
-                console.log("show annotations modal");
+                console.log("show annotations modal: " + JSON.stringify(data));
                 Utils.showModal({
                     title: "Edit Annotation",
                     body: ""
@@ -372,8 +371,6 @@ class AnatomyNotes {
                         annotationId: data.annotationId,
                         title: title,
                         description: desc
-
-                        // add to annotations container
                     });
                     this.$modalAlert.modal('hide');
                     Utils.resetModal();
@@ -651,9 +648,6 @@ class AnatomyNotes {
                     appObj.setCurrentAction(appGlobals.actions[appGlobals.currentNote.uid][0]);
                 }
 
-                // load annotations
-                appObj.loadAnnotations(appGlobals.currentAction);
-
                 appGlobals.notesLoaded = true;
 
                 Utils.setNoteUpdateStatus("Notes data load complete.", 3000);
@@ -694,24 +688,28 @@ class AnatomyNotes {
      *
      * @param action - Action object for which to load annotations.
      */
-    loadAnnotations(action) {
+    loadAnnotations() {
 
         console.log("loadAnnotations");
-
-        let annotations = JSON.parse(action.scene_state)['annotations'];
 
         // clear previous annotations
         this.$annotationsDropdownContainer.empty();
         let numAnnotations = 0;
 
-        for (let annotation of annotations) {
-            numAnnotations++;
-            this.addAnnotationToContainer(annotation);
-        }
+        this.human.send("annotations.info", (annotations) => {
+            console.log("annotations", annotations);
+            for (let annotationId in annotations){
+                numAnnotations++;
+                let annotation = annotations[annotationId];
+                this.addAnnotationToContainer(annotation);
 
-        // Update num annotations label
-        this.$numAnnotationsLabel.text(numAnnotations + " annotations");
+                console.log("load annotation: " + JSON.stringify(annotation));
+            }
 
+            // Update num annotations label
+            this.$numAnnotationsLabel.text(numAnnotations + " annotations");
+
+        });
     }
 
     addAnnotationToContainer(annotation) {
@@ -723,6 +721,8 @@ class AnatomyNotes {
         this.$annotationsDropdownContainer.append($annotationItem);
         $annotationItem.on('click', () => {
             this.showModal('annotations', annotation);
+
+
         })
     }
 
@@ -1077,7 +1077,7 @@ class AnatomyNotes {
             this.setCurrentAction(appGlobals.actions[note.uid][0]);
 
             // load annotations
-            this.loadAnnotations(appGlobals.currentAction);
+            this.loadAnnotations();
         }
 
         // scroll to top
@@ -1178,7 +1178,6 @@ class AnatomyNotes {
             if (direction === "next"){
                 if (currentActionOrder < numActions){
                     this.doAction(actions[currentActionOrder], this);
-                    this.loadAnnotations(actions[currentActionOrder]);
                 }  else {
                     console.log("Reached last action");
                     return;
@@ -1186,7 +1185,6 @@ class AnatomyNotes {
             } else {
                 if (currentActionOrder > 1){
                     this.doAction(actions[currentActionOrder - 2], this);
-                    this.loadAnnotations(actions[currentActionOrder - 2]);
                 } else {
                     console.log("Reached first action");
                     return;
@@ -1348,7 +1346,10 @@ class AnatomyNotes {
                     up: JSON.parse(action.scene_state).camera.up,
                     animate: true
                 }, () => {
-                    appObj.human.send('scene.restore', JSON.parse(action.scene_state))
+                    appObj.human.send('scene.restore', JSON.parse(action.scene_state), () => {
+                        console.log("scene restored");
+                        appObj.loadAnnotations();
+                    });
                 });
 
                 appObj.setCurrentAction(action);
@@ -1517,7 +1518,9 @@ class AnatomyNotes {
         if (appGlobals.currentNote){
             if (appGlobals.currentNote.scene_state !== ""){
                 let scene_state = JSON.parse(appGlobals.currentNote['scene_state']);
-                human.send("scene.restore", scene_state);
+                human.send("scene.restore", scene_state, () => {
+                    this.loadAnnotations();
+                });
                 if (callback) callback(scene_state);
             }
         }

@@ -48,6 +48,9 @@ let appGlobals = {
         GENERAL: 'general'
     },
 
+    // annotations
+    annotations: [], // array of annotation objects representing currently visible annotations
+
     // scene presets - naming must match data attributes in layout file
     scenePresets: {
         head: {
