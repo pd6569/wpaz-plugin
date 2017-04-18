@@ -433,6 +433,7 @@
             </div>
             <div class="modal-error text-center hidden"><p></p></div>
             <div class="modal-footer">
+                <button id="annotations-delete-btn" type="button" class="btn btn-danger modal-annotations pull-left">Delete</button>
                 <button id="modal-btn-1" type="button" class="btn btn-default"></button>
                 <button id="modal-btn-2" type="button" class="btn btn-default"></button>
             </div>

@@ -94,7 +94,7 @@ class AnatomyNotes {
                         position: [pickInfo.position.x, pickInfo.position.y, pickInfo.position.z]
                     }, (newAnnotation) => {
                         console.log("New annotation created: " + JSON.stringify(newAnnotation));
-                        newAnnotation.isNewAnnotation = true;
+                        newAnnotation.isNewAnnotation = true; // if cancel clicked on modal, annotation will be deleted
                         this.showModal('annotations', newAnnotation);
 
                         /*Utils.resetModal();
@@ -377,7 +377,24 @@ class AnatomyNotes {
                     });
                     this.$modalAlert.modal('hide');
                     Utils.resetModal();
+
+                    // reload annotations container
+                    this.loadAnnotations();
                 });
+
+                let $deleteBtn = jQuery('#annotations-delete-btn');
+
+                $deleteBtn.off(); // detach previous listeners
+                $deleteBtn.on('click', () => {
+                    console.log("delete annotation");
+                    this.human.send('annotations.destroy', data.annotationId, () => {
+                        console.log("destroy annotation: " + data.annotationId);
+                        this.loadAnnotations(); // reload annotations dropdown
+                    });
+                    this.$modalAlert.modal('hide');
+                    Utils.resetModal();
+                });
+
                 break;
         }
     }
@@ -706,7 +723,7 @@ class AnatomyNotes {
                 let annotation = annotations[annotationId];
                 this.addAnnotationToContainer(annotation);
 
-                console.log("load annotation: " + JSON.stringify(annotation));
+                console.log("load annotation: " + annotation.annotationId);
             }
 
             // Update num annotations label
