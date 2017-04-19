@@ -291,13 +291,27 @@
                                         <button id="action-add" type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
                                         <button id="action-previous" type="button" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
                                         <button id="action-next" type="button" class="btn btn-default"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></button>
-                                        <button class="btn btn-default dropdown-toggle" type="button" id="actions-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                            Actions
-                                            <span class="caret"></span>
-                                        </button>
-                                        <ul id="actions-dropdown-container" class="dropdown-menu" aria-labelledby="actions-dropdown">
-                                        </ul>
-                                        <button id="action-snapshot" type="button" class="btn btn-default"><span class="glyphicon glyphicon-camera"></span></button>
+
+                                        <div class="btn-group">
+                                            <button class="btn btn-default dropdown-toggle" type="button" id="actions-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                Actions
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul id="actions-dropdown-container" class="dropdown-menu" aria-labelledby="actions-dropdown">
+                                            </ul>
+                                        </div>
+
+                                        <div class="btn-group">
+                                            <button class="btn btn-default dropdown-toggle" type="button" id="snapshot-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                <span class="glyphicon glyphicon-camera"></span>
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul id="snapshot-dropdown" class="dropdown-menu" aria-labelledby="snapshot-dropdown">
+                                                <li class="take-snapshot" data-ratio="one-one"><a>1:1</a></li>
+                                                <li class="take-snapshot" data-ratio="four-three"><a>4:3</a></li>
+                                            </ul>
+                                        </div>
+
                                     </div>
                                     <div class="action-properties">
                                         <span id="current-action" class="label label-info">Action 1</span>

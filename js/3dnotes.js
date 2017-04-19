@@ -189,7 +189,7 @@ class AnatomyNotes {
         this.$currentActionLabel = jQuery('#current-action');
         this.$clearActions = jQuery('#toolbar-clear-actions');
         this.$actionStatusBox = jQuery('#action-status-box');
-        this.$takeSnapshot = jQuery('#action-snapshot');
+        this.$takeSnapshot = jQuery('.take-snapshot');
 
         // Annotations
         this.$annotationsDropdownContainer = jQuery('#annotations-dropdown-container');
@@ -329,7 +329,7 @@ class AnatomyNotes {
         this.$nextAction.on('click', (event) => { this.navigateActions('next')});
         this.$previousAction.on('click', (event) => { this.navigateActions('previous')});
         this.$clearActions.on('click', () => { this.clearActions(appGlobals.currentNote.uid); });
-        this.$takeSnapshot.on('click', () => {this.takeSnapshot()});
+        this.$takeSnapshot.on('click', (event) => { this.takeSnapshot(jQuery(event.currentTarget).attr('data-ratio')); });
 
         // Toolbar
         this.$toolbarReset.on('click', event => { this.human.send("scene.restore", JSON.parse(appGlobals.currentNote.scene_state)); });
@@ -1241,7 +1241,13 @@ class AnatomyNotes {
         this.$currentActionLabel.text("Action " + action.action_order);
     }
 
-    takeSnapshot(backgroundColor, callback){
+    /**
+     *
+     * @param aspectRatio Specified by the 'data-ratio' attribute. Options: 'one-one', 'four-three'
+     * @param backgroundColor
+     * @param callback
+     */
+    takeSnapshot(aspectRatio, backgroundColor, callback){
 
         appGlobals.numSnapshots++;
 
@@ -1249,7 +1255,21 @@ class AnatomyNotes {
         this.$modelContainer
             .removeClass('col-md-8')
             .addClass('col-md-12');
-        let height = this.$humanWidget.width();
+
+        let height;
+
+        switch(aspectRatio){
+            case 'one-one':
+                height = this.$humanWidget.width();
+                console.log("aspect ratio: " + aspectRatio + " height: " + height);
+                break;
+
+            case 'four-three':
+                height = parseInt((this.$humanWidget.width() / 4) * 3);
+                console.log("aspect ratio: " + aspectRatio + " height: " + height);
+                break;
+        }
+
         this.$humanWidget.attr("height", height);
 
         setTimeout(() => {

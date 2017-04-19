@@ -112,6 +112,8 @@
     margin-right: 5px;
 }
 
+/* TOOLBAR BUTTONS */
+
 #scene-actions .list-group {
     margin: 0px;
 }
@@ -125,6 +127,14 @@
 }
 #wpaz-notes-container .dropdown-menu {
     list-style: none;
+}
+
+#snapshot-dropdown {
+    min-width: 0px
+}
+
+#snapshot-dropdown li:hover {
+    cursor: pointer;
 }
 
 #wpaz-notes-container .update-status {
