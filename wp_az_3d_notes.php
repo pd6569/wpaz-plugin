@@ -40,6 +40,7 @@ define('WP_AZ_USER_NOTES_POST_TYPE', 'user-notes');
 
 require_once ( WP_AZ_PLUGIN_DIR . '/functions.php');
 require_once ( WP_AZ_PLUGIN_DIR . '/templates.php');
+require_once ( WP_AZ_PLUGIN_DIR . '/inc/class_notes_editor.php');
 
 // Database
 $wp_az_db_version = '1.0';
@@ -63,6 +64,7 @@ class wp_az_3d_notes {
 		add_action('init', array($this,'register_3d_notes')); //register admin notes post type
 		add_action('init', array($this,'register_user_notes')); //register user notes post type
 		add_action('init', array($this, 'set_globals_from_options'));
+		add_action('init', array($this, 'setup_notes_editor'));
 		add_action('admin_enqueue_scripts', array($this,'enqueueAdmin'));
 		add_action('wp_enqueue_scripts', array($this,'enqueue'), 50); // ensure styles are enqueued AFTER theme!
 		add_filter('the_content', array($this, 'set_content'));
@@ -198,6 +200,14 @@ class wp_az_3d_notes {
 		$wp_az_3d_body_id = get_option('wp_az_3d_body_post_id');
 
 	}
+
+	public function setup_notes_editor(){
+
+		$notes_editor = new wpaz_notes_editor();
+
+	}
+
+	//  ENQUEUE SCRIPTS AND STYLES
 
 	public function enqueueAdmin() {
 

@@ -275,9 +275,7 @@
                                 </div>
                             </form>
 
-	                        <?php wp_editor( $notes[0]->note_content, 'notetexteditor', array(
-		                        'media_buttons'       => true,
-                            ));
+	                        <?php wp_editor( $notes[0]->note_content, 'notetexteditor');
 
 	                        ?>
 
