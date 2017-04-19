@@ -127,6 +127,9 @@ class AnatomyNotes {
                 });
             });
 
+            this.$canvas = jQuery('#myCanvas');
+            this.$canvas.hide();
+
             // resize the canvas to fill browser window dynamically
             jQuery(window).on('resize', () => {
                 console.log("resize canvas");
@@ -153,6 +156,7 @@ class AnatomyNotes {
          *      MODEL CONTAINER  *
          *************************/
         this.$modelContainer = jQuery('#wpaz-model-container');
+        this.$modeInfo = jQuery('#wpaz-mode-info');
 
         /**********************
          *    NOTE CONTAINER  *
@@ -283,7 +287,19 @@ class AnatomyNotes {
         this.$sceneSelectorOption.on('click', (event) => { this.loadScene(jQuery(event.target)) });
         this.$sceneSelectImageBtn.on('click', (event) => {this.loadImage()});
         this.$toggleCanvas.on('click', (event) => {
-            jQuery('#myCanvas').toggle();
+            this.$canvas.toggle();
+            appGlobals.mode.ANNOTATE = !appGlobals.mode.ANNOTATE;
+            if (appGlobals.mode.ANNOTATE) {
+                this.$toggleCanvas.css("background-color", "#337ab7");
+                this.$modeInfo
+                    .removeClass('hidden')
+                    .show()
+                    .text("ANNOTATE MODE");
+            } else {
+                this.$toggleCanvas.css("background-color", "");
+                this.$modeInfo.hide();
+            }
+
         });
 
 
@@ -341,6 +357,11 @@ class AnatomyNotes {
      *      CLASS METHODS       *
      ****************************/
 
+    /****
+     *
+     * @param modalType Select modal type: 'annotations',
+     * @param data Data object associated with modal. Annotations modal takes annotation object.
+     */
     showModal(modalType, data){
 
         Utils.resetModal();

@@ -67,6 +67,7 @@
                             src="<?php if (!empty($notes[0]->url)): echo $notes[0]->url; else: echo "https://human.biodigital.com/widget?be=1mHv&background=255,255,255,51,64,77&ui-nav=false&ui-fullscreen=false&ui-share=false&dk=6f2c42f37ce7c183993a87afb2df8d136fecc7c7"; endif; ?>">
                     </iframe>
 
+                    <div id="wpaz-mode-info" class="hidden"></div>
                 </div>
 
 	            <?php if ( $user_is_editor || is_page($wp_az_3d_body_id)): ?>

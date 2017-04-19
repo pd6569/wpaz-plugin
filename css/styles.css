@@ -58,12 +58,31 @@
 }
 
 /******************************
+ *      SCENE SELECTOR        *
+ ******************************/
+
+
+/******************************
  *    MODEL CANVAS OVERLAY    *
  ******************************/
 #myCanvas {
     position:absolute;
     top: 0;
     border:1px solid #000000;
+}
+
+/* MODE INFO OVERLAY */
+
+#wpaz-mode-info {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: white;
+    color: red;
+    border: 2px solid;
+    margin: 10px;
+    margin-right: 20px;
+    padding: 5px;
 }
 
 

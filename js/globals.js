@@ -29,6 +29,11 @@ let appGlobals = {
         'NOTES_DASHBOARD': "NOTES_DASHBOARD",
     },
 
+    // Modes
+    mode: {
+        'ANNOTATE': false,
+    },
+
     // templates
     templates: {
         NOTE_SECTION: {},
