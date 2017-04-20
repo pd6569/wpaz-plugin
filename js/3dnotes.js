@@ -179,7 +179,6 @@ class AnatomyNotes {
         this.$noteText = jQuery('.notes-text');
         this.$savingStatus = jQuery('.update-status');
 
-
         // actions
         this.$addAction = jQuery('#action-add');
         this.$previousAction = jQuery('#action-previous');
@@ -310,16 +309,21 @@ class AnatomyNotes {
         this.$noteNavRight.on('click', () => { this.navigateNotes('right'); });
         this.$noteTitle.on("change keyup paste", () => { this.changesMade = true; });
 
+
         // tinyMCE Note Editor
         jQuery(document).on( 'tinymce-editor-init', ( event, editor ) => {
 
             console.log("tinyMCE ready");
+
             this.$noteEditor = editor;
 
             this.$noteEditor.on('KeyUp', (e) => {
                 console.log("KeyUp");
                 this.changesMade = true;
-            })
+            });
+
+/*            this.$editorBody = jQuery(this.$noteEditor.getBody());
+            this.$editorBody.find('.linked-scene').css('color', 'red');*/
 
         });
 

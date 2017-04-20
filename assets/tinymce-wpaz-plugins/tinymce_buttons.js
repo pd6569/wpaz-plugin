@@ -5,13 +5,12 @@
          * Initialize the TinyMCE plugin
          */
         init : function( editor, url ) {
-            console.log("init linkscene tinymce plugin. " + url);
             editor.addButton( 'linkscene', {
-                title : 'Link text toscene',
+                title : 'Link text to current scene',
                 image : url + '/images/linkscene.png',
-
                 onclick: function() {
                     console.log("Link this text to an action");
+                    let text = editor.selection.getContent();
                     editor.windowManager.open( {
                         title: 'Link action',
 
@@ -20,11 +19,20 @@
                             multiline: true,
                             name: 'linktext',
                             label: 'Link scene to text',
-                            value: 'PWNAGE TEXT'
+                            value: text
                         }],
 
                         onsubmit: function(e) {
-                            editor.execCommand( 'mceInsertContent', 0, 'Pwning the noobs' );
+
+                            let id = "linked-scene-" + appGlobals.currentAction.uid;
+                            let linkedText =
+                                "<span id='" + id + "' class='linked-scene' data-action-id='" + appGlobals.currentAction.uid + "'>" +
+                                    text +
+                                "</span>";
+                            editor.execCommand( 'mceInsertContent', true, linkedText);
+
+                            /*this.$editorBody = jQuery(editor.getBody());
+                            this.$editorBody.find('#' + id).css('color', 'red');*/
                         }
                     });
                 },

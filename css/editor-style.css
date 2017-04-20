@@ -1,0 +1,12 @@
+/***********************************
+ * STYLE SHEET FOR TINY MCE EDITOR *
+ ***********************************/
+
+.linked-scene {
+    text-decoration: underline;
+}
+
+.linked-scene:hover {
+    text-decoration: none;
+    cursor: pointer;
+}

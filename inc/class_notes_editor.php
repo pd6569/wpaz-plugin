@@ -13,8 +13,20 @@ class wpaz_notes_editor {
 	}
 
 	private function setup_editor(){
+		add_filter('mce_css', array($this, 'plugin_mce_css'));
 		add_filter('mce_external_plugins', array($this, add_tinymce_plugin));
 		add_filter('mce_buttons', array($this, add_tinymce_button));
+	}
+
+	public function plugin_mce_css() {
+
+		if ( ! empty( $mce_css ) )
+			$mce_css .= ',';
+
+		$mce_css .= WP_AZ_PLUGIN_URL . 'css/editor-style.css';
+
+		return $mce_css;
+
 	}
 
 	public function add_tinymce_plugin($plugin_array){
