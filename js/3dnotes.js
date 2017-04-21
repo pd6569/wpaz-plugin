@@ -325,6 +325,34 @@ class AnatomyNotes {
                 this.changesMade = true;
             });
 
+            this.$editorBody = jQuery(this.$noteEditor.getBody());
+
+            // add dynamic listener in editor to link scenes to text
+            this.$editorBody.on('click', '.linked-scene', (event) => {
+                console.log("linked scene clicked in editor");
+
+                let $editLink = jQuery(event.target);
+                this.doActionById($editLink.attr('data-action-id'));
+
+                editor.windowManager.open( {
+                    title: 'Link action',
+
+                    body: [{
+                        type: 'textbox',
+                        multiline: true,
+                        name: 'linktext',
+                        label: 'Link scene to text',
+                        value: $editLink.text()
+                    }],
+
+                    onsubmit: function(e) {
+                        console.log("function to replace action");
+                    }
+                });
+
+
+            });
+
         });
 
 
