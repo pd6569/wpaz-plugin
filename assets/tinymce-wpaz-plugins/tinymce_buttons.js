@@ -24,15 +24,15 @@
 
                         onsubmit: function(e) {
 
-                            let id = "linked-scene-" + appGlobals.currentAction.uid;
-                            let linkedText =
-                                "<span id='" + id + "' class='linked-scene' data-action-id='" + appGlobals.currentAction.uid + "'>" +
+                            appGlobals.appRef.addAction((action) => {
+                                console.log("added action: ", action);
+                                let linkedText =
+                                    "<span class='linked-scene' data-action-id='" + action.uid + "'>" +
                                     text +
-                                "</span>";
-                            editor.execCommand( 'mceInsertContent', true, linkedText);
+                                    "</span>";
+                                editor.execCommand( 'mceInsertContent', true, linkedText);
 
-                            /*this.$editorBody = jQuery(editor.getBody());
-                            this.$editorBody.find('#' + id).css('color', 'red');*/
+                            })
                         }
                     });
                 },

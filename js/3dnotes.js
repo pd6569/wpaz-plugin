@@ -7,7 +7,7 @@ class AnatomyNotes {
     constructor() {
         console.log("anatomy notes loaded");
 
-        let self = this;
+        appGlobals.appRef = this;
 
         // get BioDigital Human
         this.human = new HumanAPI("embedded-human");
@@ -179,6 +179,9 @@ class AnatomyNotes {
         this.$noteText = jQuery('.notes-text');
         this.$savingStatus = jQuery('.update-status');
 
+        // Linked scenes
+        this.$textLinkedToScene = jQuery('.linked-scene');
+
         // actions
         this.$addAction = jQuery('#action-add');
         this.$previousAction = jQuery('#action-previous');
@@ -309,21 +312,18 @@ class AnatomyNotes {
         this.$noteNavRight.on('click', () => { this.navigateNotes('right'); });
         this.$noteTitle.on("change keyup paste", () => { this.changesMade = true; });
 
-
         // tinyMCE Note Editor
         jQuery(document).on( 'tinymce-editor-init', ( event, editor ) => {
 
             console.log("tinyMCE ready");
 
+            //TODO: CHANGE $noteEditor to noteEditor - it is not a jquery element!
             this.$noteEditor = editor;
 
             this.$noteEditor.on('KeyUp', (e) => {
                 console.log("KeyUp");
                 this.changesMade = true;
             });
-
-/*            this.$editorBody = jQuery(this.$noteEditor.getBody());
-            this.$editorBody.find('.linked-scene').css('color', 'red');*/
 
         });
 
@@ -348,6 +348,14 @@ class AnatomyNotes {
         this.$notesTimelineContainer.on('click', '.edit-note', (event) => { console.log("edit Note"); this.editNote(jQuery(event.target).closest('div.note-item').attr('id')) });
         this.$notesTimelineContainer.on('click', '.delete-note', (event) => { console.log("delete Note"); this.deleteNote(jQuery(event.target).closest('div.note-item').attr('id')) });
 
+        // Text Linked Scenes
+        this.$editNoteContainer.on('click', '.linked-scene', (event) => {
+            console.log("linked scene, action id: " + jQuery(event.target).attr('data-action-id'));
+            this.doActionById(jQuery(event.target).attr('data-action-id'));
+        });
+        this.$textLinkedToScene.on('click', (event) => {
+            this.doActionById(jQuery(event.target).attr('data-action-id'));
+        });
 
         // load notes
         this.loadNotes();
@@ -360,6 +368,7 @@ class AnatomyNotes {
     /****************************
      *      CLASS METHODS       *
      ****************************/
+
 
     /****
      *
@@ -581,7 +590,7 @@ class AnatomyNotes {
 
         } else {
             // User UI
-            this.setScanner();
+
         }
 
         // Enable light box
@@ -716,7 +725,7 @@ class AnatomyNotes {
         }
     }
 
-    setScanner(){
+    /*setScanner(){
         //ignores 'left', 'right', and 'bones of the' when searching for matching anatomy objects.
         let toStrip = /^left\s|right\s|bones\sof\sthe\s/i;
 
@@ -726,7 +735,7 @@ class AnatomyNotes {
             },
             suffix: "</a>"
         }});
-    }
+    }*/
 
     /****
      *  Load annotations for a specific action into the note editor
@@ -1165,7 +1174,7 @@ class AnatomyNotes {
     
 
     // ACTIONS
-    addAction() {
+    addAction(callback) {
 
         this.numActions++;
         this.actionsChanged = true;
@@ -1202,7 +1211,9 @@ class AnatomyNotes {
                         break;
                 }
 
-            })
+            });
+
+            if (callback) callback(action);
 
         });
 
@@ -1424,6 +1435,25 @@ class AnatomyNotes {
 
         }
 
+    }
+
+    /*******
+     *
+     * Perform an action using the action Id
+     *
+     * @param actionId
+     */
+    doActionById(actionId){
+        console.log("doActionById");
+        if (actionId) {
+            let actionsArray = appGlobals.actions[appGlobals.currentNote.uid];
+            for (let action of actionsArray) {
+                if (action.uid == actionId){
+                    this.doAction(action, this);
+                    break;
+                }
+            }
+        }
     }
 
     loadActions(noteUID, appObj){

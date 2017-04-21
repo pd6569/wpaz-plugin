@@ -5,6 +5,7 @@
 let appGlobals = {
 
     // app data
+    appRef: {},
     post_id: 0,
     notes: {},
     sequenceIndex: [],
