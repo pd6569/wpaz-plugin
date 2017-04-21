@@ -358,6 +358,7 @@ class wp_az_3d_notes {
 		action_type tinytext NOT NULL,
 		scene_state text,
 		action_data text,
+		action_title tinytext,
 		PRIMARY KEY  (id)
 		) $charset_collate;";
 
@@ -453,7 +454,8 @@ class wp_az_3d_notes {
 					'action_order'  => $action['action_order'],
 					'action_type'   => $action['action_type'],
 					'scene_state'   => $action['scene_state'],
-					'action_data'   => $action['action_data']
+					'action_data'   => $action['action_data'],
+					'action_title'  => $action['action_title']
 				);
 
 				$update = $wpdb->update(

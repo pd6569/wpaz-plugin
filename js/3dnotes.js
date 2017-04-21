@@ -1183,6 +1183,7 @@ class AnatomyNotes {
         // create action, add to array
         let noteId = appGlobals.currentNote.uid;
         let action = new Action(noteId, this.numActions, appGlobals.actionTypes.GENERAL);
+        if (actionTitle) action.setTitle(actionTitle);
         if(appGlobals.actions[noteId]) {
             appGlobals.actions[noteId].push(action);
         } else {
@@ -1469,8 +1470,14 @@ class AnatomyNotes {
 
                 appObj.numActions++;
                 appObj.$numActionsLabel.text(appObj.numActions + ' actions');
+                let actionTitle;
+                if (action.action_title) {
+                    actionTitle = action.action_title;
+                } else {
+                    actionTitle = "Action " + action.action_order;
+                }
 
-                let $actionItem = jQuery("<li id='" + action.uid + "' class='list-group-item'><a> Action " + action.action_order + "</a></li>");
+                let $actionItem = jQuery("<li id='" + action.uid + "' class='list-group-item'><a>" + actionTitle + "</a></li>");
                 appObj.$actionsDropdownContainer.append($actionItem);
 
                 $actionItem.on('click', (event) => {
