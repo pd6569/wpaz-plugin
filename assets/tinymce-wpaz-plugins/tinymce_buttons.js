@@ -24,7 +24,7 @@
 
                         onsubmit: function(e) {
 
-                            appGlobals.appRef.addAction((action) => {
+                            appGlobals.appRef.addAction(text, (action) => {
                                 console.log("added action: ", action);
                                 let linkedText =
                                     "<span class='linked-scene' data-action-id='" + action.uid + "'>" +

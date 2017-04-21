@@ -1174,7 +1174,7 @@ class AnatomyNotes {
     
 
     // ACTIONS
-    addAction(callback) {
+    addAction(actionTitle, callback) {
 
         this.numActions++;
         this.actionsChanged = true;
@@ -1189,8 +1189,13 @@ class AnatomyNotes {
             appGlobals.actions[noteId] = [action];
         }
 
-        let $actionItem = jQuery("<li id='" + action.uid + "' class='list-group-item'><a> Action " + this.numActions + "</a></li>");
+        let $actionItem;
 
+        if (!actionTitle) {
+            $actionItem = jQuery("<li id='" + action.uid + "' class='list-group-item'><a> Action " + this.numActions + "</a></li>");
+        } else {
+            $actionItem = jQuery("<li id='" + action.uid + "' class='list-group-item'><a>" + actionTitle + "</a></li>");
+        }
         this.$actionsDropdownContainer.append($actionItem);
 
         // create new generic action
