@@ -330,9 +330,11 @@ class AnatomyNotes {
             // add dynamic listener in editor to link scenes to text
             this.$editorBody.on('click', '.linked-scene', (event) => {
                 console.log("linked scene clicked in editor");
-
+                let appObj = this;
                 let $editLink = jQuery(event.target);
-                this.doActionById($editLink.attr('data-action-id'));
+                let linkText = $editLink.text();
+                let actionId = $editLink.attr('data-action-id');
+                this.doActionById(actionId);
 
                 editor.windowManager.open( {
                     title: 'Link action',
@@ -343,6 +345,28 @@ class AnatomyNotes {
                         name: 'linktext',
                         label: 'Link scene to text',
                         value: $editLink.text()
+                    }],
+
+                    buttons: [{
+                        text: 'Delete',
+                        onclick: function () {
+                            // remove action data
+                            Action.deleteAction(actionId);
+
+                            // Update UI
+                            appObj.removeAction(actionId);
+
+                            // remove from editor
+                            $editLink.remove();
+
+                            editor.execCommand( 'mceInsertContent', true, linkText);
+                        }
+                    }, {
+                        text: 'OK',
+                        subtype: 'primary',
+                        onclick: function() {
+
+                        }
                     }],
 
                     onsubmit: function(e) {
@@ -1202,11 +1226,16 @@ class AnatomyNotes {
     
 
     // ACTIONS
+
+    updateActionLabel(){
+        this.actionsChanged = true;
+        this.$numActionsLabel.text(this.numActions + ' actions');
+    }
+
     addAction(actionTitle, callback) {
 
         this.numActions++;
-        this.actionsChanged = true;
-        this.$numActionsLabel.text(this.numActions + ' actions');
+        this.updateActionLabel();
 
         // create action, add to array
         let noteId = appGlobals.currentNote.uid;
@@ -1251,6 +1280,16 @@ class AnatomyNotes {
 
         });
 
+    }
+
+    removeAction(actionId) {
+        console.log("removeAction");
+
+        this.numActions--;
+        this.updateActionLabel();
+
+        // Remove from dropdown
+        this.$actionsDropdownContainer.find('#' + actionId).remove();
     }
 
     navigateActions(direction){

@@ -39,5 +39,21 @@ class Action {
         this.action_title = action_title;
     }
 
+    static deleteAction(actionId){
+        let currentNoteId = appGlobals.currentNote.uid;
+        if (appGlobals.actions[currentNoteId]){
+            let actions = appGlobals.actions[currentNoteId];
+            let index;
+            for (let i = 0; i < actions.length; i++) {
+                if (actions[i].uid == actionId){
+                    index = i;
+                    break;
+                }
+            }
+            console.log("action to delete index: " + index);
+            actions.splice(index, 1);
+
+        }
+    }
 
 }
