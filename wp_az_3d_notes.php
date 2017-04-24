@@ -512,7 +512,7 @@ class wp_az_3d_notes {
 			'title'                 => $notes['title'],
 			'note_content'          => $notes['note_content'],
 			'sequence'              => $notes['sequence'],
-			'actions'               => $actions,
+			'actions'               => $actions_db_updated,
 		));
 
 

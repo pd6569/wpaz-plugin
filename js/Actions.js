@@ -4,6 +4,19 @@
 
 class Action {
 
+    /*****
+     *
+     * @param note_id
+     * @param action_order
+     * @param action_type
+     * @param scene_state
+     * @param action_data Object.
+     *              Parameters:
+     *              type (required) - set using appGlobals.actionDataTypes.
+     *              rotationSpeed (optional)
+     *
+     * @param action_title
+     */
     constructor(note_id, action_order, action_type, scene_state = "", action_data = {}, action_title = "New Action") {
 
         this.note_id = note_id;

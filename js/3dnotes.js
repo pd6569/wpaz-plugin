@@ -1519,7 +1519,7 @@ class AnatomyNotes {
                     function update() {
                         // Orbit camera horizontally around target
                         appObj.human.send("camera.orbit", {
-                            yaw: 0.2
+                            yaw: 0.5,
                         });
 
                         if (appGlobals.animateUpdate) {
@@ -1582,7 +1582,7 @@ class AnatomyNotes {
      * @param actionId
      */
     doActionById(actionId){
-        console.log("doActionById");
+        console.log("doActionById: " + actionId);
         if (actionId) {
             let actionsArray = appGlobals.actions[appGlobals.currentNote.uid];
             for (let action of actionsArray) {

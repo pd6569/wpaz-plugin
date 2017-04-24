@@ -85,8 +85,11 @@ class Utils {
 
     /**
      *
-     * @param modalObj Object with properties: title - title text, body - html body text, btn1 - text on button 1,
-     *                                          btn2- text on button 2
+     * @param modalObj Object. Properties:
+     *                         title - title text
+     *                         body - html body text
+     *                         btn1 - text on button 1,
+     *                         btn2- text on button 2
      */
     static showModal(modalObj){
         let $modalAlert = jQuery('#wpaz-modal-alert');
