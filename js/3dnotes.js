@@ -241,6 +241,7 @@ class AnatomyNotes {
         this.$modalBody = this.$modalAlert.find('.modal-body');
         this.$modalImageProps = this.$modalAlert.find('.modal-image-properties');
         this.$modalAnnotations = this.$modalAlert.find('.modal-annotations');
+        this.$modalActions = this.$modalAlert.find('.modal-actions');
         this.$modalError = this.$modalAlert.find('.modal-error p');
         this.$modalBtn1 = this.$modalAlert.find('#modal-btn-1');
         this.$modalBtn2 = this.$modalAlert.find('#modal-btn-2');
@@ -336,7 +337,13 @@ class AnatomyNotes {
                 let actionId = $editLink.attr('data-action-id');
                 this.doActionById(actionId);
 
-                editor.windowManager.open( {
+                this.showModal('edit_action', {
+                    actionText: linkText,
+                    newAction: false,
+                    actionId: actionId
+                });
+
+                /*editor.windowManager.open( {
                     title: 'Link action',
 
                     body: [{
@@ -379,7 +386,7 @@ class AnatomyNotes {
                     onsubmit: function(e) {
                         console.log("function to replace action");
                     }
-                });
+                });*/
 
 
             });
@@ -432,11 +439,20 @@ class AnatomyNotes {
     /****
      *
      * @param modalType Select modal type: 'annotations',
-     * @param data Data object associated with modal. Annotations modal takes annotation object.
+     * @param data Data object associated with modal.
+     *          Annotations: takes annotation object, as specified by BioDigital API.
+     *          Actions modal:
+     *              actionText - (String) text in editor that will be linked to the scene. Required
+     *              newAction - (Boolean) true if new action, false if existing action. Optional
+     *              actionId - (String) id of action to edit. Optional
      */
     showModal(modalType, data){
 
         Utils.resetModal();
+
+        // Other modal elements
+        let $deleteBtn = jQuery('#modal-btn-delete');
+        $deleteBtn.off(); // detach previous listeners
 
         switch (modalType){
 
@@ -448,6 +464,7 @@ class AnatomyNotes {
                 });
 
                 this.$modalAnnotations.removeClass('hidden');
+                $deleteBtn.removeClass('hidden');
 
                 this.$annotationsTitle.val(data.title);
                 this.$annotationsDescription.val(data.description);
@@ -475,9 +492,6 @@ class AnatomyNotes {
                     this.loadAnnotations();
                 });
 
-                let $deleteBtn = jQuery('#annotations-delete-btn');
-
-                $deleteBtn.off(); // detach previous listeners
                 $deleteBtn.on('click', () => {
                     console.log("delete annotation");
                     this.human.send('annotations.destroy', data.annotationId, () => {
@@ -488,7 +502,113 @@ class AnatomyNotes {
                     Utils.resetModal();
                 });
 
-                break;
+                return true;
+
+            case 'edit_action':
+                Utils.showModal({
+                    title: "Edit Action: " + data.actionText,
+                    body: "Current scene will be linked to text '" + data.actionText + "'"
+                });
+                this.$modalActions.removeClass('hidden').show();
+
+                // Data
+                let dataActionSelected;
+                let actionData = {};
+
+                // Different actions
+                this.$actions = jQuery('.modal-action-option');
+
+                // Labels
+                let $labelActions = jQuery('.label-action-options');
+                let $labelCameraRotate = jQuery('.label-camera-rotate');
+
+                // Containers for all option settings
+                this.$allOptionsContainers = jQuery('.modal-action-options-container');
+                this.$allOptionsContainers.addClass('hidden');
+
+                // Individual option containers
+                this.$cameraRotateOptionsContainer = jQuery('.modal-actions__camera-rotate');
+
+                // Delete button
+                if (!data.newAction) {
+                    $deleteBtn.removeClass('hidden');
+                    $deleteBtn.on('click', () => {
+                        // remove action data
+                        Action.deleteAction(data.actionId);
+
+                        // Update UI
+                        this.removeAction(data.actionId);
+
+                        // remove from editor
+                        let $removeLink = this.$editorBody.find(`span[data-action-id='${data.actionId}']`);
+                        $removeLink.remove();
+
+                        this.$noteEditor.execCommand( 'mceInsertContent', true, data.actionText);
+
+                        this.$modalAlert.modal('hide');
+                        Utils.resetModal();
+                    })
+                }
+
+                this.$actions.on('click', (event) => {
+                    let $actionSelected = jQuery(event.target);
+                    dataActionSelected = $actionSelected.attr('data-action-data-type');
+
+                    // Function for rotate camera action
+                    if (dataActionSelected === appGlobals.actionDataTypes.ROTATE_CAMERA){
+                        actionData.type = appGlobals.actionDataTypes.ROTATE_CAMERA;
+
+                        // show camera rotation options
+                        this.$cameraRotateOptionsContainer.removeClass('hidden');
+                        this.$cameraRotateSpeed = jQuery('.camera-rotate-speed-option');
+
+                        this.$cameraRotateSpeed.on('click', (event) => {
+                            let $speedSelected = jQuery(event.target);
+                            let speed = $speedSelected.attr('data-camera-rotate');
+                            if (speed === 'slow') actionData.rotationSpeed = 0.2;
+                            if (speed === 'medium') actionData.rotationSpeed = 0.5;
+                            if (speed === 'fast') actionData.rotationSpeed = 1;
+
+                            // Update label
+                            $labelCameraRotate.text($speedSelected.text());
+                        })
+
+                    } else {
+                        actionData = {};
+                        this.$allOptionsContainers.addClass('hidden');
+                    }
+
+                    // Update action label
+                    $labelActions.text($actionSelected.text());
+                });
+
+
+                this.$modalBtn1.on('click', () => {
+                    this.$modalAlert.modal('hide');
+                    Utils.resetModal();
+                });
+
+                this.$modalBtn2.on('click', () => {
+
+                    this.addAction(data.actionText, actionData, (action) => {
+                        console.log("added action: ", action);
+                        let linkedText =
+                            "<span class='linked-scene' data-action-id='" + action.uid + "'>" +
+                            data.actionText +
+                            "</span>";
+                        this.$noteEditor.execCommand( 'mceInsertContent', true, linkedText);
+                    });
+
+                    this.$modalAlert.modal('hide');
+                    Utils.resetModal();
+
+                });
+
+                return true;
+
+            default:
+                console.log("No modal found for: ", modalType);
+                return false;
         }
     }
 
@@ -1519,7 +1639,7 @@ class AnatomyNotes {
                     function update() {
                         // Orbit camera horizontally around target
                         appObj.human.send("camera.orbit", {
-                            yaw: 0.5,
+                            yaw: action_data.rotationSpeed,
                         });
 
                         if (appGlobals.animateUpdate) {

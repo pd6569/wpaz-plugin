@@ -27,7 +27,9 @@
     margin-bottom: 10px;
 }
 
-/* Modal popup */
+/*********************************
+ *         Modal popup           *
+ *********************************/
 .modal {
     top: 25%;
 }
@@ -57,10 +59,13 @@
     width: 90%;
 }
 
-/******************************
- *      SCENE SELECTOR        *
- ******************************/
+.modal-actions {
+    margin: 10px;
+}
 
+.modal-actions .dropdown-menu {
+    list-style: none;
+}
 
 /******************************
  *    MODEL CANVAS OVERLAY    *
@@ -131,9 +136,10 @@
     height: 55px;
 }
 
-#wpaz-notes-container .dropdown {
+/*#wpaz-notes-container .dropdown {
     margin: 10px 0px 10px 0px
-}
+}*/
+
 #wpaz-notes-container .dropdown-menu {
     list-style: none;
 }

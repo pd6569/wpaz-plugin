@@ -444,9 +444,42 @@
                     </form>
                 </div>
             </div>
+            <div class="modal-actions hidden">
+                <div class="form-group">
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="modal-actions__dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            Actions
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="modal-actions__dropdown">
+                            <li><a href="#" class="modal-action-option" data-action-data-type="noAction">No action</a></li>
+                            <li><a href="#" class="modal-action-option" data-action-data-type="rotateCamera">360 Camera Rotate</a></li>
+                        </ul>
+                        <span class="label-action-options">No action</span>
+                    </div>
+
+                    <div class="modal-actions__options">
+                        <div class="modal-actions__camera-rotate modal-action-options-container hidden">
+                            <h4>Camera Rotate Options</h4>
+                            <div class="dropdown">
+                                <button class="btn btn-default dropdown-toggle" type="button" id="camera-rotate-options__dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    Rotation Speed
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="camera-rotate-options__dropdown">
+                                    <li><a href="#" class="camera-rotate-speed-option" data-camera-rotate="slow">Slow</a></li>
+                                    <li><a href="#" class="camera-rotate-speed-option" data-camera-rotate="medium">Medium</a></li>
+                                    <li><a href="#" class="camera-rotate-speed-option" data-camera-rotate="fast">Fast</a></li>
+                                </ul>
+                                <span class="label-camera-rotate">Medium</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="modal-error text-center hidden"><p></p></div>
             <div class="modal-footer">
-                <button id="annotations-delete-btn" type="button" class="btn btn-danger modal-annotations pull-left hidden">Delete</button>
+                <button id="modal-btn-delete" type="button" class="btn btn-danger pull-left hidden">Delete</button>
                 <button id="modal-btn-1" type="button" class="btn btn-default"></button>
                 <button id="modal-btn-2" type="button" class="btn btn-default"></button>
             </div>

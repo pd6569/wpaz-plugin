@@ -68,19 +68,24 @@ class Utils {
         let $modalBody = $modalAlert.find('.modal-body');
         let $modalImageProps = $modalAlert.find('.modal-image-properties');
         let $modalAnnotations = $modalAlert.find('.modal-annotations');
+        let $modalActions = $modalAlert.find('.modal-actions');
         let $modalBtn1 = $modalAlert.find('#modal-btn-1');
         let $modalBtn2 = $modalAlert.find('#modal-btn-2');
+        let $modalDeleteBtn = $modalAlert.find('#modal-btn-delete');
 
         // Set default text, remove existing event listeners
         $modalTitle.text("");
         $modalBody.empty();
         $modalImageProps.addClass('hidden');
         $modalAnnotations.addClass('hidden');
+        $modalActions.addClass('hidden');
         $modalError.empty();
         $modalBtn1.off();
         $modalBtn2.off();
         $modalBtn1.text("Cancel");
         $modalBtn2.text("OK");
+        $modalDeleteBtn.addClass('hidden');
+        $modalDeleteBtn.off();
     }
 
     /**

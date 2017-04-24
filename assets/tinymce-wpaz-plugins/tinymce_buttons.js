@@ -1,40 +1,5 @@
 ( function() {
 
-    let actionData;
-
-    components = {
-        actions: {
-            type   : 'listbox',
-            name   : 'action',
-            label  : 'Action',
-            values : [
-                { text : 'No action', value: null },
-                { text: 'Rotate camera', value: appGlobals.actionDataTypes.ROTATE_CAMERA }
-            ],
-            onSelect: function () {
-                console.log("Value selected: " + this.value());
-                if (this.value() === appGlobals.actionDataTypes.ROTATE_CAMERA) {
-                    components.rotationSpeed.disabled = false;
-                    actionData = {
-                        type: appGlobals.actionDataTypes.ROTATE_CAMERA,
-                        rotationSpeed: 0.5
-                    }
-                }
-            }
-        },
-        rotationSpeed: {
-            type: 'listbox',
-            disabled: true,
-            name: 'rotate-options',
-            label: 'Rotation Speed',
-            values: [
-                { text: 'slow', value: 0.2 },
-                { text: 'medium', value: 0.5},
-                { text: 'fast', value: 1 }
-            ]
-        }
-    };
-
     tinymce.create('tinymce.plugins.LinkScene', {
 
         /**
@@ -49,12 +14,12 @@
                     let text = editor.selection.getContent();
                     let actionData;
 
-                    Utils.showModal({
-                        title: "Edit Action",
-                        body: "<p> Form for editing actions </p>"
+                    appGlobals.appRef.showModal('edit_action', {
+                        actionText: text,
+                        newAction: true,
                     });
 
-                    editor.windowManager.open( {
+                    /*editor.windowManager.open( {
                         title: 'Link action',
 
                         body: [{
@@ -77,7 +42,7 @@
 
                             })
                         }
-                    });
+                    });*/
                 },
 
 
