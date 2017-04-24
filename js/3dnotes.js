@@ -512,26 +512,28 @@ class AnatomyNotes {
                 this.$modalActions.removeClass('hidden').show();
 
                 // Data
-                let dataActionSelected;
-                let actionData = {};
+                let actionData = { };
+                let actionObj;
 
                 // Different actions
-                this.$actions = jQuery('.modal-action-option');
+                let $actions = jQuery('.modal-action-option');
 
                 // Labels
                 let $labelActions = jQuery('.label-action-options');
+                $labelActions.text("No action");
                 let $labelCameraRotate = jQuery('.label-camera-rotate');
 
                 // Containers for all option settings
-                this.$allOptionsContainers = jQuery('.modal-action-options-container');
-                this.$allOptionsContainers.addClass('hidden');
+                let $allOptionsContainers = jQuery('.modal-action-options-container');
+                $allOptionsContainers.addClass('hidden');
 
                 // Individual option containers
-                this.$cameraRotateOptionsContainer = jQuery('.modal-actions__camera-rotate');
+                let $cameraRotateOptionsContainer = jQuery('.modal-actions__camera-rotate');
 
-                // Delete button
+                // Existing scene link
                 if (!data.newAction) {
                     $deleteBtn.removeClass('hidden');
+
                     $deleteBtn.on('click', () => {
                         // remove action data
                         Action.deleteAction(data.actionId);
@@ -547,39 +549,33 @@ class AnatomyNotes {
 
                         this.$modalAlert.modal('hide');
                         Utils.resetModal();
-                    })
+                    });
+
+                    // Get existing action data
+                    console.log("Action associated with this data", Action.getActionById(data.actionId));
+                    actionObj = Action.getActionById(data.actionId);
+                    actionData = actionObj.action_data;
+
+                    // Set correct action label and show options
+                    if (actionData) {
+                        if (actionData.type === appGlobals.actionDataTypes.ROTATE_CAMERA) {
+                            $labelActions.text("360 Camera Rotate")
+                        } else {
+                            $labelActions.text("No Action");
+                        }
+
+                        showOptionsForDataAction(actionData.type);
+                    }
                 }
 
-                this.$actions.on('click', (event) => {
+                $actions.on('click', (event) => {
                     let $actionSelected = jQuery(event.target);
-                    dataActionSelected = $actionSelected.attr('data-action-data-type');
-
-                    // Function for rotate camera action
-                    if (dataActionSelected === appGlobals.actionDataTypes.ROTATE_CAMERA){
-                        actionData.type = appGlobals.actionDataTypes.ROTATE_CAMERA;
-
-                        // show camera rotation options
-                        this.$cameraRotateOptionsContainer.removeClass('hidden');
-                        this.$cameraRotateSpeed = jQuery('.camera-rotate-speed-option');
-
-                        this.$cameraRotateSpeed.on('click', (event) => {
-                            let $speedSelected = jQuery(event.target);
-                            let speed = $speedSelected.attr('data-camera-rotate');
-                            if (speed === 'slow') actionData.rotationSpeed = 0.2;
-                            if (speed === 'medium') actionData.rotationSpeed = 0.5;
-                            if (speed === 'fast') actionData.rotationSpeed = 1;
-
-                            // Update label
-                            $labelCameraRotate.text($speedSelected.text());
-                        })
-
-                    } else {
-                        actionData = {};
-                        this.$allOptionsContainers.addClass('hidden');
-                    }
+                    let dataActionSelected = $actionSelected.attr('data-action-data-type');
 
                     // Update action label
                     $labelActions.text($actionSelected.text());
+
+                    showOptionsForDataAction(dataActionSelected);
                 });
 
 
@@ -590,19 +586,78 @@ class AnatomyNotes {
 
                 this.$modalBtn2.on('click', () => {
 
-                    this.addAction(data.actionText, actionData, (action) => {
-                        console.log("added action: ", action);
-                        let linkedText =
-                            "<span class='linked-scene' data-action-id='" + action.uid + "'>" +
-                            data.actionText +
-                            "</span>";
-                        this.$noteEditor.execCommand( 'mceInsertContent', true, linkedText);
-                    });
+                    if (data.newAction) {
+                        this.addAction(data.actionText, actionData, (action) => {
+                            console.log("added action: ", action);
+                            let linkedText =
+                                "<span class='linked-scene' data-action-id='" + action.uid + "'>" +
+                                data.actionText +
+                                "</span>";
+                            this.$noteEditor.execCommand( 'mceInsertContent', true, linkedText);
+                        });
+                    } else {
+                        console.log("Function to update actions...");
+                        Action.getActionById(actionObj.uid).action_data = actionData;
+                    }
 
                     this.$modalAlert.modal('hide');
                     Utils.resetModal();
 
+                    this.actionsChanged = true;
                 });
+
+            /***
+             *
+             * Private function. Displays the options for a selected action.
+             *
+             * @param dataActionSelected Data action type as specified in appGlobls.actionDataTypes
+             */
+                function showOptionsForDataAction(dataActionSelected) {
+
+                    if (!actionData) {
+                        actionData = {};
+                    }
+
+                    // Function for rotate camera action
+                    if (dataActionSelected === appGlobals.actionDataTypes.ROTATE_CAMERA){
+
+                        actionData.type = appGlobals.actionDataTypes.ROTATE_CAMERA;
+
+                        // show camera rotation options
+                        $cameraRotateOptionsContainer.removeClass('hidden');
+                        let $cameraRotateSpeed = jQuery('.camera-rotate-speed-option');
+
+                        let speedLabel;
+                        if (actionData.rotationSpeed) {
+                            let rotationSpeeds = Object.keys(Action.actionDataValues().ROTATE_CAMERA.speeds);
+                            for (let speedText of rotationSpeeds) {
+                                console.log("current speed: " + Action.actionDataValues().ROTATE_CAMERA.speeds[speedText] + " rotationSpeed: " + actionData.rotationSpeed);
+                                if (Action.actionDataValues().ROTATE_CAMERA.speeds[speedText] == actionData.rotationSpeed) {
+                                    speedLabel = speedText;
+                                    console.log("speedLabel: " + speedLabel);
+                                    $labelCameraRotate.text(Utils.capitalizeFirstLetter(speedLabel));
+                                    break;
+                                }
+                            }
+                        }
+
+                        $cameraRotateSpeed.on('click', (event) => {
+                            let $speedSelected = jQuery(event.target);
+                            let speed = $speedSelected.attr('data-camera-rotate');
+                            if (speed === 'slow') actionData.rotationSpeed = Action.actionDataValues().ROTATE_CAMERA.speeds.slow;
+                            if (speed === 'medium') actionData.rotationSpeed = Action.actionDataValues().ROTATE_CAMERA.speeds.medium;
+                            if (speed === 'fast') actionData.rotationSpeed = Action.actionDataValues().ROTATE_CAMERA.speeds.fast;
+
+                            // Update label
+                            $labelCameraRotate.text($speedSelected.text());
+                        })
+
+                    } else {
+                        actionData = {};
+                        $allOptionsContainers.addClass('hidden');
+                    }
+
+                }
 
                 return true;
 

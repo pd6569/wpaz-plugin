@@ -452,6 +452,8 @@
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="modal-actions__dropdown">
+
+                            <!-- data-action-data-type MUST match format specified in appGlobals.actionDataTypes -->
                             <li><a href="#" class="modal-action-option" data-action-data-type="noAction">No action</a></li>
                             <li><a href="#" class="modal-action-option" data-action-data-type="rotateCamera">360 Camera Rotate</a></li>
                         </ul>

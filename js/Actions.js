@@ -71,4 +71,33 @@ class Action {
         }
     }
 
+    /***
+     *
+     * Function to get action object from action id. If no note Id is specified, the function will look for an actionId
+     * associated with the current note.
+     *
+     * @param actionId (String) uid of action
+     * @param noteId (String) uid for note that contains the action, defaults to current note Id.
+     * @returns Action Object
+     */
+    static getActionById(actionId, noteId = appGlobals.currentNote.uid) {
+        let actions = appGlobals.actions[noteId];
+        for (let action of actions) {
+            if (action.uid === actionId){
+                return action;
+            }
+        }
+    }
+
+    static actionDataValues () {
+        return {
+            ROTATE_CAMERA: {
+                speeds: {
+                    'slow': 0.2,
+                    'medium': 0.5,
+                    'fast': 1,
+                }
+            }
+        }
+    }
 }
