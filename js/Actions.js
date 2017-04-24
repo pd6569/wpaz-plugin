@@ -13,7 +13,9 @@ class Action {
         this.scene_state = scene_state;
         this.action_data = action_data;
         this.action_title = action_title;
+
     }
+
 
     setNoteId(note_id){
         this.note_id = note_id;

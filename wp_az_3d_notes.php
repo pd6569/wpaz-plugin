@@ -454,7 +454,7 @@ class wp_az_3d_notes {
 					'action_order'  => $action['action_order'],
 					'action_type'   => $action['action_type'],
 					'scene_state'   => $action['scene_state'],
-					'action_data'   => $action['action_data'],
+					'action_data'   => json_encode($action['action_data']),
 					'action_title'  => $action['action_title']
 				);
 
@@ -512,7 +512,7 @@ class wp_az_3d_notes {
 			'title'                 => $notes['title'],
 			'note_content'          => $notes['note_content'],
 			'sequence'              => $notes['sequence'],
-			'actions'               => $actions_db_updated,
+			'actions'               => $actions,
 		));
 
 

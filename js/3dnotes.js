@@ -345,7 +345,15 @@ class AnatomyNotes {
                         name: 'linktext',
                         label: 'Link scene to text',
                         value: $editLink.text()
-                    }],
+                        },
+                        {
+                            type   : 'combobox',
+                            name   : 'action',
+                            label  : 'Action',
+                            values : [
+                                { text: '360-Rotate', value: '360-Rotate' }
+                            ]
+                        }],
 
                     buttons: [{
                         text: 'Delete',
@@ -365,7 +373,6 @@ class AnatomyNotes {
                         text: 'OK',
                         subtype: 'primary',
                         onclick: function() {
-
                         }
                     }],
 
@@ -734,9 +741,19 @@ class AnatomyNotes {
                 actionsArray.forEach(function(action){
                     console.log("adding action to array order: " + action.action_order);
                     if (appGlobals.actions[action.note_id]) {
+                        setActionData(action);
                         appGlobals.actions[action.note_id].push(action);
                     } else {
+                        setActionData(action);
                         appGlobals.actions[action.note_id] = [action];
+                    }
+
+                    // if action has data, parse string into object and set data.
+                    function setActionData(action){
+                        if (Object.keys(action.action_data).length > 0){
+                            let actionDataObj = JSON.parse(action.action_data);
+                            action.action_data = actionDataObj;
+                        }
                     }
                 });
 
@@ -1232,7 +1249,7 @@ class AnatomyNotes {
         this.$numActionsLabel.text(this.numActions + ' actions');
     }
 
-    addAction(actionTitle, callback) {
+    addAction(actionTitle, actionData, callback) {
 
         this.numActions++;
         this.updateActionLabel();
@@ -1241,6 +1258,7 @@ class AnatomyNotes {
         let noteId = appGlobals.currentNote.uid;
         let action = new Action(noteId, this.numActions, appGlobals.actionTypes.GENERAL);
         if (actionTitle) action.setTitle(actionTitle);
+        if (actionData) action.setData(actionData);
         if(appGlobals.actions[noteId]) {
             appGlobals.actions[noteId].push(action);
         } else {
@@ -1481,9 +1499,52 @@ class AnatomyNotes {
 
     }
 
+    /**
+     * If action has action data - execute this data
+     */
+    execActionData(action_data, appObj){
+        console.log("execActionData", action_data);
+        if (action_data.type){
+            switch (action_data.type) {
+                case appGlobals.actionDataTypes.ROTATE_CAMERA:
+                    console.log("Rotate camera");
+
+                    appGlobals.animateUpdate = true;
+
+                    // Stop rotating camera if scene is clicked
+                    appObj.human.on('scene.picked', function () {
+                        appGlobals.animateUpdate = false;
+                    });
+
+                    function update() {
+                        // Orbit camera horizontally around target
+                        appObj.human.send("camera.orbit", {
+                            yaw: 0.2
+                        });
+
+                        if (appGlobals.animateUpdate) {
+                            requestAnimationFrame(update);
+                        }
+                    };
+
+                    requestAnimationFrame(update);
+                    return true;
+
+                default:
+                    return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
     // DO ACTION METHODS
     doAction(action, appObj){
         console.log("doAction");
+
+        // Stop any current animations
+        appGlobals.animateUpdate = false;
+
         switch(action.action_type){
             case appGlobals.actionTypes.GENERAL:
                 
@@ -1496,6 +1557,10 @@ class AnatomyNotes {
                     appObj.human.send('scene.restore', JSON.parse(action.scene_state), () => {
                         console.log("scene restored");
                         appObj.loadAnnotations();
+
+                        // If action has associated data, execute this data
+                        if (action.action_data) appObj.execActionData(action.action_data, appObj);
+
                     });
                 });
 

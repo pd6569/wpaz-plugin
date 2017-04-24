@@ -13,6 +13,7 @@ let appGlobals = {
     actions: {},
     firstSceneUrl: "",
     numSnapshots: 0,
+    animateUpdate: false, // set to true when animating the human, e.g. if rotating camera etc.
 
     // user role constants
     userRoles: {
@@ -52,6 +53,11 @@ let appGlobals = {
     currentAction: {},
     actionTypes: {
         GENERAL: 'general'
+    },
+
+    // Action options
+    actionDataTypes: {
+        ROTATE_CAMERA: 'rotateCamera'
     },
 
     // annotations
