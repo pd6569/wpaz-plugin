@@ -12,6 +12,7 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 //TODO: update AJAX json responses
 //TODO: switch to REST api where possible
+//TODO: BUG. if post excerpt is not set, then wp editor does not load properly
 
 // Exit if accessed directly
 if (!defined( 'ABSPATH')) {
@@ -285,8 +286,15 @@ class wp_az_3d_notes {
 
 	// triggered on deactivation of the plugin (called only once)
 	public function plugin_deactivate(){
-		//flush permalinks
+		// flush permalinks
 		flush_rewrite_rules();
+
+		// delete static pages
+		$body_post_id = get_option('wp_az_3d_body_post_id');
+		$dashboard_id = get_option('wp_az_notes_dashboard_post_id');
+
+		wp_delete_post($body_post_id);
+		wp_delete_post($dashboard_id);
 	}
 
 	public function create_static_pages(){
@@ -296,7 +304,8 @@ class wp_az_3d_notes {
 			'post_title'    => '3D Body',
 			'post_content'  => 'Interact with 3D Body',
 			'post_status'   => 'publish',
-			'post_type'     => 'page'
+			'post_type'     => 'page',
+			'post_excerpt'  => 'Use our free interactive 3D model to learn anatomy by region or system'
 		);
 
 		// Create notes dashboard page
@@ -304,7 +313,8 @@ class wp_az_3d_notes {
 			'post_title'    => 'Notes Dashboard',
 			'post_content'  => 'Notes Dashboard',
 			'post_status'   => 'publish',
-			'post_type'     => 'page'
+			'post_type'     => 'page',
+			'post_excerpt'  => 'Create your own 3D anatomy notes using our novel 3D notes platform.'
 		);
 
 		$wp_az_3d_body_id = wp_insert_post($body_3d);

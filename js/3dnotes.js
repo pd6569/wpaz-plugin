@@ -623,19 +623,21 @@ class AnatomyNotes {
 
                         actionData.type = appGlobals.actionDataTypes.ROTATE_CAMERA;
 
+
+                        /*******************************************
+                         * Add/Update action option behaviour here *
+                         *******************************************/
+
                         // show camera rotation options
                         $cameraRotateOptionsContainer.removeClass('hidden');
                         let $cameraRotateSpeed = jQuery('.camera-rotate-speed-option');
 
-                        let speedLabel;
                         if (actionData.rotationSpeed) {
                             let rotationSpeeds = Object.keys(Action.actionDataValues().ROTATE_CAMERA.speeds);
                             for (let speedText of rotationSpeeds) {
                                 console.log("current speed: " + Action.actionDataValues().ROTATE_CAMERA.speeds[speedText] + " rotationSpeed: " + actionData.rotationSpeed);
                                 if (Action.actionDataValues().ROTATE_CAMERA.speeds[speedText] == actionData.rotationSpeed) {
-                                    speedLabel = speedText;
-                                    console.log("speedLabel: " + speedLabel);
-                                    $labelCameraRotate.text(Utils.capitalizeFirstLetter(speedLabel));
+                                    $labelCameraRotate.text(Utils.capitalizeFirstLetter(speedText));
                                     break;
                                 }
                             }

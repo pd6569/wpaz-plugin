@@ -54,6 +54,8 @@ class Action {
         this.action_title = action_title;
     }
 
+    /***** STATIC FUNCTIONS *****/
+
     static deleteAction(actionId){
         let currentNoteId = appGlobals.currentNote.uid;
         if (appGlobals.actions[currentNoteId]){

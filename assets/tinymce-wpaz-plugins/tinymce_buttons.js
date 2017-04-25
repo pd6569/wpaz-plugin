@@ -18,31 +18,6 @@
                         actionText: text,
                         newAction: true,
                     });
-
-                    /*editor.windowManager.open( {
-                        title: 'Link action',
-
-                        body: [{
-                            type: 'textbox',
-                            multiline: true,
-                            name: 'linktext',
-                            label: 'Link scene to text',
-                            value: text
-                        }, components.actions
-                        , components.rotationSpeed],
-
-                        onsubmit: function(e) {
-                            appGlobals.appRef.addAction(text, actionData, (action) => {
-                                console.log("added action: ", action);
-                                let linkedText =
-                                    "<span class='linked-scene' data-action-id='" + action.uid + "'>" +
-                                    text +
-                                    "</span>";
-                                editor.execCommand( 'mceInsertContent', true, linkedText);
-
-                            })
-                        }
-                    });*/
                 },
 
 
