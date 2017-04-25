@@ -11,15 +11,18 @@ function wp_az_show_plugin_layout(){
 	global $wp_az_notes_dashboard_id;
 	global $wp_az_3d_body_id;
 
-	if ($post->post_type == WP_AZ_ADMIN_NOTES_POST_TYPE
-	    || $post->post_type == WP_AZ_USER_NOTES_POST_TYPE
-	    || is_page($wp_az_notes_dashboard_id)
-	    || is_page($wp_az_3d_body_id)) {
+	if (!is_admin()){
+		if ($post->post_type == WP_AZ_ADMIN_NOTES_POST_TYPE
+		    || $post->post_type == WP_AZ_USER_NOTES_POST_TYPE
+		    || is_page($wp_az_notes_dashboard_id)
+		    || is_page($wp_az_3d_body_id)) {
 
-		return true;
-	} else {
-		return false;
+			return true;
+		} else {
+			return false;
+		}
 	}
+	return false;
 }
 
 function wp_az_get_context(){

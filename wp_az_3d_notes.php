@@ -42,6 +42,7 @@ define('WP_AZ_USER_NOTES_POST_TYPE', 'user-notes');
 require_once ( WP_AZ_PLUGIN_DIR . '/functions.php');
 require_once ( WP_AZ_PLUGIN_DIR . '/templates.php');
 require_once ( WP_AZ_PLUGIN_DIR . '/inc/class_notes_editor.php');
+require_once ( WP_AZ_PLUGIN_DIR . '/admin/class-3d-notes-admin.php');
 
 // Database
 $wp_az_db_version = '1.0';
@@ -66,6 +67,7 @@ class wp_az_3d_notes {
 		add_action('init', array($this,'register_user_notes')); //register user notes post type
 		add_action('init', array($this, 'set_globals_from_options'));
 		add_action('init', array($this, 'setup_notes_editor'));
+		add_action('init', array($this, 'load_admin'));
 		add_action('admin_enqueue_scripts', array($this,'enqueueAdmin'));
 		add_action('wp_enqueue_scripts', array($this,'enqueue'), 50); // ensure styles are enqueued AFTER theme!
 		add_filter('the_content', array($this, 'set_content'));
@@ -84,6 +86,7 @@ class wp_az_3d_notes {
 		add_action('wp_ajax_nopriv_load_notes', array($this, 'load_notes'));
 		add_action('wp_ajax_nopriv_send_item_templates', array($this, 'send_item_templates'));
 
+		// Activation and deactivation hooks
 		register_activation_hook(__FILE__, array($this, 'plugin_activate'));
 		register_deactivation_hook(__FILE__, array($this, 'plugin_deactivate'));
 	}
@@ -102,6 +105,10 @@ class wp_az_3d_notes {
 	}
 
 	// INIT
+
+	public function load_admin(){
+		$admin = new wp_az_3d_notes_admin();
+	}
 
 	public function register_3d_notes(){
 
@@ -134,7 +141,7 @@ class wp_az_3d_notes {
 			'show_in_nav'       => true,
 			'query_var'         => true,
 			'hierarchical'      => false,
-			'supports'          => array('title','thumbnail','editor', 'excerpt'),
+			'supports'          => array('title','thumbnail', 'excerpt'),
 			'has_archive'       => true,
 			'menu_position'     => 20,
 			'show_in_admin_bar' => true,
@@ -179,7 +186,7 @@ class wp_az_3d_notes {
 			'show_in_nav'       => true,
 			'query_var'         => true,
 			'hierarchical'      => false,
-			'supports'          => array('title','thumbnail','editor', 'excerpt'),
+			'supports'          => array('title','thumbnail', 'excerpt'),
 			'has_archive'       => true,
 			'menu_position'     => 20,
 			'show_in_admin_bar' => true,

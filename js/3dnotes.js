@@ -38,6 +38,9 @@ class AnatomyNotes {
         // Track saves
         this.firstSave = true;
 
+        // Tab default
+        appGlobals.currentTab = appGlobals.tabs.NOTE_EDITOR;
+
         // Human loaded
         this.human.on('human.ready', () => {
 
@@ -162,6 +165,9 @@ class AnatomyNotes {
          *    NOTE CONTAINER  *
          **********************/
 
+        // Layouts
+        this.$mainLayout = jQuery('#wpaz-main-layout');
+
         // note top navigation
         this.$noteNavLeft = jQuery('#note-nav-left');
         this.$noteNavRight = jQuery('#note-nav-right');
@@ -261,8 +267,8 @@ class AnatomyNotes {
          *******************************/
 
         // Main Toolbar
-        this.$mainToolbarActiveNotes.on('click', () => { console.log("active notes")});
-        this.$mainToolbarMyNotes.on('click', () => { console.log("my notes")});
+        this.$mainToolbarActiveNotes.on('click', () => { Utils.setActiveTab(appGlobals.tabs.NOTE_EDITOR)});
+        this.$mainToolbarMyNotes.on('click', () => { Utils.setActiveTab(appGlobals.tabs.MY_NOTES); });
         this.$mainToolbarCreateNew.on('click', () => {
             console.log("create new");
             Utils.resetModal();

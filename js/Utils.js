@@ -130,4 +130,51 @@ class Utils {
     static capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
+
+    /****
+     *
+     * @param tabToActivate. (String) 'MY_NOTES', 'NOTE_EDITOR'
+     */
+    static setActiveTab(tabToActivate){
+
+        console.log("setActiveTab" + tabToActivate);
+
+        // Get ref to layouts
+        let $noteEditor = jQuery('#wpaz-main-layout');
+        let $myNotes = jQuery('#wpaz-my-notes');
+
+        // Ref to tabs
+        let $tabs = jQuery('.toolbar-tab');
+        let $noteEditorTab = jQuery('#toolbar-active-note');
+        let $myNotesTab = jQuery('#toolbar-my-notes');
+
+        // hide current tab
+
+        $tabs.removeClass('active');
+        if (appGlobals.currentTab == appGlobals.tabs.NOTE_EDITOR) {
+            $noteEditor.fadeOut(() => { showTab() });
+
+        } else if (appGlobals.currentTab == appGlobals.tabs.MY_NOTES) {
+            $myNotes.fadeOut(() => { showTab() });
+
+        } else {
+            console.log("Could not find active tab");
+            return;
+        }
+
+        // show new tab
+        function showTab(){
+            if (tabToActivate === appGlobals.tabs.NOTE_EDITOR) {
+                $noteEditor.fadeIn();
+                $noteEditorTab.addClass('active');
+            } else if (tabToActivate === appGlobals.tabs.MY_NOTES) {
+                $myNotes.fadeIn();
+                $myNotes.addClass('active');
+            }
+
+            // Set current tab
+            appGlobals.currentTab = tabToActivate;
+        }
+
+    }
 }

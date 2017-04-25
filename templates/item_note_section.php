@@ -24,18 +24,21 @@
                     <div class="note-image-container">
                         <div class="row">
                         <?php
-                            foreach($attached_images as $image) {
-                                if ($note->uid == get_post_meta($image->ID, "_az_note_id", true)): ?>
-                                    <div class="col-md-4 col-sm-4 col-xs-6">
-                                        <div id="<?php echo $image->ID ?>">
-                                            <a rel="<?php echo $note->uid ?>" href="<?php echo wp_get_attachment_image_src($image->ID,'full')[0]; ?>" class="swipebox note-images" title="<?php echo $image->post_excerpt ?>">
-                                                <img src="<?php echo wp_get_attachment_image_src($image->ID,'medium')[0]; ?>" alt="image" width="100%" height="100%">
-                                            </a>
+
+                            if (is_array($attached_images)):
+                                foreach($attached_images as $image) {
+                                    if ($note->uid == get_post_meta($image->ID, "_az_note_id", true)): ?>
+                                        <div class="col-md-4 col-sm-4 col-xs-6">
+                                            <div id="<?php echo $image->ID ?>">
+                                                <a rel="<?php echo $note->uid ?>" href="<?php echo wp_get_attachment_image_src($image->ID,'full')[0]; ?>" class="swipebox note-images" title="<?php echo $image->post_excerpt ?>">
+                                                    <img src="<?php echo wp_get_attachment_image_src($image->ID,'medium')[0]; ?>" alt="image" width="100%" height="100%">
+                                                </a>
+                                            </div>
                                         </div>
-                                    </div>
                         <?php
-                                endif;
-                            } ?>
+                                    endif;
+                                }
+                            endif; ?>
                         </div>
                     </div>
 				</div>

@@ -31,6 +31,14 @@ let appGlobals = {
         'NOTES_DASHBOARD': "NOTES_DASHBOARD",
     },
 
+    // Tabs
+    tabs: {
+        NOTE_EDITOR: "NOTE_EDITOR",
+        MY_NOTES: "MY_NOTES",
+    },
+
+    currentTab: "",
+
     // Modes
     mode: {
         'ANNOTATE': false,
