@@ -137,8 +137,6 @@ class Utils {
      */
     static setActiveTab(tabToActivate){
 
-        console.log("setActiveTab" + tabToActivate);
-
         // Get ref to layouts
         let $noteEditor = jQuery('#wpaz-main-layout');
         let $myNotes = jQuery('#wpaz-my-notes');
@@ -165,11 +163,11 @@ class Utils {
         // show new tab
         function showTab(){
             if (tabToActivate === appGlobals.tabs.NOTE_EDITOR) {
-                $noteEditor.fadeIn();
+                $noteEditor.hide().removeClass('hidden').fadeIn();
                 $noteEditorTab.addClass('active');
             } else if (tabToActivate === appGlobals.tabs.MY_NOTES) {
-                $myNotes.fadeIn();
-                $myNotes.addClass('active');
+                $myNotes.hide().removeClass('hidden').fadeIn();
+                $myNotesTab.addClass('active');
             }
 
             // Set current tab

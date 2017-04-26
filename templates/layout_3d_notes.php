@@ -45,13 +45,26 @@
                     </ul>
                 </div>
             </div>
-        <?php endif ?>
 
         <div id="wpaz-my-notes" class="row hidden">
             <div class="col-md-8">
-
+                <h3>My Notes</h3>
+                <ul>
+                    <li>Notes</li>
+                    <li>Notes</li>
+                    <li>Notes</li>
+                    <li>Notes</li>
+                    <li>Notes</li>
+                    <li>Notes</li>
+                    <li>Notes</li>
+                    <li>Notes</li>
+                    <li>Notes</li>
+                    <li>Notes</li>
+                </ul>
             </div>
         </div>
+
+        <?php endif ?>
 
         <div id="wpaz-main-layout">
             <div class="row">

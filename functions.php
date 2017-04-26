@@ -86,9 +86,12 @@ function base64ToImage($base64_string, $output_file) {
  */
 function wp_az_save_image( $base64_img, $title, $desc, $caption, $post_id) {
 
+	$userId = wp_get_current_user()->ID;
+
 	// Upload dir.
-	$upload_dir  = wp_upload_dir();
-	$upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
+	$upload_path = str_replace( '/', DIRECTORY_SEPARATOR, WP_AZ_MEDIA_DIR . DIRECTORY_SEPARATOR . $userId) . DIRECTORY_SEPARATOR;
+	$user_media_dir = WP_AZ_MEDIA_DIR . '/' . $userId;
+
 
 	$img             = str_replace( 'data:image/jpeg;base64,', '', $base64_img );
 	$img             = str_replace( ' ', '+', $img );
@@ -97,7 +100,12 @@ function wp_az_save_image( $base64_img, $title, $desc, $caption, $post_id) {
 	$file_type       = 'image/jpeg';
 	$hashed_filename = md5( $filename . microtime() ) . '_' . $filename;
 
-	// Save the image in the uploads directory.
+	// Check if az media directory exists
+	if (!file_exists($user_media_dir)) {
+		mkdir($user_media_dir, 0777, true);
+	}
+
+	// Upload file
 	$upload_file = file_put_contents( $upload_path . $hashed_filename, $decoded );
 
 	$attachment = array(
@@ -106,16 +114,16 @@ function wp_az_save_image( $base64_img, $title, $desc, $caption, $post_id) {
 		'post_content'   => $desc,
 		'post_excerpt'   => $caption,
 		'post_status'    => 'inherit',
-		'guid'           => $upload_dir['url'] . '/' . basename( $hashed_filename )
+		'guid'           => WP_AZ_MEDIA_URL . '/' .$userId . '/' . basename( $hashed_filename )
 	);
 
-	$attach_id = wp_insert_attachment( $attachment, $upload_dir['path'] . '/' . $hashed_filename, $post_id);
+	$attach_id = wp_insert_attachment( $attachment, $user_media_dir . '/' . $hashed_filename, $post_id);
 
 	// Make sure that this file is included, as wp_generate_attachment_metadata() depends on it.
 	require_once( ABSPATH . 'wp-admin/includes/image.php' );
 
 	// Generate the metadata for the attachment, and update the database record.
-	$attach_data = wp_generate_attachment_metadata( $attach_id, $upload_dir['path'] . '/' . $hashed_filename );
+	$attach_data = wp_generate_attachment_metadata( $attach_id, $user_media_dir . '/' . $hashed_filename );
 
 	wp_update_attachment_metadata( $attach_id, $attach_data );
 

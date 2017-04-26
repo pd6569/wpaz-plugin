@@ -38,6 +38,10 @@ define('WP_AZ_CONTEXT_NOTES_DASHBOARD', 'NOTES_DASHBOARD');
 define('WP_AZ_ADMIN_NOTES_POST_TYPE', '3d-notes');
 define('WP_AZ_USER_NOTES_POST_TYPE', 'user-notes');
 
+# Media directory
+define ('WP_AZ_MEDIA_DIR', WP_CONTENT_DIR . '/uploads/3d-notes');
+define ('WP_AZ_MEDIA_URL', WP_CONTENT_URL . '/uploads/3d-notes');
+
 
 require_once ( WP_AZ_PLUGIN_DIR . '/functions.php');
 require_once ( WP_AZ_PLUGIN_DIR . '/templates.php');
