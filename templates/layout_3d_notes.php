@@ -46,6 +46,7 @@
                 </div>
             </div>
 
+        <!-------- MY-NOTES MODULE ----------->
         <div id="wpaz-my-notes" class="row hidden">
 
             <div class="row">
@@ -483,6 +484,7 @@
 	        <?php if ($post->ID != $wp_az_3d_body_id) : ?>
                 <div class="row">
 
+                    <!--------------- NOTES TIMELINE ------------------>
                     <div id="notes-timeline" class="row">
 				        <?php
 				        if ($notes != null):
@@ -500,6 +502,8 @@
     </div>
 </div>
 
+
+<!---------- MODAL POPUP -------------->
 <div class="modal fade" id="wpaz-modal-alert" tabindex="-1" role="dialog" aria-labelledby="wpaz-alert-label">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

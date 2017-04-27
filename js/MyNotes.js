@@ -12,8 +12,12 @@ class MyNotes {
 
         // Data
         this.myNotes = []; // array of post objects
+        this.dataTableIsCreated = false;
+        this.requireReload = false;
 
         // DOM elements
+
+        this.dataTable = null;
         this.$notesTable = jQuery('#my-notes-table');
         this.$notesTableBody = this.$notesTable.find('tbody');
 
@@ -28,7 +32,9 @@ class MyNotes {
 
         Utils.showLoading();
 
-        let data = {};
+        let data = {
+            'per_page': 100,
+        };
 
         let url;
 
@@ -52,6 +58,15 @@ class MyNotes {
 
                 myNotesMod.myNotes = response;
 
+                // Destroy datatable
+                if (myNotesMod.dataTableIsCreated) {
+                    console.log("destroy datatable");
+                    myNotesMod.dataTable.destroy();
+                }
+
+                // empty table
+                myNotesMod.$notesTableBody.empty();
+
                 for (let post of response){
 
                     let title = post.title.rendered;
@@ -64,14 +79,19 @@ class MyNotes {
                             <td>${date}</td>
                         </tr>`);
                     myNotesMod.$notesTableBody.append($row);
-
                 }
 
-                // Load datatable
-                myNotesMod.$notesTable.DataTable();
+                // Load data table
+                myNotesMod.dataTable = myNotesMod.$notesTable.DataTable({
+                    "order": [[ 1, "desc" ]]
+                });
 
                 // Hide loading
                 Utils.hideLoading();
+
+                // Set data
+                myNotesMod.dataTableIsCreated = true;
+                myNotesMod.requireReload = false;
             },
             error: function(response) {
                 console.log("failed: " + JSON.stringify(response));

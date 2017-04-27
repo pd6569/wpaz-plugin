@@ -137,6 +137,8 @@ class Utils {
      */
     static setActiveTab(tabToActivate){
 
+        console.log("setActiveTab: " + tabToActivate);
+
         // Get ref to layouts
         let $noteEditor = jQuery('#wpaz-main-layout');
         let $myNotes = jQuery('#wpaz-my-notes');

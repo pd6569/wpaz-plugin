@@ -275,35 +275,20 @@ class AnatomyNotes {
             Utils.setActiveTab(appGlobals.tabs.MY_NOTES);
             let myNotesModule = appGlobals.modulesLoaded[appGlobals.tabs.MY_NOTES];
             if (myNotesModule){
-                // do nothing
+
+                if (myNotesModule.requireReload){
+                    console.log("reload Notes");
+                    myNotesModule.loadNotes();
+                } else {
+                    // do nothing
+                }
             } else {
                 myNotesModule = new MyNotes();
                 appGlobals.modulesLoaded[appGlobals.tabs.MY_NOTES] = myNotesModule;
                 myNotesModule.loadNotes();
             }
         });
-        this.$mainToolbarCreateNew.on('click', () => {
-            console.log("create new");
-            Utils.resetModal();
-            Utils.showModal({
-                title: "Create New Notes",
-                body: "<input id='create-new-note-set' type='text' class='form-control' placeholder='Enter title' value=''>",
-            });
-            this.$modalBtn1.on('click', () => { this.$modalAlert.modal('hide')});
-            this.$modalBtn2.on('click', () => {
-                console.log("create new note set somehow...");
-                let newTitle = jQuery('#create-new-note-set').val();
-                this.clearActiveNotes();
-                this.$postTitle.text(newTitle);
-                this.$mainToolbarActiveNotes.find('a').text(newTitle);
-                this.$modalAlert.modal('hide');
-
-
-                // CREATE NEW POST IN DB
-                this.createPostInDb(newTitle);
-
-            })
-        });
+        this.$mainToolbarCreateNew.on('click', () => { this.createNewNoteSet() });
 
         // Scene selector
         this.$sceneSelectorOption.on('click', (event) => { this.loadScene(jQuery(event.target)) });
@@ -690,6 +675,36 @@ class AnatomyNotes {
         }
     }
 
+    createNewNoteSet() {
+        console.log("createNewNoteSet");
+        Utils.resetModal();
+        Utils.showModal({
+            title: "Create New Notes",
+            body: "<input id='create-new-note-set' type='text' class='form-control' placeholder='Enter title' value=''>",
+        });
+        this.$modalBtn1.on('click', () => { this.$modalAlert.modal('hide')});
+        this.$modalBtn2.on('click', () => {
+            let newTitle = jQuery('#create-new-note-set').val();
+            this.clearActiveNotes();
+            this.$postTitle.text(newTitle);
+            this.$mainToolbarActiveNotes.find('a').text(newTitle);
+            this.$modalAlert.modal('hide');
+
+
+            // CREATE NEW POST IN DB
+            this.createPostInDb(newTitle);
+
+            // Notify MyNotes module that reload will be required
+            if (appGlobals.modulesLoaded[appGlobals.tabs.MY_NOTES]) {
+                appGlobals.modulesLoaded[appGlobals.tabs.MY_NOTES].requireReload = true;
+            }
+
+            // Switch tab
+            if (appGlobals.currentTab !== appGlobals.tabs.NOTE_EDITOR) {
+                Utils.setActiveTab(appGlobals.tabs.NOTE_EDITOR)
+            }
+        })
+    }
     createPostInDb(title, callback){
 
         let data = {
@@ -1175,7 +1190,10 @@ class AnatomyNotes {
                 $noteSection.find('.note-title').html(title);
                 $noteSection.find('.note-content').html(note_content);
                 $noteSection.find('.note-actions').removeClass('hidden');
-                let $imageContainer = $noteSection.find('.note-image-container');
+
+                this.$notesTimelineContainer.append($noteSection);
+
+                /*let $imageContainer = $noteSection.find('.note-image-container');
 
                 let originalBackgroundData;
 
@@ -1205,7 +1223,7 @@ class AnatomyNotes {
                     this.$notesTimelineContainer.append($noteSection);
                 }
 
-
+*/
             }
         }
 
