@@ -108,47 +108,31 @@
 
                 </div>
             </div>
-            <div class="col-md-12">
 
+            <div class="row">
 
-                <div class="my-notes-item">
+                <div class="col-md-12">
 
-                    <div class="table-responsive">
+                    <div class="my-notes-item">
 
-                        <table id="my-notes-table" class="table table-striped table-bordered">
-                            <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Region</th>
-                                <th>Structure</th>
-                                <th>System</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>111aasdfasdf</td>
-                                <td>111asdfasdf</td>
-                                <td>11asdfasdf</td>
-                                <td>111asdfasdfasdf</td>
-                            </tr>
-                            <tr>
-                                <td>22aasdfasdf</td>
-                                <td>asf2433asdfasdf</td>
-                                <td>asdf24323a</td>
-                                <td>asdfasdfasdf</td>
-                            </tr>
-                            <tr>
-                                <td>2211aasdfasdf</td>
-                                <td>aasdfsdfasdf</td>
-                                <td>aasd33asdfasdf</td>
-                                <td>3312341asdfasdfasdf</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+
+                            <table id="my-notes-table" class="table table-striped table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Created</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+
+                        </div>
 
                     </div>
-
                 </div>
+
             </div>
         </div>
 

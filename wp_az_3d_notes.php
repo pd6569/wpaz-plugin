@@ -150,7 +150,8 @@ class wp_az_3d_notes {
 			'show_in_admin_bar' => true,
 			'menu_icon'         => 'dashicons-location-alt',
 			'rewrite'           => array('slug' => WP_AZ_ADMIN_NOTES_POST_TYPE, 'with_front' => 'true'),
-			'capability_type'   => WP_AZ_ADMIN_NOTES_POST_TYPE
+			'capability_type'   => WP_AZ_ADMIN_NOTES_POST_TYPE,
+			'taxonomies'        => array('post_tag' ),
 		);
 
 		// register post type
@@ -195,7 +196,9 @@ class wp_az_3d_notes {
 			'show_in_admin_bar' => true,
 			'menu_icon'         => 'dashicons-format-aside',
 			'rewrite'           => array('slug' => WP_AZ_USER_NOTES_POST_TYPE, 'with_front' => 'true'),
-			'capability_type'   => WP_AZ_USER_NOTES_POST_TYPE
+			'capability_type'   => WP_AZ_USER_NOTES_POST_TYPE,
+			'taxonomies'        => array('post_tag' ),
+
 		);
 
 		// register post type

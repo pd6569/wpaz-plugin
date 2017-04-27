@@ -275,11 +275,11 @@ class AnatomyNotes {
             Utils.setActiveTab(appGlobals.tabs.MY_NOTES);
             let myNotesModule = appGlobals.modulesLoaded[appGlobals.tabs.MY_NOTES];
             if (myNotesModule){
-                myNotesModule.displayNotes();
+                // do nothing
             } else {
                 myNotesModule = new MyNotes();
                 appGlobals.modulesLoaded[appGlobals.tabs.MY_NOTES] = myNotesModule;
-                myNotesModule.displayNotes();
+                myNotesModule.loadNotes();
             }
         });
         this.$mainToolbarCreateNew.on('click', () => {

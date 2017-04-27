@@ -228,6 +228,10 @@
 
 /* My Notes */
 
+#wpaz-my-notes {
+    min-height: 600px;
+}
+
 #wpaz-my-notes .my-notes-filters {
     margin-top: 10px;
     margin-bottom: 10px;

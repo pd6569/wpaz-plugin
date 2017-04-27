@@ -10,14 +10,17 @@ class MyNotes {
 
         this.appRef = appGlobals.appRef;
 
-        jQuery('#my-notes-table').DataTable();
+        // Data
+        this.myNotes = []; // array of post objects
+
+        // DOM elements
+        this.$notesTable = jQuery('#my-notes-table');
+        this.$notesTableBody = this.$notesTable.find('tbody');
     }
 
     loadNotes() {
 
-    }
-
-    displayNotes() {
+        Utils.showLoading();
 
         let data = {};
 
@@ -29,6 +32,8 @@ class MyNotes {
             url = ajax_object.wp_az_root + 'wp/v2/user-notes'
         }
 
+        let myNotesMod = this;
+
         jQuery.ajax({
             method: 'GET',
             url: url,
@@ -37,12 +42,37 @@ class MyNotes {
                 xhr.setRequestHeader('X-WP-Nonce', ajax_object.wp_az_nonce);
             },
             success: function(response) {
-                console.log("success: " + JSON.stringify(response));
+                console.log("List of 3D notes obtained", response);
+
+                myNotesMod.myNotes = response;
+
+                for (let post of response){
+
+                    let title = post.title.rendered;
+                    let date = post.date;
+                    let $row = jQuery(
+                        `<tr>
+                            <td>${title}</td>
+                            <td>${date}</td>
+                        </tr>`);
+                    myNotesMod.$notesTableBody.append($row);
+
+                }
+
+                // Load datatable
+                myNotesMod.$notesTable.DataTable();
+
+                // Hide loading
+                Utils.hideLoading();
             },
             error: function(response) {
                 console.log("failed: " + JSON.stringify(response));
             }
         })
+
+    }
+
+    displayNotes() {
 
     }
 
