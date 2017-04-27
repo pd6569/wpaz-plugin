@@ -242,15 +242,22 @@ class wp_az_3d_notes {
 			wp_enqueue_style('wp_az_bootstrap_style', plugins_url('lib/bootstrap.css', __FILE__));
 			wp_enqueue_style('wp_az_swipebox_style', plugins_url('lib/swipebox.css', __FILE__));
 			wp_enqueue_style('wp_az_toolbar_style', plugins_url('lib/jquery.toolbar.css', __FILE__));
+			wp_enqueue_style('wp_az_datatables_style', plugins_url('lib/datatables.min.css', __FILE__));
 			wp_enqueue_style('wp_az_main_style', plugins_url('css/styles.css?v=' . time(), __FILE__));
 
 			// scripts
+
+			//lib
 			wp_enqueue_script('wp_az_bootstrap', plugins_url('lib/bootstrap.js', __FILE__), null, null, true);
 			wp_enqueue_script('wp_az_swipebox', plugins_url('lib/jquery.swipebox.js', __FILE__), null, null, true);
 			wp_enqueue_script('wp_az_toolbar', plugins_url('lib/jquery.toolbar.js', __FILE__), null, null, true);
 			wp_enqueue_script('wp_az_biodigital_human', plugins_url('lib/human-api.min.js', __FILE__), null, null, true);
 			wp_enqueue_script('wp_az_biodigital_human_components', plugins_url('lib/human-components.js', __FILE__), null, null, true);
 			wp_enqueue_script('wp_az_fabric', plugins_url('lib/fabric.js', __FILE__), null, null, true);
+			wp_enqueue_script('wp_az_datatables', plugins_url('lib/datatables.min.js', __FILE__), array('jquery'), null, true);
+
+
+			// 3d-notes
 			wp_enqueue_script('wp_az_globals', plugins_url('js/globals.js', __FILE__), array('jquery'), '1.0', true);
 			wp_enqueue_script('wp_az_note', plugins_url('js/Note.js', __FILE__), array('jquery'), '1.0', true);
 			wp_enqueue_script('wp_az_actions', plugins_url('js/Actions.js', __FILE__), array('jquery'), '1.0', true);

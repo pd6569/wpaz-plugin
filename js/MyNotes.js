@@ -9,6 +9,8 @@ class MyNotes {
         console.log("MyNotes module created");
 
         this.appRef = appGlobals.appRef;
+
+        jQuery('#my-notes-table').DataTable();
     }
 
     loadNotes() {
