@@ -16,6 +16,12 @@ class MyNotes {
         // DOM elements
         this.$notesTable = jQuery('#my-notes-table');
         this.$notesTableBody = this.$notesTable.find('tbody');
+
+        // Listeners
+        this.$notesTable.on('click', '.my-notes__note-title', (event) => {
+            let $noteSelected = jQuery(event.target);
+            console.log("Post id: " + $noteSelected.attr('data-post-id'));
+        })
     }
 
     loadNotes() {
@@ -49,10 +55,12 @@ class MyNotes {
                 for (let post of response){
 
                     let title = post.title.rendered;
+                    let id = post.id;
+                    let url = post.guid.rendered;
                     let date = post.date;
                     let $row = jQuery(
                         `<tr>
-                            <td>${title}</td>
+                            <td><a href="${url}" data-post-id="${id}" class="my-notes__note-title">${title}</a></td>
                             <td>${date}</td>
                         </tr>`);
                     myNotesMod.$notesTableBody.append($row);
@@ -69,6 +77,10 @@ class MyNotes {
                 console.log("failed: " + JSON.stringify(response));
             }
         })
+
+    }
+
+    displayNoteSet(postId) {
 
     }
 

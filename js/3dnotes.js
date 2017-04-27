@@ -948,9 +948,11 @@ class AnatomyNotes {
 
                     // if action has data, parse string into object and set data.
                     function setActionData(action){
-                        if (Object.keys(action.action_data).length > 0){
-                            let actionDataObj = JSON.parse(action.action_data);
-                            action.action_data = actionDataObj;
+                        if (action.action_data) {
+                            if (Object.keys(action.action_data).length > 0){
+                                let actionDataObj = JSON.parse(action.action_data);
+                                action.action_data = actionDataObj;
+                            }
                         }
                     }
                 });
