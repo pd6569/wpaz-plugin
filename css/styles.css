@@ -228,8 +228,9 @@
 
 /* My Notes */
 
-#wpaz-my-notes .nav {
-    margin: 0px;
+#wpaz-my-notes .my-notes-filters {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 #wpaz-my-notes ul {

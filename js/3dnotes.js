@@ -188,6 +188,9 @@ class AnatomyNotes {
         // Linked scenes
         this.$textLinkedToScene = jQuery('.linked-scene');
 
+        // Dropdowns
+        jQuery('body .dropdown-toggle').dropdown(); // conflict with datatables and bootstrap drop downs - requires this
+
         // actions
         this.$addAction = jQuery('#action-add');
         this.$previousAction = jQuery('#action-previous');
