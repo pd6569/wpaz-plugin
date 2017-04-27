@@ -48,6 +48,84 @@
 
         <div id="wpaz-my-notes" class="row hidden">
             <div class="col-md-8">
+
+                <nav class="navbar navbar-default">
+                    <div class="container-fluid">
+
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+
+                        <ul class="nav navbar-nav">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                    Order by
+                                    <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Date</a></li>
+                                    <li><a href="#">Title</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="Region">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                    Region
+                                    <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Head</a></li>
+                                    <li><a href="#">Neck</a></li>
+                                    <li><a href="#">Thorax</a></li>
+                                    <li><a href="#">Abdomen</a></li>
+                                    <li><a href="#">Back</a></li>
+                                    <li><a href="#">Pelvis</a></li>
+                                    <li><a href="#">Upper Limb</a></li>
+                                    <li><a href="#">Lower Limb</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="Structure">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                    Structure
+                                    <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Bone</a></li>
+                                    <li><a href="#">Muscle</a></li>
+                                    <li><a href="#">Joint</a></li>
+                                    <li><a href="#">Nerve</a></li>
+                                    <li><a href="#">Organ</a></li>
+                                    <li><a href="#">Lymphatics</a></li>
+                                    <li><a href="#">Artery</a></li>
+                                    <li><a href="#">Vein</a></li>
+                                    <li><a href="#">Blood Vessel</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="System">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                    System
+                                    <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Muscular</a></li>
+                                    <li><a href="#">Skeletal</a></li>
+                                    <li><a href="#">Nervous</a></li>
+                                    <li><a href="#">Respiratory</a></li>
+                                    <li><a href="#">Cardiovascular</a></li>
+                                    <li><a href="#">Gastrointestinal</a></li>
+                                    <li><a href="#">Urinary</a></li>
+                                    <li><a href="#">Reproductive</a></li>
+                                </ul>
+                            </li>
+
+                        </ul>
+                        <form class="navbar-form navbar-left">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search">
+                            </div>
+                            <button type="submit" class="btn btn-default">Submit</button>
+                        </form>
+
+                    </div>
+                </nav>
+
+
                 <h3>My Notes</h3>
                 <ul>
                     <li>Notes</li>

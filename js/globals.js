@@ -39,6 +39,9 @@ let appGlobals = {
 
     currentTab: "",
 
+    // Modules
+    modulesLoaded: {}, // associative array module name => module object
+
     // Modes
     mode: {
         'ANNOTATE': false,

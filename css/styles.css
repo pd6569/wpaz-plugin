@@ -21,6 +21,10 @@
     width: 100%;
 }
 
+.single-share-box {
+    display: none;
+}
+
 /* END HACKS */
 
 #wpaz-toolbar {
@@ -136,10 +140,6 @@
     height: 55px;
 }
 
-/*#wpaz-notes-container .dropdown {
-    margin: 10px 0px 10px 0px
-}*/
-
 #wpaz-notes-container .dropdown-menu {
     list-style: none;
 }
@@ -221,6 +221,22 @@
 .tool-container .arrow {
     display: none;
 }
+
+/***************************************
+ *              MODULES                *
+ ***************************************/
+
+/* My Notes */
+
+#wpaz-my-notes .nav {
+    margin: 0px;
+}
+
+#wpaz-my-notes ul {
+    list-style: none;
+}
+
+
 
 /************************************************
  * LOADING from http://tobiasahlin.com/spinkit/ *

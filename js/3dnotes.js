@@ -268,7 +268,17 @@ class AnatomyNotes {
 
         // Main Toolbar
         this.$mainToolbarActiveNotes.on('click', () => { Utils.setActiveTab(appGlobals.tabs.NOTE_EDITOR)});
-        this.$mainToolbarMyNotes.on('click', () => { Utils.setActiveTab(appGlobals.tabs.MY_NOTES); });
+        this.$mainToolbarMyNotes.on('click', () => {
+            Utils.setActiveTab(appGlobals.tabs.MY_NOTES);
+            let myNotesModule = appGlobals.modulesLoaded[appGlobals.tabs.MY_NOTES];
+            if (myNotesModule){
+                myNotesModule.displayNotes();
+            } else {
+                myNotesModule = new MyNotes();
+                appGlobals.modulesLoaded[appGlobals.tabs.MY_NOTES] = myNotesModule;
+                myNotesModule.displayNotes();
+            }
+        });
         this.$mainToolbarCreateNew.on('click', () => {
             console.log("create new");
             Utils.resetModal();
@@ -431,6 +441,8 @@ class AnatomyNotes {
 
         // load notes
         this.loadNotes();
+
+        // get html templates
         this.getItemTemplates();
 
         // set UI

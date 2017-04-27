@@ -42,7 +42,6 @@ define('WP_AZ_USER_NOTES_POST_TYPE', 'user-notes');
 define ('WP_AZ_MEDIA_DIR', WP_CONTENT_DIR . '/uploads/3d-notes');
 define ('WP_AZ_MEDIA_URL', WP_CONTENT_URL . '/uploads/3d-notes');
 
-
 require_once ( WP_AZ_PLUGIN_DIR . '/functions.php');
 require_once ( WP_AZ_PLUGIN_DIR . '/templates.php');
 require_once ( WP_AZ_PLUGIN_DIR . '/inc/class_notes_editor.php');
@@ -255,6 +254,7 @@ class wp_az_3d_notes {
 			wp_enqueue_script('wp_az_globals', plugins_url('js/globals.js', __FILE__), array('jquery'), '1.0', true);
 			wp_enqueue_script('wp_az_note', plugins_url('js/Note.js', __FILE__), array('jquery'), '1.0', true);
 			wp_enqueue_script('wp_az_actions', plugins_url('js/Actions.js', __FILE__), array('jquery'), '1.0', true);
+			wp_enqueue_script('wp_az_my_notes', plugins_url('js/MyNotes.js', __FILE__), array('jquery'), '1.0', true);
 			wp_enqueue_script('wp_az_utils', plugins_url('js/Utils.js', __FILE__), array('jquery'), '1.0', true);
 			wp_enqueue_script('wp_az_3d_notes_main', plugins_url('js/3dnotes.js', __FILE__), array('jquery'), '1.0', true);
 
