@@ -288,7 +288,7 @@ class AnatomyNotes {
                 myNotesModule.loadNotes();
             }
         });
-        this.$mainToolbarCreateNew.on('click', () => { this.createNewNoteSet() });
+        this.$mainToolbarCreateNew.on('click', () => { this.showModal('new_note_set') });
 
         // Scene selector
         this.$sceneSelectorOption.on('click', (event) => { this.loadScene(jQuery(event.target)) });
@@ -444,7 +444,10 @@ class AnatomyNotes {
 
     /****
      *
-     * @param modalType Select modal type: 'annotations',
+     * @param modalType Select modal type:
+     *                          'annotations',
+     *                          'edit_action',
+     *                          'new_note_set'
      * @param data Data object associated with modal.
      *          Annotations: takes annotation object, as specified by BioDigital API.
      *          Actions modal:
@@ -669,42 +672,49 @@ class AnatomyNotes {
 
                 return true;
 
+            case 'new_note_set':
+                console.log("new_note_set");
+                Utils.resetModal();
+                Utils.showModal({
+                    title: "Create New Notes",
+                    body: "<input id='create-new-note-set' type='text' class='form-control' placeholder='Enter title' value=''>",
+                });
+                this.$modalBtn1.on('click', () => { this.$modalAlert.modal('hide')});
+                this.$modalBtn2.on('click', () => {
+                    let newTitle = jQuery('#create-new-note-set').val();
+                    this.clearActiveNotes();
+                    this.$postTitle.text(newTitle);
+                    this.$mainToolbarActiveNotes.find('a').text(newTitle);
+                    this.$modalAlert.modal('hide');
+
+
+                    // CREATE NEW POST IN DB
+                    this.createPostInDb(newTitle);
+
+                    // Notify MyNotes module that reload will be required
+                    if (appGlobals.modulesLoaded[appGlobals.tabs.MY_NOTES]) {
+                        appGlobals.modulesLoaded[appGlobals.tabs.MY_NOTES].requireReload = true;
+                    }
+
+                    // Switch tab
+                    if (appGlobals.currentTab !== appGlobals.tabs.NOTE_EDITOR) {
+                        Utils.setActiveTab(appGlobals.tabs.NOTE_EDITOR)
+                    }
+                })
+
             default:
                 console.log("No modal found for: ", modalType);
                 return false;
         }
     }
 
-    createNewNoteSet() {
-        console.log("createNewNoteSet");
-        Utils.resetModal();
-        Utils.showModal({
-            title: "Create New Notes",
-            body: "<input id='create-new-note-set' type='text' class='form-control' placeholder='Enter title' value=''>",
-        });
-        this.$modalBtn1.on('click', () => { this.$modalAlert.modal('hide')});
-        this.$modalBtn2.on('click', () => {
-            let newTitle = jQuery('#create-new-note-set').val();
-            this.clearActiveNotes();
-            this.$postTitle.text(newTitle);
-            this.$mainToolbarActiveNotes.find('a').text(newTitle);
-            this.$modalAlert.modal('hide');
-
-
-            // CREATE NEW POST IN DB
-            this.createPostInDb(newTitle);
-
-            // Notify MyNotes module that reload will be required
-            if (appGlobals.modulesLoaded[appGlobals.tabs.MY_NOTES]) {
-                appGlobals.modulesLoaded[appGlobals.tabs.MY_NOTES].requireReload = true;
-            }
-
-            // Switch tab
-            if (appGlobals.currentTab !== appGlobals.tabs.NOTE_EDITOR) {
-                Utils.setActiveTab(appGlobals.tabs.NOTE_EDITOR)
-            }
-        })
-    }
+    /****
+     *
+     * Creates new post in DB using WP REST API
+     *
+     * @param title (String) Title of new post (note set)
+     * @param callback (Function) Function called once post created. Takes one argument (post object)
+     */
     createPostInDb(title, callback){
 
         let data = {
@@ -733,7 +743,7 @@ class AnatomyNotes {
 
                 appGlobals.post_id = response.id;
 
-                if (callback) callback();
+                if (callback) callback(response);
 
             },
             error: function(response) {
