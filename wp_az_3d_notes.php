@@ -54,6 +54,9 @@ $wp_az_db_version = '1.0';
 global $wp_az_3d_body_id;
 global $wp_az_notes_dashboard_id;
 
+// Ajax call - will set to true for functions called by ajax
+global $ajax_call;
+
 class wp_az_3d_notes {
 
 	public function __construct() {
@@ -610,10 +613,16 @@ class wp_az_3d_notes {
 	public function send_item_templates() {
 
 		global $item_templates;
+		global $item_template_names;
+		global $ajax_call;
+
+		$ajax_call = true;
+		$templates['NOTE_SECTION'] = wp_az_get_template_html($item_template_names['NOTE_SECTION']);
+		$ajax_call = false;
 
 		wp_send_json(array (
 			'status' => "success",
-			'templates' => $item_templates,
+			'templates' => $templates,
 		));
 
 	}

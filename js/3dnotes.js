@@ -895,6 +895,7 @@ class AnatomyNotes {
             },
             success: function(data) {
                 appGlobals.templates.NOTE_SECTION = (data.templates['NOTE_SECTION']);
+                console.log("Got templates", data);
             },
             type: 'GET'
         });

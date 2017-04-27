@@ -1,3 +1,4 @@
+
 <div class="col-md-12">
 
 	<div id="<?php echo $note->uid ?>" class="panel panel-primary note-item" sequence="<?php echo $note->sequence?>">
@@ -5,7 +6,11 @@
 			<h3 class="panel-title">
                 <a><span class="note-title"><?php if(empty($note->title)): echo "No title"; else: echo $note->title; endif; ?></span></a>
 
-                <?php if ($user_is_editor) : ?>
+                <?php
+
+                global $ajax_call;
+
+                if ($user_is_editor || $ajax_call) : ?>
                 <span class="glyphicon glyphicon-trash pull-right delete-note note-actions hvr-grow" aria-hidden="true"></span>
                 <span class="glyphicon glyphicon-pencil pull-right edit-note note-actions hvr-grow" aria-hidden="true"></span>
                 <?php endif ?>
