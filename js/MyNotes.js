@@ -28,6 +28,10 @@ class MyNotes {
         })
     }
 
+    displayNotes() {
+
+    }
+
     loadNotes() {
 
         Utils.showLoading();

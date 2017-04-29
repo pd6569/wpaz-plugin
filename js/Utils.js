@@ -66,7 +66,7 @@ class Utils {
         let $modalTitle = $modalAlert.find('.modal-title');
         let $modalError = $modalAlert.find('.modal-error p');
         let $modalBody = $modalAlert.find('.modal-body');
-        let $modalImageProps = $modalAlert.find('.modal-image-properties');
+        let $modalImage = $modalAlert.find('.modal-image');
         let $modalAnnotations = $modalAlert.find('.modal-annotations');
         let $modalActions = $modalAlert.find('.modal-actions');
         let $modalBtn1 = $modalAlert.find('#modal-btn-1');
@@ -76,7 +76,7 @@ class Utils {
         // Set default text, remove existing event listeners
         $modalTitle.text("");
         $modalBody.empty();
-        $modalImageProps.addClass('hidden');
+        $modalImage.addClass('hidden');
         $modalAnnotations.addClass('hidden');
         $modalActions.addClass('hidden');
         $modalError.empty();

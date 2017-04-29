@@ -6,7 +6,7 @@ class AnatomyNotes {
 
     constructor() {
         console.log("anatomy notes loaded");
-
+        
         appGlobals.appRef = this;
 
         // get BioDigital Human
@@ -99,32 +99,6 @@ class AnatomyNotes {
                         console.log("New annotation created: " + JSON.stringify(newAnnotation));
                         newAnnotation.isNewAnnotation = true; // if cancel clicked on modal, annotation will be deleted
                         this.showModal('annotations', newAnnotation);
-
-                        /*Utils.resetModal();
-                        Utils.showModal({
-                            title: "Add annotation",
-                            body: ""
-                        });
-
-                        this.$modalAnnotations.removeClass('hidden');
-
-                        this.$modalBtn1.on('click', () => {
-                            this.$modalAlert.modal('hide');
-                            Utils.resetModal();
-                            this.human.send("annotations.destroy", newAnnotation.annotationId);
-                        });
-
-                        this.$modalBtn2.on('click', () => {
-                            let title = this.$annotationsTitle.val();
-                            let desc = this.$annotationsDescription.val();
-                            this.human.send("annotations.update", {
-                                annotationId: newAnnotation.annotationId,
-                                title: title,
-                                description: desc
-                            });
-                            this.$modalAlert.modal('hide');
-                            Utils.resetModal();
-                        })*/
 
                     })
                 });
@@ -248,14 +222,18 @@ class AnatomyNotes {
         this.$modalAlert = jQuery('#wpaz-modal-alert');
         this.$modalTitle = this.$modalAlert.find('.modal-title');
         this.$modalBody = this.$modalAlert.find('.modal-body');
-        this.$modalImageProps = this.$modalAlert.find('.modal-image-properties');
+        this.$modalImage = jQuery('.modal-image');
         this.$modalAnnotations = this.$modalAlert.find('.modal-annotations');
         this.$modalActions = this.$modalAlert.find('.modal-actions');
         this.$modalError = this.$modalAlert.find('.modal-error p');
         this.$modalBtn1 = this.$modalAlert.find('#modal-btn-1');
         this.$modalBtn2 = this.$modalAlert.find('#modal-btn-2');
 
+        // Image Upload
+        this.$modalImageUpload = jQuery('.modal-image-upload');
+
         // Image Properties
+        this.$modalImageProps = this.$modalAlert.find('.modal-image-properties');
         this.$imgTitle = jQuery('.modal-image-properties .image-title');
         this.$imgDesc = jQuery('.modal-image-properties .image-description');
         this.$imgCaption = jQuery('.modal-image-properties .image-caption');
@@ -292,7 +270,7 @@ class AnatomyNotes {
 
         // Scene selector
         this.$sceneSelectorOption.on('click', (event) => { this.loadScene(jQuery(event.target)) });
-        this.$sceneSelectImageBtn.on('click', (event) => {this.loadImage()});
+        this.$sceneSelectImageBtn.on('click', (event) => {this.loadImage(event)});
         this.$toggleCanvas.on('click', (event) => {
             this.$canvas.toggle();
             appGlobals.mode.ANNOTATE = !appGlobals.mode.ANNOTATE;
@@ -346,52 +324,6 @@ class AnatomyNotes {
                     newAction: false,
                     actionId: actionId
                 });
-
-                /*editor.windowManager.open( {
-                    title: 'Link action',
-
-                    body: [{
-                        type: 'textbox',
-                        multiline: true,
-                        name: 'linktext',
-                        label: 'Link scene to text',
-                        value: $editLink.text()
-                        },
-                        {
-                            type   : 'combobox',
-                            name   : 'action',
-                            label  : 'Action',
-                            values : [
-                                { text: '360-Rotate', value: '360-Rotate' }
-                            ]
-                        }],
-
-                    buttons: [{
-                        text: 'Delete',
-                        onclick: function () {
-                            // remove action data
-                            Action.deleteAction(actionId);
-
-                            // Update UI
-                            appObj.removeAction(actionId);
-
-                            // remove from editor
-                            $editLink.remove();
-
-                            editor.execCommand( 'mceInsertContent', true, linkText);
-                        }
-                    }, {
-                        text: 'OK',
-                        subtype: 'primary',
-                        onclick: function() {
-                        }
-                    }],
-
-                    onsubmit: function(e) {
-                        console.log("function to replace action");
-                    }
-                });*/
-
 
             });
 
@@ -454,6 +386,11 @@ class AnatomyNotes {
      *              actionText - (String) text in editor that will be linked to the scene. Required
      *              newAction - (Boolean) true if new action, false if existing action. Optional
      *              actionId - (String) id of action to edit. Optional
+ *              Image modal:
+     *              type            {String} 'upload', 'snapshot'
+     *              enableUpload    {boolean} allow image upload in modal
+     *              imgSrc          {String} base64 encoded image src
+     *              callback        {function}
      */
     showModal(modalType, data){
 
@@ -701,6 +638,113 @@ class AnatomyNotes {
                         Utils.setActiveTab(appGlobals.tabs.NOTE_EDITOR)
                     }
                 })
+
+            case 'image':
+                Utils.resetModal();
+                Utils.showModal({
+                    title: "Edit snapshot",
+                    body: "",
+                });
+
+                let enableUpload = data.enableUpload;
+                let type = data.type;
+                let imgSrc = data.imgSrc;
+                let callback = data.callback;
+
+                this.$modalImage.removeClass('hidden');
+
+                if (type === 'upload'){
+                    this.$modalImageUpload.removeClass('hidden');
+                    this.$modalImageProps.addClass('hidden');
+                } else if (type === 'snapshot') {
+                    this.$modalImageUpload.addClass('hidden');
+                    this.$modalImageProps.removeClass('hidden');
+                }
+
+
+                // Set field defaults
+                let defaultTitle = "Snapshot " + appGlobals.numSnapshots;
+                this.$imgTitle.val(defaultTitle);
+                this.$modalImageProps.find('.image-thumbnail img').attr('src', imgSrc);
+
+                // Cancel
+                this.$modalBtn1.on('click', () => {
+                    this.$modalAlert.modal('hide');
+                    Utils.resetModal();
+                    return;
+                });
+
+                // OK
+                this.$modalBtn2.on('click', () => {
+
+                    let self = this;
+                    let imgTitle;
+                    this.$imgTitle.val() == "" ? imgTitle = defaultTitle : imgTitle = this.$imgTitle.val();
+                    let imgDesc = this.$imgDesc.val();
+                    let imgCaption = this.$imgCaption.val();
+                    let imgAlt = this.$imgAlt.val();
+
+                    console.log("title: " + imgTitle + " desc: " + imgDesc + " caption: " + imgCaption + "imgAlt: " + imgAlt);
+
+                    this.$modalAlert.modal('hide');
+                    Utils.resetModal();
+
+                    Utils.setNoteUpdateStatus("Saving snapshot...");
+
+                    // Save media to server and append
+                    let $updateNote = this.$notesTimelineContainer.find('#' + appGlobals.currentNote.uid);
+                    let $imageContainer = $updateNote.find('.note-image-container .row');
+
+                    // Save media
+                    jQuery.ajax({
+                        url: ajax_object.wp_az_ajax_url,
+                        data: {
+                            action: 'upload_snapshot',
+                            wp_az_3d_notes_nonce: ajax_object.wp_az_3d_notes_nonce,
+                            wp_az_post_id: appGlobals.post_id,
+                            wp_az_img_data: imgSrc,
+                            wp_az_img_title: imgTitle,
+                            wp_az_img_desc: imgDesc,
+                            wp_az_img_caption: imgCaption,
+                            wp_az_img_alt: imgAlt,
+                            wp_az_note_id: appGlobals.currentNote.uid
+                        },
+                        error: function() {
+                            console.log("Failed to save snapshot");
+                            Utils.setNoteUpdateStatus("Failed to save snapshot", 3000);
+                        },
+                        success: function(data) {
+                            console.log("Snapshot saved", data);
+                            Utils.setNoteUpdateStatus("Snapshot saved", 3000);
+
+                            let attachmentId = data['attachment_id'];
+                            let attachmentMedium = data['attachment_src_medium'];
+                            let attachmentLarge = data['attachment_src_large'];
+
+                            let $newImage = jQuery(
+                                "<div class='col-md-4 col-sm-4 col-xs-6'>" +
+                                "<div id='" + attachmentId + "'>" +
+                                "<a rel='" + appGlobals.currentNote.uid + "' href='" + attachmentLarge + "' class='swipebox note-images' title='" + imgCaption + "'>" +
+                                "<img src='" + attachmentMedium + "' alt='image' width='100%' height='100%'>" +
+                                "</a>" +
+                                "</div>" +
+                                "</div>");
+                            $newImage.appendTo($imageContainer);
+
+                            // add toolbar
+                            $newImage.find('a.note-images').toolbar(self.toolbarOptions);
+                            self.setImgToolbarListeners($newImage.find('a.note-images'));
+
+                        },
+                        type: 'POST'
+                    });
+
+                    if (callback) {
+                        callback(imgSrc)
+                    }
+
+                });
+                return true;
 
             default:
                 console.log("No modal found for: ", modalType);
@@ -1203,38 +1247,6 @@ class AnatomyNotes {
                 $noteSection.find('.note-actions').removeClass('hidden');
 
                 this.$notesTimelineContainer.append($noteSection);
-
-                /*let $imageContainer = $noteSection.find('.note-image-container');
-
-                let originalBackgroundData;
-
-                if (appGlobals.humanLoaded){
-                    this.human.send("ui.getBackground", (backgroundData) => {
-                        originalBackgroundData = backgroundData;
-                    });
-
-                    let backgroundColor = 'white';
-
-                    let backgroundData = { colors: [backgroundColor, backgroundColor] };
-
-                    this.human.send("ui.setBackground", backgroundData);
-
-                    this.human.send("ui.snapshot", {}, (imgSrc) => {
-                        console.log("Snapshot captured.");
-                        this.human.send("ui.setBackground", originalBackgroundData);
-                        jQuery("<img>", {
-                            "src": imgSrc,
-                            "width": "250px",
-                            "height": "250px"})
-                            .appendTo($imageContainer);
-
-                        this.$notesTimelineContainer.append($noteSection);
-                    });
-                } else {
-                    this.$notesTimelineContainer.append($noteSection);
-                }
-
-*/
             }
         }
 
@@ -1631,97 +1643,12 @@ class AnatomyNotes {
                     .addClass('col-md-8');
                 this.$humanWidget.attr("height", "600");
 
-                // Show image properties modal
-                Utils.resetModal();
-                Utils.showModal({
-                    title: "Edit snapshot",
-                    body: "",
-                });
-
-                this.$modalImageProps.removeClass('hidden');
-
-                // Set field defaults
-                let defaultTitle = "Snapshot " + appGlobals.numSnapshots;
-                this.$imgTitle.val(defaultTitle);
-                this.$modalImageProps.find('.image-thumbnail img').attr('src', imgSrc);
-
-                // Cancel
-                this.$modalBtn1.on('click', () => {
-                    this.$modalAlert.modal('hide');
-                    Utils.resetModal();
-                    return;
-                });
-
-                // OK
-                this.$modalBtn2.on('click', () => {
-
-                    let self = this;
-                    let imgTitle;
-                    this.$imgTitle.val() == "" ? imgTitle = defaultTitle : imgTitle = this.$imgTitle.val();
-                    let imgDesc = this.$imgDesc.val();
-                    let imgCaption = this.$imgCaption.val();
-                    let imgAlt = this.$imgAlt.val();
-
-                    console.log("title: " + imgTitle + " desc: " + imgDesc + " caption: " + imgCaption + "imgAlt: " + imgAlt);
-
-                    this.$modalAlert.modal('hide');
-                    Utils.resetModal();
-
-                    Utils.setNoteUpdateStatus("Saving snapshot...");
-
-                    // Save media to server and append
-                    let $updateNote = this.$notesTimelineContainer.find('#' + appGlobals.currentNote.uid);
-                    let $imageContainer = $updateNote.find('.note-image-container .row');
-
-                    // Save media
-                    jQuery.ajax({
-                        url: ajax_object.wp_az_ajax_url,
-                        data: {
-                            action: 'upload_snapshot',
-                            wp_az_3d_notes_nonce: ajax_object.wp_az_3d_notes_nonce,
-                            wp_az_post_id: appGlobals.post_id,
-                            wp_az_img_data: imgSrc,
-                            wp_az_img_title: imgTitle,
-                            wp_az_img_desc: imgDesc,
-                            wp_az_img_caption: imgCaption,
-                            wp_az_img_alt: imgAlt,
-                            wp_az_note_id: appGlobals.currentNote.uid
-                        },
-                        error: function() {
-                            console.log("Failed to save snapshot");
-                            Utils.setNoteUpdateStatus("Failed to save snapshot", 3000);
-                        },
-                        success: function(data) {
-                            console.log("Snapshot saved", data);
-                            Utils.setNoteUpdateStatus("Snapshot saved", 3000);
-
-                            let attachmentId = data['attachment_id'];
-                            let attachmentMedium = data['attachment_src_medium'];
-                            let attachmentLarge = data['attachment_src_large'];
-
-                            let $newImage = jQuery(
-                                "<div class='col-md-4 col-sm-4 col-xs-6'>" +
-                                    "<div id='" + attachmentId + "'>" +
-                                        "<a rel='" + appGlobals.currentNote.uid + "' href='" + attachmentLarge + "' class='swipebox note-images' title='" + imgCaption + "'>" +
-                                            "<img src='" + attachmentMedium + "' alt='image' width='100%' height='100%'>" +
-                                        "</a>" +
-                                    "</div>" +
-                                "</div>");
-                            $newImage.appendTo($imageContainer);
-
-                            // add toolbar
-                            $newImage.find('a.note-images').toolbar(self.toolbarOptions);
-                            self.setImgToolbarListeners($newImage.find('a.note-images'));
-
-                        },
-                        type: 'POST'
-                    });
-
-                    if (callback) {
-                        callback(imgSrc)
-                    }
-
-                });
+                let data = {
+                    type: 'snapshot',
+                    enableUpload: false,
+                    imgSrc: imgSrc,
+                }
+                this.showModal('image', data);
 
             });
         }, 50);
@@ -1940,13 +1867,15 @@ class AnatomyNotes {
         });
     }
 
-    loadImage(){
+    loadImage(event){
         console.log("loadImage");
-        this.$modalTitle.text("Load Image");
-        this.$modalBody.text("Select image to use");
-        this.$modalBtn1.text("Cancel");
-        this.$modalBtn2.text("OK");
-        this.$modalAlert.modal('show');
+
+        this.showModal('image', {
+            type: 'upload',
+        });
+
+        event.preventDefault();
+
     }
 
     // BIODIGITAL API FUNCTIONS

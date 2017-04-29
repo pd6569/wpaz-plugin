@@ -63,16 +63,15 @@ class wp_az_3d_notes {
 
 		$this->hooks();
 
-		// generate item templates
-		wp_az_generate_item_templates();
 
+		/*wp_az_generate_item_templates();*/
 	}
 	
 	public function hooks(){
 		add_action('init', array($this,'register_3d_notes')); //register admin notes post type
 		add_action('init', array($this,'register_user_notes')); //register user notes post type
 		add_action('init', array($this, 'set_globals_from_options'));
-		add_action('init', array($this, 'setup_notes_editor'));
+		add_action('init', array($this, 'setup_modules'));
 		add_action('init', array($this, 'load_admin'));
 		add_action('admin_enqueue_scripts', array($this,'enqueueAdmin'));
 		add_action('wp_enqueue_scripts', array($this,'enqueue'), 50); // ensure styles are enqueued AFTER theme!
@@ -109,6 +108,7 @@ class wp_az_3d_notes {
 
 		return $content;
 	}
+
 
 	// INIT
 
@@ -218,10 +218,9 @@ class wp_az_3d_notes {
 
 	}
 
-	public function setup_notes_editor(){
+	public function setup_modules (){
 
 		$notes_editor = new wpaz_notes_editor();
-
 	}
 
 	//  ENQUEUE SCRIPTS AND STYLES
@@ -261,7 +260,6 @@ class wp_az_3d_notes {
 			wp_enqueue_script('wp_az_biodigital_human_components', plugins_url('lib/human-components.js', __FILE__), null, null, true);
 			wp_enqueue_script('wp_az_fabric', plugins_url('lib/fabric.js', __FILE__), null, null, true);
 			wp_enqueue_script('wp_az_datatables', plugins_url('lib/datatables.min.js', __FILE__), array('jquery'), null, true);
-
 
 			// 3d-notes
 			wp_enqueue_script('wp_az_globals', plugins_url('js/globals.js', __FILE__), array('jquery'), '1.0', true);
