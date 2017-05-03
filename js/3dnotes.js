@@ -647,6 +647,7 @@ class AnatomyNotes {
                 let type = data.type;
                 let imgSrc = data.imgSrc;
                 let callback = data.callback;
+                let defaultTitle;
 
                 Utils.resetModal();
                 Utils.showModal({
@@ -656,12 +657,27 @@ class AnatomyNotes {
 
                 this.$modalImage.removeClass('hidden');
 
+                // default click listeners
+                this.$modalBtn1.on('click', () => {
+                    this.$modalAlert.modal('hide');
+                    Utils.resetModal();
+                    return;
+                });
+
+                this.$modalBtn2.on('click', () => {
+                    this.$modalAlert.modal('hide');
+                    Utils.resetModal();
+                    return;
+                });
+
                 if (type === 'upload'){
                     this.$modalImageUpload.removeClass('hidden');
                     this.$modalImageProps.addClass('hidden');
 
                     jQuery('#image-upload').on('change', (event) => {
+
                         let file = event.target.files[0];
+                        let fileName = event.target.files[0].name.replace(/\.[^/.]+$/, "");
                         let reader = new FileReader();
 
                         reader.readAsDataURL(file);
@@ -672,13 +688,14 @@ class AnatomyNotes {
                             console.log("event", event);
                             imgSrc = event.target.result;
 
-                            loadImgProperties("Uploaded image");
+                            loadImgProperties(fileName);
                         };
                     });
 
                 } else if (type === 'snapshot') {
                     this.$modalImageUpload.addClass('hidden');
-                    this.$modalImageProps.removeClass('hidden');
+
+                    loadImgProperties();
                 }
 
 
@@ -686,93 +703,100 @@ class AnatomyNotes {
                     self.$modalImageProps.removeClass('hidden');
 
                     // Set field defaults
-                    let defaultTitle = "Snapshot " + appGlobals.numSnapshots;
-                    self.$imgTitle.val(title ? title : defaultTitle);
+                    title ? defaultTitle = title : defaultTitle = "Snapshot " + appGlobals.numSnapshots;
+                    self.$imgTitle.val(defaultTitle);
                     self.$modalImageProps.find('.image-thumbnail img').attr('src', imgSrc);
-                    
+
+                    // clear fields
+                    self.$imgDesc.val("");
+                    self.$imgCaption.val("");
+                    self.$imgAlt.val("");
+
+                    setClickListeners();
                 }
 
-                // Set field defaults
-                let defaultTitle = "Snapshot " + appGlobals.numSnapshots;
-                this.$imgTitle.val(defaultTitle);
-                this.$modalImageProps.find('.image-thumbnail img').attr('src', imgSrc);
+                function setClickListeners(){
+                    self.$modalBtn2.off();
+                    self.$modalBtn2.on('click', () => {
 
-                // Cancel
-                this.$modalBtn1.on('click', () => {
-                    this.$modalAlert.modal('hide');
-                    Utils.resetModal();
-                    return;
-                });
+                        let imgTitle;
+                        self.$imgTitle.val() == "" ? imgTitle = defaultTitle : imgTitle = self.$imgTitle.val();
+                        let imgDesc = self.$imgDesc.val();
+                        let imgCaption = self.$imgCaption.val();
+                        let imgAlt = self.$imgAlt.val();
 
-                // OK
-                this.$modalBtn2.on('click', () => {
+                        console.log("title: " + imgTitle + " desc: " + imgDesc + " caption: " + imgCaption + "imgAlt: " + imgAlt);
 
-                    let imgTitle;
-                    this.$imgTitle.val() == "" ? imgTitle = defaultTitle : imgTitle = this.$imgTitle.val();
-                    let imgDesc = this.$imgDesc.val();
-                    let imgCaption = this.$imgCaption.val();
-                    let imgAlt = this.$imgAlt.val();
+                        self.$modalAlert.modal('hide');
+                        Utils.resetModal();
 
-                    console.log("title: " + imgTitle + " desc: " + imgDesc + " caption: " + imgCaption + "imgAlt: " + imgAlt);
+                        Utils.setNoteUpdateStatus("Saving image...");
 
-                    this.$modalAlert.modal('hide');
-                    Utils.resetModal();
+                        // Save media to server and append
+                        let $updateNote = self.$notesTimelineContainer.find('#' + appGlobals.currentNote.uid);
+                        let $imageContainer = $updateNote.find('.note-image-container .row');
 
-                    Utils.setNoteUpdateStatus("Saving snapshot...");
+                        // Save media
+                        jQuery.ajax({
+                            url: ajax_object.wp_az_ajax_url,
+                            data: {
+                                action: 'upload_snapshot',
+                                wp_az_3d_notes_nonce: ajax_object.wp_az_3d_notes_nonce,
+                                wp_az_post_id: appGlobals.post_id,
+                                wp_az_img_data: imgSrc,
+                                wp_az_img_title: imgTitle,
+                                wp_az_img_desc: imgDesc,
+                                wp_az_img_caption: imgCaption,
+                                wp_az_img_alt: imgAlt,
+                                wp_az_note_id: appGlobals.currentNote.uid
+                            },
+                            error: function() {
+                                console.log("Failed to save snapshot");
+                                Utils.setNoteUpdateStatus("Failed to save snapshot", 3000);
+                            },
+                            success: function(data) {
+                                console.log("Snapshot saved", data);
+                                Utils.setNoteUpdateStatus("Snapshot saved", 3000);
 
-                    // Save media to server and append
-                    let $updateNote = this.$notesTimelineContainer.find('#' + appGlobals.currentNote.uid);
-                    let $imageContainer = $updateNote.find('.note-image-container .row');
+                                let attachmentId = data['attachment_id'];
+                                let attachmentMedium = data['attachment_src_medium'];
+                                let attachmentLarge = data['attachment_src_large'];
 
-                    // Save media
-                    jQuery.ajax({
-                        url: ajax_object.wp_az_ajax_url,
-                        data: {
-                            action: 'upload_snapshot',
-                            wp_az_3d_notes_nonce: ajax_object.wp_az_3d_notes_nonce,
-                            wp_az_post_id: appGlobals.post_id,
-                            wp_az_img_data: imgSrc,
-                            wp_az_img_title: imgTitle,
-                            wp_az_img_desc: imgDesc,
-                            wp_az_img_caption: imgCaption,
-                            wp_az_img_alt: imgAlt,
-                            wp_az_note_id: appGlobals.currentNote.uid
-                        },
-                        error: function() {
-                            console.log("Failed to save snapshot");
-                            Utils.setNoteUpdateStatus("Failed to save snapshot", 3000);
-                        },
-                        success: function(data) {
-                            console.log("Snapshot saved", data);
-                            Utils.setNoteUpdateStatus("Snapshot saved", 3000);
+                                let $newImage = jQuery(
+                                    "<div class='col-md-4 col-sm-4 col-xs-6'>" +
+                                    "<div id='" + attachmentId + "'>" +
+                                    "<a rel='" + appGlobals.currentNote.uid + "' href='" + attachmentLarge + "' class='swipebox note-images' title='" + imgCaption + "'>" +
+                                    "<img src='" + attachmentMedium + "' alt='image' width='100%' height='100%'>" +
+                                    "</a>" +
+                                    "</div>" +
+                                    "</div>");
+                                $newImage.appendTo($imageContainer);
 
-                            let attachmentId = data['attachment_id'];
-                            let attachmentMedium = data['attachment_src_medium'];
-                            let attachmentLarge = data['attachment_src_large'];
+                                // add toolbar
+                                $newImage.find('a.note-images').toolbar(self.toolbarOptions);
+                                self.setImgToolbarListeners($newImage.find('a.note-images'));
 
-                            let $newImage = jQuery(
-                                "<div class='col-md-4 col-sm-4 col-xs-6'>" +
-                                "<div id='" + attachmentId + "'>" +
-                                "<a rel='" + appGlobals.currentNote.uid + "' href='" + attachmentLarge + "' class='swipebox note-images' title='" + imgCaption + "'>" +
-                                "<img src='" + attachmentMedium + "' alt='image' width='100%' height='100%'>" +
-                                "</a>" +
-                                "</div>" +
-                                "</div>");
-                            $newImage.appendTo($imageContainer);
+                            },
+                            type: 'POST'
+                        });
 
-                            // add toolbar
-                            $newImage.find('a.note-images').toolbar(self.toolbarOptions);
-                            self.setImgToolbarListeners($newImage.find('a.note-images'));
+                        if (callback) {
+                            callback(imgSrc)
+                        }
 
-                        },
-                        type: 'POST'
                     });
 
-                    if (callback) {
-                        callback(imgSrc)
-                    }
+                }
 
-                });
+                /*// Set field defaults
+                let defaultTitle = "Snapshot " + appGlobals.numSnapshots;
+                this.$imgTitle.val(defaultTitle);
+                this.$modalImageProps.find('.image-thumbnail img').attr('src', imgSrc);*/
+
+
+
+                // OK
+
                 return true;
 
             default:
