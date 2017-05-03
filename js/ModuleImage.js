@@ -15,28 +15,67 @@ class ModuleImage extends NotesModule {
 
     enableModule(){
 
+        console.log("enableModule: " + this.moduleName);
+
+        // Disable conflicting modes/modules
+        if (appGlobals.modulesLoaded[appGlobals.modules.ANNOTATE_MODULE]){
+            appGlobals.modulesLoaded[appGlobals.modules.ANNOTATE_MODULE].disableModule();
+            appGlobals.mode.ANNOTATE = false;
+        }
+
         // Enable canvas
         this.$canvas.show();
 
         // Set image in canvas
+        this.fabricCanvas = new fabric.Canvas('myCanvas', {
+            backgroundColor: 'rgb(255,255, 255)',
+            selectionColor: 'blue',
+            selectionLineWidth: 2
+        });
+        this.fabricCanvas.setZoom(0.5);
+        this.fabricCanvas.setWidth(this.app.$humanWidget.width());
+        this.fabricCanvas.setHeight(this.app.$humanWidget.height());
+
+        jQuery(window).on('resize', () => {
+            console.log("resize fabric canvas");
+            this.fabricCanvas.setWidth(this.app.$humanWidget.width());
+        });
+
+
+        // Set Image
+        let imgElement = new Image;
+        imgElement.src = this.imgSrc;
+        let imgInstance = new fabric.Image(imgElement, {
+            left: 0,
+            top: 0,
+        });
+        this.fabricCanvas.add(imgInstance);
 
         // Add listeners
         this.setCanvasListeners();
+
     }
 
     disableModule() {
+
+        console.log("disableModule: " + this.moduleName);
 
         // Disable canvas
         this.$canvas.hide();
 
         // Remove listeners
         this.removeListeners();
+
+        // Deactivate fabric canvas
+        if (this.fabricCanvas) {
+            this.fabricCanvas.dispose();
+            this.fabricCanvas = null;
+        }
+
     }
 
     toggleModule() {
         let modeState = !appGlobals.mode.EDIT_IMAGE;
-
-        this.turnAllModesOff();
 
         appGlobals.mode.EDIT_IMAGE = modeState;
 

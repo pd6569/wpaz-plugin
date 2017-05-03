@@ -50,7 +50,7 @@ let appGlobals = {
     // Modules
     modulesLoaded: {}, // associative array module name => module object
 
-    // Modes
+    // Modes - enabled/disabled. Note: Module can be loaded, but mode can be disabled.
     mode: {
         'ANNOTATE': false,
         'EDIT_IMAGE': false,

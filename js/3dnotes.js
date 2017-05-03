@@ -112,9 +112,11 @@ class AnatomyNotes {
 
             // resize the canvas to fill browser window dynamically
             jQuery(window).on('resize', () => {
-                console.log("resize canvas");
-                this.canvas.width = this.$humanWidget.width();
-                this.canvas.height = this.$humanWidget.height();
+                if (appGlobals.mode.ANNOTATE){
+                    console.log("resize canvas");
+                    this.canvas.width = this.$humanWidget.width();
+                    this.canvas.height = this.$humanWidget.height();
+                }
             });
 
 

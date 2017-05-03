@@ -85,6 +85,14 @@
     border:1px solid #000000;
 }
 
+.canvas-container {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    margin-right: 15px;
+    margin-left: 15px;
+}
+
 /* MODE INFO OVERLAY */
 
 #wpaz-mode-info {

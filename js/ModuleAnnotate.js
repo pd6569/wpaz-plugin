@@ -10,6 +10,13 @@ class ModuleAnnotate extends NotesModule {
     }
 
     enableModule(){
+        
+        // disable conflicting modules
+        if (appGlobals.modulesLoaded[appGlobals.modules.IMAGE_MODULE]){
+            appGlobals.modulesLoaded[appGlobals.modules.IMAGE_MODULE].disableModule();
+            appGlobals.mode.EDIT_IMAGE = false;
+        }
+
         this.$canvas.show();
         this.app.$annotateModelBtn.css("background-color", "#337ab7");
         this.app.$modeInfo
@@ -34,8 +41,6 @@ class ModuleAnnotate extends NotesModule {
     toggleModule(){
 
         let modeState = !appGlobals.mode.ANNOTATE;
-
-        this.turnAllModesOff();
 
         appGlobals.mode.ANNOTATE = modeState;
 
