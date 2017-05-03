@@ -58,7 +58,7 @@ class AnatomyNotes {
              *          CANVAS OVERLAY         *
              ***********************************/
 
-                // Create canvas overlay
+            // Create canvas overlay
             let height = this.$humanWidget.height();
             let width = this.$humanWidget.width();
 
@@ -70,7 +70,9 @@ class AnatomyNotes {
             this.canvas = document.getElementById('myCanvas');
             this.canvasCtx = this.canvas.getContext('2d');
 
-            this.canvas.addEventListener('click', (event) => {
+            /*this.canvas.addEventListener('click', (event) => {
+
+                console.log("canvas clicked");
                 let canvasX = event.offsetX;
                 let canvasY = event.offsetY;
 
@@ -102,7 +104,8 @@ class AnatomyNotes {
 
                     })
                 });
-            });
+
+            });*/
 
             this.$canvas = jQuery('#myCanvas');
             this.$canvas.hide();
@@ -194,7 +197,7 @@ class AnatomyNotes {
 
         this.$sceneSelectorOption = jQuery('.scene-selector-option');
         this.$sceneSelectImageBtn = jQuery('#scene-selector-image');
-        this.$toggleCanvas = jQuery('#scene-selector-canvas-toggle');
+        this.$annotateModelBtn = jQuery('#scene-selector-annotate-model');
 
 
         /*********************
@@ -270,20 +273,23 @@ class AnatomyNotes {
 
         // Scene selector
         this.$sceneSelectorOption.on('click', (event) => { this.loadScene(jQuery(event.target)) });
-        this.$sceneSelectImageBtn.on('click', (event) => {this.loadImage(event)});
-        this.$toggleCanvas.on('click', (event) => {
-            this.$canvas.toggle();
+        this.$sceneSelectImageBtn.on('click', (event) => {
+            this.loadImage(event)
+        });
+        this.$annotateModelBtn.on('click', (event) => {
+            this.loadModule(appGlobals.modules.ANNOTATE_MODULE);
+            /*this.$canvas.toggle();
             appGlobals.mode.ANNOTATE = !appGlobals.mode.ANNOTATE;
             if (appGlobals.mode.ANNOTATE) {
-                this.$toggleCanvas.css("background-color", "#337ab7");
+                this.$annotateModelBtn.css("background-color", "#337ab7");
                 this.$modeInfo
                     .removeClass('hidden')
                     .show()
                     .text("ANNOTATE MODE");
             } else {
-                this.$toggleCanvas.css("background-color", "");
+                this.$annotateModelBtn.css("background-color", "");
                 this.$modeInfo.hide();
-            }
+            }*/
 
         });
 
@@ -374,27 +380,64 @@ class AnatomyNotes {
      ****************************/
 
 
-    loadModule(moduleName) {
+    /********
+     *
+     *
+     * @param moduleName {String} Module names as defined in appGlobals
+     * @param data {object} Data object with data to load module
+     *                      Image Module:
+     *                          imgSrc  {String} base64 string encoding image
+     */
+    loadModule(moduleName, data) {
 
         let moduleToLoad;
 
         if (moduleToLoad = appGlobals.modulesLoaded[moduleName]) {
-            console.log(moduleName + " already exists, load it");
-            moduleToLoad.load();
+            console.log(moduleName + " already exists, load/toggle it");
+
+            switch(moduleName) {
+
+                case appGlobals.modules.IMAGE_MODULE:
+                    moduleToLoad.imgSrc = data.imgSrc;
+                    moduleToLoad.toggleModule();
+                    break;
+
+                case appGlobals.modules.ANNOTATE_MODULE:
+                    moduleToLoad.toggleModule();
+                    break;
+
+                default:
+                    console.log("Could not load module: " + moduleName);
+                    break;
+            }
         } else {
             console.log(moduleName + " does not exist, create it");
-            new ModuleImage();
+
+            switch(moduleName) {
+
+                case appGlobals.modules.IMAGE_MODULE:
+                    new ModuleImage(moduleName, data);
+                    break;
+
+                case appGlobals.modules.ANNOTATE_MODULE:
+                    new ModuleAnnotate(moduleName);
+                    break;
+
+                default:
+                    console.log("Could not load module: " + moduleName);
+            }
         }
+
     }
 
 
     /****
      *
-     * @param modalType Select modal type:
-     *                          'annotations',
-     *                          'edit_action',
-     *                          'new_note_set'
-     * @param data Data object associated with modal.
+     * @param modalType {String} Select modal type:
+     *                              'annotations',
+     *                              'edit_action',
+     *                              'new_note_set'
+     * @param data {Object} Data object associated with modal.
      *          Annotations: takes annotation object, as specified by BioDigital API.
      *          Actions modal:
      *              actionText - (String) text in editor that will be linked to the scene. Required
@@ -432,6 +475,7 @@ class AnatomyNotes {
                     this.$modalAlert.modal('hide');
                     Utils.resetModal();
                     if (data.isNewAnnotation) {
+                        console.log("destroy Annotation", data.annotationId);
                         this.human.send("annotations.destroy", data.annotationId);
                     }
                 });
@@ -765,7 +809,9 @@ class AnatomyNotes {
                         Utils.setNoteUpdateStatus("Saving image...");
 
                         if (type === 'upload'){
-                            self.loadModule(appGlobals.modules.IMAGE_MODULE)
+                            self.loadModule(appGlobals.modules.IMAGE_MODULE, {
+                                imgSrc: imgSrc,
+                            })
                         }
 
                         // Save media to server and append
@@ -1956,13 +2002,15 @@ class AnatomyNotes {
     }
 
     loadImage(event){
+        event.preventDefault();
+
         console.log("loadImage");
 
         this.showModal('image', {
             type: 'upload',
         });
 
-        event.preventDefault();
+
 
     }
 

@@ -41,7 +41,8 @@ let appGlobals = {
     modules: {
         NOTE_EDITOR: "NOTE_EDITOR",
         MY_NOTES: "MY_NOTES",
-        IMAGE_MODULE: "IMAGE_MODULE"
+        IMAGE_MODULE: "IMAGE_MODULE",
+        ANNOTATE_MODULE: "ANNOTATE_MODULE"
     },
 
     currentTab: "",
@@ -52,6 +53,7 @@ let appGlobals = {
     // Modes
     mode: {
         'ANNOTATE': false,
+        'EDIT_IMAGE': false,
     },
 
     // templates
