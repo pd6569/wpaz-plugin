@@ -637,30 +637,60 @@ class AnatomyNotes {
                     if (appGlobals.currentTab !== appGlobals.tabs.NOTE_EDITOR) {
                         Utils.setActiveTab(appGlobals.tabs.NOTE_EDITOR)
                     }
-                })
+                });
+                return true;
 
             case 'image':
-                Utils.resetModal();
-                Utils.showModal({
-                    title: "Edit snapshot",
-                    body: "",
-                });
 
+                let self = this;
                 let enableUpload = data.enableUpload;
                 let type = data.type;
                 let imgSrc = data.imgSrc;
                 let callback = data.callback;
+
+                Utils.resetModal();
+                Utils.showModal({
+                    title: type == 'upload' ? "Upload Image" : "Edit Snapshot",
+                    body: "",
+                });
 
                 this.$modalImage.removeClass('hidden');
 
                 if (type === 'upload'){
                     this.$modalImageUpload.removeClass('hidden');
                     this.$modalImageProps.addClass('hidden');
+
+                    jQuery('#image-upload').on('change', (event) => {
+                        let file = event.target.files[0];
+                        let reader = new FileReader();
+
+                        reader.readAsDataURL(file);
+
+                        // Called once data has been read as data url
+                        reader.onload = function(event) {
+
+                            console.log("event", event);
+                            imgSrc = event.target.result;
+
+                            loadImgProperties("Uploaded image");
+                        };
+                    });
+
                 } else if (type === 'snapshot') {
                     this.$modalImageUpload.addClass('hidden');
                     this.$modalImageProps.removeClass('hidden');
                 }
 
+
+                function loadImgProperties(title) {
+                    self.$modalImageProps.removeClass('hidden');
+
+                    // Set field defaults
+                    let defaultTitle = "Snapshot " + appGlobals.numSnapshots;
+                    self.$imgTitle.val(title ? title : defaultTitle);
+                    self.$modalImageProps.find('.image-thumbnail img').attr('src', imgSrc);
+                    
+                }
 
                 // Set field defaults
                 let defaultTitle = "Snapshot " + appGlobals.numSnapshots;
@@ -677,7 +707,6 @@ class AnatomyNotes {
                 // OK
                 this.$modalBtn2.on('click', () => {
 
-                    let self = this;
                     let imgTitle;
                     this.$imgTitle.val() == "" ? imgTitle = defaultTitle : imgTitle = this.$imgTitle.val();
                     let imgDesc = this.$imgDesc.val();
