@@ -273,26 +273,8 @@ class AnatomyNotes {
 
         // Scene selector
         this.$sceneSelectorOption.on('click', (event) => { this.loadScene(jQuery(event.target)) });
-        this.$sceneSelectImageBtn.on('click', (event) => {
-            this.loadImage(event)
-        });
-        this.$annotateModelBtn.on('click', (event) => {
-            this.loadModule(appGlobals.modules.ANNOTATE_MODULE);
-            /*this.$canvas.toggle();
-            appGlobals.mode.ANNOTATE = !appGlobals.mode.ANNOTATE;
-            if (appGlobals.mode.ANNOTATE) {
-                this.$annotateModelBtn.css("background-color", "#337ab7");
-                this.$modeInfo
-                    .removeClass('hidden')
-                    .show()
-                    .text("ANNOTATE MODE");
-            } else {
-                this.$annotateModelBtn.css("background-color", "");
-                this.$modeInfo.hide();
-            }*/
-
-        });
-
+        this.$sceneSelectImageBtn.on('click', (event) => { this.loadImage(event) });
+        this.$annotateModelBtn.on('click', (event) => { this.loadModule(appGlobals.modules.ANNOTATE_MODULE);});
 
 
         // Note container
@@ -392,6 +374,9 @@ class AnatomyNotes {
 
         let moduleToLoad;
 
+
+        // Reload open module
+
         if (moduleToLoad = appGlobals.modulesLoaded[moduleName]) {
             console.log(moduleName + " already exists, load/toggle it");
 
@@ -410,7 +395,11 @@ class AnatomyNotes {
                     console.log("Could not load module: " + moduleName);
                     break;
             }
-        } else {
+        }
+
+        // Create new module
+
+        else {
             console.log(moduleName + " does not exist, create it");
 
             switch(moduleName) {

@@ -6,13 +6,6 @@ class ModuleAnnotate extends NotesModule {
 
     init(){
 
-        // Get refs to canvas
-        this.$canvas = this.app.$canvas;
-        this.canvas = this.app.canvas;
-
-        // Track listeners for module
-        this.listeners = {};
-
         this.toggleModule();
     }
 
@@ -34,7 +27,7 @@ class ModuleAnnotate extends NotesModule {
         this.app.$modeInfo.hide();
         
         // Remove listeners
-        this.removeListeners();
+        this.removeCanvasListeners();
 
     }
 
@@ -54,8 +47,8 @@ class ModuleAnnotate extends NotesModule {
 
     }
 
-    removeListeners() {
-        
+    /*removeListeners() {
+
         let listenerKeys = Object.keys(this.listeners);
         if (listenerKeys.length > 0){
             for (let listenerKey of listenerKeys) {
@@ -63,7 +56,7 @@ class ModuleAnnotate extends NotesModule {
             }
         }
         this.listeners = {};
-    }
+    }*/
 
     setCanvasListeners(){
 
@@ -106,7 +99,7 @@ class ModuleAnnotate extends NotesModule {
 
 
         this.canvas.addEventListener('click', createAnnotation);
-        this.listeners['CREATE_ANNOTATION'] = createAnnotation;
+        this.canvasListeners['CREATE_ANNOTATION'] = createAnnotation;
 
     }
 

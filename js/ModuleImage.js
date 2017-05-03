@@ -7,10 +7,6 @@ class ModuleImage extends NotesModule {
     init() {
         console.log("init: " + this.moduleName);
 
-        // Get refs to canvas
-        this.$canvas = this.app.$canvas;
-        this.canvas = this.app.canvas;
-
         // Get module data
         this.imgSrc = this.moduleData.imgSrc;
 
@@ -21,12 +17,20 @@ class ModuleImage extends NotesModule {
 
         // Enable canvas
         this.$canvas.show();
+
+        // Set image in canvas
+
+        // Add listeners
+        this.setCanvasListeners();
     }
 
     disableModule() {
 
         // Disable canvas
         this.$canvas.hide();
+
+        // Remove listeners
+        this.removeListeners();
     }
 
     toggleModule() {
@@ -41,5 +45,16 @@ class ModuleImage extends NotesModule {
         } else {
             this.disableModule();
         }
+    }
+    
+    setCanvasListeners(){
+
+        this.canvas.addEventListener('click', (event) => {
+            console.log("Image canvas clicked");
+        })
+    }
+
+    removeListeners(){
+
     }
 }
