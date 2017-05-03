@@ -42,6 +42,10 @@
     color: red;
 }
 
+#image-upload {
+    margin: 10px;
+}
+
 .modal-image-properties {
     display:inline-block;
 }

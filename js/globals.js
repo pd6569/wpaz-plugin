@@ -37,6 +37,13 @@ let appGlobals = {
         MY_NOTES: "MY_NOTES",
     },
 
+    // Modules
+    modules: {
+        NOTE_EDITOR: "NOTE_EDITOR",
+        MY_NOTES: "MY_NOTES",
+        IMAGE_MODULE: "IMAGE_MODULE"
+    },
+
     currentTab: "",
 
     // Modules

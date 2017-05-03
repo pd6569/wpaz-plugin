@@ -374,6 +374,20 @@ class AnatomyNotes {
      ****************************/
 
 
+    loadModule(moduleName) {
+
+        let moduleToLoad;
+
+        if (moduleToLoad = appGlobals.modulesLoaded[moduleName]) {
+            console.log(moduleName + " already exists, load it");
+            moduleToLoad.load();
+        } else {
+            console.log(moduleName + " does not exist, create it");
+            new ModuleImage();
+        }
+    }
+
+
     /****
      *
      * @param modalType Select modal type:
@@ -388,7 +402,6 @@ class AnatomyNotes {
      *              actionId - (String) id of action to edit. Optional
  *              Image modal:
      *              type            {String} 'upload', 'snapshot'
-     *              enableUpload    {boolean} allow image upload in modal
      *              imgSrc          {String} base64 encoded image src
      *              callback        {function}
      */
@@ -643,7 +656,6 @@ class AnatomyNotes {
             case 'image':
 
                 let self = this;
-                let enableUpload = data.enableUpload;
                 let type = data.type;
                 let imgSrc = data.imgSrc;
                 let callback = data.callback;
@@ -675,6 +687,10 @@ class AnatomyNotes {
                     this.$modalImageProps.addClass('hidden');
 
                     let $imageUpload = jQuery('#image-upload');
+
+                    // reset file input
+                    $imageUpload.val("");
+
                     $imageUpload.on('change', (event) => {
 
                         if (event.target.value == "" || event.target.value == null) return;
@@ -747,6 +763,10 @@ class AnatomyNotes {
                         Utils.resetModal();
 
                         Utils.setNoteUpdateStatus("Saving image...");
+
+                        if (type === 'upload'){
+                            self.loadModule(appGlobals.modules.IMAGE_MODULE)
+                        }
 
                         // Save media to server and append
                         let $updateNote = self.$notesTimelineContainer.find('#' + appGlobals.currentNote.uid);
@@ -1714,7 +1734,6 @@ class AnatomyNotes {
 
                 let data = {
                     type: 'snapshot',
-                    enableUpload: false,
                     imgSrc: imgSrc,
                 }
                 this.showModal('image', data);

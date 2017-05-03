@@ -266,6 +266,7 @@ class wp_az_3d_notes {
 			wp_enqueue_script('wp_az_note', plugins_url('js/Note.js', __FILE__), array('jquery'), '1.0', true);
 			wp_enqueue_script('wp_az_actions', plugins_url('js/Actions.js', __FILE__), array('jquery'), '1.0', true);
 			wp_enqueue_script('wp_az_my_notes', plugins_url('js/MyNotes.js', __FILE__), array('jquery'), '1.0', true);
+			wp_enqueue_script('wp_az_module_image', plugins_url('js/ModuleImage.js', __FILE__), array('jquery'), '1.0', true);
 			wp_enqueue_script('wp_az_utils', plugins_url('js/Utils.js', __FILE__), array('jquery'), '1.0', true);
 			wp_enqueue_script('wp_az_3d_notes_main', plugins_url('js/3dnotes.js', __FILE__), array('jquery'), '1.0', true);
 
