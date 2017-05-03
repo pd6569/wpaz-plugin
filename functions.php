@@ -131,3 +131,30 @@ function wp_az_save_image( $base64_img, $title, $desc, $caption, $post_id) {
 
 }
 
+/***
+ *
+ * Verifies if base64 data URL is an image.
+ *
+ * @param $base64 {String} base64 encoded image
+ *
+ * @return bool
+ *
+ */
+function wp_az_check_base64_image($base64) {
+	$img = imagecreatefromstring(base64_decode($base64));
+	if (!$img) {
+		return false;
+	}
+
+	imagejpeg($img, 'tmp.jpg');
+	$info = getimagesize('tmp.jpg');
+
+	unlink('tmp.jpg');
+
+	if ($info[0] > 0 && $info[1] > 0 && $info['mime']) {
+		return true;
+	}
+
+	return false;
+}
+

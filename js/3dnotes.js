@@ -674,7 +674,25 @@ class AnatomyNotes {
                     this.$modalImageUpload.removeClass('hidden');
                     this.$modalImageProps.addClass('hidden');
 
-                    jQuery('#image-upload').on('change', (event) => {
+                    let $imageUpload = jQuery('#image-upload');
+                    $imageUpload.on('change', (event) => {
+
+                        if (event.target.value == "" || event.target.value == null) return;
+
+                        // Check that file upload is jpeg (add additional file types as required)
+                        let ext = event.target.value.match(/\.([^\.]+)$/)[1];
+                        console.log("ext: ", ext);
+                        switch(ext)
+                        {
+                            case 'jpg':
+                                break;
+                            default:
+                                alert('Please select a JPEG/JPG file');
+                                $imageUpload.val("");
+                                this.$modalImageProps.addClass('hidden');
+                                return;
+                        }
+
 
                         let file = event.target.files[0];
                         let fileName = event.target.files[0].name.replace(/\.[^/.]+$/, "");
@@ -694,10 +712,8 @@ class AnatomyNotes {
 
                 } else if (type === 'snapshot') {
                     this.$modalImageUpload.addClass('hidden');
-
                     loadImgProperties();
                 }
-
 
                 function loadImgProperties(title) {
                     self.$modalImageProps.removeClass('hidden');

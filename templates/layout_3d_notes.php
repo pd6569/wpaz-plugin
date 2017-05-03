@@ -515,7 +515,7 @@
             </div>
             <div class="modal-image hidden">
                 <div class="modal-image-upload hidden">
-                    <input id="image-upload" type="file">
+                    <input id="image-upload" type="file" />
                 </div>
                 <div class="modal-image-properties hidden">
 

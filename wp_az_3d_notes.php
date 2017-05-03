@@ -739,6 +739,17 @@ class wp_az_3d_notes {
 		$post_id = $_POST['wp_az_post_id'];
 		$note_id = $_POST['wp_az_note_id'];
 
+		// verify the image data
+		$base64_img = str_replace( 'data:image/jpeg;base64,', '', $img );
+		if (!wp_az_check_base64_image($base64_img)) {
+			wp_send_json(array(
+				'status'    => 'error',
+				'message'   => 'Could not verify this file as an image'
+			));
+			return;
+		}
+
+		// if image data verified, save to database
 		$attach_id = wp_az_save_image($img, $img_title, $img_desc, $img_caption, $post_id);
 
 		if ($attach_id) {
