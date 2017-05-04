@@ -223,8 +223,6 @@
 
                     </div>
 
-                    </div>
-
 			        <?php if ( $user_is_editor || is_page($wp_az_3d_body_id)): ?>
 
                         <div id="wpaz-scene-selector" class="text-center">
@@ -392,6 +390,7 @@
 
                 </div>
 
+
 		        <?php if ($post->ID != $wp_az_3d_body_id) : ?>
 
                     <div id="wpaz-notes" class="col-md-4">
@@ -548,6 +547,7 @@
 		        <?php endif ?>
 
             </div>
+
 
 	        <?php if ($post->ID != $wp_az_3d_body_id) : ?>
                 <div class="row">
