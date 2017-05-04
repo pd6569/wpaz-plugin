@@ -158,6 +158,8 @@ class ModuleImage extends BaseModule {
      */
     doToolbarAction(toolbarAction){
 
+        let self = this;
+
         switch (toolbarAction) {
 
             case 'add-image':
@@ -203,7 +205,8 @@ class ModuleImage extends BaseModule {
 
 
         function zoomCanvas(zoomIn){
-            console.log("Zoom In: " + zoomIn);
+            let currentZoom =  self.fabricCanvas.getZoom();
+            zoomIn ? self.fabricCanvas.setZoom(currentZoom + 0.05) : self.fabricCanvas.setZoom(currentZoom - 0.05);
         }
     }
 }
