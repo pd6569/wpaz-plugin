@@ -68,7 +68,7 @@ class ModuleAnnotate extends BaseModule {
 
     setUi(enable){
         if (enable){
-            this.app.$annotateModelBtn.css("background-color", "#337ab7");
+            this.app.$annotateModelBtn.css("background-color", appGlobals.ui.btnSelected);
             this.app.$modeInfo
                 .removeClass('hidden')
                 .show()

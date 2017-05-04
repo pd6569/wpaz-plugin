@@ -10,8 +10,13 @@ class ModuleImage extends BaseModule {
         // Get module data
         this.imgSrc = this.moduleData.imgSrc;
 
-        // DOM references
+        /*** DOM references ***/
+
+        // Canvas
         this.$imageCanvas = this.app.$imageCanvas;
+
+        // Toolbar
+        this.$toolbar = jQuery('#wpaz-image-editor-toolbar');
 
         this.toggleModule();
     }
@@ -89,9 +94,11 @@ class ModuleImage extends BaseModule {
     setUi(enable){
 
         if (enable) {
-            this.app.$sceneSelectImageBtn.css("background-color", "#337ab7");
+            this.app.$sceneSelectImageBtn.css("background-color", appGlobals.ui.btnSelected);
+            this.$toolbar.removeClass('hidden').show();
         } else {
             this.app.$sceneSelectImageBtn.css("background-color", "");
+            this.$toolbar.hide();
         }
     }
 

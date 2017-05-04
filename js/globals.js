@@ -184,8 +184,11 @@ let appGlobals = {
             lymph: "",
             organ: "",
         }
-    }
+    },
 
+    ui: {
+        btnSelected: '#337ab7'
+    }
 
 
 };

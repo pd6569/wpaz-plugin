@@ -155,6 +155,41 @@
                         </iframe>
 
                         <div id="wpaz-mode-info" class="hidden"></div>
+
+                        <div id="wpaz-image-editor-toolbar" class="hidden">
+
+                            <div class="btn-group" role="group" aria-label="...">
+                                <button type="button" class="btn btn-default image-editor-toolbar">
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                </button>
+                                <button type="button" class="btn btn-default image-editor-toolbar">
+                                    <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
+                                </button>
+                                <button type="button" class="btn btn-default image-editor-toolbar">
+                                    <span class="glyphicon glyphicon-zoom-out" aria-hidden="true"></span>
+                                </button>
+                                <button type="button" class="btn btn-default image-editor-toolbar">
+                                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                </button>
+                                <button type="button" class="btn btn-default image-editor-toolbar">
+                                    <span class="glyphicon glyphicon-font" aria-hidden="true"></span>
+                                </button>
+                                <button type="button" class="btn btn-default image-editor-toolbar">
+                                    <span class="glyphicon glyphicon-text-size" aria-hidden="true"></span>
+                                </button>
+                                <button type="button" class="btn btn-default image-editor-toolbar">
+                                    <span class="glyphicon glyphicon-text-color" aria-hidden="true"></span>
+                                </button>
+                                <button type="button" class="btn btn-default image-editor-toolbar">
+                                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                </button>
+                                <button type="button" class="btn btn-default image-editor-toolbar">
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                </button>
+                            </div>
+
+                        </div>
+
                     </div>
 
 			        <?php if ( $user_is_editor || is_page($wp_az_3d_body_id)): ?>
