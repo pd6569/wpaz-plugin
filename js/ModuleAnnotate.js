@@ -17,12 +17,24 @@ class ModuleAnnotate extends NotesModule {
             appGlobals.mode.EDIT_IMAGE = false;
         }
 
+        this.canvas.width = this.app.$humanWidget.width();
+        this.canvas.height = this.app.$humanWidget.height();
+
         this.$canvas.show();
         this.app.$annotateModelBtn.css("background-color", "#337ab7");
         this.app.$modeInfo
             .removeClass('hidden')
             .show()
             .text("ANNOTATE MODE");
+
+        // Resize canvas to window
+        jQuery(window).on('resize', () => {
+            if (appGlobals.mode.ANNOTATE){
+                console.log("resize canvas");
+                this.canvas.width = this.app.$humanWidget.width();
+                this.canvas.height = this.app.$humanWidget.height();
+            }
+        });
 
         // Set listeners
         this.setCanvasListeners();

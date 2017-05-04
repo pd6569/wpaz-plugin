@@ -62,12 +62,19 @@ class AnatomyNotes {
             let height = this.$humanWidget.height();
             let width = this.$humanWidget.width();
 
-            let $canvasHtml = jQuery(
-                "<canvas id='myCanvas' width='" + width + "' height='" + height + "'>" +
+            let $annotationCanvasHtml = jQuery(
+                "<canvas id='annotationCanvas' class='myCanvas' width='" + width + "' height='" + height + "'>" +
                 "</canvas>");
 
-            $canvasHtml.appendTo(this.$iframeContainer);
-            this.canvas = document.getElementById('myCanvas');
+            let $imageCanvasHtml = jQuery(
+                "<canvas id='imageCanvas' class='myCanvas' width='" + width + "' height='" + height + "'>" +
+                "</canvas>");
+
+            $annotationCanvasHtml.appendTo(this.$iframeContainer);
+            $imageCanvasHtml.appendTo(this.$iframeContainer);
+
+            // annotation canvas
+            this.canvas = document.getElementById('annotationCanvas');
             this.canvasCtx = this.canvas.getContext('2d');
 
             /*this.canvas.addEventListener('click', (event) => {
@@ -107,17 +114,20 @@ class AnatomyNotes {
 
             });*/
 
-            this.$canvas = jQuery('#myCanvas');
+            this.$canvas = jQuery('#annotationCanvas');
             this.$canvas.hide();
 
-            // resize the canvas to fill browser window dynamically
+            this.$imageCanvas = jQuery('#imageCanvas');
+            this.$imageCanvas.hide();
+
+            /*// resize the canvas to fill browser window dynamically
             jQuery(window).on('resize', () => {
                 if (appGlobals.mode.ANNOTATE){
                     console.log("resize canvas");
                     this.canvas.width = this.$humanWidget.width();
                     this.canvas.height = this.$humanWidget.height();
                 }
-            });
+            });*/
 
 
             /******** END CANVAS OVERLAY ********/

@@ -24,10 +24,10 @@ class ModuleImage extends NotesModule {
         }
 
         // Enable canvas
-        this.$canvas.show();
+        this.app.$imageCanvas.show();
 
         // Set image in canvas
-        this.fabricCanvas = new fabric.Canvas('myCanvas', {
+        this.fabricCanvas = new fabric.Canvas('imageCanvas', {
             backgroundColor: 'rgb(255,255, 255)',
             selectionColor: 'blue',
             selectionLineWidth: 2
@@ -61,7 +61,7 @@ class ModuleImage extends NotesModule {
         console.log("disableModule: " + this.moduleName);
 
         // Disable canvas
-        this.$canvas.hide();
+        this.app.$imageCanvas.hide();
 
         // Remove listeners
         this.removeListeners();
@@ -94,6 +94,6 @@ class ModuleImage extends NotesModule {
     }
 
     removeListeners(){
-
+        jQuery(window).off();
     }
 }
