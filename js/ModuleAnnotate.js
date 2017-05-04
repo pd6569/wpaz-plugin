@@ -2,55 +2,57 @@
  * Created by peter on 03/05/2017.
  */
 
-class ModuleAnnotate extends NotesModule {
+class ModuleAnnotate extends BaseModule {
 
     init(){
+        console.log("init");
+
+        // DOM ref
+
+        // Canvas reference
+        this.$annotationCanvas = this.app.$annotationCanvas;
+        this.annotationCanvas = this.app.annotationCanvas;
+        this.annotationCanvasCtx = this.app.annotationCanvasCtx;
+
+        // Module state
+        this.listenersSet = false;
 
         this.toggleModule();
     }
 
     enableModule(){
-        
+        console.log("enableModule");
+        appGlobals.mode.ANNOTATE = true;
+
         // disable conflicting modules
         if (appGlobals.modulesLoaded[appGlobals.modules.IMAGE_MODULE]){
             appGlobals.modulesLoaded[appGlobals.modules.IMAGE_MODULE].disableModule();
             appGlobals.mode.EDIT_IMAGE = false;
         }
 
-        this.canvas.width = this.app.$humanWidget.width();
-        this.canvas.height = this.app.$humanWidget.height();
+        // Setup canvas
+        this.annotationCanvas.width = this.app.$humanWidget.width();
+        this.annotationCanvas.height = this.app.$humanWidget.height();
+        this.$annotationCanvas.show();
 
-        this.$canvas.show();
-        this.app.$annotateModelBtn.css("background-color", "#337ab7");
-        this.app.$modeInfo
-            .removeClass('hidden')
-            .show()
-            .text("ANNOTATE MODE");
-
-        // Resize canvas to window
-        jQuery(window).on('resize', () => {
-            if (appGlobals.mode.ANNOTATE){
-                console.log("resize canvas");
-                this.canvas.width = this.app.$humanWidget.width();
-                this.canvas.height = this.app.$humanWidget.height();
-            }
-        });
+        // Set UI
+        this.setUi(true);
 
         // Set listeners
-        this.setCanvasListeners();
+        if (!this.listenersSet) this.setListeners();
     }
 
     disableModule() {
-        this.$canvas.hide();
-        this.app.$annotateModelBtn.css("background-color", "");
-        this.app.$modeInfo.hide();
-        
-        // Remove listeners
-        this.removeCanvasListeners();
+        appGlobals.mode.ANNOTATE = false;
+
+        // Unset canvas and UI
+        this.$annotationCanvas.hide();
+        this.setUi(false);
 
     }
 
     toggleModule(){
+        console.log("toggleModule");
 
         let modeState = !appGlobals.mode.ANNOTATE;
 
@@ -64,20 +66,25 @@ class ModuleAnnotate extends NotesModule {
 
     }
 
-    /*removeListeners() {
-
-        let listenerKeys = Object.keys(this.listeners);
-        if (listenerKeys.length > 0){
-            for (let listenerKey of listenerKeys) {
-                this.canvas.removeEventListener('click', this.listeners[listenerKey]);
-            }
+    setUi(enable){
+        if (enable){
+            this.app.$annotateModelBtn.css("background-color", "#337ab7");
+            this.app.$modeInfo
+                .removeClass('hidden')
+                .show()
+                .text("ANNOTATE MODE");
+        } else {
+            this.app.$annotateModelBtn.css("background-color", "");
+            this.app.$modeInfo.hide();
         }
-        this.listeners = {};
-    }*/
+    }
 
-    setCanvasListeners(){
+    setListeners(){
+
+        console.log("setListeners");
 
         let app = this.app;
+        let annotationCanvas = this.annotationCanvas;
 
         function createAnnotation(event) {
             console.log("canvas clicked");
@@ -114,10 +121,20 @@ class ModuleAnnotate extends NotesModule {
             });
         }
 
+        function resizeCanvas(){
+            if (appGlobals.mode.ANNOTATE){
+                console.log("resize annotations canvas");
+                annotationCanvas.width = app.$humanWidget.width();
+                annotationCanvas.height = app.$humanWidget.height();
+            }
+        }
 
-        this.canvas.addEventListener('click', createAnnotation);
-        this.canvasListeners['CREATE_ANNOTATION'] = createAnnotation;
+        this.annotationCanvas.addEventListener('click', createAnnotation);
 
+        // Resize canvas to window
+        window.addEventListener('resize', resizeCanvas);
+
+        this.listenersSet = true;
     }
 
 }

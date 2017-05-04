@@ -53,84 +53,8 @@ class AnatomyNotes {
             });
             this.registerCallbacks();
             this.setHumanUi();
+            this.setCanvasLayers();
 
-            /***********************************
-             *          CANVAS OVERLAY         *
-             ***********************************/
-
-            // Create canvas overlay
-            let height = this.$humanWidget.height();
-            let width = this.$humanWidget.width();
-
-            let $annotationCanvasHtml = jQuery(
-                "<canvas id='annotationCanvas' class='myCanvas' width='" + width + "' height='" + height + "'>" +
-                "</canvas>");
-
-            let $imageCanvasHtml = jQuery(
-                "<canvas id='imageCanvas' class='myCanvas' width='" + width + "' height='" + height + "'>" +
-                "</canvas>");
-
-            $annotationCanvasHtml.appendTo(this.$iframeContainer);
-            $imageCanvasHtml.appendTo(this.$iframeContainer);
-
-            // annotation canvas
-            this.canvas = document.getElementById('annotationCanvas');
-            this.canvasCtx = this.canvas.getContext('2d');
-
-            /*this.canvas.addEventListener('click', (event) => {
-
-                console.log("canvas clicked");
-                let canvasX = event.offsetX;
-                let canvasY = event.offsetY;
-
-                this.human.send('scene.pick', {
-                    x: canvasX,
-                    y: canvasY,
-                }, (pickInfo) => {
-                    console.log("Picked: ", pickInfo);
-
-                    let objectId = pickInfo.objectId;
-                    let pos3d = [];
-                    pos3d['x'] = pickInfo.position.x;
-                    pos3d['y'] = pickInfo.position.y;
-                    pos3d['z'] = pickInfo.position.z;
-
-                    let posObj = pickInfo.position;
-
-                    console.log("position: ", pickInfo.position);
-
-                    this.human.send('annotations.create', {
-                        title: "",
-                        description: "",
-                        objectId: pickInfo.objectId,
-                        position: [pickInfo.position.x, pickInfo.position.y, pickInfo.position.z]
-                    }, (newAnnotation) => {
-                        console.log("New annotation created: " + JSON.stringify(newAnnotation));
-                        newAnnotation.isNewAnnotation = true; // if cancel clicked on modal, annotation will be deleted
-                        this.showModal('annotations', newAnnotation);
-
-                    })
-                });
-
-            });*/
-
-            this.$canvas = jQuery('#annotationCanvas');
-            this.$canvas.hide();
-
-            this.$imageCanvas = jQuery('#imageCanvas');
-            this.$imageCanvas.hide();
-
-            /*// resize the canvas to fill browser window dynamically
-            jQuery(window).on('resize', () => {
-                if (appGlobals.mode.ANNOTATE){
-                    console.log("resize canvas");
-                    this.canvas.width = this.$humanWidget.width();
-                    this.canvas.height = this.$humanWidget.height();
-                }
-            });*/
-
-
-            /******** END CANVAS OVERLAY ********/
         });
 
 
@@ -373,6 +297,40 @@ class AnatomyNotes {
      *      CLASS METHODS       *
      ****************************/
 
+    /***
+     *
+     * Set up canvases for modules: annotations, image editing
+     *
+     */
+    setCanvasLayers(){
+
+        // Get initial canvas dimensions
+        let height = this.$humanWidget.height();
+        let width = this.$humanWidget.width();
+
+        // Create and insert canvases
+        let $annotationCanvasHtml = jQuery(
+            "<canvas id='annotationCanvas' class='myCanvas' width='" + width + "' height='" + height + "'>" +
+            "</canvas>");
+
+        let $imageCanvasHtml = jQuery(
+            "<canvas id='imageCanvas' class='myCanvas' width='" + width + "' height='" + height + "'>" +
+            "</canvas>");
+
+        $annotationCanvasHtml.appendTo(this.$iframeContainer);
+        $imageCanvasHtml.appendTo(this.$iframeContainer);
+
+        // Annotation canvas
+        this.annotationCanvas = document.getElementById('annotationCanvas');
+        this.annotationCanvasCtx = this.annotationCanvas.getContext('2d');
+        this.$annotationCanvas = jQuery('#annotationCanvas');
+        this.$annotationCanvas.hide();
+
+        // Image canvas
+        this.$imageCanvas = jQuery('#imageCanvas');
+        this.$imageCanvas.hide();
+
+    }
 
     /********
      *
@@ -396,7 +354,7 @@ class AnatomyNotes {
 
                 case appGlobals.modules.IMAGE_MODULE:
                     moduleToLoad.imgSrc = data.imgSrc;
-                    moduleToLoad.toggleModule();
+                    moduleToLoad.enableModule();
                     break;
 
                 case appGlobals.modules.ANNOTATE_MODULE:

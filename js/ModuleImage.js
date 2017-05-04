@@ -2,7 +2,7 @@
  * Created by peter on 03/05/2017.
  */
 
-class ModuleImage extends NotesModule {
+class ModuleImage extends BaseModule {
 
     init() {
         console.log("init: " + this.moduleName);
@@ -10,12 +10,16 @@ class ModuleImage extends NotesModule {
         // Get module data
         this.imgSrc = this.moduleData.imgSrc;
 
+        // DOM references
+        this.$imageCanvas = this.app.$imageCanvas;
+
         this.toggleModule();
     }
 
     enableModule(){
-
         console.log("enableModule: " + this.moduleName);
+
+        appGlobals.mode.EDIT_IMAGE = true;
 
         // Disable conflicting modes/modules
         if (appGlobals.modulesLoaded[appGlobals.modules.ANNOTATE_MODULE]){
@@ -23,23 +27,29 @@ class ModuleImage extends NotesModule {
             appGlobals.mode.ANNOTATE = false;
         }
 
-        // Enable canvas
-        this.app.$imageCanvas.show();
+        // Set UI
+        this.setUi(true);
 
-        // Set image in canvas
+        // Show canvas
+        this.$imageCanvas.show();
+
+        // If canvas already exists, destroy and create new
+        if (this.fabricCanvas) {
+            this.fabricCanvas.dispose();
+            this.fabricCanvas = null;
+        }
+
+        // Create canvas
         this.fabricCanvas = new fabric.Canvas('imageCanvas', {
             backgroundColor: 'rgb(255,255, 255)',
             selectionColor: 'blue',
             selectionLineWidth: 2
         });
+
+        // Set canvas properties
         this.fabricCanvas.setZoom(0.5);
         this.fabricCanvas.setWidth(this.app.$humanWidget.width());
         this.fabricCanvas.setHeight(this.app.$humanWidget.height());
-
-        jQuery(window).on('resize', () => {
-            console.log("resize fabric canvas");
-            this.fabricCanvas.setWidth(this.app.$humanWidget.width());
-        });
 
 
         // Set Image
@@ -52,7 +62,7 @@ class ModuleImage extends NotesModule {
         this.fabricCanvas.add(imgInstance);
 
         // Add listeners
-        this.setCanvasListeners();
+        this.setListeners();
 
     }
 
@@ -60,11 +70,13 @@ class ModuleImage extends NotesModule {
 
         console.log("disableModule: " + this.moduleName);
 
-        // Disable canvas
-        this.app.$imageCanvas.hide();
+        appGlobals.mode.EDIT_IMAGE = false;
 
-        // Remove listeners
-        this.removeListeners();
+        // Disable canvas
+        this.$imageCanvas.hide();
+
+        // Set UI
+        this.setUi(false);
 
         // Deactivate fabric canvas
         if (this.fabricCanvas) {
@@ -72,6 +84,15 @@ class ModuleImage extends NotesModule {
             this.fabricCanvas = null;
         }
 
+    }
+
+    setUi(enable){
+
+        if (enable) {
+            this.app.$sceneSelectImageBtn.css("background-color", "#337ab7");
+        } else {
+            this.app.$sceneSelectImageBtn.css("background-color", "");
+        }
     }
 
     toggleModule() {
@@ -86,14 +107,20 @@ class ModuleImage extends NotesModule {
         }
     }
     
-    setCanvasListeners(){
+    setListeners(){
 
-        this.canvas.addEventListener('click', (event) => {
-            console.log("Image canvas clicked");
-        })
+        let app = this.app;
+        let fabricCanvas = this.fabricCanvas;
+
+        function resizeCanvas(){
+            if (appGlobals.mode.EDIT_IMAGE){
+                console.log("resize fabric canvas");
+                fabricCanvas.setWidth(app.$humanWidget.width());
+            }
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+
     }
 
-    removeListeners(){
-        jQuery(window).off();
-    }
 }
