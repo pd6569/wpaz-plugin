@@ -19,6 +19,9 @@ class ModuleImage extends BaseModule {
         this.$toolbar = jQuery('#wpaz-image-editor-toolbar');
         this.$toolbarButtons = jQuery('.image-editor-toolbar');
 
+        // Options boxes
+        this.$drawingOptions = jQuery('#drawing-mode-options');
+
         // Track listeners
         this.listenersSet = false;
 
@@ -55,15 +58,14 @@ class ModuleImage extends BaseModule {
             selectionLineWidth: 2,
         });
 
-        // Set canvas properties
-        this.fabricCanvas.setZoom(0.5);
-        this.fabricCanvas.setWidth(this.app.$humanWidget.width());
-        this.fabricCanvas.setHeight(this.app.$humanWidget.height());
+        // Set canvas defaults
+        this.setCanvasDefaults();
 
 
         // Set Image
         let imgElement = new Image;
         imgElement.src = this.imgSrc;
+        console.log("imgElement", imgElement);
         let imgInstance = new fabric.Image(imgElement, {
             left: 0,
             top: 0,
@@ -148,6 +150,17 @@ class ModuleImage extends BaseModule {
         })
     }
 
+    setCanvasDefaults() {
+
+        // Set canvas properties
+        this.fabricCanvas.setZoom(0.5);
+        this.fabricCanvas.setWidth(this.app.$humanWidget.width());
+        this.fabricCanvas.setHeight(this.app.$humanWidget.height());
+
+        // Set tool defaults
+        this.fabricCanvas.freeDrawingBrush.width = 6;
+    }
+
     /****
      *
      * Perform toolbar action
@@ -212,6 +225,37 @@ class ModuleImage extends BaseModule {
 
         function drawMode() {
             self.fabricCanvas.isDrawingMode = !self.fabricCanvas.isDrawingMode;
+            if (self.fabricCanvas.isDrawingMode) {
+                console.log("show draw options", self.$drawingOptions);
+                self.$drawingOptions.removeClass('hidden').show();
+
+                // Get elements
+                let $drawingModeSelector = jQuery('#drawing-mode-selector');
+                let $drawingLineWidth = jQuery('#drawing-line-width');
+                let $changeLineWidth = jQuery('.change-line-width');
+                let $drawingColour = jQuery('#drawing-color');
+
+                // Set values
+                $drawingLineWidth.text(self.fabricCanvas.freeDrawingBrush.width);
+
+                // Change line width
+                $changeLineWidth.on('click', (event) => {
+                    let action = jQuery(event.target).attr('data-action');
+                    let width = parseInt($drawingLineWidth.text());
+                    if (action === 'increase-width') {
+                        width++;
+                        console.log("width: " + width);
+                    } else {
+                        if (width > 1) width--;
+                        console.log("width: " + width);
+                    }
+                    $drawingLineWidth.text(width);
+                    self.fabricCanvas.freeDrawingBrush.width = width;
+                })
+            } else {
+                self.$drawingOptions.hide();
+            }
+
         }
     }
 }

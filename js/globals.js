@@ -188,7 +188,6 @@ let appGlobals = {
 
     ui: {
         btnSelected: '#337ab7'
-    }
-
+    },
 
 };

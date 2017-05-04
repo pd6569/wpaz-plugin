@@ -53,7 +53,7 @@ class AnatomyNotes {
             });
             this.registerCallbacks();
             this.setHumanUi();
-            this.setCanvasLayers();
+
 
         });
 
@@ -291,6 +291,8 @@ class AnatomyNotes {
 
         // set UI
         this.setAppUi();
+
+        this.setCanvasLayers();
     }
 
     /****************************
@@ -722,7 +724,6 @@ class AnatomyNotes {
                         // Called once data has been read as data url
                         reader.onload = function(event) {
 
-                            console.log("event", event);
                             imgSrc = event.target.result;
 
                             loadImgProperties(fileName);

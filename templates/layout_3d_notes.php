@@ -156,7 +156,7 @@
 
                         <div id="wpaz-mode-info" class="hidden"></div>
 
-                        <div id="drawing-mode-options">
+                        <div id="drawing-mode-options" class="hidden">
                             <div id="drawing-options-top-panel">
                                 <span class="drawing-options-title text-center">
                                     Drawing Options
@@ -178,7 +178,9 @@
                             </select><br>
 
                             <label for="drawing-line-width">Line width:</label>
-                            <span class="change-line-width glyphicon glyphicon-plus"></span><span class="drawing-line-width">5</span><span class="change-line-width glyphicon glyphicon-minus"></span><br>
+                            <span class="change-line-width glyphicon glyphicon-plus" data-action="increase-width"></span>
+                            <span id="drawing-line-width">5</span>
+                            <span class="change-line-width glyphicon glyphicon-minus" data-action="decrease-width"></span><br>
 
                             <label for="drawing-color">Line color:</label>
                             <input type="color" value="#005E7A" id="drawing-color"><br>
