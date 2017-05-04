@@ -157,6 +157,12 @@
                         <div id="wpaz-mode-info" class="hidden"></div>
 
                         <div id="drawing-mode-options">
+                            <div id="drawing-options-top-panel">
+                                <span class="drawing-options-title text-center">
+                                    Drawing Options
+                                </span>
+                                <span class="glyphicon glyphicon-chevron-up pull-right"></span>
+                            </div>
                             <label for="drawing-mode-selector">Mode:</label>
                             <select id="drawing-mode-selector">
                                 <option>Pencil</option>

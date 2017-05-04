@@ -133,6 +133,10 @@
     width: 100px;
 }
 
+#drawing-options-top-panel {
+    margin-bottom: 10px;
+}
+
 .change-line-width {
     margin: 10px;
 }
