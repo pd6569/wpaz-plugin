@@ -17,6 +17,10 @@ class ModuleImage extends BaseModule {
 
         // Toolbar
         this.$toolbar = jQuery('#wpaz-image-editor-toolbar');
+        this.$toolbarButtons = jQuery('.image-editor-toolbar');
+
+        // Track listeners
+        this.listenersSet = false;
 
         this.toggleModule();
     }
@@ -67,7 +71,7 @@ class ModuleImage extends BaseModule {
         this.fabricCanvas.add(imgInstance);
 
         // Add listeners
-        this.setListeners();
+        if (!this.listenersSet) this.setListeners();
 
     }
 
@@ -116,6 +120,13 @@ class ModuleImage extends BaseModule {
     
     setListeners(){
 
+        this.setWindowListeners();
+        this.setToolbarListeners();
+
+        this.listenersSet = true;
+    }
+
+    setWindowListeners(){
         let app = this.app;
         let fabricCanvas = this.fabricCanvas;
 
@@ -127,7 +138,72 @@ class ModuleImage extends BaseModule {
         }
 
         window.addEventListener('resize', resizeCanvas);
-
     }
 
+    setToolbarListeners(){
+
+        this.$toolbarButtons.on('click', (event) => {
+            let toolbarAction = jQuery(event.currentTarget).attr('data-toolbar-action');
+            this.doToolbarAction(toolbarAction);
+        })
+    }
+
+    /****
+     *
+     * Perform toolbar action
+     *
+     * @param toolbarAction: action specified by data-toolbar-action attribute on toolbar button
+     *                       options: add-image, zoom-in, zoom-out, draw, add-text, text-size, text-colour, save, exit
+     *
+     */
+    doToolbarAction(toolbarAction){
+
+        switch (toolbarAction) {
+
+            case 'add-image':
+                console.log("do action: " + toolbarAction);
+                break;
+
+            case 'zoom-in':
+                zoomCanvas(true);
+                break;
+
+            case 'zoom-out':
+                zoomCanvas(false);
+                break;
+
+            case 'draw':
+                console.log("do action: " + toolbarAction);
+                break;
+
+            case 'add-text':
+                console.log("do action: " + toolbarAction);
+                break;
+
+            case 'text-size':
+                console.log("do action: " + toolbarAction);
+                break;
+
+            case 'text-colour':
+                console.log("do action: " + toolbarAction);
+                break;
+
+            case 'save':
+                console.log("do action: " + toolbarAction);
+                break;
+
+            case 'exit':
+                console.log("do action: " + toolbarAction);
+                break;
+
+            default:
+                console.log("Could not find action: " + toolbarAction);
+                break;
+        }
+
+
+        function zoomCanvas(zoomIn){
+            console.log("Zoom In: " + zoomIn);
+        }
+    }
 }
