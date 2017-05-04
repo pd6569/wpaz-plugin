@@ -156,6 +156,29 @@
 
                         <div id="wpaz-mode-info" class="hidden"></div>
 
+                        <div id="drawing-mode-options">
+                            <label for="drawing-mode-selector">Mode:</label>
+                            <select id="drawing-mode-selector">
+                                <option>Pencil</option>
+                                <option>Circle</option>
+                                <option>Spray</option>
+                                <option>Pattern</option>
+
+                                <option>hline</option>
+                                <option>vline</option>
+                                <option>square</option>
+                                <option>diamond</option>
+                                <option>texture</option>
+                            </select><br>
+
+                            <label for="drawing-line-width">Line width:</label>
+                            <span class="change-line-width glyphicon glyphicon-plus"></span><span class="drawing-line-width">5</span><span class="change-line-width glyphicon glyphicon-minus"></span><br>
+
+                            <label for="drawing-color">Line color:</label>
+                            <input type="color" value="#005E7A" id="drawing-color"><br>
+
+                        </div>
+
                         <div id="wpaz-image-editor-toolbar" class="hidden">
 
                             <div class="btn-group" role="group" aria-label="...">
@@ -188,7 +211,11 @@
                                 </button>
                             </div>
 
+
                         </div>
+
+
+                    </div>
 
                     </div>
 

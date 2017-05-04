@@ -765,61 +765,63 @@ class AnatomyNotes {
                         self.$modalAlert.modal('hide');
                         Utils.resetModal();
 
-                        Utils.setNoteUpdateStatus("Saving image...");
-
                         if (type === 'upload'){
                             self.loadModule(appGlobals.modules.IMAGE_MODULE, {
                                 imgSrc: imgSrc,
                             })
+                        } else {
+
+                            Utils.setNoteUpdateStatus("Saving image...");
+
+                            // Save media to server and append
+                            let $updateNote = self.$notesTimelineContainer.find('#' + appGlobals.currentNote.uid);
+                            let $imageContainer = $updateNote.find('.note-image-container .row');
+
+                            // Save media
+                            jQuery.ajax({
+                                url: ajax_object.wp_az_ajax_url,
+                                data: {
+                                    action: 'upload_snapshot',
+                                    wp_az_3d_notes_nonce: ajax_object.wp_az_3d_notes_nonce,
+                                    wp_az_post_id: appGlobals.post_id,
+                                    wp_az_img_data: imgSrc,
+                                    wp_az_img_title: imgTitle,
+                                    wp_az_img_desc: imgDesc,
+                                    wp_az_img_caption: imgCaption,
+                                    wp_az_img_alt: imgAlt,
+                                    wp_az_note_id: appGlobals.currentNote.uid
+                                },
+                                error: function() {
+                                    console.log("Failed to save snapshot");
+                                    Utils.setNoteUpdateStatus("Failed to save snapshot", 3000);
+                                },
+                                success: function(data) {
+                                    console.log("Snapshot saved", data);
+                                    Utils.setNoteUpdateStatus("Snapshot saved", 3000);
+
+                                    let attachmentId = data['attachment_id'];
+                                    let attachmentMedium = data['attachment_src_medium'];
+                                    let attachmentLarge = data['attachment_src_large'];
+
+                                    let $newImage = jQuery(
+                                        "<div class='col-md-4 col-sm-4 col-xs-6'>" +
+                                        "<div id='" + attachmentId + "'>" +
+                                        "<a rel='" + appGlobals.currentNote.uid + "' href='" + attachmentLarge + "' class='swipebox note-images' title='" + imgCaption + "'>" +
+                                        "<img src='" + attachmentMedium + "' alt='image' width='100%' height='100%'>" +
+                                        "</a>" +
+                                        "</div>" +
+                                        "</div>");
+                                    $newImage.appendTo($imageContainer);
+
+                                    // add toolbar
+                                    $newImage.find('a.note-images').toolbar(self.toolbarOptions);
+                                    self.setImgToolbarListeners($newImage.find('a.note-images'));
+
+                                },
+                                type: 'POST'
+                            });
+
                         }
-
-                        // Save media to server and append
-                        let $updateNote = self.$notesTimelineContainer.find('#' + appGlobals.currentNote.uid);
-                        let $imageContainer = $updateNote.find('.note-image-container .row');
-
-                        // Save media
-                        jQuery.ajax({
-                            url: ajax_object.wp_az_ajax_url,
-                            data: {
-                                action: 'upload_snapshot',
-                                wp_az_3d_notes_nonce: ajax_object.wp_az_3d_notes_nonce,
-                                wp_az_post_id: appGlobals.post_id,
-                                wp_az_img_data: imgSrc,
-                                wp_az_img_title: imgTitle,
-                                wp_az_img_desc: imgDesc,
-                                wp_az_img_caption: imgCaption,
-                                wp_az_img_alt: imgAlt,
-                                wp_az_note_id: appGlobals.currentNote.uid
-                            },
-                            error: function() {
-                                console.log("Failed to save snapshot");
-                                Utils.setNoteUpdateStatus("Failed to save snapshot", 3000);
-                            },
-                            success: function(data) {
-                                console.log("Snapshot saved", data);
-                                Utils.setNoteUpdateStatus("Snapshot saved", 3000);
-
-                                let attachmentId = data['attachment_id'];
-                                let attachmentMedium = data['attachment_src_medium'];
-                                let attachmentLarge = data['attachment_src_large'];
-
-                                let $newImage = jQuery(
-                                    "<div class='col-md-4 col-sm-4 col-xs-6'>" +
-                                    "<div id='" + attachmentId + "'>" +
-                                    "<a rel='" + appGlobals.currentNote.uid + "' href='" + attachmentLarge + "' class='swipebox note-images' title='" + imgCaption + "'>" +
-                                    "<img src='" + attachmentMedium + "' alt='image' width='100%' height='100%'>" +
-                                    "</a>" +
-                                    "</div>" +
-                                    "</div>");
-                                $newImage.appendTo($imageContainer);
-
-                                // add toolbar
-                                $newImage.find('a.note-images').toolbar(self.toolbarOptions);
-                                self.setImgToolbarListeners($newImage.find('a.note-images'));
-
-                            },
-                            type: 'POST'
-                        });
 
                         if (callback) {
                             callback(imgSrc)
@@ -828,15 +830,6 @@ class AnatomyNotes {
                     });
 
                 }
-
-                /*// Set field defaults
-                let defaultTitle = "Snapshot " + appGlobals.numSnapshots;
-                this.$imgTitle.val(defaultTitle);
-                this.$modalImageProps.find('.image-thumbnail img').attr('src', imgSrc);*/
-
-
-
-                // OK
 
                 return true;
 

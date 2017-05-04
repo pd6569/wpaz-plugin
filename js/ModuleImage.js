@@ -52,7 +52,7 @@ class ModuleImage extends BaseModule {
         this.fabricCanvas = new fabric.Canvas('imageCanvas', {
             backgroundColor: 'rgb(255,255, 255)',
             selectionColor: 'blue',
-            selectionLineWidth: 2
+            selectionLineWidth: 2,
         });
 
         // Set canvas properties
@@ -176,6 +176,7 @@ class ModuleImage extends BaseModule {
 
             case 'draw':
                 console.log("do action: " + toolbarAction);
+                drawMode();
                 break;
 
             case 'add-text':
@@ -207,6 +208,10 @@ class ModuleImage extends BaseModule {
         function zoomCanvas(zoomIn){
             let currentZoom =  self.fabricCanvas.getZoom();
             zoomIn ? self.fabricCanvas.setZoom(currentZoom + 0.05) : self.fabricCanvas.setZoom(currentZoom - 0.05);
+        }
+
+        function drawMode() {
+            self.fabricCanvas.isDrawingMode = !self.fabricCanvas.isDrawingMode;
         }
     }
 }
