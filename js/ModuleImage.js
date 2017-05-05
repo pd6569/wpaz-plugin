@@ -54,13 +54,10 @@ class ModuleImage extends BaseModule {
         // Create canvas
         this.fabricCanvas = new fabric.Canvas('imageCanvas', {
             backgroundColor: 'rgb(255,255, 255)',
-            selectionColor: 'blue',
-            selectionLineWidth: 2,
         });
 
         // Set canvas defaults
         this.setCanvasDefaults();
-
 
         // Set Image
         let imgElement = new Image;
@@ -72,11 +69,17 @@ class ModuleImage extends BaseModule {
         let viewportImgRatio = this.fabricCanvas.getHeight() / imgHeight;
         this.fabricCanvas.setZoom(viewportImgRatio);
 
-
+        // Add image to canvas
         let imgInstance = new fabric.Image(imgElement, {});
+        imgInstance.selectable = false;
         this.fabricCanvas.add(imgInstance);
         this.fabricCanvas.viewportCenterObject(imgInstance);
         imgInstance.setCoords();
+
+        this.fabricCanvas.on('object:added', (event) => {
+            let object = event.target;
+            object.selectable = false;
+        });
 
         // Add listeners
         this.setListeners();
@@ -149,12 +152,14 @@ class ModuleImage extends BaseModule {
 
     setWindowListeners(){
         let app = this.app;
+        let self = this;
         let fabricCanvas = this.fabricCanvas;
 
         function resizeCanvas(){
             if (appGlobals.mode.EDIT_IMAGE){
                 console.log("resize fabric canvas");
                 fabricCanvas.setWidth(app.$humanWidget.width());
+                self.doToolbarAction('center-image');
             }
         }
 
@@ -185,7 +190,7 @@ class ModuleImage extends BaseModule {
      * Perform toolbar action
      *
      * @param toolbarAction: action specified by data-toolbar-action attribute on toolbar button
-     *                       options: add-image, zoom-in, zoom-out, draw, add-text, text-size, text-colour, save, exit
+     *                       options: add-image, center-image, zoom-in, zoom-out, draw, add-text, text-size, text-colour, save, exit
      *
      */
     doToolbarAction(toolbarAction){
@@ -196,6 +201,10 @@ class ModuleImage extends BaseModule {
 
             case 'add-image':
                 console.log("do action: " + toolbarAction);
+                break;
+
+            case 'center-image':
+                centerImage();
                 break;
 
             case 'zoom-in':
@@ -246,6 +255,15 @@ class ModuleImage extends BaseModule {
                 type: "snapshot",
                 imgSrc: imgSrc
             })
+        }
+
+        function centerImage(){
+            console.log("centerImage");
+            let img = self.fabricCanvas.getActiveObject();
+            if (img) {
+                self.fabricCanvas.viewportCenterObject(img);
+                img.setCoords();
+            }
         }
 
         function zoomCanvas(zoomIn){
