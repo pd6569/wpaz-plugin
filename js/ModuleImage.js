@@ -65,14 +65,18 @@ class ModuleImage extends BaseModule {
         // Set Image
         let imgElement = new Image;
         imgElement.src = this.imgSrc;
-        let left = this.fabricCanvas.getWidth() / 2;
-        let top = this.fabricCanvas.getHeight() / 2;
-        console.log("left: " + left, " top: " + top);
-        let imgInstance = new fabric.Image(imgElement, {
-            /*left: left,
-            top: top,*/
-        });
+
+        // Calculate ratio if image to viewport and set canvas zoom accordingly
+        let imgHeight = imgElement.height;
+        let imgWidth = imgElement.width;
+        let viewportImgRatio = this.fabricCanvas.getHeight() / imgHeight;
+        this.fabricCanvas.setZoom(viewportImgRatio);
+
+
+        let imgInstance = new fabric.Image(imgElement, {});
         this.fabricCanvas.add(imgInstance);
+        this.fabricCanvas.viewportCenterObject(imgInstance);
+        imgInstance.setCoords();
 
         // Add listeners
         this.setListeners();
@@ -109,7 +113,12 @@ class ModuleImage extends BaseModule {
             this.$toolbar.removeClass('hidden').show();
         } else {
             this.app.$sceneSelectImageBtn.css("background-color", "");
+
+            // hide toolbar
             this.$toolbar.hide();
+
+            // Hide property boxes
+            this.$drawingOptions.hide();
         }
     }
 
@@ -164,7 +173,6 @@ class ModuleImage extends BaseModule {
     setCanvasDefaults() {
 
         // Set canvas properties
-        this.fabricCanvas.setZoom(0.5);
         this.fabricCanvas.setWidth(this.app.$humanWidget.width());
         this.fabricCanvas.setHeight(this.app.$humanWidget.height());
 
