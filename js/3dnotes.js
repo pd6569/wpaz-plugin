@@ -398,6 +398,7 @@ class AnatomyNotes {
      *                              'annotations',
      *                              'edit_action',
      *                              'new_note_set'
+     *                              'image'
      * @param data {Object} Data object associated with modal.
      *          Annotations: takes annotation object, as specified by BioDigital API.
      *          Actions modal:

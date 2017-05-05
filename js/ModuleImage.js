@@ -65,15 +65,17 @@ class ModuleImage extends BaseModule {
         // Set Image
         let imgElement = new Image;
         imgElement.src = this.imgSrc;
-        console.log("imgElement", imgElement);
+        let left = this.fabricCanvas.getWidth() / 2;
+        let top = this.fabricCanvas.getHeight() / 2;
+        console.log("left: " + left, " top: " + top);
         let imgInstance = new fabric.Image(imgElement, {
-            left: 0,
-            top: 0,
+            /*left: left,
+            top: top,*/
         });
         this.fabricCanvas.add(imgInstance);
 
         // Add listeners
-        if (!this.listenersSet) this.setListeners();
+        this.setListeners();
 
     }
 
@@ -94,6 +96,9 @@ class ModuleImage extends BaseModule {
             this.fabricCanvas.dispose();
             this.fabricCanvas = null;
         }
+
+        // Remove listeners
+        this.removeListeners();
 
     }
 
@@ -128,6 +133,11 @@ class ModuleImage extends BaseModule {
         this.listenersSet = true;
     }
 
+    removeListeners(){
+        jQuery(window).off();
+        this.$toolbarButtons.off();
+    }
+
     setWindowListeners(){
         let app = this.app;
         let fabricCanvas = this.fabricCanvas;
@@ -139,7 +149,8 @@ class ModuleImage extends BaseModule {
             }
         }
 
-        window.addEventListener('resize', resizeCanvas);
+        jQuery(window).on('resize', resizeCanvas);
+
     }
 
     setToolbarListeners(){
@@ -206,6 +217,7 @@ class ModuleImage extends BaseModule {
 
             case 'save':
                 console.log("do action: " + toolbarAction);
+                saveImage();
                 break;
 
             case 'exit':
@@ -217,6 +229,16 @@ class ModuleImage extends BaseModule {
                 break;
         }
 
+        function saveImage(){
+            console.log("saveImage");
+            let imgSrc = self.fabricCanvas.toDataURL({
+                format: "jpeg",
+            });
+            self.app.showModal("image", {
+                type: "snapshot",
+                imgSrc: imgSrc
+            })
+        }
 
         function zoomCanvas(zoomIn){
             let currentZoom =  self.fabricCanvas.getZoom();
@@ -251,6 +273,13 @@ class ModuleImage extends BaseModule {
                     }
                     $drawingLineWidth.text(width);
                     self.fabricCanvas.freeDrawingBrush.width = width;
+                });
+                
+                // Line colour
+                $drawingColour.on('change', (event) => {
+                    console.log("colour change:", event);
+                    let colour = event.target.value;
+                    self.fabricCanvas.freeDrawingBrush.color = colour;
                 })
             } else {
                 self.$drawingOptions.hide();
