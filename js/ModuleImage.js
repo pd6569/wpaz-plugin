@@ -25,6 +25,10 @@ class ModuleImage extends BaseModule {
         // Track listeners
         this.listenersSet = false;
 
+        // Image data
+        this.baseImage = {} // uploaded image as Fabric object
+        this.imgDimensions = {};
+
         this.toggleModule();
     }
 
@@ -66,6 +70,10 @@ class ModuleImage extends BaseModule {
         // Calculate ratio if image to viewport and set canvas zoom accordingly
         let imgHeight = imgElement.height;
         let imgWidth = imgElement.width;
+        this.imgDimensions = {
+            "width": imgWidth,
+            "height": imgHeight,
+        };
         let viewportImgRatio = this.fabricCanvas.getHeight() / imgHeight;
         this.fabricCanvas.setZoom(viewportImgRatio);
 
@@ -75,6 +83,8 @@ class ModuleImage extends BaseModule {
         this.fabricCanvas.add(imgInstance);
         this.fabricCanvas.viewportCenterObject(imgInstance);
         imgInstance.setCoords();
+
+        this.baseImage = imgInstance; // reference to uploaded image as fabric object
 
         this.fabricCanvas.on('object:added', (event) => {
             let object = event.target;
@@ -248,13 +258,57 @@ class ModuleImage extends BaseModule {
 
         function saveImage(){
             console.log("saveImage");
+
+            let objects = self.fabricCanvas.getObjects();
+            let group;
+
+            let originalCanvasProperties = {
+                "width": self.fabricCanvas.getWidth(),
+                "height": self.fabricCanvas.getHeight(),
+                "zoom": self.fabricCanvas.getZoom(),
+            };
+
+            if (objects.length > 1){
+                console.log("Create object group: " + objects.length);
+
+                group = new fabric.Group();
+                self.fabricCanvas.forEachObject((object, index) => {
+                    group.addWithUpdate(object);
+                });
+
+                self.fabricCanvas.setActiveGroup(group);
+                self.fabricCanvas.add(group);
+
+                console.log("group width: " + group.getWidth() + " group height: " + group.getHeight());
+
+                self.fabricCanvas.setDimensions({
+                    "width": group.getWidth(),
+                    "height": group.getHeight(),
+                });
+                group.top = 0;
+                group.left = 0;
+                self.fabricCanvas.setZoom(1);
+
+            }
+
             let imgSrc = self.fabricCanvas.toDataURL({
                 format: "jpeg",
             });
+
+            restoreCanvas(originalCanvasProperties);
+
             self.app.showModal("image", {
                 type: "snapshot",
                 imgSrc: imgSrc
-            })
+            });
+
+            function restoreCanvas(originalCanvasProperties) {
+                console.log("originalCanvasProps: ", originalCanvasProperties);
+
+                self.fabricCanvas.setWidth(originalCanvasProperties.width);
+                self.fabricCanvas.setHeight(originalCanvasProperties.height);
+                self.fabricCanvas.setZoom(originalCanvasProperties.zoom);
+            }
         }
 
         function centerImage(){
@@ -313,4 +367,5 @@ class ModuleImage extends BaseModule {
 
         }
     }
+
 }
