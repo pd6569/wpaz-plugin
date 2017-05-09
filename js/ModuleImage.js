@@ -209,6 +209,7 @@ class ModuleImage extends BaseModule {
 
         // Set tool defaults
         this.fabricCanvas.freeDrawingBrush.width = 6;
+        this.fabricCanvas.freeDrawingBrush.color = "#00ff00";
         this.doToolbarAction('get-all').drawMode(false);
     }
 

@@ -183,7 +183,7 @@
                             <span class="change-line-width glyphicon glyphicon-minus" data-action="decrease-width"></span><br>
 
                             <label for="drawing-color">Line color:</label>
-                            <input type="color" value="#005E7A" id="drawing-color"><br>
+                            <input type="color" value="#00ff00" id="drawing-color"><br>
 
                         </div>
 
