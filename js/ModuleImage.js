@@ -361,7 +361,8 @@ class ModuleImage extends BaseModule {
 
                     // Change line width
                     $changeLineWidth.on('click', (event) => {
-                        let action = jQuery(event.target).attr('data-action');
+                        let action = jQuery(event.currentTarget).attr('data-action');
+                        console.log("event: ", event);
                         let width = parseInt($drawingLineWidth.text());
                         if (action === 'increase-width') {
                             width++;

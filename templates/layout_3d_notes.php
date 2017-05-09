@@ -156,6 +156,8 @@
 
                         <div id="wpaz-mode-info" class="hidden"></div>
 
+                        <!-- START EDITOR MODE -->
+
                         <div id="drawing-mode-options" class="hidden">
                             <div id="drawing-options-top-panel">
                                 <span class="drawing-options-title text-center">
@@ -163,27 +165,39 @@
                                 </span>
                                 <span class="glyphicon glyphicon-chevron-up pull-right"></span>
                             </div>
-                            <label for="drawing-mode-selector">Mode:</label>
-                            <select id="drawing-mode-selector">
-                                <option>Pencil</option>
-                                <option>Circle</option>
-                                <option>Spray</option>
-                                <option>Pattern</option>
+                            <div class="drawing-property">
+                                <label for="drawing-mode-selector">Mode:</label>
+                                <select id="drawing-mode-selector">
+                                    <option>Pencil</option>
+                                    <option>Circle</option>
+                                    <option>Spray</option>
+                                    <option>Pattern</option>
 
-                                <option>hline</option>
-                                <option>vline</option>
-                                <option>square</option>
-                                <option>diamond</option>
-                                <option>texture</option>
-                            </select><br>
+                                    <option>hline</option>
+                                    <option>vline</option>
+                                    <option>square</option>
+                                    <option>diamond</option>
+                                    <option>texture</option>
+                                </select><br>
+                            </div>
 
-                            <label for="drawing-line-width">Line width:</label>
-                            <span class="change-line-width glyphicon glyphicon-plus" data-action="increase-width"></span>
-                            <span id="drawing-line-width">5</span>
-                            <span class="change-line-width glyphicon glyphicon-minus" data-action="decrease-width"></span><br>
+                            <div class="drawing-property">
+                                <label for="drawing-line-width">Line width:</label>
+                                <button class="btn btn-default change-line-width" data-action="increase-width">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
 
-                            <label for="drawing-color">Line color:</label>
-                            <input type="color" value="#00ff00" id="drawing-color"><br>
+                                <span id="drawing-line-width">5</span>
+
+                                <button class="btn btn-default change-line-width" data-action="decrease-width">
+                                    <span class="glyphicon glyphicon-minus" ></span>
+                                </button>
+                            </div>
+
+                            <div class="drawing-property">
+                                <label for="drawing-color">Line color:</label>
+                                <input type="color" value="#00ff00" id="drawing-color"><br>
+                            </div>
 
                         </div>
 
@@ -230,6 +244,8 @@
 
 
                         </div>
+
+                        <!-- END EDITOR MODE -->
 
 
                     </div>

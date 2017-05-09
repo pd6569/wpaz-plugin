@@ -135,6 +135,11 @@
     width: 100px;
 }
 
+/*#drawing-mode-options .drawing-property {
+    display: inline-block;
+    width: 100px;
+}*/
+
 #drawing-options-top-panel {
     margin-bottom: 10px;
 }
