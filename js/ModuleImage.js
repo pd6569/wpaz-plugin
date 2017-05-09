@@ -232,6 +232,18 @@ class ModuleImage extends BaseModule {
         let self = this;
 
         let toolbarActions = {
+            undo: function(){
+                console.log("undo");
+                let objects = self.group.getObjects();
+                let objectToRemove = objects[objects.length - 1];
+                console.log("objectToRemove: ", objectToRemove);
+                self.group.remove(objectToRemove);
+                self.fabricCanvas.renderAll();
+            },
+            redo: function() {
+                console.log("redo");
+            },
+
             saveImage: function (){
                 console.log("saveImage");
 
@@ -364,6 +376,14 @@ class ModuleImage extends BaseModule {
 
             case 'add-image':
                 console.log("do action: " + toolbarAction);
+                break;
+
+            case 'undo':
+                toolbarActions.undo();
+                break;
+
+            case 'redo':
+                toolbarActions.redo();
                 break;
 
             case 'center-image':

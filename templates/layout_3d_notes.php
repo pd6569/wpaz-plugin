@@ -193,6 +193,12 @@
                                 <button type="button" class="btn btn-default image-editor-toolbar" data-toolbar-action="add-image">
                                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                                 </button>
+                                <button type="button" class="btn btn-default image-editor-toolbar" data-toolbar-action="undo">
+                                    <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
+                                </button>
+                                <button type="button" class="btn btn-default image-editor-toolbar" data-toolbar-action="redo">
+                                    <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+                                </button>
                                 <button type="button" class="btn btn-default image-editor-toolbar" data-toolbar-action="center-image">
                                     <span class="glyphicon glyphicon-align-center" aria-hidden="true"></span>
                                 </button>
