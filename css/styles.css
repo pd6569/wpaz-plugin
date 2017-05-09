@@ -135,20 +135,15 @@
     width: 100px;
 }
 
-/*#drawing-mode-options .drawing-property {
-    display: inline-block;
-    width: 100px;
-}*/
-
 #drawing-options-top-panel {
     margin-bottom: 10px;
 }
 
-.change-line-width {
+.change-line-width, .change-line-opacity {
     margin: 10px;
 }
 
-.drawing-line-width {
+#drawing-line-width, #drawing-line-opacity {
     font-size: medium;
 }
 

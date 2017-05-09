@@ -212,7 +212,7 @@ class ModuleImage extends BaseModule {
 
         // Set tool defaults
         this.fabricCanvas.freeDrawingBrush.width = 6;
-        this.fabricCanvas.freeDrawingBrush.color = "#00ff00";
+        this.fabricCanvas.freeDrawingBrush.color = "rgba(0,255,0, 1)";
         this.doToolbarAction('get-all').drawMode(false);
     }
 
@@ -355,14 +355,17 @@ class ModuleImage extends BaseModule {
                     let $drawingLineWidth = jQuery('#drawing-line-width');
                     let $changeLineWidth = jQuery('.change-line-width');
                     let $drawingColour = jQuery('#drawing-color');
+                    let $lineOpacity = jQuery('#drawing-line-opacity');
+                    let $changeLineOpacity = jQuery('.change-line-opacity');
+
 
                     // Set values
                     $drawingLineWidth.text(self.fabricCanvas.freeDrawingBrush.width);
+                    $lineOpacity.text("100");
 
                     // Change line width
                     $changeLineWidth.on('click', (event) => {
                         let action = jQuery(event.currentTarget).attr('data-action');
-                        console.log("event: ", event);
                         let width = parseInt($drawingLineWidth.text());
                         if (action === 'increase-width') {
                             width++;
@@ -380,7 +383,32 @@ class ModuleImage extends BaseModule {
                         console.log("colour change:", event);
                         let colour = event.target.value;
                         self.fabricCanvas.freeDrawingBrush.color = colour;
+                    });
+
+                    // Line opacity
+                    $changeLineOpacity.on('click', (event) => {
+                        let action = jQuery(event.currentTarget).attr('data-action');
+                        let opacity = parseInt($lineOpacity.text());
+
+                        if (action === 'increase-opacity') {
+                            if (opacity < 100){
+                                opacity += 1;
+                                console.log("opacity: " + opacity);
+                            }
+                        } else if (opacity > 0) {
+                            opacity -= 1;
+                            console.log("opacity: " + opacity);
+                        }
+
+                        $lineOpacity.text(opacity);
+
+                        let currentColor = self.fabricCanvas.freeDrawingBrush.color;
+                        let hexColor = new fabric.Color(currentColor).toHex(); // convert to hex
+                        let rgba = Utils.convertHex(hexColor, opacity); // change opacity
+                        self.fabricCanvas.freeDrawingBrush.color = rgba;
+
                     })
+
                 } else {
                     self.$drawingOptions.hide();
                 }

@@ -199,6 +199,19 @@
                                 <input type="color" value="#00ff00" id="drawing-color"><br>
                             </div>
 
+                            <div class="drawing-property">
+                                <label>Opacity</label>
+                                <button class="btn btn-default change-line-opacity" data-action="increase-opacity">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+
+                                <span id="drawing-line-opacity">100</span>
+
+                                <button class="btn btn-default change-line-opacity" data-action="decrease-opacity">
+                                    <span class="glyphicon glyphicon-minus" ></span>
+                                </button>
+                            </div>
+
                         </div>
 
                         <div id="wpaz-image-editor-toolbar" class="hidden">
