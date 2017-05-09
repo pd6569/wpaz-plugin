@@ -26,7 +26,7 @@ class ModuleImage extends BaseModule {
         this.listenersSet = false;
 
         // Image data
-        this.baseImage = {} // uploaded image as Fabric object
+        this.baseImage = {}; // uploaded image as Fabric object
         this.imgDimensions = {};
 
         this.toggleModule();
@@ -361,9 +361,10 @@ class ModuleImage extends BaseModule {
 
                     // Set values
                     $drawingLineWidth.text(self.fabricCanvas.freeDrawingBrush.width);
-                    $lineOpacity.text("100");
+                    $lineOpacity.text(ModuleImage.getAlphaFromFabricColor(new fabric.Color(self.fabricCanvas.freeDrawingBrush.color)));
 
                     // Change line width
+                    $changeLineWidth.off();
                     $changeLineWidth.on('click', (event) => {
                         let action = jQuery(event.currentTarget).attr('data-action');
                         let width = parseInt($drawingLineWidth.text());
@@ -379,6 +380,7 @@ class ModuleImage extends BaseModule {
                     });
 
                     // Line colour
+                    $drawingColour.off();
                     $drawingColour.on('change', (event) => {
                         console.log("colour change:", event);
                         let colour = event.target.value;
@@ -386,6 +388,7 @@ class ModuleImage extends BaseModule {
                     });
 
                     // Line opacity
+                    $changeLineOpacity.off();
                     $changeLineOpacity.on('click', (event) => {
                         let action = jQuery(event.currentTarget).attr('data-action');
                         let opacity = parseInt($lineOpacity.text());
@@ -393,11 +396,9 @@ class ModuleImage extends BaseModule {
                         if (action === 'increase-opacity') {
                             if (opacity < 100){
                                 opacity += 1;
-                                console.log("opacity: " + opacity);
                             }
                         } else if (opacity > 0) {
                             opacity -= 1;
-                            console.log("opacity: " + opacity);
                         }
 
                         $lineOpacity.text(opacity);
@@ -407,11 +408,13 @@ class ModuleImage extends BaseModule {
                         let rgba = Utils.convertHex(hexColor, opacity); // change opacity
                         self.fabricCanvas.freeDrawingBrush.color = rgba;
 
+
                     })
 
                 } else {
                     self.$drawingOptions.hide();
                 }
+
             }
 
         };
@@ -477,134 +480,14 @@ class ModuleImage extends BaseModule {
                 break;
         }
 
+    }
 
+    /****************************************
+     *            STATIC FUNCTIONS          *
+     ****************************************/
 
-/*        function saveImage(){
-            console.log("saveImage");
-
-
-            let originalCanvasProperties = {
-                "width": self.fabricCanvas.getWidth(),
-                "height": self.fabricCanvas.getHeight(),
-                "zoom": self.fabricCanvas.getZoom(),
-            };
-
-            self.fabricCanvas.setDimensions({
-                "width": self.group.getWidth(),
-                "height": self.group.getHeight(),
-            });
-            self.group.top = 0;
-            self.group.left = 0;
-            self.fabricCanvas.setZoom(1);
-
-
-            /!*if (objects.length > 1){
-                console.log("Create object group: " + objects.length);
-
-                group = new fabric.Group();
-                self.fabricCanvas.forEachObject((object, index) => {
-                    group.addWithUpdate(object);
-                });
-
-                self.fabricCanvas.setActiveGroup(group);
-                self.fabricCanvas.add(group);
-
-                console.log("group width: " + group.getWidth() + " group height: " + group.getHeight());
-
-                self.fabricCanvas.setDimensions({
-                    "width": group.getWidth(),
-                    "height": group.getHeight(),
-                });
-                group.top = 0;
-                group.left = 0;
-                self.fabricCanvas.setZoom(1);
-
-            }
-*!/
-            let imgSrc = self.fabricCanvas.toDataURL({
-                format: "jpeg",
-            });
-
-            restoreCanvas(originalCanvasProperties);
-
-            self.app.showModal("image", {
-                type: "snapshot",
-                imgSrc: imgSrc
-            });
-
-            function restoreCanvas(originalCanvasProperties) {
-                console.log("originalCanvasProps: ", originalCanvasProperties);
-
-                self.fabricCanvas.setWidth(originalCanvasProperties.width);
-                self.fabricCanvas.setHeight(originalCanvasProperties.height);
-                self.fabricCanvas.setZoom(originalCanvasProperties.zoom);
-                self.doToolbarAction('center-image');
-            }
-        }
-
-        function centerImage(){
-            console.log("centerImage");
-            let img = self.fabricCanvas.getActiveObject();
-            if (img) {
-                self.fabricCanvas.viewportCenterObject(img);
-                img.setCoords();
-            }
-        }
-
-        function zoomCanvas(zoomIn){
-            let currentZoom =  self.fabricCanvas.getZoom();
-            zoomIn ? self.fabricCanvas.setZoom(currentZoom + 0.05) : self.fabricCanvas.setZoom(currentZoom - 0.05);
-        }
-
-        function drawMode(enable) {
-            console.log("drawingmode: " + self.fabricCanvas.isDrawingMode);
-
-            if (!enable) {
-                self.fabricCanvas.isDrawingMode = false;
-                self.$drawingOptions.hide();
-                return;
-            }
-
-            self.fabricCanvas.isDrawingMode = !self.fabricCanvas.isDrawingMode;
-            if (self.fabricCanvas.isDrawingMode) {
-                console.log("show draw options", self.$drawingOptions);
-                self.$drawingOptions.removeClass('hidden').show();
-
-                // Get elements
-                let $drawingModeSelector = jQuery('#drawing-mode-selector');
-                let $drawingLineWidth = jQuery('#drawing-line-width');
-                let $changeLineWidth = jQuery('.change-line-width');
-                let $drawingColour = jQuery('#drawing-color');
-
-                // Set values
-                $drawingLineWidth.text(self.fabricCanvas.freeDrawingBrush.width);
-
-                // Change line width
-                $changeLineWidth.on('click', (event) => {
-                    let action = jQuery(event.target).attr('data-action');
-                    let width = parseInt($drawingLineWidth.text());
-                    if (action === 'increase-width') {
-                        width++;
-                        console.log("width: " + width);
-                    } else {
-                        if (width > 1) width--;
-                        console.log("width: " + width);
-                    }
-                    $drawingLineWidth.text(width);
-                    self.fabricCanvas.freeDrawingBrush.width = width;
-                });
-                
-                // Line colour
-                $drawingColour.on('change', (event) => {
-                    console.log("colour change:", event);
-                    let colour = event.target.value;
-                    self.fabricCanvas.freeDrawingBrush.color = colour;
-                })
-            } else {
-                self.$drawingOptions.hide();
-            }
-
-        }*/
+    static getAlphaFromFabricColor(fabricColor){
+        return parseInt(fabricColor._source[3] * 100);
     }
 
 }

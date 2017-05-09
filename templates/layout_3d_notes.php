@@ -167,7 +167,7 @@
                             </div>
                             <div class="drawing-property">
                                 <label for="drawing-mode-selector">Mode:</label>
-                                <select id="drawing-mode-selector">
+                                <select id="drawing-mode-selector" class="drawing-mode-action">
                                     <option>Pencil</option>
                                     <option>Circle</option>
                                     <option>Spray</option>
@@ -183,31 +183,31 @@
 
                             <div class="drawing-property">
                                 <label for="drawing-line-width">Line width:</label>
-                                <button class="btn btn-default change-line-width" data-action="increase-width">
+                                <button class="btn btn-default change-line-width drawing-mode-action" data-action="increase-width">
                                     <span class="glyphicon glyphicon-plus"></span>
                                 </button>
 
                                 <span id="drawing-line-width">5</span>
 
-                                <button class="btn btn-default change-line-width" data-action="decrease-width">
+                                <button class="btn btn-default change-line-width drawing-mode-action" data-action="decrease-width">
                                     <span class="glyphicon glyphicon-minus" ></span>
                                 </button>
                             </div>
 
                             <div class="drawing-property">
                                 <label for="drawing-color">Line color:</label>
-                                <input type="color" value="#00ff00" id="drawing-color"><br>
+                                <input type="color" value="#00ff00" id="drawing-color" class="drawing-mode-action"><br>
                             </div>
 
                             <div class="drawing-property">
                                 <label>Opacity</label>
-                                <button class="btn btn-default change-line-opacity" data-action="increase-opacity">
+                                <button class="btn btn-default change-line-opacity drawing-mode-action" data-action="increase-opacity">
                                     <span class="glyphicon glyphicon-plus"></span>
                                 </button>
 
                                 <span id="drawing-line-opacity">100</span>
 
-                                <button class="btn btn-default change-line-opacity" data-action="decrease-opacity">
+                                <button class="btn btn-default change-line-opacity drawing-mode-action" data-action="decrease-opacity">
                                     <span class="glyphicon glyphicon-minus" ></span>
                                 </button>
                             </div>
@@ -637,6 +637,7 @@
                     </div>
                     <div class="image-thumbnail pull-right">
                         <img src="" width="100%" height="100%">
+                        <a href="#" class="image-edit pull-right">Edit Image</a>
                     </div>
                 </div>
             </div>

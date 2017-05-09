@@ -179,7 +179,6 @@ class Utils {
     }
 
     static convertHex(hex, opacity){
-        console.log("hex", hex);
 
         hex = hex.replace('#','');
         let r = parseInt(hex.substring(0,2), 16);

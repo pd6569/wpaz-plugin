@@ -177,6 +177,7 @@ class AnatomyNotes {
         this.$imgDesc = jQuery('.modal-image-properties .image-description');
         this.$imgCaption = jQuery('.modal-image-properties .image-caption');
         this.$imgAlt = jQuery('.modal-image-properties .image-alt');
+        this.$imgEdit = jQuery('.modal-image-properties .image-edit');
 
         // Annotations
         this.$annotationsTitle = this.$modalAnnotations.find('.annotation-title');
@@ -753,6 +754,17 @@ class AnatomyNotes {
                 }
 
                 function setClickListeners(){
+                    self.$imgEdit.off();
+                    self.$imgEdit.on('click', (event) => {
+                        console.log("load Image Editor");
+                        event.preventDefault();
+                        self.$modalAlert.modal('hide');
+                        Utils.resetModal();
+                        self.loadModule(appGlobals.modules.IMAGE_MODULE, {
+                            imgSrc: imgSrc
+                        })
+                    });
+
                     self.$modalBtn2.off();
                     self.$modalBtn2.on('click', () => {
 
