@@ -98,19 +98,17 @@ class ModuleImage extends BaseModule {
             let object = event.target;
             /*object.selectable = false;*/
 
+            // Clone the object, add to group, remove original object
             object.clone((newObject) => {
                 this.group.addWithUpdate(newObject);
                 this.fabricCanvas.remove(object);
+
+                this.fabricCanvas.setActiveObject(this.group);
             })
-
-            /*this.fabricCanvas.remove(object);*/
-
-
-
         });
 
         // Add listeners
-        this.setListeners();
+        if (!this.listenersSet) this.setListeners();
 
     }
 
@@ -211,6 +209,7 @@ class ModuleImage extends BaseModule {
 
         // Set tool defaults
         this.fabricCanvas.freeDrawingBrush.width = 6;
+        this.doToolbarAction('get-all').drawMode(false);
     }
 
     zoomToFit(objectHeight){
@@ -223,12 +222,142 @@ class ModuleImage extends BaseModule {
      * Perform toolbar action
      *
      * @param toolbarAction: action specified by data-toolbar-action attribute on toolbar button
-     *                       options: add-image, center-image, zoom-in, zoom-out, draw, add-text, text-size, text-colour, save, exit
+     *                       options: add-image, center-image, zoom-in, zoom-out, draw, add-text, text-size, text-colour,
+     *                       save, exit, get-all
      *
      */
     doToolbarAction(toolbarAction){
 
         let self = this;
+
+        let toolbarActions = {
+            saveImage: function (){
+                console.log("saveImage");
+
+
+                let originalCanvasProperties = {
+                    "width": self.fabricCanvas.getWidth(),
+                    "height": self.fabricCanvas.getHeight(),
+                    "zoom": self.fabricCanvas.getZoom(),
+                };
+
+                self.fabricCanvas.setDimensions({
+                    "width": self.group.getWidth(),
+                    "height": self.group.getHeight(),
+                });
+                self.group.top = 0;
+                self.group.left = 0;
+                self.fabricCanvas.setZoom(1);
+
+
+                /*if (objects.length > 1){
+                 console.log("Create object group: " + objects.length);
+
+                 group = new fabric.Group();
+                 self.fabricCanvas.forEachObject((object, index) => {
+                 group.addWithUpdate(object);
+                 });
+
+                 self.fabricCanvas.setActiveGroup(group);
+                 self.fabricCanvas.add(group);
+
+                 console.log("group width: " + group.getWidth() + " group height: " + group.getHeight());
+
+                 self.fabricCanvas.setDimensions({
+                 "width": group.getWidth(),
+                 "height": group.getHeight(),
+                 });
+                 group.top = 0;
+                 group.left = 0;
+                 self.fabricCanvas.setZoom(1);
+
+                 }
+                 */
+                let imgSrc = self.fabricCanvas.toDataURL({
+                    format: "jpeg",
+                });
+
+                restoreCanvas(originalCanvasProperties);
+
+                self.app.showModal("image", {
+                    type: "snapshot",
+                    imgSrc: imgSrc
+                });
+
+                function restoreCanvas(originalCanvasProperties) {
+                    console.log("originalCanvasProps: ", originalCanvasProperties);
+
+                    self.fabricCanvas.setWidth(originalCanvasProperties.width);
+                    self.fabricCanvas.setHeight(originalCanvasProperties.height);
+                    self.fabricCanvas.setZoom(originalCanvasProperties.zoom);
+                    self.doToolbarAction('center-image');
+                }
+            },
+
+            centerImage: function (){
+                console.log("centerImage");
+                let img = self.fabricCanvas.getActiveObject();
+                if (img) {
+                    self.fabricCanvas.viewportCenterObject(img);
+                    img.setCoords();
+                }
+            },
+
+            zoomCanvas: function (zoomIn) {
+                let currentZoom =  self.fabricCanvas.getZoom();
+                zoomIn ? self.fabricCanvas.setZoom(currentZoom + 0.05) : self.fabricCanvas.setZoom(currentZoom - 0.05);
+            },
+
+            drawMode: function (enable) {
+                console.log("drawingmode: " + self.fabricCanvas.isDrawingMode);
+
+                if (!enable) {
+                    self.fabricCanvas.isDrawingMode = false;
+                    self.$drawingOptions.hide();
+                    return;
+                }
+
+                self.fabricCanvas.isDrawingMode = !self.fabricCanvas.isDrawingMode;
+                if (self.fabricCanvas.isDrawingMode) {
+                    console.log("show draw options", self.$drawingOptions);
+                    self.$drawingOptions.removeClass('hidden').show();
+
+                    // Get elements
+                    let $drawingModeSelector = jQuery('#drawing-mode-selector');
+                    let $drawingLineWidth = jQuery('#drawing-line-width');
+                    let $changeLineWidth = jQuery('.change-line-width');
+                    let $drawingColour = jQuery('#drawing-color');
+
+                    // Set values
+                    $drawingLineWidth.text(self.fabricCanvas.freeDrawingBrush.width);
+
+                    // Change line width
+                    $changeLineWidth.on('click', (event) => {
+                        let action = jQuery(event.target).attr('data-action');
+                        let width = parseInt($drawingLineWidth.text());
+                        if (action === 'increase-width') {
+                            width++;
+                            console.log("width: " + width);
+                        } else {
+                            if (width > 1) width--;
+                            console.log("width: " + width);
+                        }
+                        $drawingLineWidth.text(width);
+                        self.fabricCanvas.freeDrawingBrush.width = width;
+                    });
+
+                    // Line colour
+                    $drawingColour.on('change', (event) => {
+                        console.log("colour change:", event);
+                        let colour = event.target.value;
+                        self.fabricCanvas.freeDrawingBrush.color = colour;
+                    })
+                } else {
+                    self.$drawingOptions.hide();
+                }
+            }
+
+        };
 
         switch (toolbarAction) {
 
@@ -237,20 +366,20 @@ class ModuleImage extends BaseModule {
                 break;
 
             case 'center-image':
-                centerImage();
+                toolbarActions.centerImage();
                 break;
 
             case 'zoom-in':
-                zoomCanvas(true);
+                toolbarActions.zoomCanvas(true);
                 break;
 
             case 'zoom-out':
-                zoomCanvas(false);
+                toolbarActions.zoomCanvas(false);
                 break;
 
             case 'draw':
                 console.log("do action: " + toolbarAction);
-                drawMode();
+                toolbarActions.drawMode(true);
                 break;
 
             case 'add-text':
@@ -267,23 +396,27 @@ class ModuleImage extends BaseModule {
 
             case 'save':
                 console.log("do action: " + toolbarAction);
-                saveImage();
+                toolbarActions.saveImage();
                 break;
 
             case 'exit':
                 console.log("do action: " + toolbarAction);
                 break;
 
+            case 'get-all':
+                console.log("return all actions");
+                return toolbarActions;
+
             default:
-                console.log("Could not find action: " + toolbarAction);
+                console.log("No action selected");
                 break;
         }
 
-        function saveImage(){
+
+
+/*        function saveImage(){
             console.log("saveImage");
 
-            let objects = self.fabricCanvas.getObjects();
-            let group;
 
             let originalCanvasProperties = {
                 "width": self.fabricCanvas.getWidth(),
@@ -291,7 +424,16 @@ class ModuleImage extends BaseModule {
                 "zoom": self.fabricCanvas.getZoom(),
             };
 
-            if (objects.length > 1){
+            self.fabricCanvas.setDimensions({
+                "width": self.group.getWidth(),
+                "height": self.group.getHeight(),
+            });
+            self.group.top = 0;
+            self.group.left = 0;
+            self.fabricCanvas.setZoom(1);
+
+
+            /!*if (objects.length > 1){
                 console.log("Create object group: " + objects.length);
 
                 group = new fabric.Group();
@@ -313,7 +455,7 @@ class ModuleImage extends BaseModule {
                 self.fabricCanvas.setZoom(1);
 
             }
-
+*!/
             let imgSrc = self.fabricCanvas.toDataURL({
                 format: "jpeg",
             });
@@ -331,6 +473,7 @@ class ModuleImage extends BaseModule {
                 self.fabricCanvas.setWidth(originalCanvasProperties.width);
                 self.fabricCanvas.setHeight(originalCanvasProperties.height);
                 self.fabricCanvas.setZoom(originalCanvasProperties.zoom);
+                self.doToolbarAction('center-image');
             }
         }
 
@@ -348,7 +491,15 @@ class ModuleImage extends BaseModule {
             zoomIn ? self.fabricCanvas.setZoom(currentZoom + 0.05) : self.fabricCanvas.setZoom(currentZoom - 0.05);
         }
 
-        function drawMode() {
+        function drawMode(enable) {
+            console.log("drawingmode: " + self.fabricCanvas.isDrawingMode);
+
+            if (!enable) {
+                self.fabricCanvas.isDrawingMode = false;
+                self.$drawingOptions.hide();
+                return;
+            }
+
             self.fabricCanvas.isDrawingMode = !self.fabricCanvas.isDrawingMode;
             if (self.fabricCanvas.isDrawingMode) {
                 console.log("show draw options", self.$drawingOptions);
@@ -388,7 +539,7 @@ class ModuleImage extends BaseModule {
                 self.$drawingOptions.hide();
             }
 
-        }
+        }*/
     }
 
 }
