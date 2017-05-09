@@ -385,6 +385,7 @@ class ModuleImage extends BaseModule {
                         console.log("colour change:", event);
                         let colour = event.target.value;
                         self.fabricCanvas.freeDrawingBrush.color = colour;
+                        $lineOpacity.text("100");
                     });
 
                     // Line opacity
