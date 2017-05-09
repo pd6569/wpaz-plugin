@@ -12,11 +12,19 @@
                 onclick: function() {
                     console.log("Link this text to an action");
                     let text = editor.selection.getContent();
-                    let actionData;
+                    let imgSrc;
+
+                    if (appGlobals.mode.EDIT_IMAGE) {
+                        let imageModule = appGlobals.modulesLoaded[appGlobals.modules.IMAGE_MODULE];
+                        if (imageModule) {
+                            imgSrc = imageModule.doToolbarAction('get-all').saveImage(true);
+                        }
+                    }
 
                     appGlobals.appRef.showModal('edit_action', {
                         actionText: text,
                         newAction: true,
+                        imgSrc: imgSrc
                     });
                 },
 

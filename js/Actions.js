@@ -14,6 +14,7 @@ class Action {
      *              Parameters:
      *              type (required) - set using appGlobals.actionDataTypes.
      *              rotationSpeed (optional)
+     *              imgSrc (optional) - base64 encoded image
      *
      * @param action_title
      */

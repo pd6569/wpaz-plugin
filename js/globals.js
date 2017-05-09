@@ -72,12 +72,14 @@ let appGlobals = {
     actions: {}, // note uid : array of ordered actions
     currentAction: {},
     actionTypes: {
-        GENERAL: 'general'
+        GENERAL: 'general',
+        IMAGE: 'image',
     },
 
     // Action options
     actionDataTypes: {
-        ROTATE_CAMERA: 'rotateCamera'
+        ROTATE_CAMERA: 'rotateCamera',
+        STATIC_IMAGE: 'staticImage',
     },
 
     // annotations

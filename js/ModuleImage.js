@@ -111,7 +111,7 @@ class ModuleImage extends BaseModule {
         this.undoHistory = []; // array of fabric objects
 
         // Add listeners
-        if (!this.listenersSet) this.setListeners();
+        this.setListeners();
 
     }
 
@@ -259,7 +259,7 @@ class ModuleImage extends BaseModule {
                 }
             },
 
-            saveImage: function (){
+            saveImage: function (srcOnly){
                 console.log("saveImage");
 
 
@@ -306,6 +306,10 @@ class ModuleImage extends BaseModule {
                 });
 
                 restoreCanvas(originalCanvasProperties);
+
+                if (srcOnly) {
+                    return imgSrc;
+                }
 
                 self.app.showModal("image", {
                     type: "snapshot",

@@ -406,6 +406,7 @@ class AnatomyNotes {
      *              actionText - (String) text in editor that will be linked to the scene. Required
      *              newAction - (Boolean) true if new action, false if existing action. Optional
      *              actionId - (String) id of action to edit. Optional
+     *              imgSrc          {String} base64 encoded image src
  *              Image modal:
      *              type            {String} 'upload', 'snapshot'
      *              imgSrc          {String} base64 encoded image src
@@ -475,10 +476,11 @@ class AnatomyNotes {
                     title: "Edit Action: " + data.actionText,
                     body: "Current scene will be linked to text '" + data.actionText + "'"
                 });
-                this.$modalActions.removeClass('hidden').show();
+
+                console.log("action modal data: ", data);
 
                 // Data
-                let actionData = { };
+                let actionData = {};
                 let actionObj;
 
                 // Different actions
@@ -495,6 +497,11 @@ class AnatomyNotes {
 
                 // Individual option containers
                 let $cameraRotateOptionsContainer = jQuery('.modal-actions__camera-rotate');
+
+
+                if (!appGlobals.mode.EDIT_IMAGE) {
+                    this.$modalActions.removeClass('hidden').show();
+                }
 
                 // Existing scene link
                 if (!data.newAction) {
@@ -553,6 +560,15 @@ class AnatomyNotes {
                 this.$modalBtn2.on('click', () => {
 
                     if (data.newAction) {
+
+                        let actionType;
+                        if (appGlobals.mode.EDIT_IMAGE){
+                            actionType = appGlobals.actionTypes.IMAGE;
+                            actionData.type = appGlobals.actionDataTypes.STATIC_IMAGE;
+                            actionData.imgUrl = data.imgSrc;
+                        } else {
+                            actionType = appGlobals.actionTypes.GENERAL;
+                        }
                         this.addAction(data.actionText, actionData, (action) => {
                             console.log("added action: ", action);
                             let linkedText =
@@ -560,7 +576,7 @@ class AnatomyNotes {
                                 data.actionText +
                                 "</span>";
                             this.$noteEditor.execCommand( 'mceInsertContent', true, linkedText);
-                        });
+                        }, actionType);
                     } else {
                         console.log("Function to update actions...");
                         Action.getActionById(actionObj.uid).action_data = actionData;
@@ -1591,14 +1607,16 @@ class AnatomyNotes {
         this.$numActionsLabel.text(this.numActions + ' actions');
     }
 
-    addAction(actionTitle, actionData, callback) {
+    addAction(actionTitle, actionData, callback, actionType = appGlobals.actionTypes.GENERAL) {
 
         this.numActions++;
         this.updateActionLabel();
 
+        let self = this;
+
         // create action, add to array
         let noteId = appGlobals.currentNote.uid;
-        let action = new Action(noteId, this.numActions, appGlobals.actionTypes.GENERAL);
+        let action = new Action(noteId, this.numActions, actionType);
         if (actionTitle) action.setTitle(actionTitle);
         if (actionData) action.setData(actionData);
         if(appGlobals.actions[noteId]) {
@@ -1616,29 +1634,43 @@ class AnatomyNotes {
         }
         this.$actionsDropdownContainer.append($actionItem);
 
+        // Set current action
+        this.setCurrentAction(action);
+
         // create new generic action
-        this.getSceneState((sceneState) => {
-            action.setSceneState(JSON.stringify(sceneState));
-            console.log("Scene state saved as action");
-            Utils.updateActionStatusBox("Action added to this note set.");
+        if (actionType === appGlobals.actionTypes.GENERAL){
+            this.getSceneState((sceneState) => {
+                action.setSceneState(JSON.stringify(sceneState));
+                console.log("Scene state saved as action");
+                Utils.updateActionStatusBox("Action added to this note set.");
 
-            // Set current action
-            this.setCurrentAction(action);
+                setActionListener();
 
+                if (callback) callback(action);
+
+            });
+        } else if (actionType === appGlobals.actionTypes.IMAGE){
+
+            setActionListener();
+
+            if (callback) callback(action);
+        }
+
+        function setActionListener(){
             $actionItem.on('click', (event) => {
                 event.preventDefault();
 
-                switch(action.action_type){
+                self.doAction(action, self);
+
+                /*switch(action.action_type){
                     case appGlobals.actionTypes.GENERAL:
-                        this.doAction(action, this);
+                        self.doAction(action, self);
                         break;
-                }
+                }*/
 
             });
+        }
 
-            if (callback) callback(action);
-
-        });
 
     }
 
@@ -1822,6 +1854,12 @@ class AnatomyNotes {
 
                 appObj.setCurrentAction(action);
 
+                break;
+
+            case appGlobals.actionTypes.IMAGE:
+                console.log("Load image into canvas");
+
+                appObj.setCurrentAction(action);
                 break;
 
             default:
