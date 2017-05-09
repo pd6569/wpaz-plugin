@@ -107,6 +107,9 @@ class ModuleImage extends BaseModule {
             })
         });
 
+        // Track history
+        this.undoHistory = []; // array of fabric objects
+
         // Add listeners
         if (!this.listenersSet) this.setListeners();
 
@@ -235,13 +238,25 @@ class ModuleImage extends BaseModule {
             undo: function(){
                 console.log("undo");
                 let objects = self.group.getObjects();
-                let objectToRemove = objects[objects.length - 1];
-                console.log("objectToRemove: ", objectToRemove);
-                self.group.remove(objectToRemove);
-                self.fabricCanvas.renderAll();
+                if (objects.length > 1){
+                    let objectToRemove = objects[objects.length - 1];
+                    console.log("objectToRemove: ", objectToRemove);
+                    self.group.remove(objectToRemove);
+
+                    // add to history
+                    self.undoHistory.push(objectToRemove);
+
+                    self.fabricCanvas.renderAll();
+                }
             },
             redo: function() {
                 console.log("redo");
+                if (self.undoHistory.length > 0){
+                    let objectToAdd = self.undoHistory[self.undoHistory.length - 1];
+                    self.group.add(objectToAdd);
+                    self.fabricCanvas.renderAll();
+                    self.undoHistory.pop();
+                }
             },
 
             saveImage: function (){
