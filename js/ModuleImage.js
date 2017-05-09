@@ -74,21 +74,39 @@ class ModuleImage extends BaseModule {
             "width": imgWidth,
             "height": imgHeight,
         };
-        let viewportImgRatio = this.fabricCanvas.getHeight() / imgHeight;
-        this.fabricCanvas.setZoom(viewportImgRatio);
+        this.zoomToFit(imgHeight);
+
+        // Create group
+        this.group = new fabric.Group();
+
+        // Create fabric image
+        let imgInstance = new fabric.Image(imgElement, {});
+        /*imgInstance.selectable = false;*/
+
+        // Add image to group
+        this.group.addWithUpdate(imgInstance);
 
         // Add image to canvas
-        let imgInstance = new fabric.Image(imgElement, {});
-        imgInstance.selectable = false;
-        this.fabricCanvas.add(imgInstance);
-        this.fabricCanvas.viewportCenterObject(imgInstance);
-        imgInstance.setCoords();
+        this.fabricCanvas.add(this.group);
+        this.fabricCanvas.viewportCenterObject(this.group);
+        this.group.setCoords();
+        this.fabricCanvas.setActiveObject(this.group);
 
         this.baseImage = imgInstance; // reference to uploaded image as fabric object
 
         this.fabricCanvas.on('object:added', (event) => {
             let object = event.target;
-            object.selectable = false;
+            /*object.selectable = false;*/
+
+            object.clone((newObject) => {
+                this.group.addWithUpdate(newObject);
+                this.fabricCanvas.remove(object);
+            })
+
+            /*this.fabricCanvas.remove(object);*/
+
+
+
         });
 
         // Add listeners
@@ -193,6 +211,11 @@ class ModuleImage extends BaseModule {
 
         // Set tool defaults
         this.fabricCanvas.freeDrawingBrush.width = 6;
+    }
+
+    zoomToFit(objectHeight){
+        let viewportImgRatio = this.fabricCanvas.getHeight() / objectHeight;
+        this.fabricCanvas.setZoom(viewportImgRatio);
     }
 
     /****
