@@ -29,10 +29,12 @@ class ModuleImage extends BaseModule {
         this.fabricRootImage = {}; // uploaded image as Fabric object
         this.imgDimensions = {};
 
-        this.toggleModule();
+        /*this.toggleModule();*/
 
         // Set up fabric canvas
         this.setupCanvas();
+        
+        this.enableModule();
     }
 
     loadImage(imageSrc = this.rootImage.src, imageType = this.rootImage.type) {
@@ -114,6 +116,9 @@ class ModuleImage extends BaseModule {
 
         // Set canvas defaults
         this.setCanvasDefaults();
+
+        // Change canvas reference to fabric canvas
+        this.$imageCanvas = jQuery('.canvas-container');
     }
 
     destroyCanvas(){
@@ -215,6 +220,8 @@ class ModuleImage extends BaseModule {
 
         this.$imageCanvas.show();
 
+        // Resize canvas
+        this.resizeCanvas();
 
 /*
         // If canvas already exists, destroy and create new
@@ -321,8 +328,8 @@ class ModuleImage extends BaseModule {
         // Set UI
         this.setUi(false);
 
-        // Deactivate fabric canvas
-        this.destroyCanvas();
+        /*// Deactivate fabric canvas
+        this.destroyCanvas();*/
 
         /*// Remove listeners
         this.removeListeners();*/
@@ -406,6 +413,14 @@ class ModuleImage extends BaseModule {
         jQuery(window).off();
         jQuery(window).on('resize', resizeCanvas);
 
+    }
+
+    resizeCanvas() {
+        if (appGlobals.mode.EDIT_IMAGE){
+            console.log("resize fabric canvas");
+            this.fabricCanvas.setWidth(this.app.$humanWidget.width());
+            this.doToolbarAction('center-image');
+        }
     }
 
     setToolbarListeners(){

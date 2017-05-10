@@ -55,7 +55,7 @@ class BaseModule {
      * Turn off all modes
      *
      */
-    turnAllModesOff() {
+    static turnAllModesOff() {
 
         let modes = Object.keys(appGlobals.mode);
         for (let mode of modes){

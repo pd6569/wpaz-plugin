@@ -172,8 +172,8 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
       <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="PackagesPane" />
     </panes>
   </component>
@@ -212,11 +212,12 @@
       <workItem from="1494232116788" duration="598000" />
       <workItem from="1494407281626" duration="598000" />
       <workItem from="1494423832113" duration="597000" />
+      <workItem from="1494449189437" duration="595000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2258000" />
+    <option name="totallyTimeSpent" value="2853000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -275,6 +276,14 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/js/3dnotes.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/js/3dnotes.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">

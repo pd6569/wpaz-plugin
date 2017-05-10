@@ -1946,7 +1946,10 @@ class AnatomyNotes {
 
         switch(action.action_type){
             case appGlobals.actionTypes.GENERAL:
-                
+
+                // Disable any modes
+                BaseModule.turnAllModesOff();
+
                 appObj.human.send('camera.set', {
                     position: JSON.parse(action.scene_state).camera.eye,
                     target: JSON.parse(action.scene_state).camera.look,
