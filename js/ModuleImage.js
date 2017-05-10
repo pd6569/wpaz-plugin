@@ -8,7 +8,8 @@ class ModuleImage extends BaseModule {
         console.log("init: " + this.moduleName);
 
         // Get module data
-        this.imgSrc = this.moduleData.imgSrc;
+        if (this.moduleData.imgSrc) this.imgSrc = this.moduleData.imgSrc;
+        if (this.moduleData.imgUrl) this.imgUrl = this.moduleData.imgUrl;
 
         /*** DOM references ***/
 
@@ -57,46 +58,73 @@ class ModuleImage extends BaseModule {
 
         // Create canvas
         this.fabricCanvas = new fabric.Canvas('imageCanvas', {
-            backgroundColor: 'rgb(255,255, 255)',
+            backgroundColor: 'rgb(255,255,255)',
         });
 
         // Set canvas defaults
         this.setCanvasDefaults();
 
-        // Set Image
-        let imgElement = new Image;
-        imgElement.src = this.imgSrc;
-
-        // Calculate ratio if image to viewport and set canvas zoom accordingly
-        let imgHeight = imgElement.height;
-        let imgWidth = imgElement.width;
-        this.imgDimensions = {
-            "width": imgWidth,
-            "height": imgHeight,
-        };
-        this.zoomToFit(imgHeight);
-
         // Create group
         this.group = new fabric.Group();
 
-        // Create fabric image
-        let imgInstance = new fabric.Image(imgElement, {});
-        /*imgInstance.selectable = false;*/
+        // Set Image
+        if (this.imgSrc){
+            console.log("set image from src");
+            let imgElement = new Image;
+            imgElement.src = this.imgSrc;
 
-        // Add image to group
-        this.group.addWithUpdate(imgInstance);
+            // Calculate ratio if image to viewport and set canvas zoom accordingly
+            let imgHeight = imgElement.height;
+            let imgWidth = imgElement.width;
+            this.imgDimensions = {
+                "width": imgWidth,
+                "height": imgHeight,
+            };
+            this.zoomToFit(imgHeight);
 
-        // Add image to canvas
-        this.fabricCanvas.add(this.group);
-        this.fabricCanvas.viewportCenterObject(this.group);
-        this.group.setCoords();
-        this.fabricCanvas.setActiveObject(this.group);
 
-        this.baseImage = imgInstance; // reference to uploaded image as fabric object
+            // Create fabric image
+            let imgInstance = new fabric.Image(imgElement, {});
+            /*imgInstance.selectable = false;*/
+
+            // Add image to group
+            this.group.addWithUpdate(imgInstance);
+
+            // Add image to canvas
+            this.fabricCanvas.add(this.group);
+            this.fabricCanvas.viewportCenterObject(this.group);
+            this.group.setCoords();
+            this.fabricCanvas.setActiveObject(this.group);
+
+            this.baseImage = imgInstance; // reference to uploaded image as fabric object
+        } else {
+            console.log("set fabric image from url: " + this.imgUrl);
+            fabric.Image.fromURL(this.imgUrl, (image) => {
+
+                let imgHeight = image.getHeight();
+                this.zoomToFit(imgHeight);
+
+                // Add image to group
+                this.group.addWithUpdate(image);
+
+                // Add image to canvas
+                this.fabricCanvas.add(this.group);
+                this.fabricCanvas.viewportCenterObject(this.group);
+                this.group.setCoords();
+                this.fabricCanvas.setActiveObject(this.group);
+            })
+        }
+
 
         this.fabricCanvas.on('object:added', (event) => {
             let object = event.target;
             /*object.selectable = false;*/
+
+
+            if (object === this.group){
+                console.log("group added, return");
+                return;
+            }
 
             // Clone the object, add to group, remove original object
             object.clone((newObject) => {
@@ -261,7 +289,6 @@ class ModuleImage extends BaseModule {
 
             saveImage: function (srcOnly){
                 console.log("saveImage");
-
 
                 let originalCanvasProperties = {
                     "width": self.fabricCanvas.getWidth(),

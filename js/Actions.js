@@ -6,17 +6,16 @@ class Action {
 
     /*****
      *
-     * @param note_id
-     * @param action_order
-     * @param action_type
-     * @param scene_state
-     * @param action_data Object.
-     *              Parameters:
-     *              type (required) - set using appGlobals.actionDataTypes.
-     *              rotationSpeed (optional)
-     *              imgSrc (optional) - base64 encoded image
-     *
-     * @param action_title
+     * @param   {int}       note_id
+     * @param   {int}       action_order
+     * @param   {string}    action_type
+     * @param   {object}    scene_state
+     * @param   {object}    action_data
+     * @param   {string}    action_data.type              - set using appGlobals.actionDataTypes
+     * @param   {number}    [action_data.rotationSpeed]
+     * @param   {string}    [action_data.imgSrc]          - temporary property to store base64 encoded image url
+     * @param   {string}    [action_data.imgUrl]           - URL to image
+     * @param   {string}    action_title
      */
     constructor(note_id, action_order, action_type, scene_state = "", action_data = {}, action_title = "New Action") {
 

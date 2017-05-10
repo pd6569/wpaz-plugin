@@ -762,19 +762,23 @@ class wp_az_3d_notes {
 		$attach_id = wp_az_save_image($img, $img_title, $img_desc, $img_caption, $post_id);
 
 		if ($attach_id) {
+			$attach_src_thumbnail = wp_get_attachment_image_src($attach_id, 'thumbnail')[0];
 			$attach_src_medium = wp_get_attachment_image_src($attach_id, 'medium')[0];
 			$attach_src_large = wp_get_attachment_image_src($attach_id, 'large')[0];
+			$attach_src_full = wp_get_attachment_image_src($attach_id, 'full')[0];
 
 			update_metadata ( 'post', $attach_id, '_az_note_id', $note_id);
 			update_metadata ( 'post', $attach_id, '_wp_attachment_image_alt', $img_alt);
 		}
 
 		wp_send_json(array(
-			'status'            => 'success',
-			'message'           => 'media updated. ',
-			'attachment_id'     => $attach_id,
-			'attachment_src_medium'    => $attach_src_medium,
-			'attachment_src_large'      => $attach_src_large
+			'status'                    => 'success',
+			'message'                   => 'media updated. ',
+			'attachment_id'             => $attach_id,
+			'attachment_thumbnail'      => $attach_src_thumbnail,
+			'attachment_src_medium'     => $attach_src_medium,
+			'attachment_src_large'      => $attach_src_large,
+			'attachment_src_full'       => $attach_src_full
 		));
 
 	}

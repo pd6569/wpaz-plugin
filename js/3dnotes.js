@@ -337,16 +337,18 @@ class AnatomyNotes {
 
     /********
      *
+     * Load modules (defined in appGlobals.modules)
      *
-     * @param moduleName {String} Module names as defined in appGlobals
-     * @param data {object} Data object with data to load module
-     *                      Image Module:
-     *                          imgSrc  {String} base64 string encoding image
+     * @param   {string}    moduleName          - Module names as defined in appGlobals
+     * @param   {object}    data                - Data object with data to load module
+     * @param   {string}    data.imgSrc         - base64 string encoding image
+     * @param   {string}    data.imgUrl         - URL for image
+     *
      */
+
     loadModule(moduleName, data) {
 
         let moduleToLoad;
-
 
         // Reload open module
 
@@ -356,7 +358,11 @@ class AnatomyNotes {
             switch(moduleName) {
 
                 case appGlobals.modules.IMAGE_MODULE:
-                    moduleToLoad.imgSrc = data.imgSrc;
+                    if (data.imgSrc){
+                        moduleToLoad.imgSrc = data.imgSrc;
+                    } else {
+                        moduleToLoad.imgUrl = data.imgUrl;
+                    }
                     moduleToLoad.enableModule();
                     break;
 
@@ -801,8 +807,6 @@ class AnatomyNotes {
                             })
                         } else {
 
-                            Utils.setNoteUpdateStatus("Saving image...");
-
                             self.saveImageToServer({
                                 'imgSrc': imgSrc,
                                 'imgTitle': imgTitle,
@@ -898,10 +902,40 @@ class AnatomyNotes {
                 console.log("No modal found for: ", modalType);
                 return false;
         }
+
     }
 
-    saveImageToServer(imageProperties, success, error) {
+
+    /****
+     *
+     * Callback used by saveImageToServer on success
+     *
+     * @callback imageSavedSuccessCallback
+     * @param       {object}    data                            - Data response from server
+     * @param       {string}    data.attachment_id              - attachment id
+     * @param       {string}    data.attachment_src_thumbnail   - url of thumbnail size image
+     * @param       {string}    data.attachment_src_medium      - url of medium size image
+     * @param       {string}    data.attachment_src_large       - url of large image
+     * @param       {string}    data.attachment_src_full        - url of full size image
+     */
+
+    /**
+     *
+     * @param       {object}            imageProperties                   - image Properties
+     * @param       {string}            imageProperties.imgSrc            - base64 encoded data url for image
+     * @param       {string}            imageProperties.imgTitle          - image title
+     * @param       {string}            imageProperties.imgDesc           - image description
+     * @param       {string}            imageProperties.imgCaption        - image caption
+     * @param       {string}            imageProperties.imgAlt            - image alt
+     * @param       {imageSavedSuccessCallback}   onSuccess               - callback run on success
+     * @param       {imageSavedErrorCallback}     onError                 - callback run on error
+     */
+
+    saveImageToServer(imageProperties, onSuccess, onError) {
         console.log("saveImageToServer", imageProperties);
+
+        Utils.setNoteUpdateStatus("Saving image...");
+
         jQuery.ajax({
             url: ajax_object.wp_az_ajax_url,
             data: {
@@ -909,26 +943,26 @@ class AnatomyNotes {
                 wp_az_3d_notes_nonce: ajax_object.wp_az_3d_notes_nonce,
                 wp_az_post_id: appGlobals.post_id,
                 wp_az_img_data: imageProperties['imgSrc'],
-                wp_az_img_title: imageProperties['imgTitle'],
-                wp_az_img_desc: imageProperties['imgDesc'],
-                wp_az_img_caption: imageProperties['imgCaption'],
-                wp_az_img_alt: imageProperties['imgAlt'],
+                wp_az_img_title: imageProperties['imgTitle'] || "",
+                wp_az_img_desc: imageProperties['imgDesc'] || "",
+                wp_az_img_caption: imageProperties['imgCaption'] || "",
+                wp_az_img_alt: imageProperties['imgAlt'] || "",
                 wp_az_note_id: appGlobals.currentNote.uid
             },
             error: function() {
                 console.log("Failed to save snapshot");
                 Utils.setNoteUpdateStatus("Failed to save snapshot", 3000);
 
-                if (error) {
-                    error();
+                if (onError) {
+                    onError();
                 }
             },
             success: function(data) {
-                console.log("Snapshot saved", data);
-                Utils.setNoteUpdateStatus("Snapshot saved", 3000);
+                console.log("Image saved", data);
+                Utils.setNoteUpdateStatus("Image saved", 3000);
 
-                if (success) {
-                    success(data);
+                if (onSuccess) {
+                    onSuccess(data);
                 }
 
             },
@@ -1718,6 +1752,15 @@ class AnatomyNotes {
             });
         } else if (actionType === appGlobals.actionTypes.IMAGE){
 
+            this.saveImageToServer({
+                imgSrc: actionData.imgSrc,
+            }, (data) => {
+                console.log("attachment urls: ", data);
+                delete action.action_data.imgSrc;
+                action.action_data.imgUrl = data.attachment_src_full;
+                console.log("action", action);
+            });
+
             setActionListener();
 
             if (callback) callback(action);
@@ -1925,7 +1968,9 @@ class AnatomyNotes {
 
             case appGlobals.actionTypes.IMAGE:
                 console.log("Load image into canvas");
-
+                this.loadModule(appGlobals.modules.IMAGE_MODULE, {
+                    'imgUrl': action.action_data['imgUrl']
+                });
                 appObj.setCurrentAction(action);
                 break;
 
