@@ -47,9 +47,9 @@ class ModuleImage extends BaseModule {
         this.fabricCanvas.remove(this.group);
         this.fabricCanvas.renderAll();
 
-        this.group = new fabric.Group();
+        this.group = new fabric.Group();*/
 
-        this.resetHistory();*/
+        this.resetHistory();
 
         // Set Image
         if (imageType === 'base64'){
@@ -69,7 +69,7 @@ class ModuleImage extends BaseModule {
 
             // Create fabric image
             let imgInstance = new fabric.Image(imgElement, {});
-            /*imgInstance.selectable = false;*/
+            imgInstance.selectable = false;
 
             // Add image to group
             this.group.addWithUpdate(imgInstance);
@@ -89,6 +89,10 @@ class ModuleImage extends BaseModule {
                 this.zoomToFit(imgHeight);
 
                 // Add image to group
+                if (this.group.getObjects().length > 0){
+                    console.log("ALREADY FUCKING ADDED IMAGE");
+                    return;
+                }
                 this.group.addWithUpdate(image);
 
                 // Add image to canvas
@@ -134,10 +138,6 @@ class ModuleImage extends BaseModule {
 
         // Create group to contain image and all annotataions/drawings
         this.group = new fabric.Group();
-
-        // Load image
-        this.loadImage(imageSrc, imageType);
-
         /*// Set Image
         if (this.rootImage.src){
             console.log("set image from src");
@@ -186,31 +186,14 @@ class ModuleImage extends BaseModule {
             })
         }*/
 
-
-        this.fabricCanvas.off();
-        this.fabricCanvas.on('object:added', (event) => {
-            let object = event.target;
-            /*object.selectable = false;*/
-
-            if (object === this.group){
-                console.log("group added, return");
-                return;
-            }
-
-            // Clone the object, add to group, remove original object
-            object.clone((newObject) => {
-                this.group.addWithUpdate(newObject);
-                this.fabricCanvas.remove(object);
-
-                this.fabricCanvas.setActiveObject(this.group);
-            })
-        });
-
         // Track history
         this.undoHistory = []; // array of fabric objects
 
         // Add listeners
         this.setListeners();
+
+        // Load image
+        this.loadImage(imageSrc, imageType);
     }
 
     resetHistory() {
@@ -378,11 +361,34 @@ class ModuleImage extends BaseModule {
     setListeners(){
         this.setWindowListeners();
         this.setToolbarListeners();
+        this.setCanvasListeners();
     }
 
     removeListeners(){
         jQuery(window).off();
         this.$toolbarButtons.off();
+    }
+
+    setCanvasListeners(){
+        this.fabricCanvas.off();
+        this.fabricCanvas.on('object:added', (event) => {
+            let object = event.target;
+            /*object.selectable = false;*/
+
+            if (object === this.group){
+                console.log("group added, return", object);
+                return;
+            }
+
+            // Clone the object, add to group, remove original object
+            object.clone((newObject) => {
+                this.group.addWithUpdate(newObject);
+                this.fabricCanvas.remove(object);
+
+                this.fabricCanvas.setActiveObject(this.group);
+            })
+        });
+
     }
 
     setWindowListeners(){
