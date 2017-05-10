@@ -341,8 +341,8 @@ class AnatomyNotes {
      *
      * @param   {string}    moduleName          - Module names as defined in appGlobals
      * @param   {object}    data                - Data object with data to load module
-     * @param   {string}    data.imgSrc         - base64 string encoding image
-     * @param   {string}    data.imgUrl         - URL for image
+     * @param   {string}    data.imgSrc         - base64 string encoding image or URL location of image
+     * @param   {string}    data.imgType        - URL for image. Options - "base64", "url"
      *
      */
 
@@ -358,12 +358,10 @@ class AnatomyNotes {
             switch(moduleName) {
 
                 case appGlobals.modules.IMAGE_MODULE:
-                    if (data.imgSrc){
-                        moduleToLoad.imgSrc = data.imgSrc;
-                    } else {
-                        moduleToLoad.imgUrl = data.imgUrl;
-                    }
+                    moduleToLoad.rootImage.src = data.imgSrc;
+                    moduleToLoad.rootImage.type = data.imgType;
                     moduleToLoad.enableModule();
+                    moduleToLoad.createCanvasWithImage();
                     break;
 
                 case appGlobals.modules.ANNOTATE_MODULE:
@@ -783,7 +781,8 @@ class AnatomyNotes {
                         self.$modalAlert.modal('hide');
                         Utils.resetModal();
                         self.loadModule(appGlobals.modules.IMAGE_MODULE, {
-                            imgSrc: imgSrc
+                            imgSrc: imgSrc,
+                            imgType: "base64"
                         })
                     });
 
@@ -804,6 +803,7 @@ class AnatomyNotes {
                         if (type === 'upload'){
                             self.loadModule(appGlobals.modules.IMAGE_MODULE, {
                                 imgSrc: imgSrc,
+                                imgType: "base64"
                             })
                         } else {
 
@@ -1969,7 +1969,8 @@ class AnatomyNotes {
             case appGlobals.actionTypes.IMAGE:
                 console.log("Load image into canvas");
                 this.loadModule(appGlobals.modules.IMAGE_MODULE, {
-                    'imgUrl': action.action_data['imgUrl']
+                    'imgSrc': action.action_data['imgUrl'],
+                    'imgType': "url"
                 });
                 appObj.setCurrentAction(action);
                 break;
