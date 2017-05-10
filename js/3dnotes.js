@@ -565,7 +565,7 @@ class AnatomyNotes {
                         if (appGlobals.mode.EDIT_IMAGE){
                             actionType = appGlobals.actionTypes.IMAGE;
                             actionData.type = appGlobals.actionDataTypes.STATIC_IMAGE;
-                            actionData.imgUrl = data.imgSrc;
+                            actionData.imgSrc = data.imgSrc;
                         } else {
                             actionType = appGlobals.actionTypes.GENERAL;
                         }
@@ -803,7 +803,38 @@ class AnatomyNotes {
 
                             Utils.setNoteUpdateStatus("Saving image...");
 
-                            // Save media to server and append
+                            self.saveImageToServer({
+                                'imgSrc': imgSrc,
+                                'imgTitle': imgTitle,
+                                'imgDesc': imgDesc,
+                                'imgCaption': imgCaption,
+                                'imgAlt': imgAlt,
+                            }, (data) => {
+
+                                let $updateNote = self.$notesTimelineContainer.find('#' + appGlobals.currentNote.uid);
+                                let $imageContainer = $updateNote.find('.note-image-container .row');
+
+                                let attachmentId = data['attachment_id'];
+                                let attachmentMedium = data['attachment_src_medium'];
+                                let attachmentLarge = data['attachment_src_large'];
+
+                                let $newImage = jQuery(
+                                    "<div class='col-md-4 col-sm-4 col-xs-6'>" +
+                                    "<div id='" + attachmentId + "'>" +
+                                    "<a rel='" + appGlobals.currentNote.uid + "' href='" + attachmentLarge + "' class='swipebox note-images' title='" + imgCaption + "'>" +
+                                    "<img src='" + attachmentMedium + "' alt='image' width='100%' height='100%'>" +
+                                    "</a>" +
+                                    "</div>" +
+                                    "</div>");
+                                $newImage.appendTo($imageContainer);
+
+                                // add toolbar
+                                $newImage.find('a.note-images').toolbar(self.toolbarOptions);
+                                self.setImgToolbarListeners($newImage.find('a.note-images'));
+
+                            });
+
+                            /*// Save media to server and append
                             let $updateNote = self.$notesTimelineContainer.find('#' + appGlobals.currentNote.uid);
                             let $imageContainer = $updateNote.find('.note-image-container .row');
 
@@ -849,7 +880,7 @@ class AnatomyNotes {
 
                                 },
                                 type: 'POST'
-                            });
+                            });*/
 
                         }
 
@@ -867,6 +898,42 @@ class AnatomyNotes {
                 console.log("No modal found for: ", modalType);
                 return false;
         }
+    }
+
+    saveImageToServer(imageProperties, success, error) {
+        console.log("saveImageToServer", imageProperties);
+        jQuery.ajax({
+            url: ajax_object.wp_az_ajax_url,
+            data: {
+                action: 'upload_snapshot',
+                wp_az_3d_notes_nonce: ajax_object.wp_az_3d_notes_nonce,
+                wp_az_post_id: appGlobals.post_id,
+                wp_az_img_data: imageProperties['imgSrc'],
+                wp_az_img_title: imageProperties['imgTitle'],
+                wp_az_img_desc: imageProperties['imgDesc'],
+                wp_az_img_caption: imageProperties['imgCaption'],
+                wp_az_img_alt: imageProperties['imgAlt'],
+                wp_az_note_id: appGlobals.currentNote.uid
+            },
+            error: function() {
+                console.log("Failed to save snapshot");
+                Utils.setNoteUpdateStatus("Failed to save snapshot", 3000);
+
+                if (error) {
+                    error();
+                }
+            },
+            success: function(data) {
+                console.log("Snapshot saved", data);
+                Utils.setNoteUpdateStatus("Snapshot saved", 3000);
+
+                if (success) {
+                    success(data);
+                }
+
+            },
+            type: 'POST'
+        });
     }
 
     /****

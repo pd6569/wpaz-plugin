@@ -389,7 +389,7 @@ class wp_az_3d_notes {
 		uid tinytext NOT NULL,
 		post_id mediumint(9) NOT NULL,
 		note_id tinytext NOT NULL,
-		action_order tinyint NOT NULL,
+		action_order tinyint,
 		action_type tinytext NOT NULL,
 		scene_state text,
 		action_data text,
@@ -397,14 +397,14 @@ class wp_az_3d_notes {
 		PRIMARY KEY  (id)
 		) $charset_collate;";
 
-		$sql .= "CREATE TABLE $table_notes_images (
+		/*$sql .= "CREATE TABLE $table_notes_images (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
 		uid tinytext NOT NULL,
 		post_id mediumint(9) NOT NULL,
 		note_id tinytext NOT NULL,
 		image_order tinyint NOT NULL,
 		image_url tinytext NOT NULL,	
-		) $charset_collate;";
+		) $charset_collate;";*/
 
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 		dbDelta( $sql );
@@ -480,6 +480,7 @@ class wp_az_3d_notes {
 		);
 
 		if ($actions && $actions_changed) {
+			error_log("num actions: " . sizeof($actions));
 			foreach ($actions as $action) {
 
 				$action_data = array (
@@ -493,6 +494,9 @@ class wp_az_3d_notes {
 					'action_title'  => $action['action_title']
 				);
 
+
+				error_log("action_data: " . print_r($action_data, TRUE));
+
 				$update = $wpdb->update(
 					$actions_table,
 					$action_data,
@@ -503,10 +507,12 @@ class wp_az_3d_notes {
 				);
 
 				if (!$update) {
-					$wpdb->insert(
+					$insert = $wpdb->insert(
 						$actions_table,
 						$action_data
 					);
+
+					error_log("updated: "  . $update . " inserted: " . $insert);
 				}
 
 				$actions_db_updated = true;
