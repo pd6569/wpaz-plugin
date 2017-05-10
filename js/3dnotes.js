@@ -276,10 +276,11 @@ class AnatomyNotes {
         this.$notesTimelineContainer.on('click', '.delete-note', (event) => { console.log("delete Note"); this.deleteNote(jQuery(event.target).closest('div.note-item').attr('id')) });
 
         // Text Linked Scenes
-        this.$editNoteContainer.on('click', '.linked-scene', (event) => {
+
+        /*this.$editNoteContainer.on('click', '.linked-scene', (event) => {
             console.log("linked scene, action id: " + jQuery(event.target).attr('data-action-id'));
             this.doActionById(jQuery(event.target).attr('data-action-id'));
-        });
+        });*/
         this.$textLinkedToScene.on('click', (event) => {
             this.doActionById(jQuery(event.target).attr('data-action-id'));
         });
@@ -361,7 +362,7 @@ class AnatomyNotes {
                     moduleToLoad.rootImage.src = data.imgSrc;
                     moduleToLoad.rootImage.type = data.imgType;
                     moduleToLoad.enableModule();
-                    moduleToLoad.createCanvasWithImage();
+                    moduleToLoad.loadImage();
                     break;
 
                 case appGlobals.modules.ANNOTATE_MODULE:

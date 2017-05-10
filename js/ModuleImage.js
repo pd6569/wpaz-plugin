@@ -32,22 +32,21 @@ class ModuleImage extends BaseModule {
         this.toggleModule();
 
         // Set up fabric canvas
-        this.createCanvasWithImage();
+        this.setupCanvas();
     }
 
     loadImage(imageSrc = this.rootImage.src, imageType = this.rootImage.type) {
 
-        console.log("loadImage");
+        console.log("loadImage. this.group: " + this.group.getObjects().length);
 
-        /*let objects = this.fabricCanvas.getObjects();
+        let objects = this.group.getObjects();
         for (let object of objects) {
-            this.fabricCanvas.remove(object);
+            this.group.remove(object);
         }
 
-        this.fabricCanvas.remove(this.group);
         this.fabricCanvas.renderAll();
 
-        this.group = new fabric.Group();*/
+        console.log("this.group: " + this.group.getObjects().length);
 
         this.resetHistory();
 
@@ -124,8 +123,8 @@ class ModuleImage extends BaseModule {
         }
     }
 
-    createCanvasWithImage(imageSrc, imageType) {
-        console.log("cretaeCanvasWithImage");
+    setupCanvas(imageSrc, imageType) {
+        console.log("setupCanvas");
 
         // Show canvas
         this.$imageCanvas.show();
