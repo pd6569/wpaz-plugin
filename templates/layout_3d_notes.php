@@ -158,7 +158,10 @@
 
                         <!-- START EDITOR MODE -->
 
-                        <div id="drawing-mode-options" class="hidden">
+	                    <?php if ( $user_is_editor && !is_page($wp_az_3d_body_id)) : ?>
+
+                        <!-- START ADMIN/EDITOR INTERFACE -->
+                        <div id="drawing-mode-options" class="hidden wpaz-editor">
                             <div id="drawing-options-top-panel">
                                 <span class="drawing-options-title text-center">
                                     Drawing Options
@@ -214,7 +217,8 @@
 
                         </div>
 
-                        <div id="wpaz-image-editor-toolbar" class="hidden">
+
+                        <div id="wpaz-image-editor-toolbar" class="hidden wpaz-editor">
 
                             <div class="btn-group" role="group" aria-label="...">
                                 <button type="button" class="btn btn-default image-editor-toolbar" data-toolbar-action="add-image">
@@ -255,8 +259,31 @@
                                 </button>
                             </div>
 
+                        </div>
+
+                        <!-- END ADMIN/EDITOR INTERFACE -->
+
+	                    <?php else : ?>
+
+                        <!-- START USER INTERFACE -->
+                        <div id="wpaz-image-editor-toolbar" class="hidden wpaz-user">
+
+                            <div class="btn-group" role="group" aria-label="...">
+                                <button type="button" class="btn btn-default image-editor-toolbar" data-toolbar-action="center-image">
+                                    <span class="glyphicon glyphicon-align-center" aria-hidden="true"></span>
+                                </button>
+                                <button type="button" class="btn btn-default image-editor-toolbar" data-toolbar-action="zoom-in">
+                                    <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
+                                </button>
+                                <button type="button" class="btn btn-default image-editor-toolbar" data-toolbar-action="zoom-out">
+                                    <span class="glyphicon glyphicon-zoom-out" aria-hidden="true"></span>
+                                </button>
+                            </div>
 
                         </div>
+                        <!-- END USER INTERFACE -->
+
+                        <?php endif ?>
 
                         <!-- END EDITOR MODE -->
 
