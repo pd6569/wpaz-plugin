@@ -37,9 +37,6 @@ class ModuleImage extends BaseModule {
         this.enableModule();
     }
 
-
-
-    //TODO: CLEAN UP METHOD
     loadImage(imageSrc = this.rootImage.src, imageType = this.rootImage.type) {
 
         /*let objects = this.group.getObjects();
@@ -52,6 +49,8 @@ class ModuleImage extends BaseModule {
         }
         console.log("objects.length after: " + this.group.getObjects().length);*/
 
+        let self = this;
+
         this.fabricCanvas.remove(this.group);
         this.fabricCanvas.renderAll();
 
@@ -59,33 +58,34 @@ class ModuleImage extends BaseModule {
 
         this.resetHistory();
 
+        // Fabric image
+        let imageToLoad;
+
         // Set Image
         if (imageType === 'base64'){
             let imgElement = new Image;
             imgElement.src = imageSrc;
 
-            // Calculate ratio if image to viewport and set canvas zoom accordingly
+            /*// Calculate ratio if image to viewport and set canvas zoom accordingly
             let imgHeight = imgElement.height;
             let imgWidth = imgElement.width;
             this.imgDimensions = {
                 "width": imgWidth,
                 "height": imgHeight,
             };
-            this.zoomToFit(imgHeight);
-
+            this.zoomToFit(imgHeight);*/
 
             // Create fabric image
-            let imgInstance = new fabric.Image(imgElement, {});
+            imageToLoad = new fabric.Image(imgElement, {});
+
+            addImage();
+
+            /*// Create fabric image
+            imageToLoad = new fabric.Image(imgElement, {});
 
             // Add image to group
 
-            this.group.addWithUpdate(imgInstance);
-
-            /*if (!this.app.userIsEditor){
-                imgInstance.selectable = false;
-                imgInstance.hasBorders = false;
-                imgInstance.hasControls = false;
-            }*/
+            this.group.addWithUpdate(imageToLoad);
 
             // Add image to canvas
             this.fabricCanvas.add(this.group);
@@ -93,27 +93,23 @@ class ModuleImage extends BaseModule {
             this.group.setCoords();
             this.fabricCanvas.setActiveObject(this.group);
 
-            this.fabricRootImage = imgInstance; // reference to uploaded image as fabric object
+            this.fabricRootImage = imageToLoad; // reference to uploaded image as fabric object*/
         } else {
             fabric.Image.fromURL(imageSrc, (image) => {
 
-                let imgHeight = image.getHeight();
-                this.zoomToFit(imgHeight);
-
-                // Add image to group
+                // Prevent duplicate images
                 if (this.group.getObjects().length > 0){
                     console.log("Image already added, return");
                     return;
                 }
 
+                // Set image and add
+                imageToLoad = image;
+                addImage();
+
+                /*imageToLoad = image;
+
                 this.group.addWithUpdate(image);
-
-                /*if (!this.app.userIsEditor){
-                    image.selectable = false;
-                    image.hasBorders = false;
-                    image.hasControls = false;
-                }*/
-
 
                 // Add image to canvas
                 this.fabricCanvas.add(this.group);
@@ -121,9 +117,29 @@ class ModuleImage extends BaseModule {
                 this.group.setCoords();
                 this.fabricCanvas.setActiveObject(this.group);
 
-                this.fabricRootImage = image;
+                this.fabricRootImage = imageToLoad;*/
             })
         }
+
+        function addImage() {
+
+            let imgHeight = imageToLoad.getHeight();
+            self.zoomToFit(imgHeight);
+
+
+            // Add image to group
+            self.group.addWithUpdate(imageToLoad);
+
+            // Add image to canvas
+            self.fabricCanvas.add(self.group);
+            self.fabricCanvas.viewportCenterObject(self.group);
+            self.group.setCoords();
+            self.fabricCanvas.setActiveObject(self.group);
+
+            self.fabricRootImage = imageToLoad; // reference to uploaded image as fabric object
+
+        }
+
 
     }
 
