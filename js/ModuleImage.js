@@ -37,9 +37,8 @@ class ModuleImage extends BaseModule {
         this.enableModule();
     }
 
+    //TODO: CLEAN UP METHOD
     loadImage(imageSrc = this.rootImage.src, imageType = this.rootImage.type) {
-
-        console.log("loadImage. this.group: " + this.group.getObjects().length);
 
         let objects = this.group.getObjects();
         for (let object of objects) {
@@ -48,13 +47,10 @@ class ModuleImage extends BaseModule {
 
         this.fabricCanvas.renderAll();
 
-        console.log("this.group: " + this.group.getObjects().length);
-
         this.resetHistory();
 
         // Set Image
         if (imageType === 'base64'){
-            console.log("set image from base64");
             let imgElement = new Image;
             imgElement.src = imageSrc;
 
@@ -83,7 +79,6 @@ class ModuleImage extends BaseModule {
 
             this.fabricRootImage = imgInstance; // reference to uploaded image as fabric object
         } else {
-            console.log("set fabric image from url: " + imageSrc);
             fabric.Image.fromURL(imageSrc, (image) => {
 
                 let imgHeight = image.getHeight();
@@ -91,7 +86,7 @@ class ModuleImage extends BaseModule {
 
                 // Add image to group
                 if (this.group.getObjects().length > 0){
-                    console.log("ALREADY FUCKING ADDED IMAGE");
+                    console.log("Image already added, return");
                     return;
                 }
                 this.group.addWithUpdate(image);
@@ -404,9 +399,7 @@ class ModuleImage extends BaseModule {
 
         function resizeCanvas(){
             if (appGlobals.mode.EDIT_IMAGE){
-                console.log("resize fabric canvas");
                 fabricCanvas.setWidth(app.$humanWidget.width());
-                self.doToolbarAction('center-image');
             }
         }
 
@@ -417,9 +410,7 @@ class ModuleImage extends BaseModule {
 
     resizeCanvas() {
         if (appGlobals.mode.EDIT_IMAGE){
-            console.log("resize fabric canvas");
             this.fabricCanvas.setWidth(this.app.$humanWidget.width());
-            this.doToolbarAction('center-image');
         }
     }
 
@@ -468,7 +459,6 @@ class ModuleImage extends BaseModule {
                 let objects = self.group.getObjects();
                 if (objects.length > 1){
                     let objectToRemove = objects[objects.length - 1];
-                    console.log("objectToRemove: ", objectToRemove);
                     self.group.remove(objectToRemove);
 
                     // add to history
@@ -544,8 +534,6 @@ class ModuleImage extends BaseModule {
                 });
 
                 function restoreCanvas(originalCanvasProperties) {
-                    console.log("originalCanvasProps: ", originalCanvasProperties);
-
                     self.fabricCanvas.setWidth(originalCanvasProperties.width);
                     self.fabricCanvas.setHeight(originalCanvasProperties.height);
                     self.fabricCanvas.setZoom(originalCanvasProperties.zoom);
@@ -601,10 +589,8 @@ class ModuleImage extends BaseModule {
                         let width = parseInt($drawingLineWidth.text());
                         if (action === 'increase-width') {
                             width++;
-                            console.log("width: " + width);
                         } else {
                             if (width > 1) width--;
-                            console.log("width: " + width);
                         }
                         $drawingLineWidth.text(width);
                         self.fabricCanvas.freeDrawingBrush.width = width;
@@ -654,7 +640,6 @@ class ModuleImage extends BaseModule {
         switch (toolbarAction) {
 
             case 'add-image':
-                console.log("do action: " + toolbarAction);
                 break;
 
             case 'undo':
@@ -678,37 +663,29 @@ class ModuleImage extends BaseModule {
                 break;
 
             case 'draw':
-                console.log("do action: " + toolbarAction);
                 toolbarActions.drawMode(true);
                 break;
 
             case 'add-text':
-                console.log("do action: " + toolbarAction);
                 break;
 
             case 'text-size':
-                console.log("do action: " + toolbarAction);
                 break;
 
             case 'text-colour':
-                console.log("do action: " + toolbarAction);
                 break;
 
             case 'save':
-                console.log("do action: " + toolbarAction);
                 toolbarActions.saveImage();
                 break;
 
             case 'exit':
-                console.log("do action: " + toolbarAction);
                 break;
 
             case 'get-all':
-                console.log("return all actions");
                 return toolbarActions;
 
             default:
-                console.log("No action selected");
                 break;
         }
 

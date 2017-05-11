@@ -238,17 +238,22 @@ class AnatomyNotes {
             // add dynamic listener in editor to link scenes to text
             this.$editorBody.on('click', '.linked-scene', (event) => {
                 console.log("linked scene clicked in editor");
+                if (event.ctrlKey){
+                    console.log("ctrlkey");
+                }
                 let appObj = this;
                 let $editLink = jQuery(event.target);
                 let linkText = $editLink.text();
                 let actionId = $editLink.attr('data-action-id');
                 this.doActionById(actionId);
 
-                this.showModal('edit_action', {
-                    actionText: linkText,
-                    newAction: false,
-                    actionId: actionId
-                });
+                if (!event.ctrlKey) {
+                    this.showModal('edit_action', {
+                        actionText: linkText,
+                        newAction: false,
+                        actionId: actionId
+                    });
+                }
 
             });
 
@@ -482,8 +487,6 @@ class AnatomyNotes {
                     body: "Current scene will be linked to text '" + data.actionText + "'"
                 });
 
-                console.log("action modal data: ", data);
-
                 // Data
                 let actionData = {};
                 let actionObj;
@@ -530,7 +533,6 @@ class AnatomyNotes {
                     });
 
                     // Get existing action data
-                    console.log("Action associated with this data", Action.getActionById(data.actionId));
                     actionObj = Action.getActionById(data.actionId);
                     actionData = actionObj.action_data;
 
