@@ -40,12 +40,20 @@ class ModuleImage extends BaseModule {
     //TODO: CLEAN UP METHOD
     loadImage(imageSrc = this.rootImage.src, imageType = this.rootImage.type) {
 
-        let objects = this.group.getObjects();
-        for (let object of objects) {
+        /*let objects = this.group.getObjects();
+        console.log("objects.length before: " + objects.length);
+        /!*for (let object of objects) {
             this.group.remove(object);
+        }*!/
+        for (let i = 0; i < objects.length ; i++){
+            this.group.remove(objects[i]);
         }
+        console.log("objects.length after: " + this.group.getObjects().length);*/
 
+        this.fabricCanvas.remove(this.group);
         this.fabricCanvas.renderAll();
+
+        this.group = new fabric.Group();
 
         this.resetHistory();
 
@@ -66,10 +74,12 @@ class ModuleImage extends BaseModule {
 
             // Create fabric image
             let imgInstance = new fabric.Image(imgElement, {});
-            imgInstance.selectable = false;
 
             // Add image to group
+
+            imgInstance.selectable = false;
             this.group.addWithUpdate(imgInstance);
+
 
             // Add image to canvas
             this.fabricCanvas.add(this.group);
@@ -89,7 +99,10 @@ class ModuleImage extends BaseModule {
                     console.log("Image already added, return");
                     return;
                 }
+
+                image.selectable = false;
                 this.group.addWithUpdate(image);
+
 
                 // Add image to canvas
                 this.fabricCanvas.add(this.group);
@@ -137,6 +150,8 @@ class ModuleImage extends BaseModule {
 
         // Create group to contain image and all annotataions/drawings
         this.group = new fabric.Group();
+
+        if (!this.app.userIsEditor) this.group.selectable = false;
         /*// Set Image
         if (this.rootImage.src){
             console.log("set image from src");
