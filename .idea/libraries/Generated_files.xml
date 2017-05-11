@@ -1,0 +1,21 @@
+<component name="libraryTable">
+  <library name="Generated files" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/../../../dist/wp-content/plugins/wpaz-plugin/js/ModuleImage.js" />
+        <item url="file://$PROJECT_DIR$/../../../dist/wp-content/plugins/wpaz-plugin/js/Utils.js" />
+        <item url="file://$PROJECT_DIR$/../../../dist/wp-content/plugins/wpaz-plugin/js/globals.js" />
+        <item url="file://$PROJECT_DIR$/../../../dist/wp-content/plugins/wpaz-plugin/js/3dnotes.js" />
+        <item url="file://$PROJECT_DIR$/../../../dist/wp-content/plugins/wpaz-plugin/js/Actions.js" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../../../dist/wp-content/plugins/wpaz-plugin/js/ModuleImage.js" />
+      <root url="file://$PROJECT_DIR$/../../../dist/wp-content/plugins/wpaz-plugin/js/Utils.js" />
+      <root url="file://$PROJECT_DIR$/../../../dist/wp-content/plugins/wpaz-plugin/js/globals.js" />
+      <root url="file://$PROJECT_DIR$/../../../dist/wp-content/plugins/wpaz-plugin/js/3dnotes.js" />
+      <root url="file://$PROJECT_DIR$/../../../dist/wp-content/plugins/wpaz-plugin/js/Actions.js" />
+    </CLASSES>
+    <SOURCES />
+  </library>
+</component>
