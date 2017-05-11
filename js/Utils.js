@@ -2,9 +2,11 @@
  * Created by peter on 25/03/2017.
  */
 
+import appGlobals from './globals';
+
 "use strict";
 
-class Utils {
+export default class Utils {
 
     constructor () {
 

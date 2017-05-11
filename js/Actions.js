@@ -3,7 +3,10 @@
  */
 "use strict";
 
-class Action {
+import appGlobals from './globals';
+import Utils from './Utils';
+
+export default class Action {
 
     /*****
      *
@@ -15,7 +18,7 @@ class Action {
      * @param   {string}    action_data.type              - set using appGlobals.actionDataTypes
      * @param   {number}    [action_data.rotationSpeed]
      * @param   {string}    [action_data.imgSrc]          - temporary property to store base64 encoded image url
-     * @param   {string}    [action_data.imgUrl]           - URL to image
+     * @param   {string}    [action_data.imgUrl]          - URL to image
      * @param   {string}    action_title
      */
     constructor(note_id, action_order, action_type, scene_state = "", action_data = {}, action_title = "New Action") {

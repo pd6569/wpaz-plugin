@@ -4,6 +4,17 @@
 
 "use strict";
 
+import appGlobals from './globals';
+import Utils from './Utils';
+import BaseModule from './BaseModule';
+import ModuleImage from './ModuleImage';
+import ModuleAnnotate from './ModuleAnnotate';
+import MyNotes from './MyNotes';
+import Action from './Actions';
+import Note from './Note';
+
+
+
 class AnatomyNotes {
 
     constructor() {
@@ -2109,7 +2120,7 @@ class AnatomyNotes {
                 setTimeout(() => {
                     this.$modalAlert.modal('show');
                 }, 500);
-                callback();
+                if (callback) callback();
             });
             return;
         }
@@ -2217,8 +2228,9 @@ class AnatomyNotes {
 
     /***
      *
-     * Private function. Displays the options for a selected action.
+     * Private function used by action modal. Displays the options for a selected action.
      *
+     * @private
      * @param   {string}    dataActionSelected  - Data action type as specified in appGlobls.actionDataTypes
      * @param   {object}    actionData          - Object containing action data
      */
@@ -2290,7 +2302,10 @@ class AnatomyNotes {
      * If image is snapshot from 3D model - uploads to server and appends image to note.
      * If image is uploaded OR "edit image" button is clicked - load image editor module.
      *
-     * @param
+     * @param {object} imgProps             - Object containing image properties
+     * @param {string} imgProps.title       - Title of image
+     * @param {string} imgProps.fileType    - Type of file 'upload' or 'snapshot'
+     * @param {string} imgProps.imgSource   - Img src as base64 encoded string
      */
     _loadImgProperties(imgProps, callback) {
 

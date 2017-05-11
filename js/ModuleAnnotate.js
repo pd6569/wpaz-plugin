@@ -3,7 +3,10 @@
  */
 "use strict";
 
-class ModuleAnnotate extends BaseModule {
+import appGlobals from './globals';
+import BaseModule from './BaseModule';
+
+export default class ModuleAnnotate extends BaseModule {
 
     init(){
         console.log("init");
@@ -120,7 +123,7 @@ class ModuleAnnotate extends BaseModule {
 
                 })
             });
-        }
+        };
 
         let resizeCanvas = function(){
             if (appGlobals.mode.ANNOTATE){
@@ -128,7 +131,7 @@ class ModuleAnnotate extends BaseModule {
                 annotationCanvas.width = app.$humanWidget.width();
                 annotationCanvas.height = app.$humanWidget.height();
             }
-        }
+        };
 
         this.annotationCanvas.addEventListener('click', createAnnotation);
 

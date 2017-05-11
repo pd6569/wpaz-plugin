@@ -4,7 +4,7 @@
 
 "use strict";
 
-let appGlobals = {
+export default {
 
         // app data
         appRef: {},

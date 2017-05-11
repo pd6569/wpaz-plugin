@@ -4,7 +4,10 @@
 
 "use strict";
 
-class ModuleImage extends BaseModule {
+import appGlobals from './globals';
+import BaseModule from './BaseModule';
+
+export default class ModuleImage extends BaseModule {
 
     init() {
         console.log("init: " + this.moduleName);

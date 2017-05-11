@@ -4,7 +4,10 @@
 
 "use strict";
 
-class MyNotes {
+import appGlobals from './globals';
+import Utils from './Utils';
+
+export default class MyNotes {
 
     constructor (){
         console.log("MyNotes module created");

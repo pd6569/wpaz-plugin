@@ -4,7 +4,9 @@
 
 "use strict";
 
-class BaseModule {
+import appGlobals from './globals';
+
+export default class BaseModule {
     
     constructor(moduleName, moduleData = {}){
 

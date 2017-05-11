@@ -4,7 +4,11 @@
 
 "use strict";
 
-class Note {
+import appGlobals from './globals';
+import Utils from './Utils';
+
+
+export default class Note {
 
     constructor (sequence, title, note_content, scene_state, uid, load_url) {
 
