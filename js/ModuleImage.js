@@ -37,6 +37,8 @@ class ModuleImage extends BaseModule {
         this.enableModule();
     }
 
+
+
     //TODO: CLEAN UP METHOD
     loadImage(imageSrc = this.rootImage.src, imageType = this.rootImage.type) {
 
@@ -53,7 +55,7 @@ class ModuleImage extends BaseModule {
         this.fabricCanvas.remove(this.group);
         this.fabricCanvas.renderAll();
 
-        this.group = new fabric.Group();
+        this.createGroup();
 
         this.resetHistory();
 
@@ -77,9 +79,13 @@ class ModuleImage extends BaseModule {
 
             // Add image to group
 
-            imgInstance.selectable = false;
             this.group.addWithUpdate(imgInstance);
 
+            /*if (!this.app.userIsEditor){
+                imgInstance.selectable = false;
+                imgInstance.hasBorders = false;
+                imgInstance.hasControls = false;
+            }*/
 
             // Add image to canvas
             this.fabricCanvas.add(this.group);
@@ -100,8 +106,13 @@ class ModuleImage extends BaseModule {
                     return;
                 }
 
-                image.selectable = false;
                 this.group.addWithUpdate(image);
+
+                /*if (!this.app.userIsEditor){
+                    image.selectable = false;
+                    image.hasBorders = false;
+                    image.hasControls = false;
+                }*/
 
 
                 // Add image to canvas
@@ -149,9 +160,8 @@ class ModuleImage extends BaseModule {
         this.createCanvas();
 
         // Create group to contain image and all annotataions/drawings
-        this.group = new fabric.Group();
+        this.createGroup();
 
-        if (!this.app.userIsEditor) this.group.selectable = false;
         /*// Set Image
         if (this.rootImage.src){
             console.log("set image from src");
@@ -208,6 +218,15 @@ class ModuleImage extends BaseModule {
 
         // Load image
         this.loadImage(imageSrc, imageType);
+    }
+
+    createGroup(){
+        this.group = new fabric.Group();
+
+        if (!this.app.userIsEditor) {
+            this.group.hasBorders = false;
+            this.group.hasControls = false;
+        }
     }
 
     resetHistory() {
