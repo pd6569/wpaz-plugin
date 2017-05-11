@@ -408,7 +408,6 @@ class ModuleImage extends BaseModule {
         this.fabricCanvas.off();
         this.fabricCanvas.on('object:added', (event) => {
             let object = event.target;
-            /*object.selectable = false;*/
 
             if (object === this.group){
                 console.log("group added, return", object);
@@ -434,6 +433,7 @@ class ModuleImage extends BaseModule {
         function resizeCanvas(){
             if (appGlobals.mode.EDIT_IMAGE){
                 fabricCanvas.setWidth(app.$humanWidget.width());
+                self.toolbarActions.centerImage();
             }
         }
 
@@ -445,6 +445,7 @@ class ModuleImage extends BaseModule {
     resizeCanvas() {
         if (appGlobals.mode.EDIT_IMAGE){
             this.fabricCanvas.setWidth(this.app.$humanWidget.width());
+            this.toolbarActions.centerImage();
         }
     }
 
@@ -487,7 +488,7 @@ class ModuleImage extends BaseModule {
 
         let self = this;
 
-        let toolbarActions = {
+        this.toolbarActions = {
             undo: function(){
                 console.log("undo");
                 let objects = self.group.getObjects();
@@ -528,30 +529,6 @@ class ModuleImage extends BaseModule {
                 self.group.left = 0;
                 self.fabricCanvas.setZoom(1);
 
-
-                /*if (objects.length > 1){
-                 console.log("Create object group: " + objects.length);
-
-                 group = new fabric.Group();
-                 self.fabricCanvas.forEachObject((object, index) => {
-                 group.addWithUpdate(object);
-                 });
-
-                 self.fabricCanvas.setActiveGroup(group);
-                 self.fabricCanvas.add(group);
-
-                 console.log("group width: " + group.getWidth() + " group height: " + group.getHeight());
-
-                 self.fabricCanvas.setDimensions({
-                 "width": group.getWidth(),
-                 "height": group.getHeight(),
-                 });
-                 group.top = 0;
-                 group.left = 0;
-                 self.fabricCanvas.setZoom(1);
-
-                 }
-                 */
                 let imgSrc = self.fabricCanvas.toDataURL({
                     format: "jpeg",
                 });
@@ -677,27 +654,27 @@ class ModuleImage extends BaseModule {
                 break;
 
             case 'undo':
-                toolbarActions.undo();
+                this.toolbarActions.undo();
                 break;
 
             case 'redo':
-                toolbarActions.redo();
+                this.toolbarActions.redo();
                 break;
 
             case 'center-image':
-                toolbarActions.centerImage();
+                this.toolbarActions.centerImage();
                 break;
 
             case 'zoom-in':
-                toolbarActions.zoomCanvas(true);
+                this.toolbarActions.zoomCanvas(true);
                 break;
 
             case 'zoom-out':
-                toolbarActions.zoomCanvas(false);
+                this.toolbarActions.zoomCanvas(false);
                 break;
 
             case 'draw':
-                toolbarActions.drawMode(true);
+                this.toolbarActions.drawMode(true);
                 break;
 
             case 'add-text':
@@ -710,14 +687,14 @@ class ModuleImage extends BaseModule {
                 break;
 
             case 'save':
-                toolbarActions.saveImage();
+                this.toolbarActions.saveImage();
                 break;
 
             case 'exit':
                 break;
 
             case 'get-all':
-                return toolbarActions;
+                return this.toolbarActions;
 
             default:
                 break;
