@@ -14,7 +14,6 @@ import Action from './Actions';
 import Note from './Note';
 
 
-
 class AnatomyNotes {
 
     constructor() {
@@ -238,15 +237,15 @@ class AnatomyNotes {
 
             console.log("tinyMCE ready");
 
-            //TODO: CHANGE $noteEditor to noteEditor - it is not a jquery element!
-            this.$noteEditor = editor;
+            //TODO: CHANGE noteEditor to noteEditor - it is not a jquery element!
+            this.noteEditor = editor;
 
-            this.$noteEditor.on('KeyUp', (e) => {
+            this.noteEditor.on('KeyUp', (e) => {
                 console.log("KeyUp");
                 this.changesMade = true;
             });
 
-            this.$editorBody = jQuery(this.$noteEditor.getBody());
+            this.$editorBody = jQuery(this.noteEditor.getBody());
 
             // add dynamic listener in editor to link scenes to text
             this.$editorBody.on('click', '.linked-scene', (event) => {
@@ -277,7 +276,7 @@ class AnatomyNotes {
 
 
         // Actions
-        this.$addAction.on('click', (event) => { this.addAction(); });
+        this.$addAction.on('click', (event) => { this.linkTextToScene(); });
         this.$nextAction.on('click', (event) => { this.navigateActions('next')});
         this.$previousAction.on('click', (event) => { this.navigateActions('previous')});
         this.$clearActions.on('click', () => { this.clearActions(appGlobals.currentNote.uid); });
@@ -287,7 +286,7 @@ class AnatomyNotes {
         this.$toolbarReset.on('click', event => { this.human.send("scene.restore", JSON.parse(appGlobals.currentNote.scene_state)); });
 
         // Save/Add new
-        this.$saveBtn.on('click', (event) => { this.saveNotes(this.$noteTitle.val(), this.$noteEditor.getContent()); });
+        this.$saveBtn.on('click', (event) => { this.saveNotes(this.$noteTitle.val(), this.noteEditor.getContent()); });
         this.$addNewNotesSection.on('click', (event) => { this.addNoteSection(); });
         this.$deleteNoteBtn.on('click', (event) => { this.deleteNote(); });
 
@@ -544,7 +543,7 @@ class AnatomyNotes {
                         let $removeLink = this.$editorBody.find(`span[data-action-id='${data.actionId}']`);
                         $removeLink.remove();
 
-                        this.$noteEditor.execCommand( 'mceInsertContent', true, data.actionText);
+                        this.noteEditor.execCommand( 'mceInsertContent', true, data.actionText);
 
                         this.$modalAlert.modal('hide');
                         Utils.resetModal();
@@ -600,7 +599,7 @@ class AnatomyNotes {
                                 "<span class='linked-scene' data-action-id='" + action.uid + "'>" +
                                 data.actionText +
                                 "</span>";
-                            this.$noteEditor.execCommand( 'mceInsertContent', true, linkedText);
+                            this.noteEditor.execCommand( 'mceInsertContent', true, linkedText);
                         }, actionType);
                     } else {
                         console.log("Function to update actions...");
@@ -1051,7 +1050,7 @@ class AnatomyNotes {
         console.log("clearActiveNotes");
 
         // save notes first
-        this.saveNotes(this.$noteTitle.val(), this.$noteEditor.getContent());
+        this.saveNotes(this.$noteTitle.val(), this.noteEditor.getContent());
 
         // Delete all data
         Utils.resetAppState();
@@ -1471,7 +1470,7 @@ class AnatomyNotes {
             console.log("context is dashboard and notes have not yet been saved");
             this.createPostInDb("New Notes", () => {
                 this.firstSave = false;
-                this.saveNotes(this.$noteTitle.val(), this.$noteEditor.getContent());
+                this.saveNotes(this.$noteTitle.val(), this.noteEditor.getContent());
             });
             return;
         }
@@ -1657,7 +1656,7 @@ class AnatomyNotes {
 
         // save current note first if changes made
         if (this.userIsEditor && this.changesMade == true || this.actionsChanged) {
-            this.saveNotes($title.val(), this.$noteEditor.getContent());
+            this.saveNotes($title.val(), this.noteEditor.getContent());
         }
 
         // reset tracking variables
@@ -1671,7 +1670,7 @@ class AnatomyNotes {
         // update title and content
         if (this.userIsEditor) {
             $title.val(note.title);
-            this.$noteEditor.setContent(note.note_content);
+            this.noteEditor.setContent(note.note_content);
         } else {
             $title.text(note.title);
             $content.html(note.note_content);
@@ -1707,10 +1706,10 @@ class AnatomyNotes {
         if (!this.userIsEditor) {console.log("Nice try..."); return};
 
         // save current notes first
-        this.saveNotes(this.$noteTitle.val(), this.$noteEditor.getContent());
+        this.saveNotes(this.$noteTitle.val(), this.noteEditor.getContent());
 
         this.$noteTitle.val("");
-        this.$noteEditor.setContent("");
+        this.noteEditor.setContent("");
 
         let sequence = (parseInt(appGlobals.numNotes) + 1);
         let addNote = new Note(sequence, "", "", "");
@@ -1734,6 +1733,26 @@ class AnatomyNotes {
     
 
     // ACTIONS
+
+    linkTextToScene(){
+        console.log("Link this text to an action");
+
+        let text = this.noteEditor.selection.getContent();
+        let imgSrc;
+
+        if (appGlobals.mode.EDIT_IMAGE) {
+            let imageModule = appGlobals.modulesLoaded[appGlobals.modules.IMAGE_MODULE];
+            if (imageModule) {
+                imgSrc = imageModule.doToolbarAction('get-all').saveImage(true);
+            }
+        }
+
+        appGlobals.appRef.showModal('edit_action', {
+            actionText: text,
+            newAction: true,
+            imgSrc: imgSrc
+        });
+    }
 
     updateActionLabel(){
         this.actionsChanged = true;
