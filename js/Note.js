@@ -2,6 +2,8 @@
  * Created by peter on 25/03/2017.
  */
 
+"use strict";
+
 class Note {
 
     constructor (sequence, title, note_content, scene_state, uid, load_url) {

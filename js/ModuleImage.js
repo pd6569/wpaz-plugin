@@ -2,6 +2,8 @@
  * Created by peter on 03/05/2017.
  */
 
+"use strict";
+
 class ModuleImage extends BaseModule {
 
     init() {
@@ -78,7 +80,7 @@ class ModuleImage extends BaseModule {
             // Create fabric image
             imageToLoad = new fabric.Image(imgElement, {});
 
-            addImage();
+            this.addImage(imageToLoad);
 
             /*// Create fabric image
             imageToLoad = new fabric.Image(imgElement, {});
@@ -103,9 +105,8 @@ class ModuleImage extends BaseModule {
                     return;
                 }
 
-                // Set image and add
-                imageToLoad = image;
-                addImage();
+                // Add image
+                this.addImage(image);
 
                 /*imageToLoad = image;
 
@@ -121,27 +122,28 @@ class ModuleImage extends BaseModule {
             })
         }
 
-        function addImage() {
+    }
 
-            let imgHeight = imageToLoad.getHeight();
-            self.zoomToFit(imgHeight);
+    addImage(imageToLoad) {
+
+        let imgHeight = imageToLoad.getHeight();
+        this.zoomToFit(imgHeight);
 
 
-            // Add image to group
-            self.group.addWithUpdate(imageToLoad);
+        // Add image to group
+        this.group.addWithUpdate(imageToLoad);
 
-            // Add image to canvas
-            self.fabricCanvas.add(self.group);
-            self.fabricCanvas.viewportCenterObject(self.group);
-            self.group.setCoords();
-            self.fabricCanvas.setActiveObject(self.group);
+        // Add image to canvas
+        this.fabricCanvas.add(this.group);
+        this.fabricCanvas.viewportCenterObject(this.group);
+        this.group.setCoords();
+        this.fabricCanvas.setActiveObject(this.group);
 
-            self.fabricRootImage = imageToLoad; // reference to uploaded image as fabric object
-
-        }
-
+        this.fabricRootImage = imageToLoad; // reference to uploaded image as fabric object
 
     }
+
+
 
     createCanvas(){
         // Create canvas
@@ -446,12 +448,12 @@ class ModuleImage extends BaseModule {
         let self = this;
         let fabricCanvas = this.fabricCanvas;
 
-        function resizeCanvas(){
+        let resizeCanvas = function() {
             if (appGlobals.mode.EDIT_IMAGE){
                 fabricCanvas.setWidth(app.$humanWidget.width());
                 self.toolbarActions.centerImage();
             }
-        }
+        };
 
         jQuery(window).off();
         jQuery(window).on('resize', resizeCanvas);
@@ -725,5 +727,10 @@ class ModuleImage extends BaseModule {
     static getAlphaFromFabricColor(fabricColor){
         return parseInt(fabricColor._source[3] * 100);
     }
+
+    /****************************************
+     *           PRIVATE FUNCTIONS          *
+     ****************************************/
+
 
 }

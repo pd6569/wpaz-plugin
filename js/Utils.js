@@ -2,6 +2,8 @@
  * Created by peter on 25/03/2017.
  */
 
+"use strict";
+
 class Utils {
 
     constructor () {

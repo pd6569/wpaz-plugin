@@ -1,6 +1,7 @@
 /**
  * Created by peter on 03/05/2017.
  */
+"use strict";
 
 class ModuleAnnotate extends BaseModule {
 
@@ -86,7 +87,7 @@ class ModuleAnnotate extends BaseModule {
         let app = this.app;
         let annotationCanvas = this.annotationCanvas;
 
-        function createAnnotation(event) {
+        let createAnnotation = function(event) {
             console.log("canvas clicked");
             let canvasX = event.offsetX;
             let canvasY = event.offsetY;
@@ -121,7 +122,7 @@ class ModuleAnnotate extends BaseModule {
             });
         }
 
-        function resizeCanvas(){
+        let resizeCanvas = function(){
             if (appGlobals.mode.ANNOTATE){
                 console.log("resize annotations canvas");
                 annotationCanvas.width = app.$humanWidget.width();

@@ -262,6 +262,19 @@ class wp_az_3d_notes {
 			wp_enqueue_script('wp_az_datatables', plugins_url('lib/datatables.min.js', __FILE__), array('jquery'), null, true);
 
 			// 3d-notes
+
+			//ES5
+			wp_enqueue_script('wp_az_globals', plugins_url('dist/js/globals.js', __FILE__), array('jquery'), '1.0', true);
+			wp_enqueue_script('wp_az_note', plugins_url('dist/js/Note.js', __FILE__), array('jquery'), '1.0', true);
+			wp_enqueue_script('wp_az_actions', plugins_url('dist/js/Actions.js', __FILE__), array('jquery'), '1.0', true);
+			wp_enqueue_script('wp_az_my_notes', plugins_url('dist/js/MyNotes.js', __FILE__), array('jquery'), '1.0', true);
+			wp_enqueue_script('wp_az_module_base_class', plugins_url('dist/js/BaseModule.js', __FILE__), array('jquery'), '1.0', true);
+			wp_enqueue_script('wp_az_module_annotations', plugins_url('dist/js/ModuleAnnotate.js', __FILE__), array('jquery'), '1.0', true);
+			wp_enqueue_script('wp_az_module_image', plugins_url('dist/js/ModuleImage.js', __FILE__), array('jquery'), '1.0', true);
+			wp_enqueue_script('wp_az_utils', plugins_url('dist/js/Utils.js', __FILE__), array('jquery'), '1.0', true);
+			wp_enqueue_script('wp_az_3d_notes_main', plugins_url('dist/js/3dnotes.js', __FILE__), array('jquery'), '1.0', true);
+
+/*			// ES6
 			wp_enqueue_script('wp_az_globals', plugins_url('js/globals.js', __FILE__), array('jquery'), '1.0', true);
 			wp_enqueue_script('wp_az_note', plugins_url('js/Note.js', __FILE__), array('jquery'), '1.0', true);
 			wp_enqueue_script('wp_az_actions', plugins_url('js/Actions.js', __FILE__), array('jquery'), '1.0', true);
@@ -270,7 +283,7 @@ class wp_az_3d_notes {
 			wp_enqueue_script('wp_az_module_annotations', plugins_url('js/ModuleAnnotate.js', __FILE__), array('jquery'), '1.0', true);
 			wp_enqueue_script('wp_az_module_image', plugins_url('js/ModuleImage.js', __FILE__), array('jquery'), '1.0', true);
 			wp_enqueue_script('wp_az_utils', plugins_url('js/Utils.js', __FILE__), array('jquery'), '1.0', true);
-			wp_enqueue_script('wp_az_3d_notes_main', plugins_url('js/3dnotes.js', __FILE__), array('jquery'), '1.0', true);
+			wp_enqueue_script('wp_az_3d_notes_main', plugins_url('js/3dnotes.js', __FILE__), array('jquery'), '1.0', true);*/
 
 
 			// sends ajax script to main JS script

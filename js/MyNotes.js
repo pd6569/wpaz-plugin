@@ -2,6 +2,7 @@
  * Created by peter on 26/04/2017.
  */
 
+"use strict";
 
 class MyNotes {
 

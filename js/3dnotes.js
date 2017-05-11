@@ -2,6 +2,8 @@
  * Created by peter on 22/03/2017.
  */
 
+"use strict";
+
 class AnatomyNotes {
 
     constructor() {
@@ -257,6 +259,9 @@ class AnatomyNotes {
 
             });
 
+            this.$editorLinkedScenes = this.$editorBody.find('.linked-scene');
+            console.log("linkedscenes: ", this.$editorLinkedScenes);
+
         });
 
 
@@ -300,6 +305,7 @@ class AnatomyNotes {
         this.setAppUi();
 
         this.setCanvasLayers();
+
     }
 
     /****************************
@@ -312,6 +318,7 @@ class AnatomyNotes {
      *
      */
     setCanvasLayers(){
+        console.log("setCanvasLayers");
 
         // Get initial canvas dimensions
         let height = this.$humanWidget.height();
@@ -544,7 +551,7 @@ class AnatomyNotes {
                             $labelActions.text("No Action");
                         }
 
-                        showOptionsForDataAction(actionData.type);
+                        this._showOptionsForDataAction(actionData.type, actionData);
                     }
                 }
 
@@ -555,7 +562,7 @@ class AnatomyNotes {
                     // Update action label
                     $labelActions.text($actionSelected.text());
 
-                    showOptionsForDataAction(dataActionSelected);
+                    this._showOptionsForDataAction(dataActionSelected, actionData);
                 });
 
 
@@ -595,13 +602,13 @@ class AnatomyNotes {
                     this.actionsChanged = true;
                 });
 
-            /***
+            /*/!***
              *
              * Private function. Displays the options for a selected action.
              *
              * @param dataActionSelected Data action type as specified in appGlobls.actionDataTypes
-             */
-                function showOptionsForDataAction(dataActionSelected) {
+             *!/
+                function _showOptionsForDataAction(dataActionSelected) {
 
                     if (!actionData) {
                         actionData = {};
@@ -613,9 +620,9 @@ class AnatomyNotes {
                         actionData.type = appGlobals.actionDataTypes.ROTATE_CAMERA;
 
 
-                        /*******************************************
+                        /!*******************************************
                          * Add/Update action option behaviour here *
-                         *******************************************/
+                         *******************************************!/
 
                         // show camera rotation options
                         $cameraRotateOptionsContainer.removeClass('hidden');
@@ -648,7 +655,7 @@ class AnatomyNotes {
                         $allOptionsContainers.addClass('hidden');
                     }
 
-                }
+                }*/
 
                 return true;
 
@@ -685,11 +692,9 @@ class AnatomyNotes {
 
             case 'image':
 
-                let self = this;
+                let app = this;
                 let type = data.type;
                 let imgSrc = data.imgSrc;
-                let callback = data.callback;
-                let defaultTitle;
 
                 Utils.resetModal();
                 Utils.showModal({
@@ -751,16 +756,29 @@ class AnatomyNotes {
 
                             imgSrc = event.target.result;
 
-                            loadImgProperties(fileName);
+                            let imgProps = {
+                                title: fileName,
+                                fileType: type,
+                                imgSrc: imgSrc,
+                            };
+
+                            app._loadImgProperties(imgProps);
                         };
                     });
 
                 } else if (type === 'snapshot') {
                     this.$modalImageUpload.addClass('hidden');
-                    loadImgProperties();
+
+                    let imgProps = {
+                        title: null,
+                        fileType: type,
+                        imgSrc: imgSrc,
+                    };
+
+                    this._loadImgProperties(imgProps);
                 }
 
-                function loadImgProperties(title) {
+                /*function _loadImgProperties(title) {
                     self.$modalImageProps.removeClass('hidden');
 
                     // Set field defaults
@@ -773,10 +791,10 @@ class AnatomyNotes {
                     self.$imgCaption.val("");
                     self.$imgAlt.val("");
 
-                    setClickListeners();
-                }
+                    setClickListenersImgModal();
+                }*/
 
-                function setClickListeners(){
+                /*function setClickListenersImgModal(){
                     self.$imgEdit.off();
                     self.$imgEdit.on('click', (event) => {
                         console.log("load Image Editor");
@@ -841,7 +859,7 @@ class AnatomyNotes {
 
                             });
 
-                            /*// Save media to server and append
+                            /!*!// Save media to server and append
                             let $updateNote = self.$notesTimelineContainer.find('#' + appGlobals.currentNote.uid);
                             let $imageContainer = $updateNote.find('.note-image-container .row');
 
@@ -887,7 +905,7 @@ class AnatomyNotes {
 
                                 },
                                 type: 'POST'
-                            });*/
+                            });*!/
 
                         }
 
@@ -897,7 +915,7 @@ class AnatomyNotes {
 
                     });
 
-                }
+                }*/
 
                 return true;
 
@@ -1228,7 +1246,6 @@ class AnatomyNotes {
 
                 // Create actions objects and update global data
                 actionsArray.forEach(function(action){
-                    console.log("adding action to array order: " + action.action_order);
                     if (appGlobals.actions[action.note_id]) {
                         setActionData(action);
                         appGlobals.actions[action.note_id].push(action);
@@ -1433,7 +1450,7 @@ class AnatomyNotes {
 
     saveNotes(title, note_content, doNotAppend, callback){
 
-        console.log("saveNotes: " + note_content);
+        console.log("saveNotes");
 
         if (!this.userIsEditor) return;
 
@@ -1471,6 +1488,7 @@ class AnatomyNotes {
             }
         }
 
+        let postId = appGlobals.post_id;
         let noteToSave = appGlobals.currentNote;
         let actions = appGlobals.actions[noteToSave.uid];
         noteToSave.setTitle(title);
@@ -1487,13 +1505,13 @@ class AnatomyNotes {
 
                 noteToSave.setSceneState(JSON.stringify(sceneState));
 
-                console.log("save current note: " + noteToSave.title + " sequence: " + noteToSave.sequence + " uid: " + noteToSave.uid + " note Content: " + noteToSave.note_content);
+                console.log("save current note: " + noteToSave.title + " post id: " + postId);
 
                 //!* Data to make available via the $_POST variable
                 data = {
                     action: 'save_notes',
                     wp_az_3d_notes_nonce: ajax_object.wp_az_3d_notes_nonce,
-                    wp_az_post_id: appGlobals.post_id,
+                    wp_az_post_id: postId,
                     wp_az_note_object: noteToSave,
                     wp_az_actions: actions,
                     wp_az_actions_changed: actionsChanged,
@@ -1901,42 +1919,43 @@ class AnatomyNotes {
     }
 
     /**
-     * If action has action data - execute this data
+     * If action has action data - execute this data (e.g. rotate camera)
+     *
+     *
      */
     execActionData(action_data, appObj){
         console.log("execActionData", action_data);
-        if (action_data.type){
-            switch (action_data.type) {
-                case appGlobals.actionDataTypes.ROTATE_CAMERA:
-                    console.log("Rotate camera");
 
-                    appGlobals.animateUpdate = true;
+        switch (action_data.type) {
+            case appGlobals.actionDataTypes.ROTATE_CAMERA:
+                console.log("Rotate camera");
+                Action.actionFunctions(action_data).rotateCamera();
 
-                    // Stop rotating camera if scene is clicked
-                    appObj.human.on('scene.picked', function () {
-                        appGlobals.animateUpdate = false;
+                /*appGlobals.animateUpdate = true;
+
+                // Stop rotating camera if scene is clicked
+                appObj.human.on('scene.picked', function () {
+                    appGlobals.animateUpdate = false;
+                });
+
+                function update() {
+                    // Orbit camera horizontally around target
+                    appObj.human.send("camera.orbit", {
+                        yaw: action_data.rotationSpeed,
                     });
 
-                    function update() {
-                        // Orbit camera horizontally around target
-                        appObj.human.send("camera.orbit", {
-                            yaw: action_data.rotationSpeed,
-                        });
+                    if (appGlobals.animateUpdate) {
+                        requestAnimationFrame(update);
+                    }
+                };
 
-                        if (appGlobals.animateUpdate) {
-                            requestAnimationFrame(update);
-                        }
-                    };
+                requestAnimationFrame(update);*/
+                return true;
 
-                    requestAnimationFrame(update);
-                    return true;
-
-                default:
-                    return false;
-            }
-        } else {
-            return false;
+            default:
+                return false;
         }
+
     }
 
     // DO ACTION METHODS
@@ -2189,7 +2208,190 @@ class AnatomyNotes {
         })
     }
 
+
+    /************************************************
+     *                                              *
+     *              PRIVATE FUNCTIONS               *
+     *                                              *
+     ************************************************/
+
+    /***
+     *
+     * Private function. Displays the options for a selected action.
+     *
+     * @param   {string}    dataActionSelected  - Data action type as specified in appGlobls.actionDataTypes
+     * @param   {object}    actionData          - Object containing action data
+     */
+    _showOptionsForDataAction(dataActionSelected, actionData) {
+
+        // Labels
+        let $labelActions = jQuery('.label-action-options');
+        $labelActions.text("No action");
+        let $labelCameraRotate = jQuery('.label-camera-rotate');
+
+        // Containers for all option settings
+        let $allOptionsContainers = jQuery('.modal-action-options-container');
+        $allOptionsContainers.addClass('hidden');
+
+        // Individual option containers
+        let $cameraRotateOptionsContainer = jQuery('.modal-actions__camera-rotate');
+
+        if (!actionData) {
+            actionData = {};
+        }
+
+        // Function for rotate camera action
+        if (dataActionSelected === appGlobals.actionDataTypes.ROTATE_CAMERA){
+
+            actionData.type = appGlobals.actionDataTypes.ROTATE_CAMERA;
+
+
+            /*******************************************
+             * Add/Update action option behaviour here *
+             *******************************************/
+
+            // show camera rotation options
+            $cameraRotateOptionsContainer.removeClass('hidden');
+            let $cameraRotateSpeed = jQuery('.camera-rotate-speed-option');
+
+            if (actionData.rotationSpeed) {
+                let rotationSpeeds = Object.keys(Action.actionDataValues().ROTATE_CAMERA.speeds);
+                for (let speedText of rotationSpeeds) {
+                    console.log("current speed: " + Action.actionDataValues().ROTATE_CAMERA.speeds[speedText] + " rotationSpeed: " + actionData.rotationSpeed);
+                    if (Action.actionDataValues().ROTATE_CAMERA.speeds[speedText] == actionData.rotationSpeed) {
+                        $labelCameraRotate.text(Utils.capitalizeFirstLetter(speedText));
+                        break;
+                    }
+                }
+            }
+
+            $cameraRotateSpeed.on('click', (event) => {
+                let $speedSelected = jQuery(event.target);
+                let speed = $speedSelected.attr('data-camera-rotate');
+                if (speed === 'slow') actionData.rotationSpeed = Action.actionDataValues().ROTATE_CAMERA.speeds.slow;
+                if (speed === 'medium') actionData.rotationSpeed = Action.actionDataValues().ROTATE_CAMERA.speeds.medium;
+                if (speed === 'fast') actionData.rotationSpeed = Action.actionDataValues().ROTATE_CAMERA.speeds.fast;
+
+                // Update label
+                $labelCameraRotate.text($speedSelected.text());
+            })
+
+        } else {
+            actionData = {};
+            $allOptionsContainers.addClass('hidden');
+        }
+
+    }
+
+    /**********
+     *
+     * Private function used by image modal. Sets fields for image modal - title, desc, caption, alt.
+     * Sets listeners for OK button and edit button.
+     * If image is snapshot from 3D model - uploads to server and appends image to note.
+     * If image is uploaded OR "edit image" button is clicked - load image editor module.
+     *
+     * @param
+     */
+    _loadImgProperties(imgProps, callback) {
+
+        let title = imgProps.title;
+        let fileType = imgProps.fileType;
+        let imgSrc = imgProps.imgSrc;
+
+        let defaultTitle;
+
+        this.$modalImageProps.removeClass('hidden');
+
+        // Set field defaults
+        title ? defaultTitle = title : defaultTitle = "Snapshot " + appGlobals.numSnapshots;
+        this.$imgTitle.val(defaultTitle);
+        this.$modalImageProps.find('.image-thumbnail img').attr('src', imgSrc);
+
+        // clear fields
+        this.$imgDesc.val("");
+        this.$imgCaption.val("");
+        this.$imgAlt.val("");
+
+
+        /******* SET LISTENERS ********/
+
+        // Edit image
+        this.$imgEdit.off();
+        this.$imgEdit.on('click', (event) => {
+            console.log("load Image Editor");
+            event.preventDefault();
+            this.$modalAlert.modal('hide');
+            Utils.resetModal();
+            this.loadModule(appGlobals.modules.IMAGE_MODULE, {
+                imgSrc: imgSrc,
+                imgType: "base64"
+            })
+        });
+
+        // OK
+        this.$modalBtn2.off();
+        this.$modalBtn2.on('click', () => {
+
+            let imgTitle;
+            this.$imgTitle.val() == "" ? imgTitle = defaultTitle : imgTitle = this.$imgTitle.val();
+            let imgDesc = this.$imgDesc.val();
+            let imgCaption = this.$imgCaption.val();
+            let imgAlt = this.$imgAlt.val();
+
+            console.log("title: " + imgTitle + " desc: " + imgDesc + " caption: " + imgCaption + "imgAlt: " + imgAlt);
+
+            this.$modalAlert.modal('hide');
+            Utils.resetModal();
+
+            if (fileType === 'upload'){
+                this.loadModule(appGlobals.modules.IMAGE_MODULE, {
+                    imgSrc: imgSrc,
+                    imgType: "base64"
+                })
+            } else {
+
+                this.saveImageToServer({
+                    'imgSrc': imgSrc,
+                    'imgTitle': imgTitle,
+                    'imgDesc': imgDesc,
+                    'imgCaption': imgCaption,
+                    'imgAlt': imgAlt,
+                }, (data) => {
+
+                    let $updateNote = this.$notesTimelineContainer.find('#' + appGlobals.currentNote.uid);
+                    let $imageContainer = $updateNote.find('.note-image-container .row');
+
+                    let attachmentId = data['attachment_id'];
+                    let attachmentMedium = data['attachment_src_medium'];
+                    let attachmentLarge = data['attachment_src_large'];
+
+                    let $newImage = jQuery(
+                        "<div class='col-md-4 col-sm-4 col-xs-6'>" +
+                        "<div id='" + attachmentId + "'>" +
+                        "<a rel='" + appGlobals.currentNote.uid + "' href='" + attachmentLarge + "' class='swipebox note-images' title='" + imgCaption + "'>" +
+                        "<img src='" + attachmentMedium + "' alt='image' width='100%' height='100%'>" +
+                        "</a>" +
+                        "</div>" +
+                        "</div>");
+                    $newImage.appendTo($imageContainer);
+
+                    // add toolbar
+                    $newImage.find('a.note-images').toolbar(this.toolbarOptions);
+                    this.setImgToolbarListeners($newImage.find('a.note-images'));
+
+                });
+
+            }
+
+            if (callback) {
+                callback(imgSrc)
+            }
+
+        });
+
+    }
 }
+
 
 jQuery(document).ready(function() {
     new AnatomyNotes();

@@ -2,6 +2,8 @@
  * Created by peter on 03/05/2017.
  */
 
+"use strict";
+
 class BaseModule {
     
     constructor(moduleName, moduleData = {}){

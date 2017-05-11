@@ -1,6 +1,7 @@
 /**
  * Created by peter on 24/03/2017.
  */
+"use strict";
 
 class Action {
 
@@ -99,6 +100,34 @@ class Action {
                     'medium': 0.5,
                     'fast': 1,
                 }
+            }
+        }
+    }
+
+    static actionFunctions(action_data) {
+
+        return {
+            rotateCamera: function() {
+
+                appGlobals.animateUpdate = true;
+
+                // Stop rotating camera if scene is clicked
+                appGlobals.appRef.human.on('scene.picked', function () {
+                    appGlobals.animateUpdate = false;
+                });
+
+                function update() {
+                    // Orbit camera horizontally around target
+                    appGlobals.appRef.human.send("camera.orbit", {
+                        yaw: action_data.rotationSpeed,
+                    });
+
+                    if (appGlobals.animateUpdate) {
+                        requestAnimationFrame(update);
+                    }
+                };
+
+                requestAnimationFrame(update);
             }
         }
     }
