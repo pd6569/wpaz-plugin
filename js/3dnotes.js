@@ -1528,6 +1528,7 @@ class AnatomyNotes {
             Action.sortActionsForCurrentNote();
             this.loadActions(note.uid, this);
             this.setCurrentAction(appGlobals.actions[note.uid][0]);
+            this.doAction(appGlobals.actions[note.uid][0]);
 
             // load annotations
             this.loadAnnotations();
@@ -1857,6 +1858,9 @@ class AnatomyNotes {
     doAction(action, appObj){
         console.log("doAction");
 
+        let _this;
+        appObj ? _this = appObj : _this = this;
+
         // Stop any current animations
         appGlobals.animateUpdate = false;
 
@@ -1866,23 +1870,23 @@ class AnatomyNotes {
                 // Disable any modes
                 BaseModule.turnAllModesOff();
 
-                appObj.human.send('camera.set', {
+                _this.human.send('camera.set', {
                     position: JSON.parse(action.scene_state).camera.eye,
                     target: JSON.parse(action.scene_state).camera.look,
                     up: JSON.parse(action.scene_state).camera.up,
                     animate: true
                 }, () => {
-                    appObj.human.send('scene.restore', JSON.parse(action.scene_state), () => {
+                    _this.human.send('scene.restore', JSON.parse(action.scene_state), () => {
                         console.log("scene restored");
-                        appObj.loadAnnotations();
+                        _this.loadAnnotations();
 
                         // If action has associated data, execute this data
-                        if (action.action_data) appObj.execActionData(action.action_data, appObj);
+                        if (action.action_data) _this.execActionData(action.action_data, _this);
 
                     });
                 });
 
-                appObj.setCurrentAction(action);
+                _this.setCurrentAction(action);
 
                 break;
 
@@ -1892,7 +1896,7 @@ class AnatomyNotes {
                     'imgSrc': action.action_data['imgUrl'],
                     'imgType': "url"
                 });
-                appObj.setCurrentAction(action);
+                _this.setCurrentAction(action);
                 break;
 
             default:
