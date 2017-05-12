@@ -348,6 +348,13 @@ class AnatomyNotes {
         }
     }
 
+    refreshActionList() {
+        Action.sortActionsForCurrentNote();
+        this.loadActions(appGlobals.currentNote.uid, this);
+
+        console.log("refresh actionlist. actions: ", appGlobals.actions);
+    }
+
     /***
      *
      * Set up canvases for modules: annotations, image editing
@@ -626,6 +633,7 @@ class AnatomyNotes {
                                 data.actionText +
                                 "</span>";
                             this.noteEditor.execCommand( 'mceInsertContent', true, linkedText);
+                            this.refreshActionList();
                         }, actionType);
                     } else {
                         console.log("Function to update actions...");
@@ -1261,24 +1269,6 @@ class AnatomyNotes {
 
             // Update post title in Db
             this.updatePostTitle(newTitle);
-            /*jQuery.ajax({
-                url: ajax_object.wp_az_ajax_url,
-                data: {
-                    action: 'update_post_title',
-                    wp_az_3d_notes_nonce: ajax_object.wp_az_3d_notes_nonce,
-                    wp_az_post_id: appGlobals.post_id,
-                    wp_az_new_post_title: newTitle
-                },
-                error: function() {
-                    console.log("Failed to update title");
-                    Utils.setNoteUpdateStatus("Failed to update title", 3000);
-                },
-                success: function(data) {
-                    console.log("Note deleted: " + JSON.stringify(data));
-                    Utils.setNoteUpdateStatus("Title updated", 3000);
-                },
-                type: 'POST'
-            });*/
         });
     }
 
@@ -1627,7 +1617,37 @@ class AnatomyNotes {
             appGlobals.actions[noteId] = [action];
         }
 
-        let $actionItem;
+        console.log("new action created and added to array: " + appGlobals.actions[noteId].length);
+
+        // Set current action
+        this.setCurrentAction(action);
+
+        // add additional data to action
+        if (actionType === appGlobals.actionTypes.GENERAL){
+            this.getSceneState((sceneState) => {
+                action.setSceneState(JSON.stringify(sceneState));
+                console.log("Scene state saved as action");
+                Utils.updateActionStatusBox("Action added to this note set.");
+
+                if (callback) callback(action);
+
+            });
+        } else if (actionType === appGlobals.actionTypes.IMAGE){
+
+            this.saveImageToServer({
+                imgSrc: actionData.imgSrc,
+            }, (data) => {
+                console.log("attachment urls: ", data);
+                delete action.action_data.imgSrc;
+                action.action_data.imgUrl = data.attachment_src_full;
+                console.log("action", action);
+
+            });
+
+            if (callback) callback(action);
+        }
+
+        /*let $actionItem;
 
         if (!actionTitle) {
             $actionItem = jQuery("<li id='" + action.uid + "' class='list-group-item'><a> Action " + this.numActions + "</a></li>");
@@ -1646,7 +1666,7 @@ class AnatomyNotes {
                 console.log("Scene state saved as action");
                 Utils.updateActionStatusBox("Action added to this note set.");
 
-                setActionListener();
+                this._setActionListener($actionItem, action);
 
                 if (callback) callback(action);
 
@@ -1662,25 +1682,19 @@ class AnatomyNotes {
                 console.log("action", action);
             });
 
-            setActionListener();
+            this._setActionListener($actionItem, action);
 
             if (callback) callback(action);
-        }
+        }*/
 
-        function setActionListener(){
+        /*function setActionListener($actionItem){
             $actionItem.on('click', (event) => {
                 event.preventDefault();
 
                 self.doAction(action, self);
 
-                /*switch(action.action_type){
-                    case appGlobals.actionTypes.GENERAL:
-                        self.doAction(action, self);
-                        break;
-                }*/
-
             });
-        }
+        }*/
 
 
     }
@@ -1898,9 +1912,11 @@ class AnatomyNotes {
         if (actionId) {
             let actionsArray = appGlobals.actions[appGlobals.currentNote.uid];
             for (let action of actionsArray) {
-                if (action.uid == actionId){
-                    this.doAction(action, this);
-                    break;
+                if (action) {
+                    if (action.uid == actionId){
+                        this.doAction(action, this);
+                        break;
+                    }
                 }
             }
         }
@@ -1909,7 +1925,14 @@ class AnatomyNotes {
     loadActions(noteUID, appObj){
 
         let actions = appGlobals.actions[noteUID];
+
+        appObj.numActions = 0;
+
+        console.log("loadActions ", actions);
         if (actions){
+
+            appObj.$actionsDropdownContainer.empty();
+
             actions.forEach((action) => {
 
                 appObj.numActions++;
@@ -2094,6 +2117,25 @@ class AnatomyNotes {
      *              PRIVATE FUNCTIONS               *
      *                                              *
      ************************************************/
+
+
+    /***
+     *
+     * Private function used by addAction function to add listener to action item in dropdown.
+     *
+     * @private
+     * @param {object} $actionItem      - jQuery object representing action item.
+     * @param {object} action           - Action object to add listener to
+     * @private
+     */
+    _setActionListener($actionItem, action){
+        $actionItem.on('click', (event) => {
+            event.preventDefault();
+
+            this.doAction(action, self);
+
+        });
+    }
 
     /***
      *
