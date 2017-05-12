@@ -113,16 +113,17 @@ export default class Action {
         console.log("sortActionsForCurrentNote");
 
         let appObj = appGlobals.appRef;
-        let $editorLinkedScenes = appObj.$editorBody.find('.linked-scene');
-        let numActions = $editorLinkedScenes.length;
+        let $linkedScenes;
+        appObj.userIsEditor ? $linkedScenes = appObj.$editorBody.find('.linked-scene') : $linkedScenes = appObj.$noteText.find('.linked-scene');
+        let numActions = $linkedScenes.length;
         if (numActions > 0){
-            console.log("Sort actions. Number of actions: " + $editorLinkedScenes.length);
+            console.log("Sort actions. Number of actions: " + $linkedScenes.length);
 
             let sortedActions = [];
             if (numActions > 0){
                 for (let i = 0; i < numActions ; i++){
-                    console.log("action id: " + jQuery($editorLinkedScenes[i]).attr('data-action-id'));
-                    let actionId = jQuery($editorLinkedScenes[i]).attr('data-action-id');
+                    console.log("action id: " + jQuery($linkedScenes[i]).attr('data-action-id'));
+                    let actionId = jQuery($linkedScenes[i]).attr('data-action-id');
                     sortedActions.push(Action.getActionById(actionId, appGlobals.currentNote.uid));
                 }
                 appGlobals.actions[appGlobals.currentNote.uid] = sortedActions;

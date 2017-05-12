@@ -19,13 +19,13 @@ export default class Note {
         this.scene_state = scene_state;
         load_url ? this.load_url = load_url : this.load_url = null;
 
-        console.log("new note created. uid: " + this.uid);
-
         // add notes to global notes object
 
         appGlobals.numNotes = parseInt(appGlobals.numNotes) + 1;
         this.addNote();
         this.updateSequenceIndex();
+
+        console.log("new note created.", this);
 
     }
 

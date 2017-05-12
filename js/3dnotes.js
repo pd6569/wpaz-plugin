@@ -309,11 +309,12 @@ class AnatomyNotes {
 
         // Text Linked Scenes
 
-        /*this.$editNoteContainer.on('click', '.linked-scene', (event) => {
+        this.$editNoteContainer.on('click', '.linked-scene', (event) => {
             console.log("linked scene, action id: " + jQuery(event.target).attr('data-action-id'));
             this.doActionById(jQuery(event.target).attr('data-action-id'));
-        });*/
+        });
         this.$textLinkedToScene.on('click', (event) => {
+            console.log("text linked to scene");
             this.doActionById(jQuery(event.target).attr('data-action-id'));
         });
 
@@ -1059,7 +1060,7 @@ class AnatomyNotes {
                 console.log("Failed to load notes");
             },
             success: function(data) {
-                console.log("Notes loaded from server.");
+                console.log("Notes loaded from server.", data.notes);
                 let notesArray = data.notes;
                 let actionsArray = data.actions;
 
@@ -1484,10 +1485,9 @@ class AnatomyNotes {
     }
 
     setActiveNote(uid, scrollToTop){
-        console.log("setActiveNote");
         let note = appGlobals.notes[uid];
 
-        appGlobals.currentNote = note;
+        console.log("setActiveNote", note);
 
         // get title/content
         let $title = jQuery('.notes-title');
@@ -1519,6 +1519,8 @@ class AnatomyNotes {
         if (note.scene_state != null && note.scene_state != "" && note.scene_state.length > 0){
             this.human.send("scene.restore", JSON.parse(note.scene_state));
         }
+
+        appGlobals.currentNote = note;
 
         // clear previous actions, load new actions, set current action
         this.clearActions();
@@ -1617,8 +1619,6 @@ class AnatomyNotes {
             appGlobals.actions[noteId] = [action];
         }
 
-        console.log("new action created and added to array: " + appGlobals.actions[noteId].length);
-
         // Set current action
         this.setCurrentAction(action);
 
@@ -1713,22 +1713,23 @@ class AnatomyNotes {
         console.log("Navigate actions: " + direction);
 
         let actions = appGlobals.actions[appGlobals.currentNote.uid];
+        let currentIndex = actions.indexOf(appGlobals.currentAction);
+        console.log("current index: " + currentIndex);
 
         if (actions) {
 
             let numActions = actions.length;
-            let currentActionOrder = parseInt(appGlobals.currentAction.action_order);
 
             if (direction === "next"){
-                if (currentActionOrder < numActions){
-                    this.doAction(actions[currentActionOrder], this);
+                if (currentIndex < numActions - 1){
+                    this.doAction(actions[currentIndex + 1], this);
                 }  else {
                     console.log("Reached last action");
                     return;
                 }
             } else {
-                if (currentActionOrder > 1){
-                    this.doAction(actions[currentActionOrder - 2], this);
+                if (currentIndex > 0){
+                    this.doAction(actions[currentIndex - 1], this);
                 } else {
                     console.log("Reached first action");
                     return;
@@ -1741,9 +1742,9 @@ class AnatomyNotes {
     }
 
     setCurrentAction(action){
-        console.log("setCurrentAction: " + JSON.stringify(action.action_order));
+        console.log("setCurrentAction");
         appGlobals.currentAction = action;
-        this.$currentActionLabel.text("Action " + action.action_order);
+        this.$currentActionLabel.text("Action " + (appGlobals.actions[appGlobals.currentNote.uid].indexOf(action) + 1));
     }
 
     /**
