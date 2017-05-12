@@ -4,6 +4,7 @@
 
 "use strict";
 
+// Modules
 import appGlobals from './globals';
 import Utils from './Utils';
 

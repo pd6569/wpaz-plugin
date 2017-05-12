@@ -4,6 +4,17 @@
 
 "use strict";
 
+// CSS
+import '../lib/css/swipebox.css';
+import '../lib/css/jquery.toolbar.css';
+import '../css/styles.css';
+
+// Vendor lib
+import 'swipebox';
+import '../lib/js/jquery.toolbar.js';
+import '../lib/js/human-api.min';
+
+// 3D notes modules
 import appGlobals from './globals';
 import Utils from './Utils';
 import BaseModule from './BaseModule';
@@ -17,8 +28,8 @@ import Note from './Note';
 class AnatomyNotes {
 
     constructor() {
-        console.log("anatomy notes loaded");
-        
+        console.log("Anatomy notes loaded");
+
         appGlobals.appRef = this;
 
         // get BioDigital Human
@@ -271,6 +282,7 @@ class AnatomyNotes {
 
             this.$editorLinkedScenes = this.$editorBody.find('.linked-scene');
             console.log("linkedscenes: ", this.$editorLinkedScenes);
+            this.setActionOrderFromEditorLinks(this.$editorLinkedScenes);
 
         });
 
@@ -321,6 +333,20 @@ class AnatomyNotes {
     /****************************
      *      CLASS METHODS       *
      ****************************/
+
+    setActionOrderFromEditorLinks($linkedScenes){
+        console.log("setActionOrderFromEditorLinks");
+
+        let numActions = $linkedScenes.length;
+
+        console.log("Number of actions: " + $linkedScenes.length);
+
+        if (numActions > 0){
+            for (let i = 0; i < numActions ; i++){
+                console.log("action id: " + jQuery($linkedScenes[i]).attr('data-action-id'));
+            }
+        }
+    }
 
     /***
      *
@@ -612,61 +638,6 @@ class AnatomyNotes {
                     this.actionsChanged = true;
                 });
 
-            /*/!***
-             *
-             * Private function. Displays the options for a selected action.
-             *
-             * @param dataActionSelected Data action type as specified in appGlobls.actionDataTypes
-             *!/
-                function _showOptionsForDataAction(dataActionSelected) {
-
-                    if (!actionData) {
-                        actionData = {};
-                    }
-
-                    // Function for rotate camera action
-                    if (dataActionSelected === appGlobals.actionDataTypes.ROTATE_CAMERA){
-
-                        actionData.type = appGlobals.actionDataTypes.ROTATE_CAMERA;
-
-
-                        /!*******************************************
-                         * Add/Update action option behaviour here *
-                         *******************************************!/
-
-                        // show camera rotation options
-                        $cameraRotateOptionsContainer.removeClass('hidden');
-                        let $cameraRotateSpeed = jQuery('.camera-rotate-speed-option');
-
-                        if (actionData.rotationSpeed) {
-                            let rotationSpeeds = Object.keys(Action.actionDataValues().ROTATE_CAMERA.speeds);
-                            for (let speedText of rotationSpeeds) {
-                                console.log("current speed: " + Action.actionDataValues().ROTATE_CAMERA.speeds[speedText] + " rotationSpeed: " + actionData.rotationSpeed);
-                                if (Action.actionDataValues().ROTATE_CAMERA.speeds[speedText] == actionData.rotationSpeed) {
-                                    $labelCameraRotate.text(Utils.capitalizeFirstLetter(speedText));
-                                    break;
-                                }
-                            }
-                        }
-
-                        $cameraRotateSpeed.on('click', (event) => {
-                            let $speedSelected = jQuery(event.target);
-                            let speed = $speedSelected.attr('data-camera-rotate');
-                            if (speed === 'slow') actionData.rotationSpeed = Action.actionDataValues().ROTATE_CAMERA.speeds.slow;
-                            if (speed === 'medium') actionData.rotationSpeed = Action.actionDataValues().ROTATE_CAMERA.speeds.medium;
-                            if (speed === 'fast') actionData.rotationSpeed = Action.actionDataValues().ROTATE_CAMERA.speeds.fast;
-
-                            // Update label
-                            $labelCameraRotate.text($speedSelected.text());
-                        })
-
-                    } else {
-                        actionData = {};
-                        $allOptionsContainers.addClass('hidden');
-                    }
-
-                }*/
-
                 return true;
 
             case 'new_note_set':
@@ -787,145 +758,6 @@ class AnatomyNotes {
 
                     this._loadImgProperties(imgProps);
                 }
-
-                /*function _loadImgProperties(title) {
-                    self.$modalImageProps.removeClass('hidden');
-
-                    // Set field defaults
-                    title ? defaultTitle = title : defaultTitle = "Snapshot " + appGlobals.numSnapshots;
-                    self.$imgTitle.val(defaultTitle);
-                    self.$modalImageProps.find('.image-thumbnail img').attr('src', imgSrc);
-
-                    // clear fields
-                    self.$imgDesc.val("");
-                    self.$imgCaption.val("");
-                    self.$imgAlt.val("");
-
-                    setClickListenersImgModal();
-                }*/
-
-                /*function setClickListenersImgModal(){
-                    self.$imgEdit.off();
-                    self.$imgEdit.on('click', (event) => {
-                        console.log("load Image Editor");
-                        event.preventDefault();
-                        self.$modalAlert.modal('hide');
-                        Utils.resetModal();
-                        self.loadModule(appGlobals.modules.IMAGE_MODULE, {
-                            imgSrc: imgSrc,
-                            imgType: "base64"
-                        })
-                    });
-
-                    self.$modalBtn2.off();
-                    self.$modalBtn2.on('click', () => {
-
-                        let imgTitle;
-                        self.$imgTitle.val() == "" ? imgTitle = defaultTitle : imgTitle = self.$imgTitle.val();
-                        let imgDesc = self.$imgDesc.val();
-                        let imgCaption = self.$imgCaption.val();
-                        let imgAlt = self.$imgAlt.val();
-
-                        console.log("title: " + imgTitle + " desc: " + imgDesc + " caption: " + imgCaption + "imgAlt: " + imgAlt);
-
-                        self.$modalAlert.modal('hide');
-                        Utils.resetModal();
-
-                        if (type === 'upload'){
-                            self.loadModule(appGlobals.modules.IMAGE_MODULE, {
-                                imgSrc: imgSrc,
-                                imgType: "base64"
-                            })
-                        } else {
-
-                            self.saveImageToServer({
-                                'imgSrc': imgSrc,
-                                'imgTitle': imgTitle,
-                                'imgDesc': imgDesc,
-                                'imgCaption': imgCaption,
-                                'imgAlt': imgAlt,
-                            }, (data) => {
-
-                                let $updateNote = self.$notesTimelineContainer.find('#' + appGlobals.currentNote.uid);
-                                let $imageContainer = $updateNote.find('.note-image-container .row');
-
-                                let attachmentId = data['attachment_id'];
-                                let attachmentMedium = data['attachment_src_medium'];
-                                let attachmentLarge = data['attachment_src_large'];
-
-                                let $newImage = jQuery(
-                                    "<div class='col-md-4 col-sm-4 col-xs-6'>" +
-                                    "<div id='" + attachmentId + "'>" +
-                                    "<a rel='" + appGlobals.currentNote.uid + "' href='" + attachmentLarge + "' class='swipebox note-images' title='" + imgCaption + "'>" +
-                                    "<img src='" + attachmentMedium + "' alt='image' width='100%' height='100%'>" +
-                                    "</a>" +
-                                    "</div>" +
-                                    "</div>");
-                                $newImage.appendTo($imageContainer);
-
-                                // add toolbar
-                                $newImage.find('a.note-images').toolbar(self.toolbarOptions);
-                                self.setImgToolbarListeners($newImage.find('a.note-images'));
-
-                            });
-
-                            /!*!// Save media to server and append
-                            let $updateNote = self.$notesTimelineContainer.find('#' + appGlobals.currentNote.uid);
-                            let $imageContainer = $updateNote.find('.note-image-container .row');
-
-                            // Save media
-                            jQuery.ajax({
-                                url: ajax_object.wp_az_ajax_url,
-                                data: {
-                                    action: 'upload_snapshot',
-                                    wp_az_3d_notes_nonce: ajax_object.wp_az_3d_notes_nonce,
-                                    wp_az_post_id: appGlobals.post_id,
-                                    wp_az_img_data: imgSrc,
-                                    wp_az_img_title: imgTitle,
-                                    wp_az_img_desc: imgDesc,
-                                    wp_az_img_caption: imgCaption,
-                                    wp_az_img_alt: imgAlt,
-                                    wp_az_note_id: appGlobals.currentNote.uid
-                                },
-                                error: function() {
-                                    console.log("Failed to save snapshot");
-                                    Utils.setNoteUpdateStatus("Failed to save snapshot", 3000);
-                                },
-                                success: function(data) {
-                                    console.log("Snapshot saved", data);
-                                    Utils.setNoteUpdateStatus("Snapshot saved", 3000);
-
-                                    let attachmentId = data['attachment_id'];
-                                    let attachmentMedium = data['attachment_src_medium'];
-                                    let attachmentLarge = data['attachment_src_large'];
-
-                                    let $newImage = jQuery(
-                                        "<div class='col-md-4 col-sm-4 col-xs-6'>" +
-                                        "<div id='" + attachmentId + "'>" +
-                                        "<a rel='" + appGlobals.currentNote.uid + "' href='" + attachmentLarge + "' class='swipebox note-images' title='" + imgCaption + "'>" +
-                                        "<img src='" + attachmentMedium + "' alt='image' width='100%' height='100%'>" +
-                                        "</a>" +
-                                        "</div>" +
-                                        "</div>");
-                                    $newImage.appendTo($imageContainer);
-
-                                    // add toolbar
-                                    $newImage.find('a.note-images').toolbar(self.toolbarOptions);
-                                    self.setImgToolbarListeners($newImage.find('a.note-images'));
-
-                                },
-                                type: 'POST'
-                            });*!/
-
-                        }
-
-                        if (callback) {
-                            callback(imgSrc)
-                        }
-
-                    });
-
-                }*/
 
                 return true;
 
@@ -1202,7 +1034,7 @@ class AnatomyNotes {
         let setInitialSceneState = this.setInitialSceneState;
 
         if (appGlobals.context === appGlobals.contextType.NOTES_DASHBOARD){
-            createNewNote();
+            this.createNewNote();
             return;
         }
 
@@ -1241,17 +1073,7 @@ class AnatomyNotes {
                     // No stored notes - create brand new note
                     console.log("no stored notes, new note created");
 
-                    createNewNote(true);
-                    /*appGlobals.currentNote = new Note(1, "", "", "");
-
-                    human.send('scene.capture', (sceneState) => {
-                        console.log("scene state captured for new note");
-                        let sceneStateStr = JSON.stringify(sceneState);
-                        appGlobals.currentNote.setSceneState(sceneStateStr);
-
-                        // save new note
-                        appObj.saveNotes("", "", true);
-                    });*/
+                    appObj.createNewNote(true);
                 }
 
                 // Create actions objects and update global data
@@ -1275,11 +1097,35 @@ class AnatomyNotes {
                     }
                 });
 
-                // sort actions into order
+                // Sort actions for current note
+                Action.sortActionsForCurrentNote();
+
+                /*appObj.$editorLinkedScenes = appObj.$editorBody.find('.linked-scene');
+                let numActions = appObj.$editorLinkedScenes.length;
+                if (numActions > 0){
+                    console.log("Sort actions. Number of actions: " + appObj.$editorLinkedScenes.length);
+
+                    let sortedActions = [];
+                    if (numActions > 0){
+                        for (let i = 0; i < numActions ; i++){
+                            console.log("action id: " + jQuery(appObj.$editorLinkedScenes[i]).attr('data-action-id'));
+                            let actionId = jQuery(appObj.$editorLinkedScenes[i]).attr('data-action-id');
+                            sortedActions.push(Action.getActionById(actionId, appGlobals.currentNote.uid));
+                        }
+                        appGlobals.actions[appGlobals.currentNote.uid] = sortedActions;
+                        console.log("appglobals sorted actions: ", appGlobals.actions[appGlobals.currentNote.uid])
+                    }
+                }*/
+
+
+
+                /*// sort actions into order
                 Object.keys(appGlobals.actions).forEach((noteId) => {
                     let actionsToSort = appGlobals.actions[noteId];
                     actionsToSort.sort(Utils.compare);
-                });
+
+
+                });*/
 
                 // load actions
                 appObj.loadActions(appGlobals.currentNote.uid, appObj);
@@ -1297,32 +1143,33 @@ class AnatomyNotes {
             type: 'GET'
         });
 
-        function createNewNote(save){
-            console.log("createNewNote");
-            appGlobals.currentNote = new Note(1, "", "", "");
-
-            human.send('scene.capture', (sceneState) => {
-                console.log("scene state captured for new note");
-                let sceneStateStr = JSON.stringify(sceneState);
-                appGlobals.currentNote.setSceneState(sceneStateStr);
-
-                // save new note
-                if (save) appObj.saveNotes("", "", true);
-            });
-        }
     }
 
-    /*setScanner(){
-        //ignores 'left', 'right', and 'bones of the' when searching for matching anatomy objects.
-        let toStrip = /^left\s|right\s|bones\sof\sthe\s/i;
+    /****
+     *
+     * Creates a new note and sets it as current.
+     *
+     * @param {boolean} save            - save notes after creating notes if set to true.
+     * @param {object}  [appObj]        - Reference to main app module
+     */
+    createNewNote(save, appObj){
+        console.log("createNewNote public");
 
-        this.$humanWidget.scanner({toStrip: toStrip, formatData: {
-            prefix: function(dataId) {
-                return '<a class="anatomy-object" data-id="' + dataId + '">'
-            },
-            suffix: "</a>"
-        }});
-    }*/
+        let _this;
+
+        if (!appObj) _this = this;
+
+        appGlobals.currentNote = new Note(1, "", "", "");
+
+        _this.human.send('scene.capture', (sceneState) => {
+            console.log("scene state captured for new note");
+            let sceneStateStr = JSON.stringify(sceneState);
+            appGlobals.currentNote.setSceneState(sceneStateStr);
+
+            // save new note
+            if (save) _this.saveNotes("", "", true);
+        });
+    }
 
     /****
      *  Load annotations for a specific action into the note editor
@@ -1650,6 +1497,8 @@ class AnatomyNotes {
         console.log("setActiveNote");
         let note = appGlobals.notes[uid];
 
+        appGlobals.currentNote = note;
+
         // get title/content
         let $title = jQuery('.notes-title');
         let $content = jQuery('.notes-text');
@@ -1684,6 +1533,7 @@ class AnatomyNotes {
         // clear previous actions, load new actions, set current action
         this.clearActions();
         if (appGlobals.actions[note.uid]) {
+            Action.sortActionsForCurrentNote();
             this.loadActions(note.uid, this);
             this.setCurrentAction(appGlobals.actions[note.uid][0]);
 
@@ -1698,7 +1548,7 @@ class AnatomyNotes {
             }, 500);
         }
 
-        appGlobals.currentNote = note;
+
 
     }
 

@@ -6,6 +6,7 @@
 
 import appGlobals from './globals';
 import BaseModule from './BaseModule';
+import 'fabric';
 
 export default class ModuleImage extends BaseModule {
 

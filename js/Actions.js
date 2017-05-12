@@ -107,6 +107,28 @@ export default class Action {
         }
     }
 
+    static sortActionsForCurrentNote() {
+        console.log("sortActionsForCurrentNote");
+
+        let appObj = appGlobals.appRef;
+        let $editorLinkedScenes = appObj.$editorBody.find('.linked-scene');
+        let numActions = $editorLinkedScenes.length;
+        if (numActions > 0){
+            console.log("Sort actions. Number of actions: " + $editorLinkedScenes.length);
+
+            let sortedActions = [];
+            if (numActions > 0){
+                for (let i = 0; i < numActions ; i++){
+                    console.log("action id: " + jQuery($editorLinkedScenes[i]).attr('data-action-id'));
+                    let actionId = jQuery($editorLinkedScenes[i]).attr('data-action-id');
+                    sortedActions.push(Action.getActionById(actionId, appGlobals.currentNote.uid));
+                }
+                appGlobals.actions[appGlobals.currentNote.uid] = sortedActions;
+                console.log("appglobals sorted actions: ", appGlobals.actions[appGlobals.currentNote.uid])
+            }
+        }
+    }
+
     static actionFunctions(action_data) {
 
         return {

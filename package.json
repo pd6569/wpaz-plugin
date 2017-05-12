@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "swipebox": "^1.4.6"
+    "fabric": "^1.7.11",
+    "swipebox": "^1.4.6",
+    "datatables.net": "^1.10.15",
+    "datatables.net-bs": "^1.10.15"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
@@ -12,6 +15,9 @@
     "babel-loader": "^7.0.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
     "babel-preset-env": "^1.4.0",
+    "css-loader": "^0.28.1",
+    "style-loader": "^0.17.0",
+    "url-loader": "^0.5.8",
     "webpack": "^2.5.1"
   },
   "scripts": {
