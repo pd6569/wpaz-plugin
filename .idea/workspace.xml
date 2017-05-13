@@ -1054,9 +1054,7 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../wp-sweep/readme.txt" afterPath="$PROJECT_DIR$/../wp-sweep/readme.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../wp-sweep/uninstall.php" afterPath="$PROJECT_DIR$/../wp-sweep/uninstall.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../wp-sweep/wp-sweep.php" afterPath="$PROJECT_DIR$/../wp-sweep/wp-sweep.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Generated_files.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Generated_files.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inc/class_notes_editor.php" afterPath="$PROJECT_DIR$/inc/class_notes_editor.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/setup.txt" afterPath="$PROJECT_DIR$/setup.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/layout_3d_notes.php" afterPath="$PROJECT_DIR$/templates/layout_3d_notes.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../wp-includes/class-phpmailer.php" afterPath="$PROJECT_DIR$/../../../wp-includes/class-phpmailer.php" />
@@ -1226,33 +1224,13 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="setup.txt" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/setup.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="12" column="40" lean-forward="false" selection-start-line="12" selection-start-column="40" selection-end-line="12" selection-end-column="40" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="class_notes_editor.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/inc/class_notes_editor.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="24" column="9" lean-forward="false" selection-start-line="24" selection-start-column="9" selection-end-line="24" selection-end-column="9" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="layout_3d_notes.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="layout_3d_notes.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/layout_3d_notes.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="508">
-              <caret line="494" column="175" lean-forward="false" selection-start-line="494" selection-start-column="175" selection-end-line="494" selection-end-column="175" />
+            <state relative-caret-position="780">
+              <caret line="603" column="69" lean-forward="false" selection-start-line="603" selection-start-column="69" selection-end-line="603" selection-end-column="69" />
               <folding>
-                <marker date="1494685411405" expanded="true" signature="292:471" ph="SELECT title... ${$table_name}" />
+                <marker date="1494687021943" expanded="true" signature="292:471" ph="SELECT title... ${$table_name}" />
               </folding>
             </state>
           </provider>
@@ -1300,10 +1278,10 @@
         <option value="$PROJECT_DIR$/js/3dnotes.js" />
         <option value="$PROJECT_DIR$/../../../wp-config.php" />
         <option value="$PROJECT_DIR$/../../../../../apache/logs/error.log" />
-        <option value="$PROJECT_DIR$/templates/layout_3d_notes.php" />
         <option value="$PROJECT_DIR$/inc/class_notes_editor.php" />
-        <option value="$PROJECT_DIR$/setup.txt" />
         <option value="$PROJECT_DIR$/../../themes/dt-the7/single-3d-notes.php" />
+        <option value="$PROJECT_DIR$/setup.txt" />
+        <option value="$PROJECT_DIR$/templates/layout_3d_notes.php" />
       </list>
     </option>
   </component>
@@ -1879,12 +1857,12 @@
       <workItem from="1494668676046" duration="593000" />
       <workItem from="1494669367341" duration="253000" />
       <workItem from="1494669671894" duration="2227000" />
-      <workItem from="1494683175547" duration="3352000" />
+      <workItem from="1494683175547" duration="4421000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="10494000" />
+    <option name="totallyTimeSpent" value="11563000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1897,6 +1875,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295583" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1909,7 +1888,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.6890574" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6890574" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2595949" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -2247,24 +2226,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/layout_3d_notes.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="508">
-          <caret line="494" column="175" lean-forward="false" selection-start-line="494" selection-start-column="175" selection-end-line="494" selection-end-column="175" />
-          <folding>
-            <marker date="1494685411405" expanded="true" signature="292:471" ph="SELECT title... ${$table_name}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../../wp-config.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="58" column="0" lean-forward="false" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/inc/class_notes_editor.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
@@ -2314,8 +2275,26 @@
     <entry file="file://$PROJECT_DIR$/setup.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
-          <caret line="12" column="40" lean-forward="false" selection-start-line="12" selection-start-column="40" selection-end-line="12" selection-end-column="40" />
+          <caret line="12" column="17" lean-forward="false" selection-start-line="12" selection-start-column="17" selection-end-line="12" selection-end-column="17" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../wp-config.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="58" column="0" lean-forward="false" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/layout_3d_notes.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="780">
+          <caret line="603" column="69" lean-forward="false" selection-start-line="603" selection-start-column="69" selection-end-line="603" selection-end-column="69" />
+          <folding>
+            <marker date="1494687021943" expanded="true" signature="292:471" ph="SELECT title... ${$table_name}" />
+          </folding>
         </state>
       </provider>
     </entry>

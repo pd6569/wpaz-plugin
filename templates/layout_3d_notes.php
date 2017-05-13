@@ -601,7 +601,7 @@
                                         <div class="panel-body notes-text" data-scantext data-target="embedded-human">
 									        <?php
 									        if($notes) :
-										        echo $notes[0]->content;
+										        echo $notes[0]->note_content;
 									        else:
 									            echo "";
 									        endif;
