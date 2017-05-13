@@ -10,6 +10,7 @@
 - set up permalinks for user-posts (e.g. with author/time/date)
 - change media settings for medium size image
 - Watermark plugin
+- S2 settings for "notes-dashboard" page
 
 // How plugin works
 

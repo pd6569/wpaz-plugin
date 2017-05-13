@@ -492,11 +492,11 @@
                                     <div class="edit-note-container">
                                         <form>
                                             <div class="form-group">
-                                                <input type="text" class="form-control notes-title" placeholder="Enter title" value="<?php echo $notes[0]->title ?>">
+                                                <input type="text" class="form-control notes-title" placeholder="Enter title" value="<?php if ($notes) { echo $notes[0]->title; } ?>">
                                             </div>
                                         </form>
 
-								        <?php wp_editor( $notes[0]->note_content, 'notetexteditor', array(
+								        <?php wp_editor( $notes ? $notes[0]->note_content : "", 'notetexteditor', array(
 									        'media_buttons'     => false
                                         )); ?>
 
@@ -589,11 +589,23 @@
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                             <h2 class="notes-title text-center">
-										        <?php echo $notes[0]->title ?>
+										        <?php
+                                                    if($notes) :
+                                                        echo $notes[0]->title;
+                                                    else:
+                                                        echo "No Title";
+                                                    endif;
+                                                ?>
                                             </h2>
                                         </div>
                                         <div class="panel-body notes-text" data-scantext data-target="embedded-human">
-									        <?php echo $notes[0]->note_content ?>
+									        <?php
+									        if($notes) :
+										        echo $notes[0]->content;
+									        else:
+									            echo "";
+									        endif;
+									        ?>
                                         </div>
                                     </div>
                                     <div>
