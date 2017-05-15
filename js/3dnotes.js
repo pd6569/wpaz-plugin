@@ -246,6 +246,32 @@ class AnatomyNotes {
         this.$noteNavRight.on('click', () => { this.navigateNotes('right'); });
         this.$noteTitle.on("change keyup paste", () => { this.changesMade = true; });
 
+        jQuery(window).on('keyup', (event) => {
+
+            // left arrow
+            if (event.keyCode === 65) {
+                this.navigateActions('previous');
+            }
+
+            // right arrow
+            if (event.keyCode === 68) {
+                this.navigateActions('next');
+            }
+
+            // up arrow
+            if (event.keyCode === 87) {
+                this.navigateNotes('right');
+
+            }
+
+            // down arrow
+            if (event.keyCode === 83) {
+                this.navigateNotes('left');
+
+            }
+
+        });
+
         // tinyMCE Note Editor
         jQuery(document).on( 'tinymce-editor-init', ( event, editor ) => {
 
@@ -1075,6 +1101,10 @@ class AnatomyNotes {
                 let notesArray = data.notes;
                 let actionsArray = data.actions;
 
+                console.log("notes loaded:", notesArray);
+                console.log("actions loaded:", actionsArray);
+
+
                 // Create notes objects and update global data
                 if (notesArray.length > 0){
                     let numNotes = 0;
@@ -1659,56 +1689,6 @@ class AnatomyNotes {
             if (callback) callback(action);
         }
 
-        /*let $actionItem;
-
-        if (!actionTitle) {
-            $actionItem = jQuery("<li id='" + action.uid + "' class='list-group-item'><a> Action " + this.numActions + "</a></li>");
-        } else {
-            $actionItem = jQuery("<li id='" + action.uid + "' class='list-group-item'><a>" + actionTitle + "</a></li>");
-        }
-        this.$actionsDropdownContainer.append($actionItem);
-
-        // Set current action
-        this.setCurrentAction(action);
-
-        // create new generic action
-        if (actionType === appGlobals.actionTypes.GENERAL){
-            this.getSceneState((sceneState) => {
-                action.setSceneState(JSON.stringify(sceneState));
-                console.log("Scene state saved as action");
-                Utils.updateActionStatusBox("Action added to this note set.");
-
-                this._setActionListener($actionItem, action);
-
-                if (callback) callback(action);
-
-            });
-        } else if (actionType === appGlobals.actionTypes.IMAGE){
-
-            this.saveImageToServer({
-                imgSrc: actionData.imgSrc,
-            }, (data) => {
-                console.log("attachment urls: ", data);
-                delete action.action_data.imgSrc;
-                action.action_data.imgUrl = data.attachment_src_full;
-                console.log("action", action);
-            });
-
-            this._setActionListener($actionItem, action);
-
-            if (callback) callback(action);
-        }*/
-
-        /*function setActionListener($actionItem){
-            $actionItem.on('click', (event) => {
-                event.preventDefault();
-
-                self.doAction(action, self);
-
-            });
-        }*/
-
-
     }
 
     removeAction(actionId) {
@@ -1837,26 +1817,6 @@ class AnatomyNotes {
             case appGlobals.actionDataTypes.ROTATE_CAMERA:
                 console.log("Rotate camera");
                 Action.actionFunctions(action_data).rotateCamera();
-
-                /*appGlobals.animateUpdate = true;
-
-                // Stop rotating camera if scene is clicked
-                appObj.human.on('scene.picked', function () {
-                    appGlobals.animateUpdate = false;
-                });
-
-                function update() {
-                    // Orbit camera horizontally around target
-                    appObj.human.send("camera.orbit", {
-                        yaw: action_data.rotationSpeed,
-                    });
-
-                    if (appGlobals.animateUpdate) {
-                        requestAnimationFrame(update);
-                    }
-                };
-
-                requestAnimationFrame(update);*/
                 return true;
 
             default:
@@ -1950,6 +1910,11 @@ class AnatomyNotes {
             appObj.$actionsDropdownContainer.empty();
 
             actions.forEach((action) => {
+
+                if (!action ){
+                    console.log("action is corrupt");
+                    return;
+                }
 
                 appObj.numActions++;
                 appObj.$numActionsLabel.text(appObj.numActions + ' actions');

@@ -19,6 +19,12 @@ export default class ModulePresentation extends BaseModule {
         this.setListeners();
 
         this.setPresentationOverlay();
+
+        this.app.human = new HumanAPI("embedded-human");
+        this.app.human.on('human.ready', () => {
+            console.log("human ready");
+            this.app.doAction(appGlobals.currentAction);
+        });
     }
 
     disableModule () {
@@ -58,7 +64,6 @@ export default class ModulePresentation extends BaseModule {
             if (event.keyCode === 27) this.disableModule();
         });
 
-        jQuery(window).off();
         jQuery(window).on('resize', (event) =>{
             this.setWidgetFullScreen();
         })

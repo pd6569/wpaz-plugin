@@ -88,6 +88,7 @@ export default class Action {
      */
     static getActionById(actionId, noteId = appGlobals.currentNote.uid) {
         let actions = appGlobals.actions[noteId];
+        console.log("actions: ", actions);
         for (let action of actions) {
             if (action) {
                 if (action.uid === actionId){
