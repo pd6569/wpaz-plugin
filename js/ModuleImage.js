@@ -46,16 +46,6 @@ export default class ModuleImage extends BaseModule {
 
     loadImage(imageSrc = this.rootImage.src, imageType = this.rootImage.type) {
 
-        /*let objects = this.group.getObjects();
-        console.log("objects.length before: " + objects.length);
-        /!*for (let object of objects) {
-            this.group.remove(object);
-        }*!/
-        for (let i = 0; i < objects.length ; i++){
-            this.group.remove(objects[i]);
-        }
-        console.log("objects.length after: " + this.group.getObjects().length);*/
-
         let self = this;
 
         this.fabricCanvas.remove(this.group);
@@ -71,36 +61,13 @@ export default class ModuleImage extends BaseModule {
         // Set Image
         if (imageType === 'base64'){
             let imgElement = new Image;
-            imgElement.src = imageSrc;
-
-            /*// Calculate ratio if image to viewport and set canvas zoom accordingly
-            let imgHeight = imgElement.height;
-            let imgWidth = imgElement.width;
-            this.imgDimensions = {
-                "width": imgWidth,
-                "height": imgHeight,
-            };
-            this.zoomToFit(imgHeight);*/
+            imgElement.src = imageSrc
 
             // Create fabric image
             imageToLoad = new fabric.Image(imgElement, {});
 
             this.addImage(imageToLoad);
 
-            /*// Create fabric image
-            imageToLoad = new fabric.Image(imgElement, {});
-
-            // Add image to group
-
-            this.group.addWithUpdate(imageToLoad);
-
-            // Add image to canvas
-            this.fabricCanvas.add(this.group);
-            this.fabricCanvas.viewportCenterObject(this.group);
-            this.group.setCoords();
-            this.fabricCanvas.setActiveObject(this.group);
-
-            this.fabricRootImage = imageToLoad; // reference to uploaded image as fabric object*/
         } else {
             fabric.Image.fromURL(imageSrc, (image) => {
 
@@ -113,17 +80,6 @@ export default class ModuleImage extends BaseModule {
                 // Add image
                 this.addImage(image);
 
-                /*imageToLoad = image;
-
-                this.group.addWithUpdate(image);
-
-                // Add image to canvas
-                this.fabricCanvas.add(this.group);
-                this.fabricCanvas.viewportCenterObject(this.group);
-                this.group.setCoords();
-                this.fabricCanvas.setActiveObject(this.group);
-
-                this.fabricRootImage = imageToLoad;*/
             })
         }
 
@@ -185,54 +141,6 @@ export default class ModuleImage extends BaseModule {
         // Create group to contain image and all annotataions/drawings
         this.createGroup();
 
-        /*// Set Image
-        if (this.rootImage.src){
-            console.log("set image from src");
-            let imgElement = new Image;
-            imgElement.src = this.rootImage.src;
-
-            // Calculate ratio if image to viewport and set canvas zoom accordingly
-            let imgHeight = imgElement.height;
-            let imgWidth = imgElement.width;
-            this.imgDimensions = {
-                "width": imgWidth,
-                "height": imgHeight,
-            };
-            this.zoomToFit(imgHeight);
-
-
-            // Create fabric image
-            let imgInstance = new fabric.Image(imgElement, {});
-            /!*imgInstance.selectable = false;*!/
-
-            // Add image to group
-            this.group.addWithUpdate(imgInstance);
-
-            // Add image to canvas
-            this.fabricCanvas.add(this.group);
-            this.fabricCanvas.viewportCenterObject(this.group);
-            this.group.setCoords();
-            this.fabricCanvas.setActiveObject(this.group);
-
-            this.fabricRootImage = imgInstance; // reference to uploaded image as fabric object
-        } else {
-            console.log("set fabric image from url: " + this.imgUrl);
-            fabric.Image.fromURL(this.imgUrl, (image) => {
-
-                let imgHeight = image.getHeight();
-                this.zoomToFit(imgHeight);
-
-                // Add image to group
-                this.group.addWithUpdate(image);
-
-                // Add image to canvas
-                this.fabricCanvas.add(this.group);
-                this.fabricCanvas.viewportCenterObject(this.group);
-                this.group.setCoords();
-                this.fabricCanvas.setActiveObject(this.group);
-            })
-        }*/
-
         // Track history
         this.undoHistory = []; // array of fabric objects
 
@@ -264,7 +172,6 @@ export default class ModuleImage extends BaseModule {
         // Disable conflicting modes/modules
         if (appGlobals.modulesLoaded[appGlobals.modules.ANNOTATE_MODULE]){
             appGlobals.modulesLoaded[appGlobals.modules.ANNOTATE_MODULE].disableModule();
-            appGlobals.mode.ANNOTATE = false;
         }
 
         // Set UI
@@ -274,97 +181,6 @@ export default class ModuleImage extends BaseModule {
 
         // Resize canvas
         this.resizeCanvas();
-
-/*
-        // If canvas already exists, destroy and create new
-        if (this.fabricCanvas) {
-            this.fabricCanvas.dispose();
-            this.fabricCanvas = null;
-        }
-
-        // Create canvas
-        this.fabricCanvas = new fabric.Canvas('imageCanvas', {
-            backgroundColor: 'rgb(255,255,255)',
-        });
-
-        // Set canvas defaults
-        this.setCanvasDefaults();
-
-        // Create group
-        this.group = new fabric.Group();
-
-        // Set Image
-        if (this.imgSrc){
-            console.log("set image from src");
-            let imgElement = new Image;
-            imgElement.src = this.imgSrc;
-
-            // Calculate ratio if image to viewport and set canvas zoom accordingly
-            let imgHeight = imgElement.height;
-            let imgWidth = imgElement.width;
-            this.imgDimensions = {
-                "width": imgWidth,
-                "height": imgHeight,
-            };
-            this.zoomToFit(imgHeight);
-
-
-            // Create fabric image
-            let imgInstance = new fabric.Image(imgElement, {});
-            /!*imgInstance.selectable = false;*!/
-
-            // Add image to group
-            this.group.addWithUpdate(imgInstance);
-
-            // Add image to canvas
-            this.fabricCanvas.add(this.group);
-            this.fabricCanvas.viewportCenterObject(this.group);
-            this.group.setCoords();
-            this.fabricCanvas.setActiveObject(this.group);
-
-            this.fabricRootImage = imgInstance; // reference to uploaded image as fabric object
-        } else {
-            console.log("set fabric image from url: " + this.imgUrl);
-            fabric.Image.fromURL(this.imgUrl, (image) => {
-
-                let imgHeight = image.getHeight();
-                this.zoomToFit(imgHeight);
-
-                // Add image to group
-                this.group.addWithUpdate(image);
-
-                // Add image to canvas
-                this.fabricCanvas.add(this.group);
-                this.fabricCanvas.viewportCenterObject(this.group);
-                this.group.setCoords();
-                this.fabricCanvas.setActiveObject(this.group);
-            })
-        }
-
-
-        this.fabricCanvas.on('object:added', (event) => {
-            let object = event.target;
-            /!*object.selectable = false;*!/
-
-            if (object === this.group){
-                console.log("group added, return");
-                return;
-            }
-
-            // Clone the object, add to group, remove original object
-            object.clone((newObject) => {
-                this.group.addWithUpdate(newObject);
-                this.fabricCanvas.remove(object);
-
-                this.fabricCanvas.setActiveObject(this.group);
-            })
-        });
-
-        // Track history
-        this.undoHistory = []; // array of fabric objects
-
-        // Add listeners
-        this.setListeners();*/
 
     }
 
@@ -379,12 +195,6 @@ export default class ModuleImage extends BaseModule {
 
         // Set UI
         this.setUi(false);
-
-        /*// Deactivate fabric canvas
-        this.destroyCanvas();*/
-
-        /*// Remove listeners
-        this.removeListeners();*/
 
     }
 

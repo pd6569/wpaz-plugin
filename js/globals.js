@@ -43,7 +43,8 @@ export default {
             NOTE_EDITOR: "NOTE_EDITOR",
             MY_NOTES: "MY_NOTES",
             IMAGE_MODULE: "IMAGE_MODULE",
-            ANNOTATE_MODULE: "ANNOTATE_MODULE"
+            ANNOTATE_MODULE: "ANNOTATE_MODULE",
+            PRESENTATION_MODULE: "PRESENTATION_MODULE"
         },
 
         currentTab: "",
@@ -55,6 +56,7 @@ export default {
         mode: {
             'ANNOTATE': false,
             'EDIT_IMAGE': false,
+            'PRESENTATION': false,
         },
 
         // templates

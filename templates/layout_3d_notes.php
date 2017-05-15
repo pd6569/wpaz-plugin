@@ -292,11 +292,13 @@
 
 			        <?php if ( $user_is_editor || is_page($wp_az_3d_body_id)): ?>
 
+                        <!--- SCENE SELECTOR --->
                         <div id="wpaz-scene-selector" class="text-center">
 
 					        <?php if (!is_page($wp_az_3d_body_id)) : ?>
                                 <button id="scene-selector-image" type="button" class="btn btn-default pull-left"><span class="glyphicon glyphicon-picture" aria-hidden="true"></span></button>
                                 <button id="scene-selector-annotate-model" type="button" class="btn btn-default pull-left"><span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span></button>
+                                <button id="scene-selector-presentation-mode" type="button" class="btn btn-default pull-left"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button>
 					        <?php endif ?>
 
                             <div class="btn-group scene-selector scene-selector__whole-body dropup">

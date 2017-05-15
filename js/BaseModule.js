@@ -72,6 +72,10 @@ export default class BaseModule {
                 if (appGlobals.modulesLoaded[appGlobals.modules.IMAGE_MODULE]){
                     appGlobals.modulesLoaded[appGlobals.modules.IMAGE_MODULE].disableModule();
                 }
+            } else if (mode === 'PRESENTATION_MODE') {
+                if (appGlobals.modulesLoaded[appGlobals.modules.PRESENTATION_MODULE]) {
+                    appGlobals.modulesLoaded[appGlobals.modules.PRESENTATION_MODULE].disableModule();
+                }
             }
 
         }

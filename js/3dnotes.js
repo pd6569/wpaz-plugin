@@ -20,6 +20,7 @@ import Utils from './Utils';
 import BaseModule from './BaseModule';
 import ModuleImage from './ModuleImage';
 import ModuleAnnotate from './ModuleAnnotate';
+import ModulePresentation from './ModulePresentation';
 import MyNotes from './MyNotes';
 import Action from './Actions';
 import Note from './Note';
@@ -97,6 +98,15 @@ class AnatomyNotes {
         this.$modelContainer = jQuery('#wpaz-model-container');
         this.$modeInfo = jQuery('#wpaz-mode-info');
 
+        /***********************
+         *  SCENE SELECTOR     *
+         ***********************/
+
+        this.$sceneSelectorOption = jQuery('.scene-selector-option');
+        this.$sceneSelectImageBtn = jQuery('#scene-selector-image');
+        this.$annotateModelBtn = jQuery('#scene-selector-annotate-model');
+        this.$presentationModeBtn = jQuery('#scene-selector-presentation-mode');
+
         /**********************
          *    NOTE CONTAINER  *
          **********************/
@@ -149,14 +159,6 @@ class AnatomyNotes {
         this.$saveBtn = jQuery('#notes-save-btn');
         this.$addNewNotesSection = jQuery('#notes-add-new-btn');
         this.$deleteNoteBtn = jQuery('#notes-delete-btn');
-
-        /***********************
-         *  SCENE SELECTOR     *
-         ***********************/
-
-        this.$sceneSelectorOption = jQuery('.scene-selector-option');
-        this.$sceneSelectImageBtn = jQuery('#scene-selector-image');
-        this.$annotateModelBtn = jQuery('#scene-selector-annotate-model');
 
 
         /*********************
@@ -235,6 +237,7 @@ class AnatomyNotes {
         this.$sceneSelectorOption.on('click', (event) => { this.loadScene(jQuery(event.target)) });
         this.$sceneSelectImageBtn.on('click', (event) => { this.loadImage(event) });
         this.$annotateModelBtn.on('click', (event) => { this.loadModule(appGlobals.modules.ANNOTATE_MODULE);});
+        this.$presentationModeBtn.on('click', (event) => this.loadModule(appGlobals.modules.PRESENTATION_MODULE));
 
 
         // Note container
@@ -425,6 +428,10 @@ class AnatomyNotes {
                     moduleToLoad.toggleModule();
                     break;
 
+                case appGlobals.modules.PRESENTATION_MODULE:
+                    moduleToLoad.enableModule();
+                    break;
+
                 default:
                     console.log("Could not load module: " + moduleName);
                     break;
@@ -444,6 +451,10 @@ class AnatomyNotes {
 
                 case appGlobals.modules.ANNOTATE_MODULE:
                     new ModuleAnnotate(moduleName);
+                    break;
+
+                case appGlobals.modules.PRESENTATION_MODULE:
+                    new ModulePresentation(moduleName);
                     break;
 
                 default:
