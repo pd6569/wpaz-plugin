@@ -50,6 +50,8 @@ export default class ModulePresentation extends BaseModule {
         this.$presentationOverlay = jQuery(
             '<div id="presentation-overlay">\
                 <div id="presentation-toolbar">\
+                    <span id="presentation-previous-action" class="glyphicon glyphicon-chevron-left presentation-toolbar-btn"></span>\
+                    <span id="presentation-next-action" class="glyphicon glyphicon-chevron-right presentation-toolbar-btn"></span>\
                     <span id="exit-presentation" class="glyphicon glyphicon-remove presentation-toolbar-btn"></span>\
                 </div>\
 			</div>');
@@ -59,6 +61,9 @@ export default class ModulePresentation extends BaseModule {
         this.$toolbar = this.$presentationOverlay.find('#presentation-toolbar');
         this.$toolbarBtns = this.$presentationOverlay.find('.presentation-toolbar-btn');
         this.$exitBtn = this.$toolbar.find('#exit-presentation');
+        this.$nextActionBtn = this.$toolbar.find('#presentation-next-action');
+        this.$previousActionBtn = this.$toolbar.find('#presentation-previous-action');
+
 
         // Disable scrollbars
         document.body.style.overflow = 'hidden';
@@ -100,6 +105,8 @@ export default class ModulePresentation extends BaseModule {
         };
 
         this.$exitBtn.on('click', () => this.toolbarListeners.exit());
+        this.$nextActionBtn.on('click', () => this.app.navigateActions('next'));
+        this.$previousActionBtn.on('click', () => this.app.navigateActions());
     }
 
     setListeners(){
