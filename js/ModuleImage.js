@@ -61,7 +61,7 @@ export default class ModuleImage extends BaseModule {
         // Set Image
         if (imageType === 'base64'){
             let imgElement = new Image;
-            imgElement.src = imageSrc
+            imgElement.src = imageSrc;
 
             // Create fabric image
             imageToLoad = new fabric.Image(imgElement, {});

@@ -33,6 +33,7 @@ export default class ModulePresentation extends BaseModule {
         console.log(this.moduleName + " disabled");
         appGlobals.mode.PRESENTATION = false;
         this.removePresentationOverlay();
+        this.removeListeners();
 
     }
 
@@ -44,11 +45,18 @@ export default class ModulePresentation extends BaseModule {
         this.$presentationOverlay = jQuery(
             '<div id="presentation-overlay">\
                 <div id="presentation-toolbar">\
-                    <span class="glyphicon glyphicon-remove pull-right"></span>\
+                    <span id="exit-presentation" class="glyphicon glyphicon-remove presentation-toolbar-btn"></span>\
                 </div>\
 			</div>');
-
         jQuery('body').append(this.$presentationOverlay);
+
+        // Get DOM elements
+        this.$toolbar = this.$presentationOverlay.find('#presentation-toolbar');
+        this.$toolbarBtns = this.$presentationOverlay.find('.presentation-toolbar-btn');
+        this.$exitBtn = this.$toolbar.find('#exit-presentation');
+
+        // Set toolbar listeners
+        this.setToolbarListeners();
 
         this.setWidgetFullScreen();
         this.$presentationOverlay.append(this.app.$iframeContainer);
@@ -59,6 +67,19 @@ export default class ModulePresentation extends BaseModule {
         this.app.$humanWidget.height(600);
         this.app.$modelContainer.prepend(this.app.$iframeContainer);
         this.$presentationOverlay.remove();
+    }
+
+    setToolbarListeners() {
+
+        let _this = this;
+
+        this.toolbarListeners = {
+            "exit": function() {
+                _this.disableModule();
+            }
+        };
+
+        this.$exitBtn.on('click', () => this.toolbarListeners.exit());
     }
 
     setListeners(){
@@ -79,9 +100,19 @@ export default class ModulePresentation extends BaseModule {
             }
         };
 
-        jQuery(document).keyup((event) => this.windowListeners.keyboardShortcuts(event));
+        jQuery(window).keyup(this.windowListeners.keyboardShortcuts);
 
-        jQuery(window).on('resize', () => this.windowListeners.resize());
+        jQuery(window).on('resize', this.windowListeners.resize);
+    }
+
+    removeListeners() {
+        console.log("removeListeners");
+
+        // Toolbar
+        this.$toolbarBtns.off();
+
+        // Window
+        jQuery(window).unbind('resize', this.windowListeners.resize);
     }
 
     setWidgetFullScreen(){
