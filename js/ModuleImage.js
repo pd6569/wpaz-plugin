@@ -24,6 +24,7 @@ export default class ModuleImage extends BaseModule {
 
         // Canvas
         this.$imageCanvas = this.app.$imageCanvas;
+        this.canvasMarginsSet = true; // margins either side of canvas - to be removed in presentation mode
 
         // Toolbar
         this.$toolbar = jQuery('#wpaz-image-editor-toolbar');
@@ -36,7 +37,8 @@ export default class ModuleImage extends BaseModule {
         this.fabricRootImage = {}; // uploaded image as Fabric object
         this.imgDimensions = {};
 
-        /*this.toggleModule();*/
+        // Window Listeners
+        this.windowListenerIsSet = false;
 
         // Set up fabric canvas
         this.setupCanvas();
@@ -182,6 +184,8 @@ export default class ModuleImage extends BaseModule {
         // Resize canvas
         this.resizeCanvas();
 
+        // Enable window listeners
+        this.setWindowListeners();
     }
 
     disableModule() {
@@ -196,6 +200,8 @@ export default class ModuleImage extends BaseModule {
         // Set UI
         this.setUi(false);
 
+        // Remove window listeners
+        this.removeListeners();
     }
 
     setUi(enable){
@@ -233,8 +239,11 @@ export default class ModuleImage extends BaseModule {
     }
 
     removeListeners(){
-        jQuery(window).off();
-        this.$toolbarButtons.off();
+
+        console.log("removeListeners");
+
+        // Window listeners
+        jQuery(window).unbind('resize', this.windowListeners.resizeCanvas);
     }
 
     setCanvasListeners(){
@@ -260,25 +269,73 @@ export default class ModuleImage extends BaseModule {
 
     setWindowListeners(){
         let app = this.app;
-        let self = this;
+        let _this = this;
         let fabricCanvas = this.fabricCanvas;
 
-        let resizeCanvas = function() {
-            if (appGlobals.mode.EDIT_IMAGE){
-                fabricCanvas.setWidth(app.$humanWidget.width());
-                self.toolbarActions.centerImage();
+        this.windowListeners = {
+            "resizeCanvas": function() {
+                if (appGlobals.mode.EDIT_IMAGE){
+                    console.log("resizeCanvas");
+
+
+                    // Remove margins if in presentation mode
+                    console.log("presentation mode: " + appGlobals.mode.PRESENTATION + " margins set: " + _this.canvasMarginsSet);
+                    if (appGlobals.mode.PRESENTATION){
+                        console.log("presentation mode - remove margins");
+
+                        // remove margins from canvas
+                        if (_this.canvasMarginsSet) {
+                            jQuery('.canvas-container').css({
+                                'margin-left': '0px',
+                                'margin-right': '0px'
+                            });
+                        }
+
+                        let viewportHeight = jQuery(window).height();
+                        let viewPortWidth = jQuery(window).width();
+
+                        fabricCanvas.setWidth(viewPortWidth);
+                        fabricCanvas.setHeight(viewportHeight);
+
+                        _this.toolbarActions.centerImage();
+
+                        _this.canvasMarginsSet = false;
+                    } else {
+
+                        // reset canvas margins
+                        if (!_this.canvasMarginsSet) {
+                            jQuery('.canvas-container').css({
+                                'margin-left': '15px',
+                                'margin-right': '15px'
+                            });
+                        }
+                        fabricCanvas.setWidth(app.$humanWidget.width());
+                        fabricCanvas.setHeight(app.$humanWidget.height());
+                        _this.toolbarActions.centerImage();
+
+                        _this.canvasMarginsSet = true;
+                    }
+                }
             }
         };
 
-        jQuery(window).off();
-        jQuery(window).on('resize', resizeCanvas);
+        console.log("set resize canvas handler");
+
+        if (!this.windowListenerIsSet) {
+            jQuery(window).on('resize', this.windowListeners.resizeCanvas);
+        }
+
+        this.windowListenerIsSet = true;
 
     }
 
     resizeCanvas() {
         if (appGlobals.mode.EDIT_IMAGE){
+            this.windowListeners.resizeCanvas();
+            /*console.log("width: " + this.app.$humanWidget.width() + " height: " + this.app.$humanWidget.height());
             this.fabricCanvas.setWidth(this.app.$humanWidget.width());
-            this.toolbarActions.centerImage();
+            this.fabricCanvas.setHeight(this.app.$humanWidget.height());
+            this.toolbarActions.centerImage();*/
         }
     }
 

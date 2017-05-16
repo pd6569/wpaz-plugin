@@ -23,10 +23,15 @@ export default class ModulePresentation extends BaseModule {
         this.setPresentationOverlay();
 
         this.app.human = new HumanAPI("embedded-human");
-        this.app.human.on('human.ready', () => {
-            console.log("human ready");
+        console.log("currentAction", appGlobals.currentAction);
+        if (appGlobals.currentAction.action_type === appGlobals.actionTypes.IMAGE){
             this.app.doAction(appGlobals.currentAction);
-        });
+        } else {
+            this.app.human.on('human.ready', () => {
+                console.log("human ready");
+                this.app.doAction(appGlobals.currentAction);
+            });
+        }
     }
 
     disableModule () {
@@ -63,9 +68,15 @@ export default class ModulePresentation extends BaseModule {
     }
 
     removePresentationOverlay(){
+        this.app.$modelContainer.prepend(this.app.$iframeContainer);
+
         this.app.$humanWidget.width("100%");
         this.app.$humanWidget.height(600);
-        this.app.$modelContainer.prepend(this.app.$iframeContainer);
+
+        if (appGlobals.mode.EDIT_IMAGE) {
+            appGlobals.modulesLoaded[appGlobals.modules.IMAGE_MODULE].resizeCanvas();
+        }
+
         this.$presentationOverlay.remove();
     }
 
@@ -93,8 +104,8 @@ export default class ModulePresentation extends BaseModule {
                 _this.setWidgetFullScreen();
             },
             "keyboardShortcuts": function(event) {
-                console.log("disable presentation module");
                 if (event.keyCode === 27) {
+                    console.log("exit presentation mode");
                     _this.disableModule();
                 }
             }

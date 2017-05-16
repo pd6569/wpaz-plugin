@@ -270,6 +270,10 @@ class AnatomyNotes {
 
             }
 
+            if (event.keyCode === 77) {
+                console.log("mode status: ", appGlobals.mode);
+            }
+
         });
 
         // tinyMCE Note Editor
@@ -1829,6 +1833,8 @@ class AnatomyNotes {
     doAction(action, appObj){
         console.log("doAction");
 
+        console.log("mode status: ", appGlobals.mode);
+
         let _this;
         appObj ? _this = appObj : _this = this;
 
@@ -1839,7 +1845,9 @@ class AnatomyNotes {
             case appGlobals.actionTypes.GENERAL:
 
                 // Disable any modes
-                BaseModule.turnAllModesOff();
+                BaseModule.turnAllModesOff({
+                    'PRESENTATION': true
+                });
 
                 _this.human.send('camera.set', {
                     position: JSON.parse(action.scene_state).camera.eye,

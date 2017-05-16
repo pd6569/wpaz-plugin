@@ -58,26 +58,32 @@ export default class BaseModule {
      *
      * Turn off all modes
      *
+     * @param {object} excludeModes  - Associative array of modes to remain ON;
      */
-    static turnAllModesOff() {
+    static turnAllModesOff(excludeModes) {
+
+        console.log("turnAllModesOff");
 
         let modes = Object.keys(appGlobals.mode);
         for (let mode of modes){
-            appGlobals.mode[mode] = false;
-            if (mode === 'ANNOTATE') {
+
+            if (mode === 'ANNOTATE' && !excludeModes.ANNOTATE) {
+                console.log("disable annotate mode");
                 if (appGlobals.modulesLoaded[appGlobals.modules.ANNOTATE_MODULE]){
                     appGlobals.modulesLoaded[appGlobals.modules.ANNOTATE_MODULE].disableModule();
                 }
-            } else if (mode === 'EDIT_IMAGE'){
+            } else if (mode === 'EDIT_IMAGE' && !excludeModes.EDIT_IMAGE){
+                console.log("disable edit image mode");
                 if (appGlobals.modulesLoaded[appGlobals.modules.IMAGE_MODULE]){
                     appGlobals.modulesLoaded[appGlobals.modules.IMAGE_MODULE].disableModule();
                 }
-            } else if (mode === 'PRESENTATION_MODE') {
+            } else if (mode === 'PRESENTATION_MODE' && !excludeModes.PRESENTATION) {
+                console.log("disable presentation mode");
                 if (appGlobals.modulesLoaded[appGlobals.modules.PRESENTATION_MODULE]) {
                     appGlobals.modulesLoaded[appGlobals.modules.PRESENTATION_MODULE].disableModule();
                 }
             }
-
         }
+
     }
 }
