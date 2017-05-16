@@ -2,6 +2,8 @@
  * Created by Peter on 15/05/2017.
  */
 
+//TODO: SORT OUT WINDOW LISTENERS
+
 import appGlobals from './globals'
 import Utils from './Utils'
 import BaseModule from './BaseModule'
@@ -41,6 +43,9 @@ export default class ModulePresentation extends BaseModule {
 
         this.$presentationOverlay = jQuery(
             '<div id="presentation-overlay">\
+                <div id="presentation-toolbar">\
+                    <span class="glyphicon glyphicon-remove pull-right"></span>\
+                </div>\
 			</div>');
 
         jQuery('body').append(this.$presentationOverlay);
@@ -59,14 +64,24 @@ export default class ModulePresentation extends BaseModule {
     setListeners(){
         console.log("setListeners");
 
-        jQuery(document).keyup((event) => {
-            console.log("disable presentation module");
-            if (event.keyCode === 27) this.disableModule();
-        });
+        let _this = this;
+        this.windowListeners = {
 
-        jQuery(window).on('resize', (event) =>{
-            this.setWidgetFullScreen();
-        })
+            "resize": function () {
+                console.log("resize presentation module");
+                _this.setWidgetFullScreen();
+            },
+            "keyboardShortcuts": function(event) {
+                console.log("disable presentation module");
+                if (event.keyCode === 27) {
+                    _this.disableModule();
+                }
+            }
+        };
+
+        jQuery(document).keyup((event) => this.windowListeners.keyboardShortcuts(event));
+
+        jQuery(window).on('resize', () => this.windowListeners.resize());
     }
 
     setWidgetFullScreen(){

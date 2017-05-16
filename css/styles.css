@@ -314,6 +314,13 @@
     user-select: none;
 }
 
+#presentation-toolbar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px;
+}
+
 
 /************************************************
  * LOADING from http://tobiasahlin.com/spinkit/ *
