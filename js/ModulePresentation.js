@@ -74,7 +74,9 @@ export default class ModulePresentation extends BaseModule {
         this.app.$humanWidget.height(600);
 
         if (appGlobals.mode.EDIT_IMAGE) {
-            appGlobals.modulesLoaded[appGlobals.modules.IMAGE_MODULE].resizeCanvas();
+            let editModule = appGlobals.modulesLoaded[appGlobals.modules.IMAGE_MODULE];
+            editModule.resizeCanvas();
+            editModule.toggleToolbar(true);
         }
 
         this.$presentationOverlay.remove();

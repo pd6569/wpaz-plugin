@@ -156,7 +156,7 @@ export default class ModuleImage extends BaseModule {
     createGroup(){
         this.group = new fabric.Group();
 
-        if (!this.app.userIsEditor) {
+        if (!this.app.userIsEditor || appGlobals.mode.PRESENTATION) {
             this.group.hasBorders = false;
             this.group.hasControls = false;
         }
@@ -183,6 +183,9 @@ export default class ModuleImage extends BaseModule {
 
         // Resize canvas
         this.resizeCanvas();
+
+        // Check mode
+        appGlobals.mode.PRESENTATION ? this.toggleToolbar(false) : this.toggleToolbar(true);
 
         // Enable window listeners
         this.setWindowListeners();
@@ -363,6 +366,10 @@ export default class ModuleImage extends BaseModule {
     zoomToFit(objectHeight){
         let viewportImgRatio = this.fabricCanvas.getHeight() / objectHeight;
         this.fabricCanvas.setZoom(viewportImgRatio);
+    }
+
+    toggleToolbar(on){
+        on ? this.$toolbar.show() : this.$toolbar.hide();
     }
 
     /****
