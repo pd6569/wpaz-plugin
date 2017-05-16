@@ -60,14 +60,21 @@ export default class ModulePresentation extends BaseModule {
         this.$toolbarBtns = this.$presentationOverlay.find('.presentation-toolbar-btn');
         this.$exitBtn = this.$toolbar.find('#exit-presentation');
 
-        // Set toolbar listeners
-        this.setToolbarListeners();
+        // Disable scrollbars
+        document.body.style.overflow = 'hidden';
 
         this.setWidgetFullScreen();
         this.$presentationOverlay.append(this.app.$iframeContainer);
+
+        // Set toolbar listeners
+        this.setToolbarListeners();
     }
 
     removePresentationOverlay(){
+
+        // Disable scrollbars
+        document.body.style.overflow = 'visible';
+
         this.app.$modelContainer.prepend(this.app.$iframeContainer);
 
         this.app.$humanWidget.width("100%");
