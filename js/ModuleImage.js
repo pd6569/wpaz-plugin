@@ -2,6 +2,8 @@
  * Created by peter on 03/05/2017.
  */
 
+//TODO: Fade in animation when switching from image to image
+
 "use strict";
 
 import appGlobals from './globals';
@@ -132,7 +134,9 @@ export default class ModuleImage extends BaseModule {
         console.log("setupCanvas");
 
         // Show canvas
-        this.$imageCanvas.show();
+        this.$imageCanvas.fadeIn({
+            'duration': 1000,
+        });
 
         // If canvas already exists, destroy and create new
         this.destroyCanvas();
@@ -179,7 +183,9 @@ export default class ModuleImage extends BaseModule {
         // Set UI
         this.setUi(true);
 
-        this.$imageCanvas.show();
+        this.$imageCanvas.fadeIn({
+            'duration': 1000
+        });
 
         // Resize canvas
         this.resizeCanvas();
@@ -198,7 +204,9 @@ export default class ModuleImage extends BaseModule {
         appGlobals.mode.EDIT_IMAGE = false;
 
         // Disable canvas
-        this.$imageCanvas.hide();
+        this.$imageCanvas.fadeOut({
+            'duration': 1000
+        });
 
         // Set UI
         this.setUi(false);

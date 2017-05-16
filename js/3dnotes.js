@@ -998,7 +998,6 @@ class AnatomyNotes {
     }
 
     // INIT
-
     setHumanUi(){
         console.log("setHumanUi");
         let displayConfig;
