@@ -450,8 +450,13 @@ class AnatomyNotes {
                 case appGlobals.modules.IMAGE_MODULE:
                     moduleToLoad.rootImage.src = data.imgSrc;
                     moduleToLoad.rootImage.type = data.imgType;
-                    moduleToLoad.enableModule();
-                    moduleToLoad.loadImage();
+                    if (!appGlobals.mode.EDIT_IMAGE) {
+                        moduleToLoad.enableModule();
+                        moduleToLoad.loadImage();
+                    } else {
+                        moduleToLoad.loadImage(data.imgSrc, data.imgType)
+                    }
+
                     break;
 
                 case appGlobals.modules.ANNOTATE_MODULE:
@@ -1832,7 +1837,9 @@ class AnatomyNotes {
     doAction(action, appObj){
         console.log("doAction");
 
-        console.log("mode status: ", appGlobals.mode);
+        if (appGlobals.currentAction === action && action.action_type === appGlobals.actionTypes.IMAGE) {
+            return;
+        }
 
         let _this;
         appObj ? _this = appObj : _this = this;

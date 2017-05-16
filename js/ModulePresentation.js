@@ -40,6 +40,12 @@ export default class ModulePresentation extends BaseModule {
         this.removePresentationOverlay();
         this.removeListeners();
 
+        if (appGlobals.mode.EDIT_IMAGE) {
+            let imgModule = appGlobals.modulesLoaded[appGlobals.modules.IMAGE_MODULE];
+            imgModule.zoomToFit(imgModule.group.getHeight());
+            imgModule.toolbarActions.centerImage();
+        }
+
     }
 
     toggleModule() {}
@@ -64,6 +70,10 @@ export default class ModulePresentation extends BaseModule {
         this.$nextActionBtn = this.$toolbar.find('#presentation-next-action');
         this.$previousActionBtn = this.$toolbar.find('#presentation-previous-action');
 
+        if (appGlobals.mode.EDIT_IMAGE) {
+            let imgMod =  appGlobals.modulesLoaded[appGlobals.modules.IMAGE_MODULE];
+            imgMod.resizeCanvas();
+        }
 
         // Disable scrollbars
         document.body.style.overflow = 'hidden';

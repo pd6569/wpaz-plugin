@@ -49,18 +49,27 @@ export default class ModuleImage extends BaseModule {
     }
 
     loadImage(imageSrc = this.rootImage.src, imageType = this.rootImage.type) {
+        console.log("loadImage");
 
-        let self = this;
+        this.group.remove(this.fabricRootImage);
 
-        this.fabricCanvas.remove(this.group);
+        let _this = this;
+
+        /*this.fabricCanvas.remove(this.group);
         this.fabricCanvas.renderAll();
 
-        this.createGroup();
+        this.createGroup();*/
 
         this.resetHistory();
 
         // Fabric image
         let imageToLoad;
+
+        /*if (previousImg) {
+            console.log("previousImg", previousImg);
+            this.group.add(previousImg);
+        }*/
+
 
         // Set Image
         if (imageType === 'base64'){
@@ -91,20 +100,31 @@ export default class ModuleImage extends BaseModule {
 
     addImage(imageToLoad) {
 
+        let _this = this;
+
         let imgHeight = imageToLoad.getHeight();
         this.zoomToFit(imgHeight);
 
+        // Add image to canvas
+        imageToLoad.setOpacity(0);
 
-        // Add image to group
         this.group.addWithUpdate(imageToLoad);
 
-        // Add image to canvas
-        this.fabricCanvas.add(this.group);
-        this.fabricCanvas.viewportCenterObject(this.group);
-        this.group.setCoords();
-        this.fabricCanvas.setActiveObject(this.group);
+        _this.fabricCanvas.viewportCenterObject(_this.group);
+        _this.group.setCoords();
 
-        this.fabricRootImage = imageToLoad; // reference to uploaded image as fabric object
+        imageToLoad.animate('opacity', '1', {
+            onChange: _this.fabricCanvas.renderAll.bind(_this.fabricCanvas),
+            onComplete: function() {
+                console.log("fade animation complete");
+
+                /*_this.fabricCanvas.viewportCenterObject(_this.group);
+                 _this.group.setCoords();
+                 _this.fabricCanvas.setActiveObject(_this.group);*/
+
+                _this.fabricRootImage = imageToLoad; // reference to uploaded image as fabric object
+            }
+        });
 
     }
 
@@ -134,9 +154,8 @@ export default class ModuleImage extends BaseModule {
         console.log("setupCanvas");
 
         // Show canvas
-        this.$imageCanvas.fadeIn({
-            'duration': 1000,
-        });
+        /*this.$imageCanvas.show();*/
+        this.$imageCanvas.show();
 
         // If canvas already exists, destroy and create new
         this.destroyCanvas();
@@ -155,6 +174,7 @@ export default class ModuleImage extends BaseModule {
 
         // Load image
         this.loadImage(imageSrc, imageType);
+
     }
 
     createGroup(){
@@ -164,6 +184,11 @@ export default class ModuleImage extends BaseModule {
             this.group.hasBorders = false;
             this.group.hasControls = false;
         }
+
+        this.fabricCanvas.add(this.group);
+        this.fabricCanvas.viewportCenterObject(this.group);
+        this.group.setCoords();
+        this.fabricCanvas.setActiveObject(this.group);
     }
 
     resetHistory() {
@@ -183,18 +208,23 @@ export default class ModuleImage extends BaseModule {
         // Set UI
         this.setUi(true);
 
-        this.$imageCanvas.fadeIn({
-            'duration': 1000
-        });
+        /*this.$imageCanvas.show();*/
+        this.$imageCanvas.show();
 
         // Resize canvas
         this.resizeCanvas();
+
+        // Create new group
+        this.fabricCanvas.remove(this.group);
+        this.createGroup();
 
         // Check mode
         appGlobals.mode.PRESENTATION ? this.toggleToolbar(false) : this.toggleToolbar(true);
 
         // Enable window listeners
         this.setWindowListeners();
+
+        console.log("group: " + this.group.getObjects().length);
     }
 
     disableModule() {
@@ -210,6 +240,9 @@ export default class ModuleImage extends BaseModule {
 
         // Set UI
         this.setUi(false);
+
+        // Reset root image
+        this.fabricRootImage = {};
 
         // Remove window listeners
         this.removeListeners();
