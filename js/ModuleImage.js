@@ -46,14 +46,14 @@ export default class ModuleImage extends BaseModule {
         this.setupCanvas();
         
         this.enableModule();
+
+        this.loadImage();
     }
 
     loadImage(imageSrc = this.rootImage.src, imageType = this.rootImage.type) {
         console.log("loadImage");
 
         this.group.remove(this.fabricRootImage);
-
-        let _this = this;
 
         /*this.fabricCanvas.remove(this.group);
         this.fabricCanvas.renderAll();
@@ -99,10 +99,13 @@ export default class ModuleImage extends BaseModule {
     }
 
     addImage(imageToLoad) {
-
+        console.log("addImage", imageToLoad);
         let _this = this;
 
         let imgHeight = imageToLoad.getHeight();
+
+        console.log("image height: " + imgHeight);
+
         this.zoomToFit(imgHeight);
 
         // Add image to canvas
@@ -172,8 +175,8 @@ export default class ModuleImage extends BaseModule {
         // Add listeners
         this.setListeners();
 
-        // Load image
-        this.loadImage(imageSrc, imageType);
+        /*// Load image
+        this.loadImage(imageSrc, imageType);*/
 
     }
 
