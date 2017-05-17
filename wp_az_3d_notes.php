@@ -419,22 +419,12 @@ class wp_az_3d_notes {
 		uid tinytext NOT NULL,
 		post_id mediumint(9) NOT NULL,
 		note_id tinytext NOT NULL,
-		action_order tinyint,
 		action_type tinytext NOT NULL,
 		scene_state text,
 		action_data text,
 		action_title tinytext,
 		PRIMARY KEY  (id)
 		) $charset_collate;";
-
-		/*$sql .= "CREATE TABLE $table_notes_images (
-		id mediumint(9) NOT NULL AUTO_INCREMENT,
-		uid tinytext NOT NULL,
-		post_id mediumint(9) NOT NULL,
-		note_id tinytext NOT NULL,
-		image_order tinyint NOT NULL,
-		image_url tinytext NOT NULL,	
-		) $charset_collate;";*/
 
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 		dbDelta( $sql );
@@ -517,7 +507,6 @@ class wp_az_3d_notes {
 					'uid'           => $action['uid'],
 					'note_id'       => $action['note_id'],
 					'post_id'       => $post_id,
-					'action_order'  => $action['action_order'],
 					'action_type'   => $action['action_type'],
 					'scene_state'   => $action['scene_state'],
 					'action_data'   => json_encode($action['action_data']),

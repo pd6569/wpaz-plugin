@@ -248,32 +248,36 @@ class AnatomyNotes {
 
         jQuery(window).on('keyup', (event) => {
 
+            if (!appGlobals.modalActive && !this.$noteTitle.is(':focus')) {
 
-            // left arrow
-            if (event.keyCode === 65) {
-                this.navigateActions('previous');
+                // left arrow
+                if (event.keyCode === 65) {
+                    this.navigateActions('previous');
+                }
+
+                // right arrow
+                if (event.keyCode === 68) {
+                    this.navigateActions('next');
+                }
+
+                // up arrow
+                if (event.keyCode === 87) {
+                    this.navigateNotes('right');
+
+                }
+
+                // down arrow
+                if (event.keyCode === 83) {
+                    this.navigateNotes('left');
+
+                }
+
+                if (event.keyCode === 77) {
+                    console.log("mode status: ", appGlobals.mode);
+                }
+
             }
 
-            // right arrow
-            if (event.keyCode === 68) {
-                this.navigateActions('next');
-            }
-
-            // up arrow
-            if (event.keyCode === 87) {
-                this.navigateNotes('right');
-
-            }
-
-            // down arrow
-            if (event.keyCode === 83) {
-                this.navigateNotes('left');
-
-            }
-
-            if (event.keyCode === 77) {
-                console.log("mode status: ", appGlobals.mode);
-            }
 
         });
 
