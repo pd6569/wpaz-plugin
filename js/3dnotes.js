@@ -722,10 +722,19 @@ class AnatomyNotes {
                         }
                         this.addAction(data.actionText, actionData, (action) => {
                             console.log("added action: ", action);
-                            let linkedText =
-                                "<span class='linked-scene' data-action-id='" + action.uid + "' data-action-disabled='true'>" +
-                                data.actionText +
-                                "</span>";
+
+                            let linkedText;
+                            if (action.action_type === appGlobals.actionTypes.IMAGE){
+                                linkedText =
+                                    "<span class='linked-scene' data-action-id='" + action.uid + "' data-action-disabled='true'>" +
+                                        data.actionText +
+                                    "</span>";
+                            } else {
+                                linkedText =
+                                    "<span class='linked-scene' data-action-id='" + action.uid + "'>" +
+                                        data.actionText +
+                                    "</span>";
+                            }
                             this.noteEditor.execCommand( 'mceInsertContent', true, linkedText);
                             this.refreshActionList();
                         }, actionType);

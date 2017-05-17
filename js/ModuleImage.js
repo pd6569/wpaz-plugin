@@ -72,18 +72,28 @@ export default class ModuleImage extends BaseModule {
             this.addImage(imageToLoad);
 
         } else {
+
+            // Unclear why but sometimes callback is called TWICE duplicating image
             fabric.Image.fromURL(imageSrc, (image) => {
 
+                console.log("image from URL called");
+
                 // Prevent duplicate images
-                if (this.group.getObjects().length > 0){
-                    console.log("Image already added, return");
-                    return;
+                if (this.group.getObjects().length > 0) {
+
+                    let objects = this.group.getObjects();
+                    let i = 0;
+                    while (objects.length != 0) {
+                        i++;
+                        this.group.removeWithUpdate(objects[0])
+                    }
+
                 }
 
                 // Add image
                 this.addImage(image);
 
-            })
+            });
         }
 
     }
@@ -191,7 +201,6 @@ export default class ModuleImage extends BaseModule {
         // Set UI
         this.setUi(true);
 
-        /*this.$imageCanvas.show();*/
         this.$imageCanvas.show();
 
         // Resize canvas
@@ -312,8 +321,6 @@ export default class ModuleImage extends BaseModule {
         this.windowListeners = {
             "resizeCanvas": function() {
                 if (appGlobals.mode.EDIT_IMAGE){
-                    console.log("resizeCanvas");
-
 
                     // Remove margins if in presentation mode
                     if (appGlobals.mode.PRESENTATION){
