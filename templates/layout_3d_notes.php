@@ -142,6 +142,48 @@
         <div id="wpaz-main-layout">
             <div class="row">
 
+                <div class="row toolbar-row scene-controls">
+                    <div id="scene-controls-container" class="col-md-12 actions-buttons scene-controls">
+                        <div class="btn-group" role="group" aria-label="...">
+                            <button id="action-add" type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                            <button id="action-previous" type="button" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
+                            <button id="action-next" type="button" class="btn btn-default"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></button>
+
+                            <div class="btn-group">
+                                <button class="btn btn-default dropdown-toggle" type="button" id="actions-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    Actions
+                                    <span class="caret"></span>
+                                </button>
+                                <ul id="actions-dropdown-container" class="dropdown-menu" aria-labelledby="actions-dropdown">
+                                </ul>
+                            </div>
+
+                        </div>
+                        <div class="action-properties scene-controls">
+                            <span id="current-action" class="label label-info">Action 1</span>
+                            <span id="num-actions" class="label label-info">0 actions</span>
+                        </div>
+                        <div class="toolbar-annotations scene-controls">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="annotations-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                Annotations
+                                <span class="caret"></span>
+                            </button>
+                            <ul id="annotations-dropdown-container" class="dropdown-menu" aria-labelledby="annotations-dropdown">
+                            </ul>
+                        </div>
+                        <div class="annotation-properties scene-controls">
+                            <span id="num-annotations" class="label label-info">0 annotations</span>
+                        </div>
+                    </div>
+                    <!--<div class="col-md-6 actions-buttons">
+                        <div class="btn-group pull-right" role="group" aria-label="...">
+                            <button id="toolbar-reset" type="button" class="btn btn-default">Reset</button>
+                            <button id="toolbar-clear-actions" type="button" class="btn btn-default">Clear Actions</button>
+                            <button id="toolbar-clear-annotations" type="button" class="btn btn-default">Clear Annotations</button>
+                        </div>
+                    </div>-->
+                </div>
+
                 <div id="wpaz-model-container" class="col-md-8">
 
                     <div id="iframe-container">
@@ -297,8 +339,19 @@
 
 					        <?php if (!is_page($wp_az_3d_body_id)) : ?>
                                 <button id="scene-selector-image" type="button" class="btn btn-default pull-left"><span class="glyphicon glyphicon-picture" aria-hidden="true"></span></button>
+                                <div class="btn-group pull-left">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="snapshot-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        <span class="glyphicon glyphicon-camera"></span>
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul id="snapshot-dropdown" class="dropdown-menu" aria-labelledby="snapshot-dropdown">
+                                        <li class="take-snapshot" data-ratio="one-one"><a>1:1</a></li>
+                                        <li class="take-snapshot" data-ratio="four-three"><a>4:3</a></li>
+                                    </ul>
+                                </div>
                                 <button id="scene-selector-annotate-model" type="button" class="btn btn-default pull-left"><span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span></button>
                                 <button id="scene-selector-presentation-mode" type="button" class="btn btn-default pull-left"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button>
+
 					        <?php endif ?>
 
                             <div class="btn-group scene-selector scene-selector__whole-body dropup">
@@ -506,7 +559,7 @@
 
                                     <div id="toolbar-buttons" class="container">
 
-                                        <div class="row toolbar-row">
+                                        <!--<div class="row toolbar-row">
                                             <div class="col-md-6 actions-buttons">
                                                 <div class="btn-group" role="group" aria-label="...">
                                                     <button id="action-add" type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
@@ -519,17 +572,6 @@
                                                             <span class="caret"></span>
                                                         </button>
                                                         <ul id="actions-dropdown-container" class="dropdown-menu" aria-labelledby="actions-dropdown">
-                                                        </ul>
-                                                    </div>
-
-                                                    <div class="btn-group">
-                                                        <button class="btn btn-default dropdown-toggle" type="button" id="snapshot-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                            <span class="glyphicon glyphicon-camera"></span>
-                                                            <span class="caret"></span>
-                                                        </button>
-                                                        <ul id="snapshot-dropdown" class="dropdown-menu" aria-labelledby="snapshot-dropdown">
-                                                            <li class="take-snapshot" data-ratio="one-one"><a>1:1</a></li>
-                                                            <li class="take-snapshot" data-ratio="four-three"><a>4:3</a></li>
                                                         </ul>
                                                     </div>
 
@@ -557,7 +599,7 @@
                                                     <button id="toolbar-clear-annotations" type="button" class="btn btn-default">Clear Annotations</button>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div>-->
 
                                         <div class="row">
                                             <div class="col-md-12 note-scenes">

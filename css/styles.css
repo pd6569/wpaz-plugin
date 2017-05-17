@@ -31,6 +31,13 @@
     margin-bottom: 10px;
 }
 
+#scene-controls-container {
+    margin-left: 15px;
+}
+.scene-controls {
+    display: inline-block;
+}
+
 /*********************************
  *         Modal popup           *
  *********************************/

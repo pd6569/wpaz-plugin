@@ -2087,7 +2087,7 @@ class AnatomyNotes {
         }
 
         //TODO: Refactor into showModal method
-        if (parseInt(appGlobals.currentNote.sequence) === 1 && sceneUrl !== appGlobals.firstSceneUrl){
+        if (parseInt(appGlobals.currentNote.sequence) === 1 && sceneUrl !== appGlobals.firstSceneUrl && appGlobals.context !== appGlobals.contextType['3D_BODY']){
             Utils.resetModal();
             this.$modalAlert.find('.modal-title').text("First scene");
             this.$modalAlert.find('.modal-body').text("Do you want this scene to be displayed when the page first loads?");
