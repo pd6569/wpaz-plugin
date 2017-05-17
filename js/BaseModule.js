@@ -60,7 +60,7 @@ export default class BaseModule {
      *
      * @param {object} excludeModes  - Associative array of modes to remain ON;
      */
-    static turnAllModesOff(excludeModes) {
+    static turnAllModesOff(excludeModes = {}) {
 
         console.log("turnAllModesOff");
 

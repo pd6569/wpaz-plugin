@@ -55,21 +55,11 @@ export default class ModuleImage extends BaseModule {
 
         this.group.remove(this.fabricRootImage);
 
-        /*this.fabricCanvas.remove(this.group);
-        this.fabricCanvas.renderAll();
-
-        this.createGroup();*/
 
         this.resetHistory();
 
         // Fabric image
         let imageToLoad;
-
-        /*if (previousImg) {
-            console.log("previousImg", previousImg);
-            this.group.add(previousImg);
-        }*/
-
 
         // Set Image
         if (imageType === 'base64'){
@@ -99,12 +89,10 @@ export default class ModuleImage extends BaseModule {
     }
 
     addImage(imageToLoad) {
-        console.log("addImage", imageToLoad);
+        console.log("addImage");
         let _this = this;
 
         let imgHeight = imageToLoad.getHeight();
-
-        console.log("image height: " + imgHeight);
 
         this.zoomToFit(imgHeight);
 
@@ -120,10 +108,6 @@ export default class ModuleImage extends BaseModule {
             onChange: _this.fabricCanvas.renderAll.bind(_this.fabricCanvas),
             onComplete: function() {
                 console.log("fade animation complete");
-
-                /*_this.fabricCanvas.viewportCenterObject(_this.group);
-                 _this.group.setCoords();
-                 _this.fabricCanvas.setActiveObject(_this.group);*/
 
                 _this.fabricRootImage = imageToLoad; // reference to uploaded image as fabric object
             }
@@ -157,7 +141,6 @@ export default class ModuleImage extends BaseModule {
         console.log("setupCanvas");
 
         // Show canvas
-        /*this.$imageCanvas.show();*/
         this.$imageCanvas.show();
 
         // If canvas already exists, destroy and create new
@@ -174,9 +157,6 @@ export default class ModuleImage extends BaseModule {
 
         // Add listeners
         this.setListeners();
-
-        /*// Load image
-        this.loadImage(imageSrc, imageType);*/
 
     }
 
@@ -230,16 +210,24 @@ export default class ModuleImage extends BaseModule {
         console.log("group: " + this.group.getObjects().length);
     }
 
-    disableModule() {
+    disableModule(destroyCanvas) {
 
         console.log("disableModule: " + this.moduleName);
+
+        let _this = this;
 
         appGlobals.mode.EDIT_IMAGE = false;
 
         // Disable canvas
-        this.$imageCanvas.fadeOut({
-            'duration': 1000
-        });
+        if (destroyCanvas) {
+            this.fabricCanvas.dispose();
+            this.$imageCanvas = jQuery('#imageCanvas');
+            this.$imageCanvas.hide();
+        } else {
+            this.$imageCanvas.fadeOut({
+                'duration': 1000,
+            });
+        }
 
         // Set UI
         this.setUi(false);
@@ -249,6 +237,8 @@ export default class ModuleImage extends BaseModule {
 
         // Remove window listeners
         this.removeListeners();
+
+
     }
 
     setUi(enable){
@@ -326,7 +316,6 @@ export default class ModuleImage extends BaseModule {
 
 
                     // Remove margins if in presentation mode
-                    console.log("presentation mode: " + appGlobals.mode.PRESENTATION + " margins set: " + _this.canvasMarginsSet);
                     if (appGlobals.mode.PRESENTATION){
                         console.log("presentation mode - remove margins");
 
@@ -379,10 +368,6 @@ export default class ModuleImage extends BaseModule {
     resizeCanvas() {
         if (appGlobals.mode.EDIT_IMAGE){
             this.windowListeners.resizeCanvas();
-            /*console.log("width: " + this.app.$humanWidget.width() + " height: " + this.app.$humanWidget.height());
-            this.fabricCanvas.setWidth(this.app.$humanWidget.width());
-            this.fabricCanvas.setHeight(this.app.$humanWidget.height());
-            this.toolbarActions.centerImage();*/
         }
     }
 

@@ -91,6 +91,12 @@ export default {
         // annotations
         annotations: [], // array of annotation objects representing currently visible annotations
 
+        // Server requests
+        serverRequests: {
+            'savingImage': false,
+            'savingNote': false
+        },
+
         // scene presets - naming must match data attributes in layout file
         scenePresets: {
             head: {

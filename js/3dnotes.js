@@ -306,6 +306,22 @@ class AnatomyNotes {
                 let $editLink = jQuery(event.target);
                 let linkText = $editLink.text();
                 let actionId = $editLink.attr('data-action-id');
+
+
+                let $imageActionLink = this.$editorBody.find(`.linked-scene[data-action-id=${actionId}]`);
+                if ($imageActionLink.attr('data-action-disabled') === 'true'){
+                    console.log("This image is still being processed");
+                    Utils.showModal({
+                        'title': "Image still being processed",
+                        'body': "This image is still being processed on the server"
+                    });
+
+                    this.$modalBtn1.on('click', () => Utils.hideModal());
+                    this.$modalBtn2.on('click', () => Utils.hideModal());
+
+                    return;
+                }
+
                 this.doActionById(actionId);
 
                 if (!event.ctrlKey) {
@@ -326,7 +342,33 @@ class AnatomyNotes {
 
 
         // Actions
-        this.$addAction.on('click', (event) => { this.linkTextToScene(); });
+        this.$addAction.on('click', (event) => {
+
+            console.log("server requests: " + appGlobals.serverRequests.savingImage);
+
+            if (appGlobals.mode.EDIT_IMAGE && appGlobals.serverRequests.savingImage) {
+                console.log("Image being saved to server, please wait");
+                Utils.showModal({
+                    'title': "Image currently being saved to server",
+                    "body": "An image is currently being saved to the server, please try saving action once this is complete"
+                });
+
+                this.$modalBtn1.on('click', (event) => {
+                    Utils.hideModal();
+                    Utils.resetModal();
+                });
+
+                this.$modalBtn2.on('click', (event) => {
+                    Utils.hideModal();
+                    Utils.resetModal();
+                });
+
+                return;
+            }
+
+            this.linkTextToScene();
+        });
+
         this.$nextAction.on('click', (event) => { this.navigateActions('next')});
         this.$previousAction.on('click', (event) => { this.navigateActions('previous')});
         this.$clearActions.on('click', () => { this.clearActions(appGlobals.currentNote.uid); });
@@ -681,7 +723,7 @@ class AnatomyNotes {
                         this.addAction(data.actionText, actionData, (action) => {
                             console.log("added action: ", action);
                             let linkedText =
-                                "<span class='linked-scene' data-action-id='" + action.uid + "'>" +
+                                "<span class='linked-scene' data-action-id='" + action.uid + "' data-action-disabled='true'>" +
                                 data.actionText +
                                 "</span>";
                             this.noteEditor.execCommand( 'mceInsertContent', true, linkedText);
@@ -717,7 +759,8 @@ class AnatomyNotes {
 
 
                     // CREATE NEW POST IN DB
-                    this.createPostInDb(newTitle);
+                    Utils.showLoading();
+                    this.createPostInDb(newTitle, (response) => Utils.hideLoading());
 
                     // Notify MyNotes module that reload will be required
                     if (appGlobals.modulesLoaded[appGlobals.tabs.MY_NOTES]) {
@@ -728,6 +771,10 @@ class AnatomyNotes {
                     if (appGlobals.currentTab !== appGlobals.tabs.NOTE_EDITOR) {
                         Utils.setActiveTab(appGlobals.tabs.NOTE_EDITOR)
                     }
+
+                    // Reload human
+                    this.$humanWidget.attr('src', appGlobals.scenePresets.head.bone);
+
                 });
                 return true;
 
@@ -844,12 +891,16 @@ class AnatomyNotes {
 
     /**
      *
+     *
+     *  Function to save an image to the server using ajax call
+     *
      * @param       {object}            imageProperties                   - image Properties
      * @param       {string}            imageProperties.imgSrc            - base64 encoded data url for image
      * @param       {string}            imageProperties.imgTitle          - image title
      * @param       {string}            imageProperties.imgDesc           - image description
      * @param       {string}            imageProperties.imgCaption        - image caption
      * @param       {string}            imageProperties.imgAlt            - image alt
+     * @param       {string}            imageProperties.actionId          - action id that image is associated with
      * @param       {imageSavedSuccessCallback}   onSuccess               - callback run on success
      * @param       {imageSavedErrorCallback}     onError                 - callback run on error
      */
@@ -858,6 +909,11 @@ class AnatomyNotes {
         console.log("saveImageToServer", imageProperties);
 
         Utils.setNoteUpdateStatus("Saving image...");
+
+        let _this = this;
+
+        // Set server request status
+        appGlobals.serverRequests.savingImage = true;
 
         jQuery.ajax({
             url: ajax_object.wp_az_ajax_url,
@@ -876,6 +932,11 @@ class AnatomyNotes {
                 console.log("Failed to save snapshot");
                 Utils.setNoteUpdateStatus("Failed to save snapshot", 3000);
 
+                appGlobals.serverRequests.savingImage = false;
+
+                // Enable action to be clicked
+
+
                 if (onError) {
                     onError();
                 }
@@ -883,6 +944,13 @@ class AnatomyNotes {
             success: function(data) {
                 console.log("Image saved", data);
                 Utils.setNoteUpdateStatus("Image saved", 3000);
+
+                appGlobals.serverRequests.savingImage = false;
+
+                if (imageProperties.actionId) {
+                    let $imageActionLink =_this.$editorBody.find(`.linked-scene[data-action-id=${imageProperties.actionId}]`);
+                    $imageActionLink.attr('data-action-disabled', 'false');
+                }
 
                 if (onSuccess) {
                     onSuccess(data);
@@ -928,11 +996,17 @@ class AnatomyNotes {
 
                 appGlobals.post_id = response.id;
 
+                Utils.setNoteUpdateStatus("New note set created.");
+
                 if (callback) callback(response);
 
             },
             error: function(response) {
                 console.log("failed: " + JSON.stringify(response));
+
+                Utils.setNoteUpdateStatus("Failed to create new note.");
+
+                if (callback) callback(response);
             }
         })
 
@@ -1664,6 +1738,7 @@ class AnatomyNotes {
 
             this.saveImageToServer({
                 imgSrc: actionData.imgSrc,
+                'actionId': action.uid
             }, (data) => {
                 console.log("attachment urls: ", data);
                 delete action.action_data.imgSrc;
@@ -1816,6 +1891,7 @@ class AnatomyNotes {
         console.log("doAction");
 
         if (appGlobals.currentAction === action && action.action_type === appGlobals.actionTypes.IMAGE) {
+            console.log("Already on this action");
             return;
         }
 
@@ -1854,6 +1930,7 @@ class AnatomyNotes {
                 break;
 
             case appGlobals.actionTypes.IMAGE:
+
                 console.log("Load image into canvas");
                 this.loadModule(appGlobals.modules.IMAGE_MODULE, {
                     'imgSrc': action.action_data['imgUrl'],

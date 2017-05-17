@@ -3,6 +3,7 @@
  */
 
 import appGlobals from './globals';
+import BaseModule from './BaseModule';
 
 "use strict";
 
@@ -94,11 +95,11 @@ export default class Utils {
 
     /**
      *
-     * @param modalObj Object. Properties:
-     *                         title - title text
-     *                         body - html body text
-     *                         btn1 - text on button 1,
-     *                         btn2- text on button 2
+     * @param {object} modalObj                     - Contains properties for modal display
+     * @param {string} modalObj.title               - title text
+     * @param {string} modalObj.body                - html body text
+     * @param {string} modalObj.btn1                - text on button 1
+     * @param {string} modalObj.btn2                - text on button 2
      */
     static showModal(modalObj){
         let $modalAlert = jQuery('#wpaz-modal-alert');
@@ -124,6 +125,11 @@ export default class Utils {
 
     static resetAppState(){
 
+        if (appGlobals.modulesLoaded[appGlobals.modules.IMAGE_MODULE]) {
+            appGlobals.modulesLoaded[appGlobals.modules.IMAGE_MODULE].disableModule(true);
+        }
+
+
         appGlobals.post_id = 0;
         appGlobals.notes = {};
         appGlobals.sequenceIndex = [];
@@ -135,6 +141,12 @@ export default class Utils {
         appGlobals.humanLoaded = false;
         appGlobals.actions = {};
         appGlobals.currentAction = {};
+        appGlobals.modulesLoaded = {};
+
+
+        // Disable all modes
+        BaseModule.turnAllModesOff();
+
 
     }
 
