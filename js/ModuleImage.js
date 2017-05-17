@@ -412,29 +412,29 @@ export default class ModuleImage extends BaseModule {
      */
     doToolbarAction(toolbarAction){
 
-        let self = this;
+        let _this = this;
 
         this.toolbarActions = {
             undo: function(){
                 console.log("undo");
-                let objects = self.group.getObjects();
+                let objects = _this.group.getObjects();
                 if (objects.length > 1){
                     let objectToRemove = objects[objects.length - 1];
-                    self.group.remove(objectToRemove);
+                    _this.group.remove(objectToRemove);
 
                     // add to history
-                    self.undoHistory.push(objectToRemove);
+                    _this.undoHistory.push(objectToRemove);
 
-                    self.fabricCanvas.renderAll();
+                    _this.fabricCanvas.renderAll();
                 }
             },
             redo: function() {
                 console.log("redo");
-                if (self.undoHistory.length > 0){
-                    let objectToAdd = self.undoHistory[self.undoHistory.length - 1];
-                    self.group.add(objectToAdd);
-                    self.fabricCanvas.renderAll();
-                    self.undoHistory.pop();
+                if (_this.undoHistory.length > 0){
+                    let objectToAdd = _this.undoHistory[_this.undoHistory.length - 1];
+                    _this.group.add(objectToAdd);
+                    _this.fabricCanvas.renderAll();
+                    _this.undoHistory.pop();
                 }
             },
 
@@ -442,20 +442,20 @@ export default class ModuleImage extends BaseModule {
                 console.log("saveImage");
 
                 let originalCanvasProperties = {
-                    "width": self.fabricCanvas.getWidth(),
-                    "height": self.fabricCanvas.getHeight(),
-                    "zoom": self.fabricCanvas.getZoom(),
+                    "width": _this.fabricCanvas.getWidth(),
+                    "height": _this.fabricCanvas.getHeight(),
+                    "zoom": _this.fabricCanvas.getZoom(),
                 };
 
-                self.fabricCanvas.setDimensions({
-                    "width": self.group.getWidth(),
-                    "height": self.group.getHeight(),
+                _this.fabricCanvas.setDimensions({
+                    "width": _this.group.getWidth(),
+                    "height": _this.group.getHeight(),
                 });
-                self.group.top = 0;
-                self.group.left = 0;
-                self.fabricCanvas.setZoom(1);
+                _this.group.top = 0;
+                _this.group.left = 0;
+                _this.fabricCanvas.setZoom(1);
 
-                let imgSrc = self.fabricCanvas.toDataURL({
+                let imgSrc = _this.fabricCanvas.toDataURL({
                     format: "jpeg",
                 });
 
@@ -465,46 +465,46 @@ export default class ModuleImage extends BaseModule {
                     return imgSrc;
                 }
 
-                self.app.showModal("image", {
+                _this.app.showModal("image", {
                     type: "snapshot",
                     imgSrc: imgSrc
                 });
 
                 function restoreCanvas(originalCanvasProperties) {
-                    self.fabricCanvas.setWidth(originalCanvasProperties.width);
-                    self.fabricCanvas.setHeight(originalCanvasProperties.height);
-                    self.fabricCanvas.setZoom(originalCanvasProperties.zoom);
-                    self.doToolbarAction('center-image');
+                    _this.fabricCanvas.setWidth(originalCanvasProperties.width);
+                    _this.fabricCanvas.setHeight(originalCanvasProperties.height);
+                    _this.fabricCanvas.setZoom(originalCanvasProperties.zoom);
+                    _this.doToolbarAction('center-image');
                 }
             },
 
             centerImage: function (){
                 console.log("centerImage");
-                let img = self.fabricCanvas.getActiveObject();
+                let img = _this.fabricCanvas.getActiveObject();
                 if (img) {
-                    self.fabricCanvas.viewportCenterObject(img);
+                    _this.fabricCanvas.viewportCenterObject(img);
                     img.setCoords();
                 }
             },
 
             zoomCanvas: function (zoomIn) {
-                let currentZoom =  self.fabricCanvas.getZoom();
-                zoomIn ? self.fabricCanvas.setZoom(currentZoom + 0.05) : self.fabricCanvas.setZoom(currentZoom - 0.05);
+                let currentZoom =  _this.fabricCanvas.getZoom();
+                zoomIn ? _this.fabricCanvas.setZoom(currentZoom + 0.05) : _this.fabricCanvas.setZoom(currentZoom - 0.05);
             },
 
             drawMode: function (enable) {
-                console.log("drawingmode: " + self.fabricCanvas.isDrawingMode);
+                console.log("drawingmode: " + _this.fabricCanvas.isDrawingMode);
 
                 if (!enable) {
-                    self.fabricCanvas.isDrawingMode = false;
-                    self.$drawingOptions.hide();
+                    _this.fabricCanvas.isDrawingMode = false;
+                    _this.$drawingOptions.hide();
                     return;
                 }
 
-                self.fabricCanvas.isDrawingMode = !self.fabricCanvas.isDrawingMode;
-                if (self.fabricCanvas.isDrawingMode) {
-                    console.log("show draw options", self.$drawingOptions);
-                    self.$drawingOptions.removeClass('hidden').show();
+                _this.fabricCanvas.isDrawingMode = !_this.fabricCanvas.isDrawingMode;
+                if (_this.fabricCanvas.isDrawingMode) {
+                    console.log("show draw options", _this.$drawingOptions);
+                    _this.$drawingOptions.removeClass('hidden').show();
 
                     // Get elements
                     let $drawingModeSelector = jQuery('#drawing-mode-selector');
@@ -516,8 +516,8 @@ export default class ModuleImage extends BaseModule {
 
 
                     // Set values
-                    $drawingLineWidth.text(self.fabricCanvas.freeDrawingBrush.width);
-                    $lineOpacity.text(ModuleImage.getAlphaFromFabricColor(new fabric.Color(self.fabricCanvas.freeDrawingBrush.color)));
+                    $drawingLineWidth.text(_this.fabricCanvas.freeDrawingBrush.width);
+                    $lineOpacity.text(ModuleImage.getAlphaFromFabricColor(new fabric.Color(_this.fabricCanvas.freeDrawingBrush.color)));
 
                     // Change line width
                     $changeLineWidth.off();
@@ -530,7 +530,7 @@ export default class ModuleImage extends BaseModule {
                             if (width > 1) width--;
                         }
                         $drawingLineWidth.text(width);
-                        self.fabricCanvas.freeDrawingBrush.width = width;
+                        _this.fabricCanvas.freeDrawingBrush.width = width;
                     });
 
                     // Line colour
@@ -538,7 +538,7 @@ export default class ModuleImage extends BaseModule {
                     $drawingColour.on('change', (event) => {
                         console.log("colour change:", event);
                         let colour = event.target.value;
-                        self.fabricCanvas.freeDrawingBrush.color = colour;
+                        _this.fabricCanvas.freeDrawingBrush.color = colour;
                         $lineOpacity.text("100");
                     });
 
@@ -558,19 +558,19 @@ export default class ModuleImage extends BaseModule {
 
                         $lineOpacity.text(opacity);
 
-                        let currentColor = self.fabricCanvas.freeDrawingBrush.color;
+                        let currentColor = _this.fabricCanvas.freeDrawingBrush.color;
                         let hexColor = new fabric.Color(currentColor).toHex(); // convert to hex
                         let rgba = Utils.convertHex(hexColor, opacity); // change opacity
-                        self.fabricCanvas.freeDrawingBrush.color = rgba;
+                        _this.fabricCanvas.freeDrawingBrush.color = rgba;
 
 
                     })
 
                 } else {
-                    self.$drawingOptions.hide();
+                    _this.$drawingOptions.hide();
                 }
 
-            }
+            },
 
         };
 
@@ -617,6 +617,7 @@ export default class ModuleImage extends BaseModule {
                 break;
 
             case 'exit':
+                this.disableModule();
                 break;
 
             case 'get-all':
