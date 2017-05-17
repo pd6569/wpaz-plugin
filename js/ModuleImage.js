@@ -227,17 +227,6 @@ export default class ModuleImage extends BaseModule {
 
         appGlobals.mode.EDIT_IMAGE = false;
 
-        // Disable canvas
-        if (destroyCanvas) {
-            this.fabricCanvas.dispose();
-            this.$imageCanvas = jQuery('#imageCanvas');
-            this.$imageCanvas.hide();
-        } else {
-            this.$imageCanvas.fadeOut({
-                'duration': 1000,
-            });
-        }
-
         // Set UI
         this.setUi(false);
 
@@ -246,6 +235,27 @@ export default class ModuleImage extends BaseModule {
 
         // Remove window listeners
         this.removeListeners();
+
+        // Disable canvas
+        if (destroyCanvas) {
+            this.fabricCanvas.dispose();
+            this.$imageCanvas = jQuery('#imageCanvas');
+            this.$imageCanvas.hide();
+
+        } else {
+            this.$imageCanvas.fadeOut({
+                'duration': 1000,
+                'progress': function() {
+                    // check if mode has been enabled by user during the fade transition - if so, fade the canvas back in and terminate the current fade out animation
+                    if (appGlobals.mode.EDIT_IMAGE) {
+                        console.log("terminate animation");
+                        _this.$imageCanvas.stop();
+                        _this.$imageCanvas.fadeIn();
+                    }
+                }
+            });
+        }
+
 
 
     }

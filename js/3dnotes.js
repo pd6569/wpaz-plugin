@@ -308,8 +308,9 @@ class AnatomyNotes {
                 let actionId = $editLink.attr('data-action-id');
 
 
+                // Check if action has been enabled (only for images - actions are disabled while server processing image).
                 let $imageActionLink = this.$editorBody.find(`.linked-scene[data-action-id=${actionId}]`);
-                if ($imageActionLink.attr('data-action-disabled') === 'true'){
+                if ($imageActionLink.attr('data-action-disabled') === 'true' && appGlobals.serverRequests.savingImage){
                     console.log("This image is still being processed");
                     Utils.showModal({
                         'title': "Image still being processed",
@@ -1412,6 +1413,18 @@ class AnatomyNotes {
 
         if (!this.userIsEditor) return;
 
+        if (appGlobals.serverRequests.savingImage){
+            Utils.showModal({
+                'title': "Unable to save",
+                'body': "An image is currently being processed by the server, please wait until this process is finished and try again"
+            });
+
+            this.$modalBtn1.on('click', () => Utils.hideModal());
+            this.$modalBtn2.on('click', () => Utils.hideModal());
+
+            return;
+        }
+
         Utils.setNoteUpdateStatus("Saving...");
 
         if (appGlobals.context === appGlobals.contextType.NOTES_DASHBOARD && this.firstSave){
@@ -1506,11 +1519,15 @@ class AnatomyNotes {
 
             console.log("saveToDb");
 
+            appGlobals.serverRequests.savingNote = true;
+
             jQuery.post(ajax_object.wp_az_ajax_url, data, response => {
                 if (response.status == 'success') {
                     // Show success message, then fade out the button after 2 seconds
                     console.log("Noted saved! " + JSON.stringify(response));
                     Utils.setNoteUpdateStatus("Notes saved.", 3000);
+
+                    appGlobals.serverRequests.savingNote = false;
 
                     // execute callback function
                     if(callback) callback();
@@ -1519,9 +1536,14 @@ class AnatomyNotes {
                     console.log("Failed. " + JSON.stringify(response));
                     Utils.setNoteUpdateStatus("Saving notes failed.", 3000);
 
+                    appGlobals.serverRequests.savingNote = false;
+
+                    if (callback) callback();
                 }
             });
         }
+
+
     }
 
     deleteNote(uid){
