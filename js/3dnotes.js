@@ -550,22 +550,23 @@ class AnatomyNotes {
 
     /****
      *
-     * @param modalType {String} Select modal type:
-     *                              'annotations',
-     *                              'edit_action',
-     *                              'new_note_set'
-     *                              'image'
-     * @param data {Object} Data object associated with modal.
-     *          Annotations: takes annotation object, as specified by BioDigital API.
-     *          Actions modal:
-     *              actionText - (String) text in editor that will be linked to the scene. Required
-     *              newAction - (Boolean) true if new action, false if existing action. Optional
-     *              actionId - (String) id of action to edit. Optional
-     *              imgSrc          {String} base64 encoded image src
- *              Image modal:
-     *              type            {String} 'upload', 'snapshot'
-     *              imgSrc          {String} base64 encoded image src
-     *              callback        {function}
+     *
+     * Modal popup for specific functions: add/edit annotation, add/edit action, upload image/snapshot, add new note set
+     *
+     *
+     * @param {string}  modalType                - Select modal type: 'annotations', 'edit_action', 'new_note_set', 'image'
+     * @param {object}  data                     - Data object associated with modal. Annotations modal takes annotation object as specified by BioDigital API
+     *
+     * @param {string}  data.actionText          - [Actions Modal]: text in editor that will be linked to scene
+     * @param {boolean} [data.newAction]         - [Actions Modal]: true if new action, false if existing action
+     * @param {string}  [data.actionId]          - [Actions Modal]: id of action to edit
+     * @param {string}  [data.imgSrc]            - [Actions Modal]: base 64 encoded image source
+     *
+     * @param {string}  [data.type]              - [Image Modal]: Type of image. 'upload', 'snapshot'
+     * @param {string}  [data.imgSrc]            - [Image Modal]: base 64 encoded image source
+     * @param {function}[data.callback]          - [Image Modal]: callback to be executed
+     *
+     *
      */
     showModal(modalType, data){
 
@@ -627,6 +628,19 @@ class AnatomyNotes {
                 return true;
 
             case 'edit_action':
+
+                if (data.actionText === "" || data.actionText === null || data.actionText.length === 0) {
+                    console.log("Empty string, cannot add action");
+                    Utils.showModal({
+                        'title': "Action must be linked to text",
+                        'body': "You must select some text in the editor to link this action to",
+                    });
+                    this.$modalBtn1.on('click', () => Utils.hideModal());
+                    this.$modalBtn2.on('click', () => Utils.hideModal());
+
+                    return;
+                }
+
                 Utils.showModal({
                     title: "Edit Action: " + data.actionText,
                     body: "Current scene will be linked to text '" + data.actionText + "'"
