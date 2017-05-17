@@ -113,6 +113,13 @@ export default class Utils {
         modalObj.btn2 ? $modalBtn1.text(modalObj.btn2) : $modalBtn2.text("OK");
 
         $modalAlert.modal('show');
+        appGlobals.modalActive = true;
+    }
+
+    static hideModal() {
+        let $modalAlert = jQuery('#wpaz-modal-alert');
+        $modalAlert.modal('hide');
+        appGlobals.modalActive = false;
     }
 
     static resetAppState(){

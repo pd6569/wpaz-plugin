@@ -248,6 +248,7 @@ class AnatomyNotes {
 
         jQuery(window).on('keyup', (event) => {
 
+
             // left arrow
             if (event.keyCode === 65) {
                 this.navigateActions('previous');
@@ -543,7 +544,7 @@ class AnatomyNotes {
                 this.$annotationsDescription.val(data.description);
 
                 this.$modalBtn1.on('click', () => {
-                    this.$modalAlert.modal('hide');
+                    Utils.hideModal();
                     Utils.resetModal();
                     if (data.isNewAnnotation) {
                         console.log("destroy Annotation", data.annotationId);
@@ -559,7 +560,7 @@ class AnatomyNotes {
                         title: title,
                         description: desc
                     });
-                    this.$modalAlert.modal('hide');
+                    Utils.hideModal();
                     Utils.resetModal();
 
                     // reload annotations container
@@ -572,7 +573,7 @@ class AnatomyNotes {
                         console.log("destroy annotation: " + data.annotationId);
                         this.loadAnnotations(); // reload annotations dropdown
                     });
-                    this.$modalAlert.modal('hide');
+                    Utils.hideModal();
                     Utils.resetModal();
                 });
 
@@ -625,7 +626,7 @@ class AnatomyNotes {
 
                         this.noteEditor.execCommand( 'mceInsertContent', true, data.actionText);
 
-                        this.$modalAlert.modal('hide');
+                        Utils.hideModal();
                         Utils.resetModal();
                     });
 
@@ -657,7 +658,7 @@ class AnatomyNotes {
 
 
                 this.$modalBtn1.on('click', () => {
-                    this.$modalAlert.modal('hide');
+                    Utils.hideModal();
                     Utils.resetModal();
                 });
 
@@ -687,7 +688,7 @@ class AnatomyNotes {
                         Action.getActionById(actionObj.uid).action_data = actionData;
                     }
 
-                    this.$modalAlert.modal('hide');
+                    Utils.hideModal();
                     Utils.resetModal();
 
                     this.actionsChanged = true;
@@ -708,7 +709,7 @@ class AnatomyNotes {
                     this.clearActiveNotes();
                     this.$postTitle.text(newTitle);
                     this.$mainToolbarActiveNotes.find('a').text(newTitle);
-                    this.$modalAlert.modal('hide');
+                    Utils.hideModal();
 
 
                     // CREATE NEW POST IN DB
@@ -742,13 +743,13 @@ class AnatomyNotes {
 
                 // default click listeners
                 this.$modalBtn1.on('click', () => {
-                    this.$modalAlert.modal('hide');
+                    Utils.hideModal();
                     Utils.resetModal();
                     return;
                 });
 
                 this.$modalBtn2.on('click', () => {
-                    this.$modalAlert.modal('hide');
+                    Utils.hideModal();
                     Utils.resetModal();
                     return;
                 });
@@ -1158,33 +1159,6 @@ class AnatomyNotes {
                 // Sort actions for current note
                 Action.sortActionsForCurrentNote();
 
-                /*appObj.$editorLinkedScenes = appObj.$editorBody.find('.linked-scene');
-                let numActions = appObj.$editorLinkedScenes.length;
-                if (numActions > 0){
-                    console.log("Sort actions. Number of actions: " + appObj.$editorLinkedScenes.length);
-
-                    let sortedActions = [];
-                    if (numActions > 0){
-                        for (let i = 0; i < numActions ; i++){
-                            console.log("action id: " + jQuery(appObj.$editorLinkedScenes[i]).attr('data-action-id'));
-                            let actionId = jQuery(appObj.$editorLinkedScenes[i]).attr('data-action-id');
-                            sortedActions.push(Action.getActionById(actionId, appGlobals.currentNote.uid));
-                        }
-                        appGlobals.actions[appGlobals.currentNote.uid] = sortedActions;
-                        console.log("appglobals sorted actions: ", appGlobals.actions[appGlobals.currentNote.uid])
-                    }
-                }*/
-
-
-
-                /*// sort actions into order
-                Object.keys(appGlobals.actions).forEach((noteId) => {
-                    let actionsToSort = appGlobals.actions[noteId];
-                    actionsToSort.sort(Utils.compare);
-
-
-                });*/
-
                 // load actions
                 appObj.loadActions(appGlobals.currentNote.uid, appObj);
 
@@ -1298,11 +1272,11 @@ class AnatomyNotes {
             "<input id='edit-post-title' type='text' class='form-control' placeholder='Enter title' value='" + this.$postTitle.text() + "'>",
         });
         this.$modalBtn1.on('click', () => {
-            this.$modalAlert.modal('hide');
+            Utils.hideModal();
         });
         this.$modalBtn2.on('click', () => {
             newTitle = jQuery('#edit-post-title').val();
-            this.$modalAlert.modal('hide');
+            Utils.hideModal();
             this.$postTitle.text(newTitle);
             this.$mainToolbarActiveNotes.find('a').text(newTitle);
 
@@ -1656,11 +1630,11 @@ class AnatomyNotes {
         this.numActions++;
         this.updateActionLabel();
 
-        let self = this;
+        let _this = this;
 
         // create action, add to array
         let noteId = appGlobals.currentNote.uid;
-        let action = new Action(noteId, this.numActions, actionType);
+        let action = new Action(noteId, actionType);
         if (actionTitle) action.setTitle(actionTitle);
         if (actionData) action.setData(actionData);
         if(appGlobals.actions[noteId]) {
@@ -1936,7 +1910,7 @@ class AnatomyNotes {
                 if (action.action_title) {
                     actionTitle = action.action_title;
                 } else {
-                    actionTitle = "Action " + action.action_order;
+                    actionTitle = "Action " + appObj.numActions;
                 }
 
                 let $actionItem = jQuery("<li id='" + action.uid + "' class='list-group-item'><a>" + actionTitle + "</a></li>");
@@ -1986,6 +1960,7 @@ class AnatomyNotes {
             return;
         }
 
+        //TODO: Refactor into showModal method
         if (parseInt(appGlobals.currentNote.sequence) === 1 && sceneUrl !== appGlobals.firstSceneUrl){
             Utils.resetModal();
             this.$modalAlert.find('.modal-title').text("First scene");
@@ -1993,12 +1968,12 @@ class AnatomyNotes {
             this.$modalAlert.find('#modal-btn-1').text("Yes").on('click', () => {
                 console.log("set as first scene");
                 appGlobals.firstSceneUrl = sceneUrl;
-                this.$modalAlert.modal('hide');
+                Utils.hideModal();
                 this.updateFirstSceneUrl();
             });
             this.$modalAlert.find('#modal-btn-2').text("No").on('click', () => {
                 console.log("do not set as first scene");
-                this.$modalAlert.modal('hide');
+                Utils.hideModal();
             });
             this.human = new HumanAPI("embedded-human");
             this.human.on('human.ready', () => {
@@ -2241,7 +2216,7 @@ class AnatomyNotes {
         this.$imgEdit.on('click', (event) => {
             console.log("load Image Editor");
             event.preventDefault();
-            this.$modalAlert.modal('hide');
+            Utils.hideModal();
             Utils.resetModal();
             this.loadModule(appGlobals.modules.IMAGE_MODULE, {
                 imgSrc: imgSrc,
@@ -2261,7 +2236,7 @@ class AnatomyNotes {
 
             console.log("title: " + imgTitle + " desc: " + imgDesc + " caption: " + imgCaption + "imgAlt: " + imgAlt);
 
-            this.$modalAlert.modal('hide');
+            Utils.hideModal();
             Utils.resetModal();
 
             if (fileType === 'upload'){

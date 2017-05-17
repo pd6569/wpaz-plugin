@@ -11,8 +11,7 @@ export default class Action {
     /*****
      *
      * @param   {int}       note_id
-     * @param   {int}       action_order
-     * @param   {string}    action_type
+     * @param   {string}    action_type                   - As specified by appGlobals.actionTypes
      * @param   {object}    scene_state
      * @param   {object}    action_data
      * @param   {string}    action_data.type              - set using appGlobals.actionDataTypes
@@ -21,11 +20,10 @@ export default class Action {
      * @param   {string}    [action_data.imgUrl]          - URL to image
      * @param   {string}    action_title
      */
-    constructor(note_id, action_order, action_type, scene_state = "", action_data = {}, action_title = "New Action") {
+    constructor(note_id, action_type, scene_state = "", action_data = {}, action_title = "New Action") {
 
         this.note_id = note_id;
         this.uid = Utils.generateUID();
-        this.action_order = action_order;
         this.action_type = action_type;
         this.scene_state = scene_state;
         this.action_data = action_data;
@@ -36,10 +34,6 @@ export default class Action {
 
     setNoteId(note_id){
         this.note_id = note_id;
-    }
-
-    setActionOrder(action_order){
-        this.action_order = action_order;
     }
 
     setType(action_type){

@@ -32,6 +32,9 @@ export default {
             'NOTES_DASHBOARD': "NOTES_DASHBOARD",
         },
 
+        // Alert Modal
+        modalActive: false,
+
         // Tabs
         tabs: {
             NOTE_EDITOR: "NOTE_EDITOR",
