@@ -271,6 +271,8 @@
       <change type="DELETED" beforePath="$PROJECT_DIR$/../wp-smushit/assets/images/install-welcome.png" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/../wp-smushit/assets/images/smush-share-widget.png" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/../wp-smushit/assets/images/smush-upload-images.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/tinymce-wpaz-plugins/images/linkscene.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/tinymce-wpaz-plugins/tinymce_buttons.js" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../adrotate/language/adrotate-bg_BG.mo" afterPath="$PROJECT_DIR$/../adrotate/language/adrotate-bg_BG.mo" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../adrotate/language/adrotate-el.mo" afterPath="$PROJECT_DIR$/../adrotate/language/adrotate-el.mo" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../adrotate/language/adrotate-en_US.mo" afterPath="$PROJECT_DIR$/../adrotate/language/adrotate-en_US.mo" />
@@ -1054,8 +1056,7 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../wp-sweep/readme.txt" afterPath="$PROJECT_DIR$/../wp-sweep/readme.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../wp-sweep/uninstall.php" afterPath="$PROJECT_DIR$/../wp-sweep/uninstall.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../wp-sweep/wp-sweep.php" afterPath="$PROJECT_DIR$/../wp-sweep/wp-sweep.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/layout_3d_notes.php" afterPath="$PROJECT_DIR$/templates/layout_3d_notes.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inc/class_notes_editor.php" afterPath="$PROJECT_DIR$/inc/class_notes_editor.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../wp-includes/class-phpmailer.php" afterPath="$PROJECT_DIR$/../../../wp-includes/class-phpmailer.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../wp-includes/class-smtp.php" afterPath="$PROJECT_DIR$/../../../wp-includes/class-smtp.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../wp-includes/class-walker-page.php" afterPath="$PROJECT_DIR$/../../../wp-includes/class-walker-page.php" />
@@ -1209,7 +1210,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="layout_3d_notes.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="layout_3d_notes.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/layout_3d_notes.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="40">
@@ -1221,6 +1222,26 @@
                 <element signature="n#div#3;n#div#0;n#div#0;n#div#1;n#div#2;n#div#0;n#div#0;n#!!top" expanded="false" />
                 <marker date="1495094345066" expanded="true" signature="292:471" ph="SELECT title... ${$table_name}" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="class_notes_editor.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/inc/class_notes_editor.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="408">
+              <caret line="29" column="0" lean-forward="false" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="editor-style.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/css/editor-style.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -1252,19 +1273,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Utils.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/Utils.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="264">
-              <caret line="101" column="70" lean-forward="false" selection-start-line="101" selection-start-column="70" selection-end-line="101" selection-end-column="70" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-                <element signature="e#44#79#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="BaseModule.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/BaseModule.js">
           <provider selected="true" editor-type-id="text-editor">
@@ -1283,16 +1291,6 @@
               <folding>
                 <element signature="e#121#156#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Actions.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/Actions.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1785">
-              <caret line="106" column="11" lean-forward="false" selection-start-line="106" selection-start-column="11" selection-end-line="106" selection-end-column="11" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -1377,7 +1375,6 @@
       <list>
         <option value="$PROJECT_DIR$/../../../wp-config.php" />
         <option value="$PROJECT_DIR$/../../../../../apache/logs/error.log" />
-        <option value="$PROJECT_DIR$/inc/class_notes_editor.php" />
         <option value="$PROJECT_DIR$/../../themes/dt-the7/single-3d-notes.php" />
         <option value="$PROJECT_DIR$/setup.txt" />
         <option value="$PROJECT_DIR$/js/ModulePresentation.js" />
@@ -1390,6 +1387,7 @@
         <option value="$PROJECT_DIR$/js/3dnotes.js" />
         <option value="$PROJECT_DIR$/css/styles.css" />
         <option value="$PROJECT_DIR$/templates/layout_3d_notes.php" />
+        <option value="$PROJECT_DIR$/inc/class_notes_editor.php" />
       </list>
     </option>
   </component>
@@ -1546,6 +1544,32 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wpaz-plugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="anatomyzone" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wp-content" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="plugins" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wpaz-plugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inc" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -2052,12 +2076,12 @@
       <workItem from="1494669671894" duration="2227000" />
       <workItem from="1494683175547" duration="4513000" />
       <workItem from="1494689528888" duration="52000" />
-      <workItem from="1494836786947" duration="74701000" />
+      <workItem from="1494836786947" duration="74839000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="86408000" />
+    <option name="totallyTimeSpent" value="86546000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -2069,7 +2093,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="0" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="1" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295583" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -2082,10 +2106,10 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.6890574" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6890574" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26439232" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26439232" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -2156,20 +2180,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/wp_az_3d_notes.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7412">
-          <caret line="445" column="28" lean-forward="false" selection-start-line="445" selection-start-column="28" selection-end-line="445" selection-end-column="28" />
-          <folding>
-            <marker date="1495009425029" expanded="true" signature="14420:14813" ph="CREATE TABLE... ${$table_notes}" />
-            <marker date="1495009425029" expanded="true" signature="14845:15127" ph="CREATE TABLE... ${$table_actions}" />
-            <marker date="1495009425029" expanded="true" signature="19133:19240" ph="SELECT title... ${$table_name}" />
-            <marker date="1495009425029" expanded="true" signature="19650:19823" ph="SELECT title... ${$table_name}" />
-            <marker date="1495009425029" expanded="true" signature="20000:20085" ph="SELECT * FRO... ${$table_actions}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -2386,13 +2396,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1034">
           <caret line="607" column="0" lean-forward="false" selection-start-line="607" selection-start-column="0" selection-end-line="607" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/inc/class_notes_editor.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="24" column="9" lean-forward="false" selection-start-line="24" selection-start-column="9" selection-end-line="24" selection-end-column="9" />
         </state>
       </provider>
     </entry>
@@ -2712,6 +2715,22 @@
             <element signature="n#div#3;n#div#0;n#div#0;n#div#1;n#div#2;n#div#0;n#div#0;n#!!top" expanded="false" />
             <marker date="1495094345066" expanded="true" signature="292:471" ph="SELECT title... ${$table_name}" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/css/editor-style.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/inc/class_notes_editor.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="29" column="0" lean-forward="false" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
