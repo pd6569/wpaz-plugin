@@ -143,8 +143,8 @@
     width: 100px;
 }
 
-#drawing-options-top-panel {
-    margin-bottom: 10px;
+#drawing-options-top-panel .drawing-options-title {
+    margin-right: 5px;
 }
 
 .change-line-width, .change-line-opacity {

@@ -527,7 +527,12 @@ export default class ModuleImage extends BaseModule {
                     console.log("show draw options", _this.$drawingOptions);
                     _this.$drawingOptions.removeClass('hidden').show();
 
+
+
                     // Get elements
+                    let $minimise = jQuery('#drawing-options-top-panel .minimise-options');
+                    let $optionsBody = jQuery('#drawing-options-body');
+
                     let $drawingModeSelector = jQuery('#drawing-mode-selector');
 
                     // Width
@@ -566,6 +571,8 @@ export default class ModuleImage extends BaseModule {
                         $drawingLineWidth.text(width);
                         _this.fabricCanvas.freeDrawingBrush.width = width;
                     });
+
+                    $widthSlider.off();
                     $widthSlider.on('change', (event) => {
                         console.log("change line width", event);
                         let width = event.target.value;
@@ -604,14 +611,30 @@ export default class ModuleImage extends BaseModule {
                         _this.fabricCanvas.freeDrawingBrush.color = rgba;
                     });
 
+                    $opacitySlider.off();
                     $opacitySlider.on('change', (event) => {
                         console.log("change line opacity");
                         let opacity = event.target.value;
+                        $lineOpacity.text(opacity);
+
                         let currentColor = _this.fabricCanvas.freeDrawingBrush.color;
                         let hexColor = new fabric.Color(currentColor).toHex(); // convert to hex
                         let rgba = Utils.convertHex(hexColor, opacity); // change opacity
                         _this.fabricCanvas.freeDrawingBrush.color = rgba;
 
+                    });
+
+                    // Minimise
+                    $minimise.off();
+                    $minimise.on('click', () => {
+                        $optionsBody.toggle();
+                        if ($optionsBody.is(":hidden")) {
+                            $minimise.removeClass('glyphicon-chevron-up');
+                            $minimise.addClass('glyphicon-chevron-down');
+                        } else {
+                            $minimise.removeClass('glyphicon-chevron-down');
+                            $minimise.addClass('glyphicon-chevron-up');
+                        }
                     });
 
 
