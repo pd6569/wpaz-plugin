@@ -142,49 +142,51 @@
         <div id="wpaz-main-layout">
 
 
-            <div class="row">
-                <div class="row toolbar-row scene-controls">
-                    <div id="scene-controls-container" class="col-md-12 actions-buttons scene-controls">
-                        <div class="btn-group" role="group" aria-label="...">
-                            <button id="action-add" type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-                            <button id="action-previous" type="button" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
-                            <button id="action-next" type="button" class="btn btn-default"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></button>
+	        <?php if ( $user_is_editor && !is_page($wp_az_3d_body_id)) : ?>
+                <div class="row">
+                    <div class="row toolbar-row scene-controls">
+                        <div id="scene-controls-container" class="col-md-12 actions-buttons scene-controls">
+                            <div class="btn-group" role="group" aria-label="...">
+                                <button id="action-add" type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                <button id="action-previous" type="button" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
+                                <button id="action-next" type="button" class="btn btn-default"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></button>
 
-                            <div class="btn-group dropdown">
-                                <button class="btn btn-default dropdown-toggle" type="button" id="actions-dropdown" data-toggle="dropdown" aria-expanded="true">
-                                    Actions
+                                <div class="btn-group dropdown">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="actions-dropdown" data-toggle="dropdown" aria-expanded="true">
+                                        Actions
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul id="actions-dropdown-container" class="dropdown-menu" aria-labelledby="actions-dropdown">
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="action-properties scene-controls">
+                                <span id="current-action" class="label label-info">Action 1</span>
+                                <span id="num-actions" class="label label-info">0 actions</span>
+                            </div>
+                            <div class="toolbar-annotations scene-controls btn-group dropdown">
+                                <button class="btn btn-default dropdown-toggle" type="button" id="annotations-dropdown" data-toggle="dropdown" aria-expanded="true">
+                                    Annotations
                                     <span class="caret"></span>
                                 </button>
-                                <ul id="actions-dropdown-container" class="dropdown-menu" aria-labelledby="actions-dropdown">
+                                <ul id="annotations-dropdown-container" class="dropdown-menu" aria-labelledby="annotations-dropdown">
                                 </ul>
                             </div>
+                            <div class="annotation-properties scene-controls">
+                                <span id="num-annotations" class="label label-info">0 annotations</span>
+                            </div>
                         </div>
-                        <div class="action-properties scene-controls">
-                            <span id="current-action" class="label label-info">Action 1</span>
-                            <span id="num-actions" class="label label-info">0 actions</span>
-                        </div>
-                        <div class="toolbar-annotations scene-controls btn-group dropdown">
-                            <button class="btn btn-default dropdown-toggle" type="button" id="annotations-dropdown" data-toggle="dropdown" aria-expanded="true">
-                                Annotations
-                                <span class="caret"></span>
-                            </button>
-                            <ul id="annotations-dropdown-container" class="dropdown-menu" aria-labelledby="annotations-dropdown">
-                            </ul>
-                        </div>
-                        <div class="annotation-properties scene-controls">
-                            <span id="num-annotations" class="label label-info">0 annotations</span>
-                        </div>
+                        <!--<div class="col-md-6 actions-buttons">
+                            <div class="btn-group pull-right" role="group" aria-label="...">
+                                <button id="toolbar-reset" type="button" class="btn btn-default">Reset</button>
+                                <button id="toolbar-clear-actions" type="button" class="btn btn-default">Clear Actions</button>
+                                <button id="toolbar-clear-annotations" type="button" class="btn btn-default">Clear Annotations</button>
+                            </div>
+                        </div>-->
                     </div>
-                    <!--<div class="col-md-6 actions-buttons">
-                        <div class="btn-group pull-right" role="group" aria-label="...">
-                            <button id="toolbar-reset" type="button" class="btn btn-default">Reset</button>
-                            <button id="toolbar-clear-actions" type="button" class="btn btn-default">Clear Actions</button>
-                            <button id="toolbar-clear-annotations" type="button" class="btn btn-default">Clear Annotations</button>
-                        </div>
-                    </div>-->
                 </div>
-            </div>
-            <div class="row">
+                <div class="row">
+            <?php endif ?>
 
 
 
