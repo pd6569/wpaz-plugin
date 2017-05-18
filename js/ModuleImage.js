@@ -6,10 +6,14 @@
 
 "use strict";
 
+// vendor
+import 'fabric';
+
+// 3D notes modules
 import appGlobals from './globals';
 import BaseModule from './BaseModule';
 import Utils from './Utils';
-import 'fabric';
+
 
 export default class ModuleImage extends BaseModule {
 
@@ -525,16 +529,29 @@ export default class ModuleImage extends BaseModule {
 
                     // Get elements
                     let $drawingModeSelector = jQuery('#drawing-mode-selector');
+
+                    // Width
                     let $drawingLineWidth = jQuery('#drawing-line-width');
                     let $changeLineWidth = jQuery('.change-line-width');
+                    let $widthSlider = jQuery('#line-width-slider');
+
+                    // Colour
                     let $drawingColour = jQuery('#drawing-color');
+
+                    // Opacity
                     let $lineOpacity = jQuery('#drawing-line-opacity');
                     let $changeLineOpacity = jQuery('.change-line-opacity');
+                    let $opacitySlider = jQuery('#line-opacity-slider');
 
 
                     // Set values
-                    $drawingLineWidth.text(_this.fabricCanvas.freeDrawingBrush.width);
-                    $lineOpacity.text(ModuleImage.getAlphaFromFabricColor(new fabric.Color(_this.fabricCanvas.freeDrawingBrush.color)));
+                    let lineWidth = _this.fabricCanvas.freeDrawingBrush.width;
+                    $drawingLineWidth.text(lineWidth);
+                    $widthSlider.attr('value', lineWidth);
+
+                    let opacity = ModuleImage.getAlphaFromFabricColor(new fabric.Color(_this.fabricCanvas.freeDrawingBrush.color));
+                    $lineOpacity.text(opacity);
+                    $opacitySlider.attr('value', opacity);
 
                     // Change line width
                     $changeLineWidth.off();
@@ -546,6 +563,12 @@ export default class ModuleImage extends BaseModule {
                         } else {
                             if (width > 1) width--;
                         }
+                        $drawingLineWidth.text(width);
+                        _this.fabricCanvas.freeDrawingBrush.width = width;
+                    });
+                    $widthSlider.on('change', (event) => {
+                        console.log("change line width", event);
+                        let width = event.target.value;
                         $drawingLineWidth.text(width);
                         _this.fabricCanvas.freeDrawingBrush.width = width;
                     });
@@ -579,9 +602,18 @@ export default class ModuleImage extends BaseModule {
                         let hexColor = new fabric.Color(currentColor).toHex(); // convert to hex
                         let rgba = Utils.convertHex(hexColor, opacity); // change opacity
                         _this.fabricCanvas.freeDrawingBrush.color = rgba;
+                    });
 
+                    $opacitySlider.on('change', (event) => {
+                        console.log("change line opacity");
+                        let opacity = event.target.value;
+                        let currentColor = _this.fabricCanvas.freeDrawingBrush.color;
+                        let hexColor = new fabric.Color(currentColor).toHex(); // convert to hex
+                        let rgba = Utils.convertHex(hexColor, opacity); // change opacity
+                        _this.fabricCanvas.freeDrawingBrush.color = rgba;
 
-                    })
+                    });
+
 
                 } else {
                     _this.$drawingOptions.hide();

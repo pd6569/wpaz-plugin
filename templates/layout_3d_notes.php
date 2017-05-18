@@ -237,12 +237,11 @@
                                 <button class="btn btn-default change-line-width drawing-mode-action" data-action="increase-width">
                                     <span class="glyphicon glyphicon-plus"></span>
                                 </button>
-
                                 <span id="drawing-line-width">5</span>
-
                                 <button class="btn btn-default change-line-width drawing-mode-action" data-action="decrease-width">
                                     <span class="glyphicon glyphicon-minus" ></span>
                                 </button>
+                                <input id="line-width-slider" class="range-slider" type="range" min="0" max="100" step="1" value="20">
                             </div>
 
                             <div class="drawing-property">
@@ -261,6 +260,7 @@
                                 <button class="btn btn-default change-line-opacity drawing-mode-action" data-action="decrease-opacity">
                                     <span class="glyphicon glyphicon-minus" ></span>
                                 </button>
+                                <input id="line-opacity-slider" class="range-slider" type="range" min="0" max="100" step="1" value="20">
                             </div>
 
                         </div>

@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "fabric": "^1.7.11",
-    "swipebox": "^1.4.6",
     "datatables.net": "^1.10.15",
-    "datatables.net-bs": "^1.10.15"
+    "datatables.net-bs": "^1.10.15",
+    "fabric": "^1.7.11",
+    "swipebox": "^1.4.6"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
