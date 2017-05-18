@@ -1871,7 +1871,8 @@ class AnatomyNotes {
 
                 // resize widget with 1:1 ratio
                 resizeHeight = this.$humanWidget.width();
-                this.$humanWidget.attr("height", resizeHeight);
+                this.$humanWidget.height(resizeHeight);
+                console.log("ratio: 1:1 - human width: " + this.$humanWidget.width() + " height: " + this.$humanWidget.height() + " resize height:" + resizeHeight);
 
                 snapshotHeight = 2160;
                 snapshotWidth = 2160;
@@ -1880,7 +1881,8 @@ class AnatomyNotes {
             case 'four-three':
 
                 resizeHeight = parseInt((this.$humanWidget.width() / 4) * 3);
-                this.$humanWidget.attr("height", resizeHeight);
+                this.$humanWidget.height(resizeHeight);
+                console.log("ratio: 4:3 - human width: " + this.$humanWidget.width() + " height: " + this.$humanWidget.height() + " resize height:" + resizeHeight);
 
                 snapshotHeight = 2160;
                 snapshotWidth = 2880;
@@ -1889,8 +1891,8 @@ class AnatomyNotes {
             case 'sixteen-nine':
 
                 resizeHeight = parseInt((this.$humanWidget.width() / 16) * 9);
-                this.$humanWidget.attr("height", resizeHeight);
-
+                this.$humanWidget.height(resizeHeight);
+                console.log("ratio: 16:9 - human width: " + this.$humanWidget.width() + " height: " + this.$humanWidget.height() + " resize height:" + resizeHeight);
                 snapshotHeight = 2160;
                 snapshotWidth = 3840;
                 break;
@@ -1923,12 +1925,12 @@ class AnatomyNotes {
                 this.$modelContainer
                     .removeClass('col-md-12')
                     .addClass('col-md-8');
-                this.$humanWidget.attr("height", "600");
+                this.$humanWidget.height(600);
 
                 let data = {
                     type: 'snapshot',
                     imgSrc: imgSrc,
-                }
+                };
                 this.showModal('image', data);
 
             });
