@@ -414,7 +414,7 @@ export default class ModuleImage extends BaseModule {
         this.fabricCanvas.setHeight(this.app.$humanWidget.height());
 
         // Set tool defaults
-        this.fabricCanvas.freeDrawingBrush.width = 6;
+        this.fabricCanvas.freeDrawingBrush.width = 50;
         this.fabricCanvas.freeDrawingBrush.color = "rgba(0,255,0, 1)";
         this.doToolbarAction('get-all').drawMode(false);
     }
@@ -534,6 +534,9 @@ export default class ModuleImage extends BaseModule {
                     console.log("show draw options", _this.$drawingOptions);
                     _this.$drawingOptions.removeClass('hidden').show();
 
+
+                    _this.fabricCanvas.freeDrawingCursor = 'none';
+
                     // Set up cursor
                     _this.mouseCursor = new fabric.Circle({
                         'selectable': false,
@@ -541,13 +544,15 @@ export default class ModuleImage extends BaseModule {
                         'hasControls': false,
                         'left': 0,
                         'top': 0,
-                        'radius': 50,
+                        'radius': parseInt((_this.fabricCanvas.freeDrawingBrush.width / 2) / _this.fabricCanvas.getZoom()),
                         'fill': _this.fabricCanvas.freeDrawingBrush.color,
-                        'originX': 'right',
-                        'originY': 'bottom',
+                        'originX': 'center',
+                        'originY': 'center',
+                        'scaleX': _this.fabricCanvas.getZoom(),
+                        'scaleY': _this.fabricCanvas.getZoom(),
                     });
 
-                    console.log("cursor", _this.mouseCursor);
+                    console.log("cursor", _this.mouseCursor + " canvas zoom", _this.fabricCanvas.getZoom());
 
                     _this.fabricCanvas.add(_this.mouseCursor);
 
@@ -560,9 +565,10 @@ export default class ModuleImage extends BaseModule {
 
                     _this.fabricCanvas.on('mouse:move', (object) => {
 
-                        _this.mouseCursor.top = object.e.y * 3;
-                        _this.mouseCursor.left = object.e.x * 3;
-                        console.log("y: " + object.e.y + " x: " + object.e.x + "mouseCursor ", _this.mouseCursor);
+                        console.log("object", object);
+                        _this.mouseCursor.top = object.e.layerY / _this.fabricCanvas.getZoom();
+                        _this.mouseCursor.left = object.e.layerX / _this.fabricCanvas.getZoom();
+                        console.log("y: " + object.e.y + " x: " + object.e.x + " mouseCursor ", _this.mouseCursor);
 
                         _this.fabricCanvas.setActiveObject(_this.mouseCursor);
 

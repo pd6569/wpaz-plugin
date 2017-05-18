@@ -223,7 +223,7 @@
                                     <button class="btn btn-default change-line-width drawing-mode-action" data-action="increase-width">
                                         <span class="glyphicon glyphicon-plus"></span>
                                     </button>
-                                    <span id="drawing-line-width">5</span>
+                                    <span id="drawing-line-width">50</span>
                                     <button class="btn btn-default change-line-width drawing-mode-action" data-action="decrease-width">
                                         <span class="glyphicon glyphicon-minus" ></span>
                                     </button>
