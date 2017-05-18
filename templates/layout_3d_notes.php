@@ -351,6 +351,7 @@
                                     <ul id="snapshot-dropdown" class="dropdown-menu" aria-labelledby="snapshot-dropdown">
                                         <li class="take-snapshot" data-ratio="one-one"><a>1:1</a></li>
                                         <li class="take-snapshot" data-ratio="four-three"><a>4:3</a></li>
+                                        <li class="take-snapshot" data-ratio="sixteen-nine"><a>16:9</a></li>
                                     </ul>
                                 </div>
                                 <button id="scene-selector-annotate-model" type="button" class="btn btn-default pull-left"><span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span></button>

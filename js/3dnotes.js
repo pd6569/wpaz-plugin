@@ -1853,28 +1853,51 @@ class AnatomyNotes {
      */
     takeSnapshot(aspectRatio, backgroundColor, callback){
 
+        console.log("takeSnapshot");
+
         appGlobals.numSnapshots++;
 
-        // resize
+        // resize to allow fullscreen model
         this.$modelContainer
             .removeClass('col-md-8')
             .addClass('col-md-12');
 
-        let height;
+        let resizeHeight;
+        let snapshotHeight;
+        let snapshotWidth;
 
         switch(aspectRatio){
             case 'one-one':
-                height = this.$humanWidget.width();
-                console.log("aspect ratio: " + aspectRatio + " height: " + height);
+
+                // resize widget with 1:1 ratio
+                resizeHeight = this.$humanWidget.width();
+                this.$humanWidget.attr("height", resizeHeight);
+
+                snapshotHeight = 2160;
+                snapshotWidth = 2160;
                 break;
 
             case 'four-three':
-                height = parseInt((this.$humanWidget.width() / 4) * 3);
-                console.log("aspect ratio: " + aspectRatio + " height: " + height);
+
+                resizeHeight = parseInt((this.$humanWidget.width() / 4) * 3);
+                this.$humanWidget.attr("height", resizeHeight);
+
+                snapshotHeight = 2160;
+                snapshotWidth = 2880;
+                break;
+
+            case 'sixteen-nine':
+
+                resizeHeight = parseInt((this.$humanWidget.width() / 16) * 9);
+                this.$humanWidget.attr("height", resizeHeight);
+
+                snapshotHeight = 2160;
+                snapshotWidth = 3840;
                 break;
         }
 
-        this.$humanWidget.attr("height", height);
+
+        console.log("human width: " + this.$humanWidget.width() + " height: " + this.$humanWidget.height());
 
         setTimeout(() => {
             let originalBackgroundData;
@@ -1890,7 +1913,9 @@ class AnatomyNotes {
             this.human.send("ui.setBackground", backgroundData);
 
             this.human.send("ui.snapshot", {
-                openInTab: false
+                openInTab: false,
+                'width': snapshotWidth,
+                'height': snapshotHeight,
 
             }, (imgSrc) => {
                 console.log("Snapshot captured.");
