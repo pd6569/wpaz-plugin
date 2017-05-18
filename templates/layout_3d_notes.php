@@ -217,21 +217,6 @@
                                 <span class="glyphicon glyphicon-chevron-up pull-right minimise-options"></span>
                             </div>
                             <div id="drawing-options-body">
-                                <!--<div class="drawing-property">
-                                <label for="drawing-mode-selector">Mode:</label>
-                                <select id="drawing-mode-selector" class="drawing-mode-action">
-                                    <option>Pencil</option>
-                                    <option>Circle</option>
-                                    <option>Spray</option>
-                                    <option>Pattern</option>
-
-                                    <option>hline</option>
-                                    <option>vline</option>
-                                    <option>square</option>
-                                    <option>diamond</option>
-                                    <option>texture</option>
-                                </select><br>
-                            </div>-->
 
                                 <div class="drawing-property">
                                     <label for="drawing-line-width">Line width:</label>
@@ -243,11 +228,6 @@
                                         <span class="glyphicon glyphicon-minus" ></span>
                                     </button>
                                     <input id="line-width-slider" class="range-slider" type="range" min="0" max="200" step="1" value="20">
-                                </div>
-
-                                <div class="drawing-property">
-                                    <label for="drawing-color">Line color:</label>
-                                    <input type="color" value="#00ff00" id="drawing-color" class="drawing-mode-action"><br>
                                 </div>
 
                                 <div class="drawing-property">
@@ -263,6 +243,12 @@
                                     </button>
                                     <input id="line-opacity-slider" class="range-slider" type="range" min="0" max="100" step="1" value="20">
                                 </div>
+
+                                <div class="drawing-property">
+                                    <label for="drawing-color">Line color:</label>
+                                    <input type="color" value="#00ff00" id="drawing-color" class="drawing-mode-action"><br>
+                                </div>
+
                             </div>
 
 
@@ -289,6 +275,9 @@
                                 </button>
                                 <button type="button" class="btn btn-default image-editor-toolbar" data-toolbar-action="zoom-out">
                                     <span class="glyphicon glyphicon-zoom-out" aria-hidden="true"></span>
+                                </button>
+                                <button type="button" class="btn btn-default image-editor-toolbar" data-toolbar-action="move">
+                                    <span class="glyphicon glyphicon-move" aria-hidden="true"></span>
                                 </button>
                                 <button type="button" class="btn btn-default image-editor-toolbar" data-toolbar-action="draw">
                                     <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>

@@ -309,10 +309,16 @@ export default class ModuleImage extends BaseModule {
     setCanvasListeners(){
         this.fabricCanvas.off();
         this.fabricCanvas.on('object:added', (event) => {
+
             let object = event.target;
 
             if (object === this.group){
                 console.log("group added, return", object);
+                return;
+            }
+
+            if (object === this.mouseCursor){
+                console.log("cursor added, return");
                 return;
             }
 
@@ -523,9 +529,55 @@ export default class ModuleImage extends BaseModule {
                 }
 
                 _this.fabricCanvas.isDrawingMode = !_this.fabricCanvas.isDrawingMode;
+
                 if (_this.fabricCanvas.isDrawingMode) {
                     console.log("show draw options", _this.$drawingOptions);
                     _this.$drawingOptions.removeClass('hidden').show();
+
+                    // Set up cursor
+                    _this.mouseCursor = new fabric.Circle({
+                        'selectable': false,
+                        'hasBorders': false,
+                        'hasControls': false,
+                        'left': 0,
+                        'top': 0,
+                        'radius': 50,
+                        'fill': _this.fabricCanvas.freeDrawingBrush.color,
+                        'originX': 'right',
+                        'originY': 'bottom',
+                    });
+
+                    console.log("cursor", _this.mouseCursor);
+
+                    _this.fabricCanvas.add(_this.mouseCursor);
+
+                    _this.fabricCanvas.sendToBack(_this.group);
+                    _this.fabricCanvas.bringToFront(_this.mouseCursor);
+
+                    _this.fabricCanvas.renderAll();
+
+                    console.log("objects: ", _this.group.getObjects().length);
+
+                    _this.fabricCanvas.on('mouse:move', (object) => {
+
+                        _this.mouseCursor.top = object.e.y * 3;
+                        _this.mouseCursor.left = object.e.x * 3;
+                        console.log("y: " + object.e.y + " x: " + object.e.x + "mouseCursor ", _this.mouseCursor);
+
+                        _this.fabricCanvas.setActiveObject(_this.mouseCursor);
+
+                        _this.fabricCanvas.renderAll();
+                    });
+
+
+                    _this.fabricCanvas.on('mouse:out', (object) =>  {
+                        // put circle off screen
+                        _this.mouseCursor.top = -100;
+                        _this.mouseCursor.left = -100;
+
+                        _this.fabricCanvas.renderAll()
+                    });
+
 
 
 
@@ -587,6 +639,7 @@ export default class ModuleImage extends BaseModule {
                         let colour = event.target.value;
                         _this.fabricCanvas.freeDrawingBrush.color = colour;
                         $lineOpacity.text("100");
+                        $opacitySlider.attr('value', '100');
                     });
 
                     // Line opacity
@@ -644,6 +697,10 @@ export default class ModuleImage extends BaseModule {
 
             },
 
+            moveImage: function() {
+                this.drawMode(false);
+            }
+
         };
 
         switch (toolbarAction) {
@@ -669,6 +726,10 @@ export default class ModuleImage extends BaseModule {
 
             case 'zoom-out':
                 this.toolbarActions.zoomCanvas(false);
+                break;
+
+            case 'move':
+                this.toolbarActions.moveImage();
                 break;
 
             case 'draw':

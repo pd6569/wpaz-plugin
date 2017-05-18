@@ -458,6 +458,7 @@ class AnatomyNotes {
             "<canvas id='imageCanvas' class='myCanvas' width='" + width + "' height='" + height + "'>" +
             "</canvas>");
 
+
         $annotationCanvasHtml.appendTo(this.$iframeContainer);
         $imageCanvasHtml.appendTo(this.$iframeContainer);
 
