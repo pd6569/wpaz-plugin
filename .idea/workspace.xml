@@ -1055,8 +1055,6 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../wp-sweep/uninstall.php" afterPath="$PROJECT_DIR$/../wp-sweep/uninstall.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../wp-sweep/wp-sweep.php" afterPath="$PROJECT_DIR$/../wp-sweep/wp-sweep.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/styles.css" afterPath="$PROJECT_DIR$/css/styles.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/3dnotes.js" afterPath="$PROJECT_DIR$/js/3dnotes.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/layout_3d_notes.php" afterPath="$PROJECT_DIR$/templates/layout_3d_notes.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../wp-includes/class-phpmailer.php" afterPath="$PROJECT_DIR$/../../../wp-includes/class-phpmailer.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../wp-includes/class-smtp.php" afterPath="$PROJECT_DIR$/../../../wp-includes/class-smtp.php" />
@@ -1214,15 +1212,14 @@
       <file leaf-file-name="layout_3d_notes.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/layout_3d_notes.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="513" column="0" lean-forward="true" selection-start-line="513" selection-start-column="0" selection-end-line="513" selection-end-column="0" />
+            <state relative-caret-position="40">
+              <caret line="142" column="0" lean-forward="false" selection-start-line="142" selection-start-column="0" selection-end-line="142" selection-end-column="0" />
               <folding>
                 <element signature="n#div#1;n#div#0;n#div#0;n#!!top" expanded="false" />
-                <element signature="n#div#1;n#div#0;n#div#2;n#div#0;n#div#0;n#!!top" expanded="false" />
-                <element signature="n#div#1;n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#div#0;n#!!top" expanded="false" />
-                <element signature="n#div#2;n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#div#0;n#!!top" expanded="false" />
-                <element signature="n#div#3;n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#div#0;n#!!top" expanded="false" />
-                <marker date="1495038468368" expanded="true" signature="292:471" ph="SELECT title... ${$table_name}" />
+                <element signature="n#div#1;n#div#0;n#div#0;n#div#1;n#div#2;n#div#0;n#div#0;n#!!top" expanded="false" />
+                <element signature="n#div#2;n#div#0;n#div#0;n#div#1;n#div#2;n#div#0;n#div#0;n#!!top" expanded="false" />
+                <element signature="n#div#3;n#div#0;n#div#0;n#div#1;n#div#2;n#div#0;n#div#0;n#!!top" expanded="false" />
+                <marker date="1495094345066" expanded="true" signature="292:471" ph="SELECT title... ${$table_name}" />
               </folding>
             </state>
           </provider>
@@ -2055,12 +2052,12 @@
       <workItem from="1494669671894" duration="2227000" />
       <workItem from="1494683175547" duration="4513000" />
       <workItem from="1494689528888" duration="52000" />
-      <workItem from="1494836786947" duration="72541000" />
+      <workItem from="1494836786947" duration="74701000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="84248000" />
+    <option name="totallyTimeSpent" value="86408000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -2073,7 +2070,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295583" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -2086,7 +2082,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6890574" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.6890574" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26439232" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -2615,20 +2611,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wp_az_3d_notes.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-244">
-          <caret line="508" column="48" lean-forward="false" selection-start-line="508" selection-start-column="48" selection-end-line="508" selection-end-column="48" />
-          <folding>
-            <marker date="1495009425029" expanded="true" signature="14420:14813" ph="CREATE TABLE... ${$table_notes}" />
-            <marker date="1495009425029" expanded="true" signature="14845:15127" ph="CREATE TABLE... ${$table_actions}" />
-            <marker date="1495009425029" expanded="true" signature="19133:19240" ph="SELECT title... ${$table_name}" />
-            <marker date="1495009425029" expanded="true" signature="19650:19823" ph="SELECT title... ${$table_name}" />
-            <marker date="1495009425029" expanded="true" signature="20000:20085" ph="SELECT * FRO... ${$table_actions}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/Actions.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1785">
@@ -2705,17 +2687,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/wp_az_3d_notes.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-244">
+          <caret line="508" column="48" lean-forward="false" selection-start-line="508" selection-start-column="48" selection-end-line="508" selection-end-column="48" />
+          <folding>
+            <marker date="1495009425029" expanded="true" signature="14420:14813" ph="CREATE TABLE... ${$table_notes}" />
+            <marker date="1495009425029" expanded="true" signature="14845:15127" ph="CREATE TABLE... ${$table_actions}" />
+            <marker date="1495009425029" expanded="true" signature="19133:19240" ph="SELECT title... ${$table_name}" />
+            <marker date="1495009425029" expanded="true" signature="19650:19823" ph="SELECT title... ${$table_name}" />
+            <marker date="1495009425029" expanded="true" signature="20000:20085" ph="SELECT * FRO... ${$table_actions}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/templates/layout_3d_notes.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="513" column="0" lean-forward="true" selection-start-line="513" selection-start-column="0" selection-end-line="513" selection-end-column="0" />
+        <state relative-caret-position="40">
+          <caret line="142" column="0" lean-forward="false" selection-start-line="142" selection-start-column="0" selection-end-line="142" selection-end-column="0" />
           <folding>
             <element signature="n#div#1;n#div#0;n#div#0;n#!!top" expanded="false" />
-            <element signature="n#div#1;n#div#0;n#div#2;n#div#0;n#div#0;n#!!top" expanded="false" />
-            <element signature="n#div#1;n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#div#0;n#!!top" expanded="false" />
-            <element signature="n#div#2;n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#div#0;n#!!top" expanded="false" />
-            <element signature="n#div#3;n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#div#0;n#!!top" expanded="false" />
-            <marker date="1495038468368" expanded="true" signature="292:471" ph="SELECT title... ${$table_name}" />
+            <element signature="n#div#1;n#div#0;n#div#0;n#div#1;n#div#2;n#div#0;n#div#0;n#!!top" expanded="false" />
+            <element signature="n#div#2;n#div#0;n#div#0;n#div#1;n#div#2;n#div#0;n#div#0;n#!!top" expanded="false" />
+            <element signature="n#div#3;n#div#0;n#div#0;n#div#1;n#div#2;n#div#0;n#div#0;n#!!top" expanded="false" />
+            <marker date="1495094345066" expanded="true" signature="292:471" ph="SELECT title... ${$table_name}" />
           </folding>
         </state>
       </provider>
