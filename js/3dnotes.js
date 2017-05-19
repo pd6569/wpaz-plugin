@@ -777,28 +777,44 @@ class AnatomyNotes {
                 this.$modalBtn1.on('click', () => { this.$modalAlert.modal('hide')});
                 this.$modalBtn2.on('click', () => {
                     let newTitle = jQuery('#create-new-note-set').val();
-                    this.clearActiveNotes();
-                    this.$postTitle.text(newTitle);
-                    this.$mainToolbarActiveNotes.find('a').text(newTitle);
                     Utils.hideModal();
 
+                    // Save notes first
+                    this.saveNotes(this.$noteTitle.val(), this.noteEditor.getContent());
 
                     // CREATE NEW POST IN DB
                     Utils.showLoading();
-                    this.createPostInDb(newTitle, (response) => Utils.hideLoading());
+                    this.createPostInDb(newTitle, (response) => {
+                        Utils.hideLoading();
+                        this.clearActiveNotes();
+                        this.$postTitle.text(newTitle);
+                        this.$mainToolbarActiveNotes.find('a').text(newTitle);
 
-                    // Notify MyNotes module that reload will be required
-                    if (appGlobals.modulesLoaded[appGlobals.tabs.MY_NOTES]) {
-                        appGlobals.modulesLoaded[appGlobals.tabs.MY_NOTES].requireReload = true;
-                    }
+                        // Notify MyNotes module that reload will be required
+                        if (appGlobals.modulesLoaded[appGlobals.tabs.MY_NOTES]) {
+                            appGlobals.modulesLoaded[appGlobals.tabs.MY_NOTES].requireReload = true;
+                        }
 
-                    // Switch tab
-                    if (appGlobals.currentTab !== appGlobals.tabs.NOTE_EDITOR) {
-                        Utils.setActiveTab(appGlobals.tabs.NOTE_EDITOR)
-                    }
+                        // Switch tab
+                        if (appGlobals.currentTab !== appGlobals.tabs.NOTE_EDITOR) {
+                            Utils.setActiveTab(appGlobals.tabs.NOTE_EDITOR)
+                        }
 
-                    // Reload human
-                    this.$humanWidget.attr('src', appGlobals.scenePresets.head.bone);
+                        // Reload human
+                        this.$humanWidget.attr('src', appGlobals.scenePresets.head.bone);
+
+                    }, (response) => {
+                        Utils.hideLoading();
+                        Utils.showModal({
+                            title: "Unable to create new note",
+                            body: "Something went wrong. Unable to to create new note set. Please try reloading the page",
+                        });
+
+                        this.$modalBtn1.on('click', () => Utils.hideModal());
+                        this.$modalBtn2.on('click', () => Utils.hideModal());
+                    });
+
+
 
                 });
                 return true;
@@ -991,9 +1007,9 @@ class AnatomyNotes {
      * Creates new post in DB using WP REST API
      *
      * @param title (String) Title of new post (note set)
-     * @param callback (Function) Function called once post created. Takes one argument (post object)
+     * @param onSuccess (Function) Function called once post created. Takes one argument (post object)
      */
-    createPostInDb(title, callback){
+    createPostInDb(title, onSuccess, onError){
 
         let data = {
             title: title,
@@ -1019,11 +1035,11 @@ class AnatomyNotes {
             success: function(response) {
                 console.log("success: " + JSON.stringify(response));
 
-                appGlobals.post_id = response.id;
-
                 Utils.setNoteUpdateStatus("New note set created.");
 
-                if (callback) callback(response);
+                if (onSuccess) onSuccess(response);
+
+                appGlobals.post_id = response.id;
 
             },
             error: function(response) {
@@ -1031,7 +1047,7 @@ class AnatomyNotes {
 
                 Utils.setNoteUpdateStatus("Failed to create new note.");
 
-                if (callback) callback(response);
+                if (onError) onError(response);
             }
         })
 
@@ -1039,9 +1055,6 @@ class AnatomyNotes {
 
     clearActiveNotes(){
         console.log("clearActiveNotes");
-
-        // save notes first
-        this.saveNotes(this.$noteTitle.val(), this.noteEditor.getContent());
 
         // Delete all data
         Utils.resetAppState();

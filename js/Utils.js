@@ -102,6 +102,7 @@ export default class Utils {
      * @param {string} modalObj.btn2                - text on button 2
      */
     static showModal(modalObj){
+        Utils.resetModal();
         let $modalAlert = jQuery('#wpaz-modal-alert');
         let $modalTitle = $modalAlert.find('.modal-title');
         let $modalBody = $modalAlert.find('.modal-body');

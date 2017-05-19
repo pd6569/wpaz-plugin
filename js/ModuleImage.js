@@ -519,6 +519,7 @@ export default class ModuleImage extends BaseModule {
                 zoomIn ? _this.fabricCanvas.setZoom(currentZoom + 0.05) : _this.fabricCanvas.setZoom(currentZoom - 0.05);
             },
 
+            //TODO: build class for different modes within image editor
             drawMode: function (enable) {
                 console.log("drawingmode: " + _this.fabricCanvas.isDrawingMode);
 
@@ -638,6 +639,7 @@ export default class ModuleImage extends BaseModule {
                         _this.mouseCursor.setRadius(parseInt((width / 2) / _this.fabricCanvas.getZoom()));
                     });
 
+                    // width slider
                     $widthSlider.off();
                     $widthSlider.on('change', (event) => {
                         console.log("change line width", event);
@@ -680,6 +682,7 @@ export default class ModuleImage extends BaseModule {
                         _this.fabricCanvas.freeDrawingBrush.color = rgba;
                     });
 
+                    // opacity slider
                     $opacitySlider.off();
                     $opacitySlider.on('change', (event) => {
                         console.log("change line opacity");
