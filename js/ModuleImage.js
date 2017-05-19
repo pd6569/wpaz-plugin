@@ -525,6 +525,14 @@ export default class ModuleImage extends BaseModule {
                 if (!enable) {
                     _this.fabricCanvas.isDrawingMode = false;
                     _this.$drawingOptions.hide();
+
+                    console.log("before objects on canvas: " +  _this.fabricCanvas.getObjects().length + " cursor: ", _this.mouseCursor);
+
+                    _this.fabricCanvas.remove(_this.mouseCursor);
+                    _this.mouseCursor = null;
+                    _this.fabricCanvas.renderAll();
+
+                    console.log("after objects on canvas: ",  _this.fabricCanvas.getObjects().length + " cursor: ", _this.mouseCursor);
                     return;
                 }
 
@@ -534,6 +542,8 @@ export default class ModuleImage extends BaseModule {
                     console.log("show draw options", _this.$drawingOptions);
                     _this.$drawingOptions.removeClass('hidden').show();
 
+
+                    /********* START CURSOR SET UP ************/
 
                     _this.fabricCanvas.freeDrawingCursor = 'none';
 
@@ -552,8 +562,6 @@ export default class ModuleImage extends BaseModule {
                         'scaleY': _this.fabricCanvas.getZoom(),
                     });
 
-                    console.log("cursor", _this.mouseCursor + " canvas zoom", _this.fabricCanvas.getZoom());
-
                     _this.fabricCanvas.add(_this.mouseCursor);
 
                     _this.fabricCanvas.sendToBack(_this.group);
@@ -561,31 +569,30 @@ export default class ModuleImage extends BaseModule {
 
                     _this.fabricCanvas.renderAll();
 
-                    console.log("objects: ", _this.group.getObjects().length);
-
                     _this.fabricCanvas.on('mouse:move', (object) => {
+                        if (_this.mouseCursor) {
+                            _this.mouseCursor.top = object.e.layerY / _this.fabricCanvas.getZoom();
+                            _this.mouseCursor.left = object.e.layerX / _this.fabricCanvas.getZoom();
+                            _this.fabricCanvas.setActiveObject(_this.mouseCursor);
+                            _this.fabricCanvas.renderAll();
+                        }
 
-                        console.log("object", object);
-                        _this.mouseCursor.top = object.e.layerY / _this.fabricCanvas.getZoom();
-                        _this.mouseCursor.left = object.e.layerX / _this.fabricCanvas.getZoom();
-                        console.log("y: " + object.e.y + " x: " + object.e.x + " mouseCursor ", _this.mouseCursor);
-
-                        _this.fabricCanvas.setActiveObject(_this.mouseCursor);
-
-                        _this.fabricCanvas.renderAll();
                     });
 
 
                     _this.fabricCanvas.on('mouse:out', (object) =>  {
                         // put circle off screen
-                        _this.mouseCursor.top = -100;
-                        _this.mouseCursor.left = -100;
 
-                        _this.fabricCanvas.renderAll()
+                        if (_this.mouseCursor) {
+                            _this.mouseCursor.top = -100;
+                            _this.mouseCursor.left = -100;
+
+                            _this.fabricCanvas.renderAll()
+                        }
+
                     });
 
-
-
+                    /********* END CURSOR SET UP ************/
 
                     // Get elements
                     let $minimise = jQuery('#drawing-options-top-panel .minimise-options');
@@ -628,6 +635,7 @@ export default class ModuleImage extends BaseModule {
                         }
                         $drawingLineWidth.text(width);
                         _this.fabricCanvas.freeDrawingBrush.width = width;
+                        _this.mouseCursor.setRadius(parseInt((width / 2) / _this.fabricCanvas.getZoom()));
                     });
 
                     $widthSlider.off();
@@ -636,6 +644,7 @@ export default class ModuleImage extends BaseModule {
                         let width = event.target.value;
                         $drawingLineWidth.text(width);
                         _this.fabricCanvas.freeDrawingBrush.width = width;
+                        _this.mouseCursor.setRadius(parseInt((width / 2) / _this.fabricCanvas.getZoom()));
                     });
 
                     // Line colour
@@ -644,6 +653,7 @@ export default class ModuleImage extends BaseModule {
                         console.log("colour change:", event);
                         let colour = event.target.value;
                         _this.fabricCanvas.freeDrawingBrush.color = colour;
+                        _this.mouseCursor.setColor(colour);
                         $lineOpacity.text("100");
                         $opacitySlider.attr('value', '100');
                     });
@@ -680,6 +690,7 @@ export default class ModuleImage extends BaseModule {
                         let hexColor = new fabric.Color(currentColor).toHex(); // convert to hex
                         let rgba = Utils.convertHex(hexColor, opacity); // change opacity
                         _this.fabricCanvas.freeDrawingBrush.color = rgba;
+                        _this.mouseCursor.setColor(rgba);
 
                     });
 
