@@ -1989,6 +1989,21 @@ class AnatomyNotes {
         // Stop any current animations
         appGlobals.animateUpdate = false;
 
+        /****** Highlight the text linked to action *******/
+        if(this.$textLinkedToScene) {
+            jQuery('.linked-scene').css({'background-color': 'transparent'});
+            let $actionLink = jQuery(`.linked-scene[data-action-id="${action.uid}"]`);
+            if ($actionLink) $actionLink.css({'background-color': 'yellow',});
+        };
+
+        if(this.$editorLinkedScenes) {
+            this.$editorBody.find('.linked-scene').css({'background-color': 'transparent'});
+            let $editorActionLink = this.$editorBody.find(`.linked-scene[data-action-id="${action.uid}"]`);
+            if ($editorActionLink) $editorActionLink.css({'background-color': 'yellow',});
+        };
+
+        /**** END HIGHLIGHT ***/
+
         switch(action.action_type){
             case appGlobals.actionTypes.GENERAL:
 
@@ -2038,7 +2053,8 @@ class AnatomyNotes {
      *
      * Perform an action using the action Id
      *
-     * @param actionId
+     * @param   {string}    actionId    - Id of action to perform
+     * @param   {noteId}    noteId      - Id of note that action is linked to. If not set, defaults to current note id.
      */
     doActionById(actionId, noteId = appGlobals.currentNote.uid){
         console.log("doActionById: " + actionId + " note: " + noteId);
