@@ -396,7 +396,9 @@ class AnatomyNotes {
         });
         this.$textLinkedToScene.on('click', (event) => {
             console.log("text linked to scene");
-            this.doActionById(jQuery(event.target).attr('data-action-id'));
+            let $linkClicked = jQuery(event.target);
+            let parentNoteId = $linkClicked.closest('.note-item').attr('id');
+            this.doActionById($linkClicked.attr('data-action-id'), parentNoteId);
         });
 
         // load notes
@@ -2038,10 +2040,16 @@ class AnatomyNotes {
      *
      * @param actionId
      */
-    doActionById(actionId){
-        console.log("doActionById: " + actionId);
+    doActionById(actionId, noteId = appGlobals.currentNote.uid){
+        console.log("doActionById: " + actionId + " note: " + noteId);
+
+        if (noteId !== appGlobals.currentNote.uid) {
+            console.log("Action clicked does not belong to current note");
+            this.setActiveNote(noteId, true);
+        }
+
         if (actionId) {
-            let actionsArray = appGlobals.actions[appGlobals.currentNote.uid];
+            let actionsArray = appGlobals.actions[noteId];
             for (let action of actionsArray) {
                 if (action) {
                     if (action.uid == actionId){
