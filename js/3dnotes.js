@@ -1381,8 +1381,8 @@ class AnatomyNotes {
 
     // NOTE EDITOR
     editPostTitle() {
-        console.log("editPostTitle");
-        if (!appGlobals.userIsEditor) return;
+        console.log("editPostTitle", this.userIsEditor);
+        if (!this.userIsEditor) return;
 
         let newTitle;
         Utils.resetModal();
