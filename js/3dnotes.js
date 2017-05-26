@@ -1554,24 +1554,28 @@ class AnatomyNotes {
             appGlobals.serverRequests.savingNote = true;
 
             jQuery.post(ajax_object.wp_az_ajax_url, data, response => {
-                if (response.status == 'success') {
-                    // Show success message, then fade out the button after 2 seconds
-                    console.log("Noted saved! " + JSON.stringify(response));
-                    Utils.setNoteUpdateStatus("Notes saved.", 3000);
 
-                    appGlobals.serverRequests.savingNote = false;
+                console.log("saveToDb: " + JSON.stringify(response));
 
-                    // execute callback function
-                    if(callback) callback();
+                if (response.status === 'success') {
+
+                    Utils.setNoteUpdateStatus(response.message, 3000);
 
                 } else {
-                    console.log("Failed. " + JSON.stringify(response));
-                    Utils.setNoteUpdateStatus("Saving notes failed.", 3000);
 
-                    appGlobals.serverRequests.savingNote = false;
+                    if (response === "0" || !response) {
+                        Utils.setNoteUpdateStatus("Unable to save notes. Trying logging in again and refreshing the page", 10000);
+                    } else {
+                        Utils.setNoteUpdateStatus(response.message, 10000);
+                    }
 
-                    if (callback) callback();
                 }
+
+                appGlobals.serverRequests.savingNote = false;
+
+                // execute callback function
+                if(callback) callback();
+
             });
         }
 

@@ -468,7 +468,35 @@ class wp_az_3d_notes {
 	public function save_notes(){
 
 		// first check if data is being sent and that it is the data we want
-		if (!isset($_POST['wp_az_3d_notes_nonce']) || !isset($_POST['wp_az_note_object']) || !isset($_POST['wp_az_post_id'])) {
+		if (
+			!isset($_POST['wp_az_3d_notes_nonce'])
+		    || !isset($_POST['wp_az_note_object'])
+		    || !isset($_POST['wp_az_post_id'])
+		    || !check_ajax_referer('wp_az_3d_notes_nonce', 'wp_az_3d_notes_nonce', false)
+			|| !wp_az_user_can_edit_notes()) {
+
+			$errorDesc = "";
+			if (!isset($_POST['wp_az_3d_notes_nonce'])) {
+				$errorDesc .= "Nonce not set. ";
+			}
+			if (!isset($_POST['wp_az_note_object'])) {
+				$errorDesc .= "No notes object recieved. ";
+			}
+			if (!isset($_POST['wp_az_post_id'])) {
+				$errorDesc .= "Post id not set. ";
+			}
+			if (!check_ajax_referer('wp_az_3d_notes_nonce', 'wp_az_3d_notes_nonce', false)) {
+				$errorDesc .= "Invalid ajax referrer. ";
+			}
+			if (!wp_az_user_can_edit_notes()){
+				$errorDesc .= "Incorrect access level. ";
+			}
+
+			wp_send_json (array(
+				'status'                => 'error',
+				'message'               => 'Saving notes failed, did not pass security check: ' . $errorDesc,
+			));
+
 			wp_die('Your request failed permission check.');
 		}
 
@@ -541,16 +569,14 @@ class wp_az_3d_notes {
 		}
 
 		// try to update notes if available
-		if (current_user_can('access_s2member_level2')):
-
 		$update = $wpdb->update(
-				$notes_table,
-				$notes_data,
-				array (
-					post_id  => $post_id,
-					uid      => $notes['uid']
-				)
-			);
+			$notes_table,
+			$notes_data,
+			array (
+				post_id  => $post_id,
+				uid      => $notes['uid']
+			)
+		);
 
 		// insert new notes if no record exists
 		if (!$update) {
@@ -561,7 +587,6 @@ class wp_az_3d_notes {
 			);
 		}
 
-		endif;
 
 		// success
 		wp_send_json (array(
@@ -630,6 +655,7 @@ class wp_az_3d_notes {
 
 		wp_send_json(array (
 			'status'    => "success",
+			'message'   => "Notes loaded",
 			'notes'     => $notes,
 			'actions'   => stripslashes_deep($actionsQuery),
 		));
@@ -647,7 +673,8 @@ class wp_az_3d_notes {
 		$ajax_call = false;
 
 		wp_send_json(array (
-			'status' => "success",
+			'status'    => "success",
+			'message'   => "Item templates sent",
 			'templates' => $templates,
 		));
 
