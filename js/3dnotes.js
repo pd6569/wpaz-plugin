@@ -1378,7 +1378,6 @@ class AnatomyNotes {
         Object.keys(appGlobals.notes).forEach((noteId) => {
             if (appGlobals.notes[noteId].sequence == noteSeq) {
                 this.setActiveNote(noteId, false);
-                console.log("appGlobals: ", appGlobals);
             }
         })
     }
@@ -1589,141 +1588,109 @@ class AnatomyNotes {
     //TODO: only update UI and remove note if server request is succesful
     deleteNote(uid){
         if (!this.userIsEditor) { console.log("Nice try..."); return };
-        console.log("delete Note");
-
-        console.log("appGlobals: ", appGlobals);
 
         let _this = this;
 
-        Utils.showLoading();
-        Utils.setNoteUpdateStatus("Deleting...");
-
-        /*let noteToDelete;
-
-        if (!uid){
-            noteToDelete = appGlobals.currentNote;
-        } else {
-            noteToDelete = appGlobals.notes[uid];
-        }
-        let noteToDeleteSequence = parseInt(noteToDelete.sequence);
-
-        // update data
-        Note.removeNote(noteToDelete.uid);
-
-        // set active note as previous note upon deletion
-        let index;
-        let activeNoteUID;
-        console.log("noteToDeleteSeq: " + noteToDeleteSequence);
-        if (noteToDeleteSequence === 1) {
-            if (appGlobals.sequenceIndex.length > 0) {
-                activeNoteUID = appGlobals.sequenceIndex[0][0];
-            } else {
-                let note = new Note(1, "", "", "");
-                activeNoteUID = note.getUid();
-            }
-        } else {
-            index = noteToDeleteSequence - 2;
-            activeNoteUID = appGlobals.sequenceIndex[index][0];
-        }
-
-        // set current note as previous
-        appGlobals.currentNote = appGlobals.notes[activeNoteUID];
-
-        // display previous note
-        this.setActiveNote(activeNoteUID);
-
-        // remove from timeline
-        let $noteToDelete = jQuery('#' + noteToDelete.uid);
-        $noteToDelete.fadeOut(() => {
-            //remove DOM element
-            $noteToDelete.remove();
-        });*/
-
-        let noteToDelete;
-
-        if (!uid){
-            noteToDelete = appGlobals.currentNote;
-        } else {
-            noteToDelete = appGlobals.notes[uid];
-        }
-        let noteToDeleteSequence = parseInt(noteToDelete.sequence);
-
-        // update data
-        Note.removeNote(noteToDelete.uid);
-
-        // set active note as previous note upon deletion
-        let index;
-        let activeNoteUID;
-        console.log("noteToDeleteSeq: " + noteToDeleteSequence);
-        if (noteToDeleteSequence === 1) {
-            if (appGlobals.sequenceIndex.length > 0) {
-                activeNoteUID = appGlobals.sequenceIndex[0][0];
-            } else {
-                let note = new Note(1, "", "", "");
-                activeNoteUID = note.getUid();
-            }
-        } else {
-            index = noteToDeleteSequence - 2;
-            activeNoteUID = appGlobals.sequenceIndex[index][0];
-        }
-
-        // set current note as previous
-        appGlobals.currentNote = appGlobals.notes[activeNoteUID];
-
-        // display previous note
-        _this.setActiveNote(activeNoteUID);
-
-        // remove from timeline
-        let $noteToDelete = jQuery('#' + noteToDelete.uid);
-        $noteToDelete.fadeOut(() => {
-            //remove DOM element
-            $noteToDelete.remove();
+        Utils.showModal({
+            title: "Delete note",
+            body: "Are you sure you want to delete note: " + appGlobals.currentNote.title,
         });
 
-        jQuery.ajax({
-            url: ajax_object.wp_az_ajax_url,
-            data: {
-                action: 'delete_note',
-                wp_az_3d_notes_nonce: ajax_object.wp_az_3d_notes_nonce,
-                wp_az_post_id: ajax_object.wp_az_post_id,
-                wp_az_note_uid: noteToDelete.uid,
-                wp_az_sequence_index: appGlobals.sequenceIndex
-            },
-            error: function() {
-                console.log("Failed to delete note: Ajax call failed");
-                Utils.setNoteUpdateStatus("Failed to delete note: AJAX call failed", 3000);
-            },
-            success: function(data) {
-                console.log("deleteNote AJAX response: " + JSON.stringify(data));
+        // Cancel
+        this.$modalBtn1.on('click', () => {
+            Utils.hideModal();
+            return;
+        })
 
-                Utils.hideLoading();
-                if (data.status === "success"){
+        // Delete
+        this.$modalBtn2.on('click', () => {
 
-                    Utils.setNoteUpdateStatus(data.message, 6000);
+            Utils.hideModal();
 
-                } else if (data.status === "error") {
+            Utils.showLoading();
+            Utils.setNoteUpdateStatus("Deleting...");
 
-                    Utils.setNoteUpdateStatus(data.message + " Please check that you are logged in, and try again", 10000);
+            let noteToDelete;
 
+            if (!uid){
+                noteToDelete = appGlobals.currentNote;
+            } else {
+                noteToDelete = appGlobals.notes[uid];
+            }
+            let noteToDeleteSequence = parseInt(noteToDelete.sequence);
+
+            // update data
+            Note.removeNote(noteToDelete.uid);
+
+            // set active note as previous note upon deletion
+            let index;
+            let activeNoteUID;
+            console.log("noteToDeleteSeq: " + noteToDeleteSequence);
+            if (noteToDeleteSequence === 1) {
+                if (appGlobals.sequenceIndex.length > 0) {
+                    activeNoteUID = appGlobals.sequenceIndex[0][0];
                 } else {
-
-                    Utils.setNoteUpdateStatus("Unable to delete, please check that you are logged in, and try again", 10000);
-
+                    let note = new Note(1, "", "", "");
+                    activeNoteUID = note.getUid();
                 }
+            } else {
+                index = noteToDeleteSequence - 2;
+                activeNoteUID = appGlobals.sequenceIndex[index][0];
+            }
+
+            // set current note as previous
+            appGlobals.currentNote = appGlobals.notes[activeNoteUID];
+
+            // display previous note
+            _this.setActiveNote(activeNoteUID);
+
+            // remove from timeline
+            let $noteToDelete = jQuery('#' + noteToDelete.uid);
+            $noteToDelete.fadeOut(() => {
+                //remove DOM element
+                $noteToDelete.remove();
+            });
+
+            jQuery.ajax({
+                url: ajax_object.wp_az_ajax_url,
+                data: {
+                    action: 'delete_note',
+                    wp_az_3d_notes_nonce: ajax_object.wp_az_3d_notes_nonce,
+                    wp_az_post_id: ajax_object.wp_az_post_id,
+                    wp_az_note_uid: noteToDelete.uid,
+                    wp_az_sequence_index: appGlobals.sequenceIndex
+                },
+                error: function() {
+                    console.log("Failed to delete note: Ajax call failed");
+                    Utils.setNoteUpdateStatus("Failed to delete note: AJAX call failed", 3000);
+                },
+                success: function(data) {
+                    console.log("deleteNote AJAX response: " + JSON.stringify(data));
+
+                    Utils.hideLoading();
+                    if (data.status === "success"){
+
+                        Utils.setNoteUpdateStatus(data.message, 6000);
+
+                    } else if (data.status === "error") {
+
+                        Utils.setNoteUpdateStatus(data.message + " Please check that you are logged in, and try again", 10000);
+
+                    } else {
+
+                        Utils.setNoteUpdateStatus("Unable to delete, please check that you are logged in, and try again", 10000);
+
+                    }
 
 
 
-            },
-            type: 'POST'
-        });
+                },
+                type: 'POST'
+            });
 
-    }
+        })
 
-    restoreAppState(appState) {
-        Object.keys(appGlobals).forEach((key) => { delete appGlobals[key] });
-        console.log("cleaned out appGlobals!" + JSON.stringify(appGlobals));
-        jQuery.extend(appGlobals, appState);
-        console.log("restored appGlobals to previous state, num notes: " + Object.keys(appGlobals.notes).length);
+
     }
 
     setActiveNote(uid, scrollToTop){
