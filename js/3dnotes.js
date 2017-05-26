@@ -973,7 +973,7 @@ class AnatomyNotes {
             },
             error: function() {
                 console.log("Failed to save snapshot");
-                Utils.setNoteUpdateStatus("Failed to save snapshot", 3000);
+                Utils.setNoteUpdateStatus("Failed to save image", 3000);
 
                 appGlobals.serverRequests.savingImage = false;
 
@@ -986,18 +986,28 @@ class AnatomyNotes {
             },
             success: function(data) {
                 console.log("Image saved", data);
-                Utils.setNoteUpdateStatus("Image saved", 3000);
+
+                if (data.status === 'success') {
+
+                    Utils.setNoteUpdateStatus(data.message, 3000);
+
+                    if (imageProperties.actionId) {
+                        let $imageActionLink =_this.$editorBody.find(`.linked-scene[data-action-id=${imageProperties.actionId}]`);
+                        $imageActionLink.attr('data-action-disabled', 'false');
+                    }
+
+                    if (onSuccess) {
+                        onSuccess(data);
+                    }
+
+
+                } else if (data.status === 'error') {
+                    Utils.setNoteUpdateStatus(data.message, 3000);
+                } else {
+                    Utils.setNoteUpdateStatus("Unable to upload image. Please check that you are logged in and try again", 3000);
+                }
 
                 appGlobals.serverRequests.savingImage = false;
-
-                if (imageProperties.actionId) {
-                    let $imageActionLink =_this.$editorBody.find(`.linked-scene[data-action-id=${imageProperties.actionId}]`);
-                    $imageActionLink.attr('data-action-disabled', 'false');
-                }
-
-                if (onSuccess) {
-                    onSuccess(data);
-                }
 
             },
             type: 'POST'
@@ -1431,12 +1441,18 @@ class AnatomyNotes {
                 wp_az_new_post_title: title
             },
             error: function() {
-                console.log("Failed to update title");
-                Utils.setNoteUpdateStatus("Failed to update title", 3000);
+                Utils.setNoteUpdateStatus("Unable to update title", 3000);
             },
             success: function(data) {
-                console.log("Note deleted: " + JSON.stringify(data));
-                Utils.setNoteUpdateStatus("Title updated", 3000);
+                console.log("updatePostTitle: " + JSON.stringify(data));
+
+                if (data.status === 'success' || data.status === 'error') {
+                    Utils.setNoteUpdateStatus(data.message, 3000);
+                } else {
+                    Utils.setNoteUpdateStatus("Unable to save post title. Please try logging in again, and refresh this page", 3000);
+                }
+
+
             },
             type: 'POST'
         });

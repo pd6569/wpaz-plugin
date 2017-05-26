@@ -790,8 +790,38 @@ class wp_az_3d_notes {
 	public function update_post_title(){
 
 		// first check if data is being sent and that it is the data we want
-		if (!isset($_POST['wp_az_3d_notes_nonce'])) {
+		if (!isset($_POST['wp_az_3d_notes_nonce'])
+		    || !isset($_POST['wp_az_post_id'])
+		    || !isset($_POST['wp_az_new_post_title'])
+		    || !check_ajax_referer('wp_az_3d_notes_nonce', 'wp_az_3d_notes_nonce', false)
+		    || !wp_az_user_can_edit_notes()) {
+
+			$errorDesc = "";
+			if (!isset($_POST['wp_az_3d_notes_nonce'])) {
+				$errorDesc .= "Nonce not set. ";
+			}
+
+			if (!isset($_POST['wp_az_new_post_title'])) {
+				$errorDesc .= "Post title not set. ";
+			}
+
+			if (!isset($_POST['wp_az_post_id'])) {
+				$errorDesc .= "Post id not set. ";
+			}
+			if (!check_ajax_referer('wp_az_3d_notes_nonce', 'wp_az_3d_notes_nonce', false)) {
+				$errorDesc .= "Invalid ajax referrer. ";
+			}
+			if (!wp_az_user_can_edit_notes()){
+				$errorDesc .= "Incorrect access level. ";
+			}
+
+			wp_send_json (array(
+				'status'                => 'error',
+				'message'               => 'Unable to save new post title. Please check that you are logged in and refresh this page. ' . $errorDesc,
+			));
+
 			wp_die('Your request failed permission check.');
+
 		}
 
 		$post_id = intval($_POST['wp_az_post_id']);
@@ -806,14 +836,35 @@ class wp_az_3d_notes {
 
 		wp_send_json(array(
 			'status'        => 'success',
-			'message'       => 'post title updated'
+			'message'       => 'Title for notes updated: ' . $new_title
 		));
 	}
 
 	public function upload_snapshot() {
 
 		// first check if data is being sent and that it is the data we want
-		if (!isset($_POST['wp_az_3d_notes_nonce'])) {
+		if (!isset($_POST['wp_az_3d_notes_nonce'])
+		    || !check_ajax_referer('wp_az_3d_notes_nonce', 'wp_az_3d_notes_nonce', false)
+		    || !wp_az_user_can_edit_notes()) {
+
+			$errorDesc = "";
+			if (!isset($_POST['wp_az_3d_notes_nonce'])) {
+				$errorDesc .= "Nonce not set. ";
+			}
+
+			if (!check_ajax_referer('wp_az_3d_notes_nonce', 'wp_az_3d_notes_nonce', false)) {
+				$errorDesc .= "Invalid ajax referrer. ";
+			}
+
+			if (!wp_az_user_can_edit_notes()){
+				$errorDesc .= "Incorrect access level. ";
+			}
+
+			wp_send_json (array(
+				'status'                => 'error',
+				'message'               => 'Unable to upload snapshot. ' . $errorDesc,
+			));
+
 			wp_die('Your request failed permission check.');
 		}
 
@@ -850,7 +901,7 @@ class wp_az_3d_notes {
 
 		wp_send_json(array(
 			'status'                    => 'success',
-			'message'                   => 'media updated. ',
+			'message'                   => 'Image uploaded successfully.',
 			'attachment_id'             => $attach_id,
 			'attachment_thumbnail'      => $attach_src_thumbnail,
 			'attachment_src_medium'     => $attach_src_medium,
