@@ -80,7 +80,7 @@ class wp_az_3d_notes {
 		// Ajax hooks logged in users
 		add_action('wp_ajax_save_notes', array($this, 'save_notes' ));
 		add_action('wp_ajax_load_notes', array($this, 'load_notes'));
-		add_action('wp_ajax_load_single_note', array($this, 'load_single_note'));
+		/*add_action('wp_ajax_load_single_note', array($this, 'load_single_note'));*/
 		add_action('wp_ajax_send_item_templates', array($this, 'send_item_templates'));
 		add_action('wp_ajax_delete_note', array($this, 'delete_note'));
 		add_action('wp_ajax_update_first_scene_url', array($this, 'update_first_scene_url'));
@@ -603,7 +603,7 @@ class wp_az_3d_notes {
 
 	}
 
-	public function load_single_note(){
+	/*public function load_single_note(){
 
 		// first check if data is being sent and that it is the data we want
 		if (!isset($_POST['wp_az_3d_notes_nonce'])) {
@@ -625,9 +625,14 @@ class wp_az_3d_notes {
 			'scene_state' => $scene_state
 		));
 
-	}
+	}*/
 
 	public function load_notes(){
+
+		// first check if data is being sent and that it is the data we want
+		if (!isset($_GET['wp_az_3d_notes_nonce'])) {
+			wp_die('Your request failed permission check.');
+		}
 
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'az_notes';
@@ -683,7 +688,31 @@ class wp_az_3d_notes {
 	public function delete_note() {
 
 		// first check if data is being sent and that it is the data we want
-		if (!isset($_POST['wp_az_3d_notes_nonce'])) {
+		if (!isset($_POST['wp_az_3d_notes_nonce'])
+		    || !isset($_POST['wp_az_post_id'])
+		    || !check_ajax_referer('wp_az_3d_notes_nonce', 'wp_az_3d_notes_nonce', false)
+		    || !wp_az_user_can_edit_notes()) {
+
+			$errorDesc = "";
+			if (!isset($_POST['wp_az_3d_notes_nonce'])) {
+				$errorDesc .= "Nonce not set. ";
+			}
+
+			if (!isset($_POST['wp_az_post_id'])) {
+				$errorDesc .= "Post id not set. ";
+			}
+			if (!check_ajax_referer('wp_az_3d_notes_nonce', 'wp_az_3d_notes_nonce', false)) {
+				$errorDesc .= "Invalid ajax referrer. ";
+			}
+			if (!wp_az_user_can_edit_notes()){
+				$errorDesc .= "Incorrect access level. ";
+			}
+
+			wp_send_json (array(
+				'status'                => 'error',
+				'message'               => 'Unable to delete notes. Failed permissions check: ' . $errorDesc
+			));
+
 			wp_die('Your request failed permission check.');
 		}
 
@@ -702,7 +731,7 @@ class wp_az_3d_notes {
 				post_id => $post_id,
 				uid => $uid));
 
-		this.$this->resequence_notes($sequence_index, $post_id);
+		$this->resequence_notes($sequence_index, $post_id);
 
 		// delete actions
 		$wpdb->delete (

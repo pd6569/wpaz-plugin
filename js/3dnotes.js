@@ -1222,6 +1222,7 @@ class AnatomyNotes {
             },
             error: function() {
                 console.log("Failed to load notes");
+                Utils.setNoteUpdateStatus("Failed to load notes", 5000);
             },
             success: function(data) {
                 console.log("Notes loaded from server.", data.notes);
@@ -1287,7 +1288,7 @@ class AnatomyNotes {
 
                 appGlobals.notesLoaded = true;
 
-                Utils.setNoteUpdateStatus("Notes data load complete.", 3000);
+                Utils.setNoteUpdateStatus(data.message, 3000);
 
             },
             type: 'GET'
@@ -1303,7 +1304,7 @@ class AnatomyNotes {
      * @param {object}  [appObj]        - Reference to main app module
      */
     createNewNote(save, appObj){
-        console.log("createNewNote public");
+        console.log("createNewNote");
 
         let _this;
 
@@ -1582,6 +1583,7 @@ class AnatomyNotes {
 
     }
 
+    //TODO: only update UI and remove note if server request is succesful
     deleteNote(uid){
         if (!this.userIsEditor) { console.log("Nice try..."); return };
         console.log("delete Note");
