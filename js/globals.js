@@ -10,7 +10,7 @@ export default {
         appRef: {},
         post_id: 0,
         notes: {},
-        sequenceIndex: [],
+        sequenceIndex: [], // Note sequence, array of arrays. [[noteUid, sequence]]
         numNotes: 0,
         firstSceneUrl: "",
         numSnapshots: 0,

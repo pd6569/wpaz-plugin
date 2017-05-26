@@ -98,8 +98,35 @@ export default class Note {
 
     /* STATIC FUNCTIONS */
 
+    static undoRemoveNote(){
+        if (!this.noteRemovedHistory){
+            console.log("no history stored");
+            return;
+        }
+
+        console.log("noteRemovedHistory: ", this.noteRemovedHistory);
+
+        appGlobals.notes = this.noteRemovedHistory['notes'];
+        appGlobals.sequenceIndex = this.noteRemovedHistory['sequenceIndex'];
+        appGlobals.numNotes = this.noteRemovedHistory['numNotes'];
+
+        appGlobals.appRef.setActiveNote(this.noteRemovedHistory['uid']);
+
+        this.noteRemovedHistory = null;
+    }
+
     static removeNote(uid){
         if (appGlobals.notes[uid]) {
+
+            // store previous values before removing note, can use undoRemoveNote to
+            this.noteRemovedHistory = JSON.parse(JSON.stringify({
+                'uid': uid,
+                'notes': appGlobals.notes,
+                'sequenceIndex': appGlobals.sequenceIndex,
+                'numNotes': appGlobals.numNotes,
+            }));
+
+
             console.log("delete note: " + appGlobals.notes[uid].uid + " sequence: " + appGlobals.notes[uid].sequence);
             delete appGlobals.notes[uid];
             appGlobals.numNotes = parseInt(appGlobals.numNotes) - 1;
@@ -127,7 +154,7 @@ export default class Note {
                 appGlobals.notes[uid].sequence = sequence;
             });
 
-            console.log("Note deleted. Num notes: " + appGlobals.numNotes);
+            console.log("Note deleted. Num notes: " + appGlobals.numNotes + " sequenceIndex: " + appGlobals.sequenceIndex);
         } else {
             console.log("removeNote failed. Could not delete note with uid: " + uid);
         }

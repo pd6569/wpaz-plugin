@@ -1290,6 +1290,8 @@ class AnatomyNotes {
 
                 Utils.setNoteUpdateStatus(data.message, 3000);
 
+                console.log("notes loaded. appGlobals: ", appGlobals);
+
             },
             type: 'GET'
         });
@@ -1376,6 +1378,7 @@ class AnatomyNotes {
         Object.keys(appGlobals.notes).forEach((noteId) => {
             if (appGlobals.notes[noteId].sequence == noteSeq) {
                 this.setActiveNote(noteId, false);
+                console.log("appGlobals: ", appGlobals);
             }
         })
     }
@@ -1588,9 +1591,14 @@ class AnatomyNotes {
         if (!this.userIsEditor) { console.log("Nice try..."); return };
         console.log("delete Note");
 
+        console.log("appGlobals: ", appGlobals);
+
+        let _this = this;
+
+        Utils.showLoading();
         Utils.setNoteUpdateStatus("Deleting...");
 
-        let noteToDelete;
+        /*let noteToDelete;
 
         if (!uid){
             noteToDelete = appGlobals.currentNote;
@@ -1629,9 +1637,49 @@ class AnatomyNotes {
         $noteToDelete.fadeOut(() => {
             //remove DOM element
             $noteToDelete.remove();
+        });*/
+
+        let noteToDelete;
+
+        if (!uid){
+            noteToDelete = appGlobals.currentNote;
+        } else {
+            noteToDelete = appGlobals.notes[uid];
+        }
+        let noteToDeleteSequence = parseInt(noteToDelete.sequence);
+
+        // update data
+        Note.removeNote(noteToDelete.uid);
+
+        // set active note as previous note upon deletion
+        let index;
+        let activeNoteUID;
+        console.log("noteToDeleteSeq: " + noteToDeleteSequence);
+        if (noteToDeleteSequence === 1) {
+            if (appGlobals.sequenceIndex.length > 0) {
+                activeNoteUID = appGlobals.sequenceIndex[0][0];
+            } else {
+                let note = new Note(1, "", "", "");
+                activeNoteUID = note.getUid();
+            }
+        } else {
+            index = noteToDeleteSequence - 2;
+            activeNoteUID = appGlobals.sequenceIndex[index][0];
+        }
+
+        // set current note as previous
+        appGlobals.currentNote = appGlobals.notes[activeNoteUID];
+
+        // display previous note
+        _this.setActiveNote(activeNoteUID);
+
+        // remove from timeline
+        let $noteToDelete = jQuery('#' + noteToDelete.uid);
+        $noteToDelete.fadeOut(() => {
+            //remove DOM element
+            $noteToDelete.remove();
         });
 
-        // ajax call to delete note from database AND resequence other notes
         jQuery.ajax({
             url: ajax_object.wp_az_ajax_url,
             data: {
@@ -1642,16 +1690,36 @@ class AnatomyNotes {
                 wp_az_sequence_index: appGlobals.sequenceIndex
             },
             error: function() {
-                console.log("Failed to delete note");
-                Utils.setNoteUpdateStatus("Failed to delete note.", 3000);
+                console.log("Failed to delete note: Ajax call failed");
+                Utils.setNoteUpdateStatus("Failed to delete note: AJAX call failed", 3000);
             },
             success: function(data) {
-                console.log("Note deleted: " + JSON.stringify(data));
-                Utils.setNoteUpdateStatus("Note deleted.", 3000);
+                console.log("deleteNote AJAX response: " + JSON.stringify(data));
+
+                Utils.hideLoading();
+                if (data.status === "success"){
+                    Utils.setNoteUpdateStatus(data.message, 3000);
+                } else if (data.status === "error") {
+                    Utils.setNoteUpdateStatus(data.message, 10000);
+                    Note.undoRemoveNote();
+                } else {
+                    Utils.setNoteUpdateStatus("Unable to delete, please check that you are logged in, and try again", 3000);
+                    Note.undoRemoveNote();
+                }
+
+
+
             },
             type: 'POST'
         });
 
+    }
+
+    restoreAppState(appState) {
+        Object.keys(appGlobals).forEach((key) => { delete appGlobals[key] });
+        console.log("cleaned out appGlobals!" + JSON.stringify(appGlobals));
+        jQuery.extend(appGlobals, appState);
+        console.log("restored appGlobals to previous state, num notes: " + Object.keys(appGlobals.notes).length);
     }
 
     setActiveNote(uid, scrollToTop){

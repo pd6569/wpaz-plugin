@@ -443,6 +443,8 @@ class wp_az_3d_notes {
 			$uid = $note_sequence[0];
 			$sequence = $note_sequence[1];
 
+			error_log("note_sequence uid: " . $uid . " sequence: " . $sequence);
+
 			$sequence_data = array(
 				uid         => $uid,
 				sequence    => $sequence
@@ -710,7 +712,7 @@ class wp_az_3d_notes {
 
 			wp_send_json (array(
 				'status'                => 'error',
-				'message'               => 'Unable to delete notes. Failed permissions check: ' . $errorDesc
+				'message'               => 'Unable to delete notes, failed permissions check. Please try logging in again and refresh the page.' . $errorDesc
 			));
 
 			wp_die('Your request failed permission check.');
