@@ -1698,13 +1698,17 @@ class AnatomyNotes {
 
                 Utils.hideLoading();
                 if (data.status === "success"){
-                    Utils.setNoteUpdateStatus(data.message, 3000);
+
+                    Utils.setNoteUpdateStatus(data.message, 6000);
+
                 } else if (data.status === "error") {
-                    Utils.setNoteUpdateStatus(data.message, 10000);
-                    Note.undoRemoveNote();
+
+                    Utils.setNoteUpdateStatus(data.message + " Please check that you are logged in, and try again", 10000);
+
                 } else {
-                    Utils.setNoteUpdateStatus("Unable to delete, please check that you are logged in, and try again", 3000);
-                    Note.undoRemoveNote();
+
+                    Utils.setNoteUpdateStatus("Unable to delete, please check that you are logged in, and try again", 10000);
+
                 }
 
 

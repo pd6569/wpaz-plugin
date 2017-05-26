@@ -23,7 +23,7 @@ export default class Utils {
 
     static setNoteUpdateStatus(statusText, timeoutMillis){
         let $updateStatus = jQuery('.update-status');
-        $updateStatus.text(statusText).removeClass('hidden').show();
+        $updateStatus.html(statusText).removeClass('hidden').show();
 
         if (timeoutMillis){
             setTimeout(() => {
