@@ -258,9 +258,9 @@
                         <div id="wpaz-image-editor-toolbar" class="hidden wpaz-editor">
 
                             <div class="btn-group" role="group" aria-label="...">
-                                <button type="button" class="btn btn-default image-editor-toolbar" data-toolbar-action="add-image">
+                                <!--<button type="button" class="btn btn-default image-editor-toolbar" data-toolbar-action="add-image">
                                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                                </button>
+                                </button>-->
                                 <button type="button" class="btn btn-default image-editor-toolbar" data-toolbar-action="undo">
                                     <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
                                 </button>

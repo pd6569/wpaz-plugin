@@ -1402,7 +1402,7 @@ class AnatomyNotes {
         Utils.showModal({
             title: "Edit title",
             body:
-            "<input id='edit-post-title' type='text' class='form-control' placeholder='Enter title' value='" + this.$postTitle.text() + "'>",
+            "<input id='edit-post-title' type='text' class='form-control' placeholder='Enter title' value='" + this.$postTitle.text().trim() + "'>",
         });
         this.$modalBtn1.on('click', () => {
             Utils.hideModal();

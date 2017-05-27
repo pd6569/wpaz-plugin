@@ -48,7 +48,8 @@ require_once ( WP_AZ_PLUGIN_DIR . '/inc/class_notes_editor.php');
 require_once ( WP_AZ_PLUGIN_DIR . '/admin/class-3d-notes-admin.php');
 
 // Database
-$wp_az_db_version = '1.0';
+$wp_az_db_version = '0.5';
+$wp_az_app_version = '0.5.0';
 
 // Static page Id
 global $wp_az_3d_body_id;
@@ -80,7 +81,6 @@ class wp_az_3d_notes {
 		// Ajax hooks logged in users
 		add_action('wp_ajax_save_notes', array($this, 'save_notes' ));
 		add_action('wp_ajax_load_notes', array($this, 'load_notes'));
-		/*add_action('wp_ajax_load_single_note', array($this, 'load_single_note'));*/
 		add_action('wp_ajax_send_item_templates', array($this, 'send_item_templates'));
 		add_action('wp_ajax_delete_note', array($this, 'delete_note'));
 		add_action('wp_ajax_update_first_scene_url', array($this, 'update_first_scene_url'));
@@ -265,7 +265,7 @@ class wp_az_3d_notes {
 
 
 			//  3d-notes
-			/*wp_enqueue_style('wp_az_main_style', plugins_url('css/styles.css', __FILE__));*/
+			wp_enqueue_style('wp_az_main_style', plugins_url('css/styles.css', __FILE__));
 
 			/*** scripts ***/
 
@@ -393,43 +393,48 @@ class wp_az_3d_notes {
 		global $table_notes;
 		global $table_actions;
 
+		$installed_db_version = get_option('wp_az_db_version');
 
-		$table_notes = $wpdb->prefix . 'az_notes';
-		$table_notes_images = $wpdb->prefix . 'az_notes_images';
-		$table_actions = $wpdb->prefix . 'az_actions';
+		if ($installed_db_version != $wp_az_db_version){
 
-		$charset_collate = $wpdb->get_charset_collate();
+			$table_notes = $wpdb->prefix . 'az_notes';
+			$table_actions = $wpdb->prefix . 'az_actions';
 
-		$sql = "CREATE TABLE $table_notes (
-		id mediumint(9) NOT NULL AUTO_INCREMENT,
-		uid tinytext NOT NULL,	  
-		post_id mediumint(9),
-		created datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-		last_modified datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-		title tinytext NOT NULL,
-		note_content text NOT NULL,
-		sequence tinyint NOT NULL,
-		scene_state text,
-		url tinytext,
-		PRIMARY KEY  (id)
-		) $charset_collate;";
+			$charset_collate = $wpdb->get_charset_collate();
 
-		$sql .= "CREATE TABLE $table_actions (
-		id mediumint(9) NOT NULL AUTO_INCREMENT,
-		uid tinytext NOT NULL,
-		post_id mediumint(9) NOT NULL,
-		note_id tinytext NOT NULL,
-		action_type tinytext NOT NULL,
-		scene_state text,
-		action_data text,
-		action_title tinytext,
-		PRIMARY KEY  (id)
-		) $charset_collate;";
+			$sql = "CREATE TABLE $table_notes (
+				id mediumint(9) NOT NULL AUTO_INCREMENT,
+				uid tinytext NOT NULL,	  
+				post_id mediumint(9),
+				created datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+				last_modified datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+				title tinytext NOT NULL,
+				note_content text NOT NULL,
+				sequence tinyint NOT NULL,
+				scene_state text,
+				url tinytext,
+				PRIMARY KEY  (id)
+				) $charset_collate;";
 
-		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-		dbDelta( $sql );
+					$sql .= "CREATE TABLE $table_actions (
+				id mediumint(9) NOT NULL AUTO_INCREMENT,
+				uid tinytext NOT NULL,
+				post_id mediumint(9) NOT NULL,
+				note_id tinytext NOT NULL,
+				action_type tinytext NOT NULL,
+				scene_state text,
+				action_data text,
+				action_title tinytext,
+				PRIMARY KEY  (id)
+				) $charset_collate;";
 
-		add_option('wp_az_db_version', $wp_az_db_version);
+			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			dbDelta( $sql );
+
+			update_option('wp_az_db_version', $wp_az_db_version);
+
+		}
+
 
 	}
 
