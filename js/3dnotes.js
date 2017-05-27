@@ -1025,7 +1025,7 @@ class AnatomyNotes {
 
         let data = {
             title: title,
-            status: 'publish',
+            status: 'draft',
             excerpt: 'Notes for ' + title
         };
 

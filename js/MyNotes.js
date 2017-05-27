@@ -43,6 +43,7 @@ export default class MyNotes {
 
         let data = {
             'per_page': 100,
+            'status': ['publish', 'draft']
         };
 
         let url;

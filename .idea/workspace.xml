@@ -1061,9 +1061,7 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../wp-sweep/uninstall.php" afterPath="$PROJECT_DIR$/../wp-sweep/uninstall.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../wp-sweep/wp-sweep.php" afterPath="$PROJECT_DIR$/../wp-sweep/wp-sweep.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/3dnotes.js" afterPath="$PROJECT_DIR$/js/3dnotes.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/ModulePresentation.js" afterPath="$PROJECT_DIR$/js/ModulePresentation.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/globals.js" afterPath="$PROJECT_DIR$/js/globals.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wp_az_3d_notes.php" afterPath="$PROJECT_DIR$/wp_az_3d_notes.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/MyNotes.js" afterPath="$PROJECT_DIR$/js/MyNotes.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../wp-includes/class-phpmailer.php" afterPath="$PROJECT_DIR$/../../../wp-includes/class-phpmailer.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../wp-includes/class-smtp.php" afterPath="$PROJECT_DIR$/../../../wp-includes/class-smtp.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../wp-includes/class-walker-page.php" afterPath="$PROJECT_DIR$/../../../wp-includes/class-walker-page.php" />
@@ -1204,8 +1202,8 @@
       <file leaf-file-name="wp_az_3d_notes.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/wp_az_3d_notes.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3203">
-              <caret line="260" column="0" lean-forward="false" selection-start-line="260" selection-start-column="0" selection-end-line="260" selection-end-column="0" />
+            <state relative-caret-position="280">
+              <caret line="363" column="39" lean-forward="false" selection-start-line="363" selection-start-column="32" selection-end-line="363" selection-end-column="39" />
               <folding>
                 <marker date="1495892561623" expanded="true" signature="14544:14576" ph="CREATE TABLE... ${$table_notes}" />
                 <marker date="1495892561623" expanded="true" signature="14544:14961" ph="CREATE TABLE... ${$table_notes}" />
@@ -1221,8 +1219,8 @@
       <file leaf-file-name="3dnotes.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/3dnotes.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="9" column="2" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="31" />
+            <state relative-caret-position="323">
+              <caret line="1025" column="20" lean-forward="true" selection-start-line="1025" selection-start-column="20" selection-end-line="1025" selection-end-column="20" />
               <folding>
                 <element signature="e#66#99#0" expanded="true" />
                 <element signature="e#187#205#0" expanded="true" />
@@ -1244,10 +1242,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="globals.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="globals.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/globals.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="249">
+            <state relative-caret-position="3264">
               <caret line="192" column="19" lean-forward="false" selection-start-line="192" selection-start-column="19" selection-end-line="192" selection-end-column="19" />
               <folding />
             </state>
@@ -1307,14 +1305,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MyNotes.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MyNotes.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/MyNotes.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="357">
+              <caret line="45" column="42" lean-forward="true" selection-start-line="45" selection-start-column="42" selection-end-line="45" selection-end-column="42" />
               <folding>
                 <element signature="e#70#105#0" expanded="true" />
-                <marker date="1494667338921" expanded="true" signature="2227:2419" ph="..." />
+                <marker date="1495899271417" expanded="true" signature="2270:2462" ph="..." />
               </folding>
             </state>
           </provider>
@@ -1343,8 +1341,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>resize</find>
-      <find>d</find>
       <find>data-action-di</find>
       <find>saveNot</find>
       <find>saveIm</find>
@@ -1362,7 +1358,6 @@
       <find>line-width</find>
       <find>toolbar</find>
       <find>RANGESLIDER</find>
-      <find>create</find>
       <find>drawingop</find>
       <find>drawingo</find>
       <find>drawing mode</find>
@@ -1373,6 +1368,9 @@
       <find>range</find>
       <find>editNote</find>
       <find>title</find>
+      <find>save</find>
+      <find>publish</find>
+      <find>create</find>
     </findStrings>
     <replaceStrings>
       <replace>Utils.hideModal();</replace>
@@ -1407,9 +1405,10 @@
         <option value="$PROJECT_DIR$/js/Utils.js" />
         <option value="$PROJECT_DIR$/templates/layout_3d_notes.php" />
         <option value="$PROJECT_DIR$/wp_az_3d_notes.php" />
-        <option value="$PROJECT_DIR$/js/3dnotes.js" />
         <option value="$PROJECT_DIR$/js/ModulePresentation.js" />
         <option value="$PROJECT_DIR$/js/globals.js" />
+        <option value="$PROJECT_DIR$/js/3dnotes.js" />
+        <option value="$PROJECT_DIR$/js/MyNotes.js" />
       </list>
     </option>
   </component>
@@ -1437,10 +1436,10 @@
     </include_path>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1912" />
+    <option name="x" value="-8" />
     <option name="y" value="-8" />
-    <option name="width" value="1382" />
-    <option name="height" value="744" />
+    <option name="width" value="1936" />
+    <option name="height" value="1056" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -1645,7 +1644,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="128386000" />
+    <option name="totallyTimeSpent" value="130265000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1657,7 +1656,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1912" y="-8" width="1382" height="744" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1674,7 +1673,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6890574" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21104388" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21055438" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -2027,18 +2026,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/3dnotes.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="2" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="31" />
-          <folding>
-            <element signature="e#66#99#0" expanded="true" />
-            <element signature="e#187#205#0" expanded="true" />
-            <element signature="e#299#334#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/Actions.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1802">
@@ -2094,17 +2081,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/MyNotes.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#70#105#0" expanded="true" />
-            <marker date="1494667338921" expanded="true" signature="2227:2419" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/Note.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -2115,10 +2091,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/js/globals.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3264">
+          <caret line="192" column="19" lean-forward="false" selection-start-line="192" selection-start-column="19" selection-end-line="192" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/wp_az_3d_notes.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3203">
-          <caret line="260" column="0" lean-forward="false" selection-start-line="260" selection-start-column="0" selection-end-line="260" selection-end-column="0" />
+        <state relative-caret-position="280">
+          <caret line="363" column="39" lean-forward="false" selection-start-line="363" selection-start-column="32" selection-end-line="363" selection-end-column="39" />
           <folding>
             <marker date="1495892561623" expanded="true" signature="14544:14576" ph="CREATE TABLE... ${$table_notes}" />
             <marker date="1495892561623" expanded="true" signature="14544:14961" ph="CREATE TABLE... ${$table_notes}" />
@@ -2130,11 +2114,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/globals.js">
+    <entry file="file://$PROJECT_DIR$/js/3dnotes.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="249">
-          <caret line="192" column="19" lean-forward="false" selection-start-line="192" selection-start-column="19" selection-end-line="192" selection-end-column="19" />
-          <folding />
+        <state relative-caret-position="323">
+          <caret line="1025" column="20" lean-forward="true" selection-start-line="1025" selection-start-column="20" selection-end-line="1025" selection-end-column="20" />
+          <folding>
+            <element signature="e#66#99#0" expanded="true" />
+            <element signature="e#187#205#0" expanded="true" />
+            <element signature="e#299#334#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/MyNotes.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="45" column="42" lean-forward="true" selection-start-line="45" selection-start-column="42" selection-end-line="45" selection-end-column="42" />
+          <folding>
+            <element signature="e#70#105#0" expanded="true" />
+            <marker date="1495899271417" expanded="true" signature="2270:2462" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
