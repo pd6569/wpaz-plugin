@@ -3,6 +3,8 @@
   <component name="BookmarkManager">
     <bookmark url="file://$PROJECT_DIR$/js/ModuleImage.js" line="782" mnemonic="4" />
     <bookmark url="file://$PROJECT_DIR$/js/ModuleImage.js" line="512" />
+    <bookmark url="file://$PROJECT_DIR$/wp_az_3d_notes.php" line="398" />
+    <bookmark url="file://$PROJECT_DIR$/js/globals.js" line="112" mnemonic="2" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c84808ce-1f4e-49d8-9892-25e13bfc2e63" name="Default" comment="">
@@ -1058,9 +1060,9 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../wp-sweep/readme.txt" afterPath="$PROJECT_DIR$/../wp-sweep/readme.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../wp-sweep/uninstall.php" afterPath="$PROJECT_DIR$/../wp-sweep/uninstall.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../wp-sweep/wp-sweep.php" afterPath="$PROJECT_DIR$/../wp-sweep/wp-sweep.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Generated_files.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Generated_files.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/3dnotes.js" afterPath="$PROJECT_DIR$/js/3dnotes.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/layout_3d_notes.php" afterPath="$PROJECT_DIR$/templates/layout_3d_notes.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/ModulePresentation.js" afterPath="$PROJECT_DIR$/js/ModulePresentation.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/globals.js" afterPath="$PROJECT_DIR$/js/globals.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wp_az_3d_notes.php" afterPath="$PROJECT_DIR$/wp_az_3d_notes.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../wp-includes/class-phpmailer.php" afterPath="$PROJECT_DIR$/../../../wp-includes/class-phpmailer.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../wp-includes/class-smtp.php" afterPath="$PROJECT_DIR$/../../../wp-includes/class-smtp.php" />
@@ -1199,30 +1201,32 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="3dnotes.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/3dnotes.js">
+      <file leaf-file-name="wp_az_3d_notes.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wp_az_3d_notes.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="23868">
-              <caret line="1404" column="140" lean-forward="false" selection-start-line="1404" selection-start-column="140" selection-end-line="1404" selection-end-column="140" />
+            <state relative-caret-position="3203">
+              <caret line="260" column="0" lean-forward="false" selection-start-line="260" selection-start-column="0" selection-end-line="260" selection-end-column="0" />
               <folding>
-                <element signature="e#66#99#0" expanded="true" />
-                <element signature="e#183#201#0" expanded="true" />
-                <element signature="e#295#330#0" expanded="true" />
+                <marker date="1495892561623" expanded="true" signature="14544:14576" ph="CREATE TABLE... ${$table_notes}" />
+                <marker date="1495892561623" expanded="true" signature="14544:14961" ph="CREATE TABLE... ${$table_notes}" />
+                <marker date="1495892561623" expanded="true" signature="14544:15379" ph="CREATE TABLE... ${$table_notes}" />
+                <marker date="1495892561623" expanded="true" signature="14996:15298" ph="CREATE TABLE... ${$table_actions}" />
+                <marker date="1495892561623" expanded="true" signature="20844:21017" ph="SELECT title... ${$table_name}" />
+                <marker date="1495892561623" expanded="true" signature="21194:21279" ph="SELECT * FRO... ${$table_actions}" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="wp_az_3d_notes.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/wp_az_3d_notes.php">
+      <file leaf-file-name="3dnotes.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/3dnotes.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2040">
-              <caret line="264" column="0" lean-forward="true" selection-start-line="264" selection-start-column="0" selection-end-line="264" selection-end-column="0" />
+            <state relative-caret-position="153">
+              <caret line="9" column="2" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="31" />
               <folding>
-                <marker date="1495891930199" expanded="true" signature="14372:14765" ph="CREATE TABLE... ${$table_notes}" />
-                <marker date="1495891930199" expanded="true" signature="14797:15079" ph="CREATE TABLE... ${$table_actions}" />
-                <marker date="1495891930199" expanded="true" signature="20613:20786" ph="SELECT title... ${$table_name}" />
-                <marker date="1495891930199" expanded="true" signature="20963:21048" ph="SELECT * FRO... ${$table_actions}" />
+                <element signature="e#66#99#0" expanded="true" />
+                <element signature="e#187#205#0" expanded="true" />
+                <element signature="e#299#334#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -1240,11 +1244,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="globals.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="globals.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/globals.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="861">
-              <caret line="96" column="31" lean-forward="false" selection-start-line="96" selection-start-column="31" selection-end-line="96" selection-end-column="31" />
+            <state relative-caret-position="249">
+              <caret line="192" column="19" lean-forward="false" selection-start-line="192" selection-start-column="19" selection-end-line="192" selection-end-column="19" />
               <folding />
             </state>
           </provider>
@@ -1253,9 +1257,11 @@
       <file leaf-file-name="ModuleAnnotate.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/ModuleAnnotate.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="298">
+            <state relative-caret-position="814">
               <caret line="48" column="4" lean-forward="false" selection-start-line="48" selection-start-column="4" selection-end-line="48" selection-end-column="4" />
-              <folding />
+              <folding>
+                <element signature="e#58#93#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -1263,9 +1269,11 @@
       <file leaf-file-name="Utils.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/Utils.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="861">
+            <state relative-caret-position="1734">
               <caret line="104" column="27" lean-forward="false" selection-start-line="104" selection-start-column="27" selection-end-line="104" selection-end-column="27" />
-              <folding />
+              <folding>
+                <element signature="e#44#79#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -1273,7 +1281,7 @@
       <file leaf-file-name="ModuleImage.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/ModuleImage.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="861">
+            <state relative-caret-position="8857">
               <caret line="521" column="71" lean-forward="false" selection-start-line="521" selection-start-column="71" selection-end-line="521" selection-end-column="71" />
               <folding>
                 <element signature="e#169#204#0" expanded="true" />
@@ -1285,16 +1293,15 @@
       <file leaf-file-name="ModulePresentation.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/ModulePresentation.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="861">
-              <caret line="80" column="26" lean-forward="false" selection-start-line="80" selection-start-column="26" selection-end-line="80" selection-end-column="26" />
+            <state relative-caret-position="41">
+              <caret line="6" column="34" lean-forward="false" selection-start-line="6" selection-start-column="34" selection-end-line="6" selection-end-column="34" />
               <folding>
-                <element signature="e#79#113#0" expanded="true" />
-                <marker date="1494963917786" expanded="true" signature="1644:1646" ph="..." />
-                <marker date="1494963917786" expanded="true" signature="1644:1693" ph="..." />
-                <marker date="1494963917786" expanded="true" signature="1644:2104" ph="..." />
-                <marker date="1494963917786" expanded="true" signature="1644:2113" ph="..." />
-                <marker date="1494963917786" expanded="true" signature="1693:1695" ph="..." />
-                <marker date="1494963917786" expanded="true" signature="1693:2102" ph="..." />
+                <marker date="1495892561520" expanded="true" signature="1616:1618" ph="..." />
+                <marker date="1495892561520" expanded="true" signature="1616:1665" ph="..." />
+                <marker date="1495892561520" expanded="true" signature="1616:2076" ph="..." />
+                <marker date="1495892561520" expanded="true" signature="1616:2085" ph="..." />
+                <marker date="1495892561520" expanded="true" signature="1665:1667" ph="..." />
+                <marker date="1495892561520" expanded="true" signature="1665:2074" ph="..." />
               </folding>
             </state>
           </provider>
@@ -1306,6 +1313,7 @@
             <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding>
+                <element signature="e#70#105#0" expanded="true" />
                 <marker date="1494667338921" expanded="true" signature="2227:2419" ph="..." />
               </folding>
             </state>
@@ -1315,9 +1323,11 @@
       <file leaf-file-name="Note.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/Note.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="102">
+              <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+              <folding>
+                <element signature="e#59#94#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -1386,10 +1396,8 @@
         <option value="$PROJECT_DIR$/../../../../../apache/logs/error.log" />
         <option value="$PROJECT_DIR$/../../themes/dt-the7/single-3d-notes.php" />
         <option value="$PROJECT_DIR$/setup.txt" />
-        <option value="$PROJECT_DIR$/js/ModulePresentation.js" />
         <option value="$PROJECT_DIR$/js/Actions.js" />
         <option value="$PROJECT_DIR$/js/BaseModule.js" />
-        <option value="$PROJECT_DIR$/js/globals.js" />
         <option value="$PROJECT_DIR$/inc/class_notes_editor.php" />
         <option value="$PROJECT_DIR$/functions.php" />
         <option value="$PROJECT_DIR$/webpack.config.js" />
@@ -1398,8 +1406,10 @@
         <option value="$PROJECT_DIR$/js/ModuleImage.js" />
         <option value="$PROJECT_DIR$/js/Utils.js" />
         <option value="$PROJECT_DIR$/templates/layout_3d_notes.php" />
-        <option value="$PROJECT_DIR$/js/3dnotes.js" />
         <option value="$PROJECT_DIR$/wp_az_3d_notes.php" />
+        <option value="$PROJECT_DIR$/js/3dnotes.js" />
+        <option value="$PROJECT_DIR$/js/ModulePresentation.js" />
+        <option value="$PROJECT_DIR$/js/globals.js" />
       </list>
     </option>
   </component>
@@ -1427,10 +1437,10 @@
     </include_path>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
+    <option name="x" value="1912" />
     <option name="y" value="-8" />
-    <option name="width" value="1936" />
-    <option name="height" value="1056" />
+    <option name="width" value="1382" />
+    <option name="height" value="744" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -1489,24 +1499,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="themes" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wpaz-plugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="anatomyzone" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wp-content" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="plugins" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -1530,66 +1522,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="wpaz-plugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wpaz-plugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="anatomyzone" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wp-content" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="plugins" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wpaz-plugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wpaz-plugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="anatomyzone" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wp-content" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="plugins" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wpaz-plugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1616,110 +1548,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wpaz-plugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="anatomyzone" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wp-content" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="plugins" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wpaz-plugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inc" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wpaz-plugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="anatomyzone" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wp-content" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="plugins" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wpaz-plugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fonts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wpaz-plugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="anatomyzone" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wp-content" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="plugins" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wpaz-plugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dist" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wpaz-plugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="anatomyzone" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wp-content" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="plugins" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wpaz-plugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1817,7 +1645,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="122930000" />
+    <option name="totallyTimeSpent" value="128386000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1829,7 +1657,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="1912" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1846,7 +1674,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6890574" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28464818" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21104388" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1930,7 +1758,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="3" />
+      <option name="time" value="4" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -2199,71 +2027,15 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/globals.js">
+    <entry file="file://$PROJECT_DIR$/js/3dnotes.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="861">
-          <caret line="96" column="31" lean-forward="false" selection-start-line="96" selection-start-column="31" selection-end-line="96" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/ModuleAnnotate.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="298">
-          <caret line="48" column="4" lean-forward="false" selection-start-line="48" selection-start-column="4" selection-end-line="48" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/ModuleImage.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="861">
-          <caret line="521" column="71" lean-forward="false" selection-start-line="521" selection-start-column="71" selection-end-line="521" selection-end-column="71" />
+        <state relative-caret-position="153">
+          <caret line="9" column="2" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="31" />
           <folding>
-            <element signature="e#169#204#0" expanded="true" />
+            <element signature="e#66#99#0" expanded="true" />
+            <element signature="e#187#205#0" expanded="true" />
+            <element signature="e#299#334#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/ModulePresentation.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="861">
-          <caret line="80" column="26" lean-forward="false" selection-start-line="80" selection-start-column="26" selection-end-line="80" selection-end-column="26" />
-          <folding>
-            <element signature="e#79#113#0" expanded="true" />
-            <marker date="1494963917786" expanded="true" signature="1644:1646" ph="..." />
-            <marker date="1494963917786" expanded="true" signature="1644:1693" ph="..." />
-            <marker date="1494963917786" expanded="true" signature="1644:2104" ph="..." />
-            <marker date="1494963917786" expanded="true" signature="1644:2113" ph="..." />
-            <marker date="1494963917786" expanded="true" signature="1693:1695" ph="..." />
-            <marker date="1494963917786" expanded="true" signature="1693:2102" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/MyNotes.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1494667338921" expanded="true" signature="2227:2419" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/Note.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/Utils.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="861">
-          <caret line="104" column="27" lean-forward="false" selection-start-line="104" selection-start-column="27" selection-end-line="104" selection-end-column="27" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2277,28 +2049,92 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/3dnotes.js">
+    <entry file="file://$PROJECT_DIR$/js/ModuleAnnotate.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="23868">
-          <caret line="1404" column="140" lean-forward="false" selection-start-line="1404" selection-start-column="140" selection-end-line="1404" selection-end-column="140" />
+        <state relative-caret-position="814">
+          <caret line="48" column="4" lean-forward="false" selection-start-line="48" selection-start-column="4" selection-end-line="48" selection-end-column="4" />
           <folding>
-            <element signature="e#66#99#0" expanded="true" />
-            <element signature="e#183#201#0" expanded="true" />
-            <element signature="e#295#330#0" expanded="true" />
+            <element signature="e#58#93#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/Utils.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1734">
+          <caret line="104" column="27" lean-forward="false" selection-start-line="104" selection-start-column="27" selection-end-line="104" selection-end-column="27" />
+          <folding>
+            <element signature="e#44#79#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/ModuleImage.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="8857">
+          <caret line="521" column="71" lean-forward="false" selection-start-line="521" selection-start-column="71" selection-end-line="521" selection-end-column="71" />
+          <folding>
+            <element signature="e#169#204#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/ModulePresentation.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="41">
+          <caret line="6" column="34" lean-forward="false" selection-start-line="6" selection-start-column="34" selection-end-line="6" selection-end-column="34" />
+          <folding>
+            <marker date="1495892561520" expanded="true" signature="1616:1618" ph="..." />
+            <marker date="1495892561520" expanded="true" signature="1616:1665" ph="..." />
+            <marker date="1495892561520" expanded="true" signature="1616:2076" ph="..." />
+            <marker date="1495892561520" expanded="true" signature="1616:2085" ph="..." />
+            <marker date="1495892561520" expanded="true" signature="1665:1667" ph="..." />
+            <marker date="1495892561520" expanded="true" signature="1665:2074" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/MyNotes.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#70#105#0" expanded="true" />
+            <marker date="1494667338921" expanded="true" signature="2227:2419" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/Note.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding>
+            <element signature="e#59#94#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/wp_az_3d_notes.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2040">
-          <caret line="264" column="0" lean-forward="true" selection-start-line="264" selection-start-column="0" selection-end-line="264" selection-end-column="0" />
+        <state relative-caret-position="3203">
+          <caret line="260" column="0" lean-forward="false" selection-start-line="260" selection-start-column="0" selection-end-line="260" selection-end-column="0" />
           <folding>
-            <marker date="1495891930199" expanded="true" signature="14372:14765" ph="CREATE TABLE... ${$table_notes}" />
-            <marker date="1495891930199" expanded="true" signature="14797:15079" ph="CREATE TABLE... ${$table_actions}" />
-            <marker date="1495891930199" expanded="true" signature="20613:20786" ph="SELECT title... ${$table_name}" />
-            <marker date="1495891930199" expanded="true" signature="20963:21048" ph="SELECT * FRO... ${$table_actions}" />
+            <marker date="1495892561623" expanded="true" signature="14544:14576" ph="CREATE TABLE... ${$table_notes}" />
+            <marker date="1495892561623" expanded="true" signature="14544:14961" ph="CREATE TABLE... ${$table_notes}" />
+            <marker date="1495892561623" expanded="true" signature="14544:15379" ph="CREATE TABLE... ${$table_notes}" />
+            <marker date="1495892561623" expanded="true" signature="14996:15298" ph="CREATE TABLE... ${$table_actions}" />
+            <marker date="1495892561623" expanded="true" signature="20844:21017" ph="SELECT title... ${$table_name}" />
+            <marker date="1495892561623" expanded="true" signature="21194:21279" ph="SELECT * FRO... ${$table_actions}" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/globals.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="192" column="19" lean-forward="false" selection-start-line="192" selection-start-column="19" selection-end-line="192" selection-end-column="19" />
+          <folding />
         </state>
       </provider>
     </entry>

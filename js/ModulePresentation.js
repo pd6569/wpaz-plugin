@@ -5,7 +5,6 @@
 //TODO: SORT OUT WINDOW LISTENERS
 
 import appGlobals from './globals'
-import Utils from './Utils'
 import BaseModule from './BaseModule'
 
 export default class ModulePresentation extends BaseModule {

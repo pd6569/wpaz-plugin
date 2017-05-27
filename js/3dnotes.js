@@ -7,7 +7,7 @@
 // CSS
 import '../lib/css/swipebox.css';
 import '../lib/css/jquery.toolbar.css';
-import '../css/styles.css';
+/*import '../css/styles.css';*/
 
 // Vendor lib
 import 'swipebox';

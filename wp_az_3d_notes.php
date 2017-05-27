@@ -255,6 +255,9 @@ class wp_az_3d_notes {
 			// App JS bundle
 			wp_enqueue_script('wp_az_3d_notes_main', plugins_url('dist/bundle.js', __FILE__), array('jquery'), '1.0', true);
 
+			// Main style
+			//  3d-notes
+			wp_enqueue_style('wp_az_main_style', plugins_url('css/styles.css', __FILE__));
 
 			/*** styles ***/
 
@@ -264,8 +267,8 @@ class wp_az_3d_notes {
 			/*wp_enqueue_style('wp_az_toolbar_style', plugins_url('lib/jquery.toolbar.css', __FILE__));*/
 
 
-			//  3d-notes
-			wp_enqueue_style('wp_az_main_style', plugins_url('css/styles.css', __FILE__));
+			/*//  3d-notes
+			wp_enqueue_style('wp_az_main_style', plugins_url('css/styles.css', __FILE__));*/
 
 			/*** scripts ***/
 
