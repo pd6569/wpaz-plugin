@@ -484,6 +484,7 @@ export default class ModuleImage extends BaseModule {
 
                 let imgSrc = _this.fabricCanvas.toDataURL({
                     format: "jpeg",
+                    quality: "0.8",
                 });
 
                 restoreCanvas(originalCanvasProperties);

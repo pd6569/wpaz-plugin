@@ -9,6 +9,7 @@
 //TODO: BUG: rename images uploaded with characters that are incompatible with filename
 
 function wp_az_show_plugin_layout(){
+
 	global $post;
 	global $wp_az_notes_dashboard_id;
 	global $wp_az_3d_body_id;
