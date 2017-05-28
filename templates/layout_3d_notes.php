@@ -8,6 +8,7 @@
     global $wp_az_notes_dashboard_id;
     global $item_template_names;
     global $user_is_editor;
+    global $attached_images;
 
     $table_name = $wpdb->prefix . 'az_notes';
 

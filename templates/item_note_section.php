@@ -1,11 +1,12 @@
 <?php
     global $note;
     global $user_is_editor;
+    global $attached_images;
 
 ?>
 <div class="col-md-12">
 
-	<div id="<?php if (gettype($note) == 'object') { echo $note->uid; } ?>" class="panel panel-primary note-item" sequence="<?php if (gettype($note) == 'object') { echo $note->sequence; } ?>">
+	<div id="<?php if ($note) { echo $note->uid; } ?>" class="panel panel-primary note-item" sequence="<?php if ($note) { echo $note->sequence; } ?>">
 		<div class="panel-heading">
 			<h3 class="panel-title">
                 <a><span class="note-title"><?php if(empty($note->title)): echo "No title"; else: echo $note->title; endif; ?></span></a>
@@ -26,7 +27,7 @@
 
 			<div class="row">
 				<div class="col-md-6 note-content">
-					<?php echo $note->note_content ?>
+					<?php if ($note) { echo $note->note_content; } ?>
 				</div>
 
 				<div class="col-md-6">
