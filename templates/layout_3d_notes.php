@@ -7,6 +7,7 @@
     global $wp_az_3d_body_id;
     global $wp_az_notes_dashboard_id;
     global $item_template_names;
+    global $user_is_editor;
 
     $table_name = $wpdb->prefix . 'az_notes';
 
@@ -680,6 +681,9 @@
                     <div id="notes-timeline" class="row">
 				        <?php
 				        if ($notes != null):
+
+                            global $note;
+
 					        foreach($notes as $note){
 						        include TMPL_URL_ITEM_NOTE_SECTION;
 					        }

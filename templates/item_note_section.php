@@ -1,7 +1,11 @@
+<?php
+    global $note;
+    global $user_is_editor;
 
+?>
 <div class="col-md-12">
 
-	<div id="<?php echo $note->uid ?>" class="panel panel-primary note-item" sequence="<?php echo $note->sequence?>">
+	<div id="<?php if (gettype($note) == 'object') { echo $note->uid; } ?>" class="panel panel-primary note-item" sequence="<?php if (gettype($note) == 'object') { echo $note->sequence; } ?>">
 		<div class="panel-heading">
 			<h3 class="panel-title">
                 <a><span class="note-title"><?php if(empty($note->title)): echo "No title"; else: echo $note->title; endif; ?></span></a>
