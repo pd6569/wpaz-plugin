@@ -12,5 +12,6 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 ## [0.5.0] - 27-05-2017
 Initial private beta release
 
+[Unreleased]: https://github.com/pd6569/wpaz-plugin/compare/v0.5.1...0.6.0
 [0.5.1]: https://github.com/pd6569/wpaz-plugin/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/pd6569/wpaz-plugin/tree/v0.5.0
