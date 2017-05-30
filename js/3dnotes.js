@@ -336,7 +336,8 @@ class AnatomyNotes {
             });
 
             this.$editorLinkedScenes = this.$editorBody.find('.linked-scene');
-            console.log("linkedscenes: ", this.$editorLinkedScenes);
+            this.$editorLinkedScenes.css({'background-color': 'transparent'});
+
             this.setActionOrderFromEditorLinks(this.$editorLinkedScenes);
 
         });
@@ -1185,6 +1186,9 @@ class AnatomyNotes {
             // User UI
 
         }
+
+        // Remove any saved highlighted actions
+        this.$textLinkedToScene.css({'background-color': 'transparent'});
 
         // Enable light box
         jQuery('.swipebox').swipebox();
