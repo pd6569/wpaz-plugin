@@ -13,6 +13,9 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 ### CHANGED
 - Model background default is now white
 
+### ADDED
+- Show/hide toggle for presentation toolbar and current note and action labels
+
 ## [0.5.1] - 28-05-2017
 ### FIXED
 - Server timeout due to JPEG compression settings when saved from image module
