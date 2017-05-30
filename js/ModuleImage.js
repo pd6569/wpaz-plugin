@@ -157,7 +157,7 @@ export default class ModuleImage extends BaseModule {
         console.log("setupCanvas");
 
         // Show canvas
-        this.$imageCanvas.fadeIn();
+        this.$imageCanvas.show();
 
         // If canvas already exists, destroy and create new
         this.destroyCanvas();
@@ -173,6 +173,8 @@ export default class ModuleImage extends BaseModule {
 
         // Add listeners
         this.setListeners();
+
+
 
     }
 

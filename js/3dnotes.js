@@ -1738,6 +1738,12 @@ class AnatomyNotes {
         jQuery('#current-note-label').text('Note ' + note.sequence);
         jQuery('#total-notes-label').text(appGlobals.numNotes + ' notes');
 
+        // If presentation mode active, update note labels in toolbar
+        if (appGlobals.mode.PRESENTATION) {
+            let presentationModule = appGlobals.modulesLoaded[appGlobals.modules.PRESENTATION_MODULE];
+            presentationModule.$currentNoteLabel.text("Note " + note.sequence + " of " + appGlobals.numNotes);
+        }
+
         // update title and content
         if (this.userIsEditor) {
             $title.val(note.title);

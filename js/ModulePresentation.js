@@ -82,6 +82,9 @@ export default class ModulePresentation extends BaseModule {
         this.$currentNoteLabel = this.$toolbar.find('#presentation-current-note');
         this.$currentActionLabel = this.$toolbar.find('#presentation-current-action');
 
+        this.$currentNoteLabel.text("Note " + appGlobals.currentNote.sequence + " of " + appGlobals.numNotes);
+        this.$currentActionLabel.text("Action " + (appGlobals.actions[appGlobals.currentNote.uid].indexOf(appGlobals.currentAction) + 1) + " of " + appGlobals.actions[appGlobals.currentNote.uid].length);
+
         // Toolbar visibility
         this.toolbarVisible = true;
 
@@ -92,6 +95,9 @@ export default class ModulePresentation extends BaseModule {
 
         // Disable scrollbars
         document.body.style.overflow = 'hidden';
+
+        // remove margins from canvas
+        jQuery('.myCanvas').css({'margin-left': '0px'});
 
         this.setWidgetFullScreen();
         this.$presentationOverlay.append(this.app.$iframeContainer);
@@ -115,6 +121,9 @@ export default class ModulePresentation extends BaseModule {
             editModule.resizeCanvas();
             editModule.toggleToolbar(true);
         }
+
+        // remove margins from canvas
+        jQuery('.myCanvas').css({'margin-left': '2px'});
 
         this.$presentationOverlay.remove();
     }
