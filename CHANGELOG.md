@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog and this project adheres to Semantic Versioning.
 
 ## [Unreleased]
+
+## [0.5.2] - 30-05-2017
 ### FIXED
 - Snapshot background now the same as 3D model background (model default is now white)
 - Image module fades in
@@ -15,6 +17,7 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ### ADDED
 - Show/hide toggle for presentation toolbar and current note and action labels
+- Buttons for navigating notes in presentation toolbar 
 
 ## [0.5.1] - 28-05-2017
 ### FIXED
@@ -23,6 +26,7 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 ## [0.5.0] - 27-05-2017
 Initial private beta release
 
-[Unreleased]: https://github.com/pd6569/wpaz-plugin/compare/v0.5.1...0.6.0
+[Unreleased]: https://github.com/pd6569/wpaz-plugin/compare/v0.5.2...0.6.0
+[0.5.2]: https://github.com/pd6569/wpaz-plugin/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/pd6569/wpaz-plugin/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/pd6569/wpaz-plugin/tree/v0.5.0
