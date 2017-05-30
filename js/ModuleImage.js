@@ -207,7 +207,7 @@ export default class ModuleImage extends BaseModule {
         // Set UI
         this.setUi(true);
 
-        this.$imageCanvas.show();
+        this.$imageCanvas.fadeIn();
 
         // Resize canvas
         this.resizeCanvas();
