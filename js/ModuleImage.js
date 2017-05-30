@@ -111,21 +111,23 @@ export default class ModuleImage extends BaseModule {
         this.zoomToFit(imgHeight);
 
         // Add image to canvas
-        imageToLoad.setOpacity(0);
+        /*imageToLoad.setOpacity(0);*/
 
         this.group.addWithUpdate(imageToLoad);
 
         _this.fabricCanvas.viewportCenterObject(_this.group);
         _this.group.setCoords();
 
-        imageToLoad.animate('opacity', '1', {
+        /*imageToLoad.animate('opacity', '1', {
             onChange: _this.fabricCanvas.renderAll.bind(_this.fabricCanvas),
             onComplete: function() {
                 console.log("fade animation complete");
 
                 _this.fabricRootImage = imageToLoad; // reference to uploaded image as fabric object
             }
-        });
+        });*/
+
+        _this.fabricRootImage = imageToLoad;
 
     }
 
