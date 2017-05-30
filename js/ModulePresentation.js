@@ -56,19 +56,34 @@ export default class ModulePresentation extends BaseModule {
         this.$presentationOverlay = jQuery(
             '<div id="presentation-overlay">\
                 <div id="presentation-toolbar">\
-                    <span id="presentation-previous-action" class="glyphicon glyphicon-chevron-left presentation-toolbar-btn"></span>\
-                    <span id="presentation-next-action" class="glyphicon glyphicon-chevron-right presentation-toolbar-btn"></span>\
-                    <span id="exit-presentation" class="glyphicon glyphicon-remove presentation-toolbar-btn"></span>\
+                    <span id="presentation-current-note" class="label label-default presentation-toolbar">Note 1 of 3</span>\
+                    <span id="presentation-current-action" class="label label-default presentation-toolbar">Action 1 of 10</span>\
+                    <span id="presentation-previous-action" class="glyphicon glyphicon-chevron-left presentation-toolbar-btn presentation-toolbar"></span>\
+                    <span id="presentation-next-action" class="glyphicon glyphicon-chevron-right presentation-toolbar-btn presentation-toolbar"></span>\
+                    <span id="exit-presentation" class="glyphicon glyphicon-remove presentation-toolbar-btn presentation-toolbar"></span>\
+                    <span id="presentation-toggle-toolbar" class="glyphicon glyphicon-eye-close presentation-toolbar-btn"></span>\
                 </div>\
 			</div>');
         jQuery('body').append(this.$presentationOverlay);
 
         // Get DOM elements
         this.$toolbar = this.$presentationOverlay.find('#presentation-toolbar');
+
+        // show/hide toolbar
+        this.$hideToolbarBtn = jQuery('#presentation-toggle-toolbar');
+
+        // Toolbar Buttons
         this.$toolbarBtns = this.$presentationOverlay.find('.presentation-toolbar-btn');
         this.$exitBtn = this.$toolbar.find('#exit-presentation');
         this.$nextActionBtn = this.$toolbar.find('#presentation-next-action');
         this.$previousActionBtn = this.$toolbar.find('#presentation-previous-action');
+
+        // Toolbar labels
+        this.$currentNoteLabel = this.$toolbar.find('#presentation-current-note');
+        this.$currentActionLabel = this.$toolbar.find('#presentation-current-action');
+
+        // Toolbar visibility
+        this.toolbarVisible = true;
 
         if (appGlobals.mode.EDIT_IMAGE) {
             let imgMod =  appGlobals.modulesLoaded[appGlobals.modules.IMAGE_MODULE];
@@ -117,6 +132,20 @@ export default class ModulePresentation extends BaseModule {
         this.$exitBtn.on('click', () => this.toolbarListeners.exit());
         this.$nextActionBtn.on('click', () => this.app.navigateActions('next'));
         this.$previousActionBtn.on('click', () => this.app.navigateActions());
+        this.$hideToolbarBtn.on('click', () => {
+            let $toolbarDisplay = jQuery('.presentation-toolbar');
+            if (this.toolbarVisible){
+                this.$hideToolbarBtn.removeClass('glyphicon-eye-close');
+                this.$hideToolbarBtn.addClass('glyphicon-eye-open');
+                $toolbarDisplay.hide();
+                this.toolbarVisible = false;
+            } else {
+                this.$hideToolbarBtn.removeClass('glyphicon-eye-open');
+                this.$hideToolbarBtn.addClass('glyphicon-eye-close');
+                $toolbarDisplay.show();
+                this.toolbarVisible = true;
+            }
+        })
     }
 
     setListeners(){
