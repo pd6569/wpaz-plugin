@@ -1944,6 +1944,11 @@ class AnatomyNotes {
         console.log("setCurrentAction");
         appGlobals.currentAction = action;
         this.$currentActionLabel.text("Action " + (appGlobals.actions[appGlobals.currentNote.uid].indexOf(action) + 1));
+
+        if (appGlobals.mode.PRESENTATION) {
+            let presentationModule = appGlobals.modulesLoaded[appGlobals.modules.PRESENTATION_MODULE];
+            presentationModule.$currentActionLabel.text("Action " + (appGlobals.actions[appGlobals.currentNote.uid].indexOf(action) + 1) + " of " + appGlobals.actions[appGlobals.currentNote.uid].length);
+        }
     }
 
     /**
