@@ -1166,6 +1166,9 @@ class AnatomyNotes {
             };
         }
         this.human.send('ui.setDisplay', displayConfig);
+        /*this.human.send('ui.setBackground', {
+            'colors': ['white', 'white'],
+        })*/
     }
 
     setAppUi(){

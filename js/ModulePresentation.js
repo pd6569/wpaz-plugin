@@ -29,6 +29,7 @@ export default class ModulePresentation extends BaseModule {
             this.app.human.on('human.ready', () => {
                 console.log("human ready");
                 this.app.doAction(appGlobals.currentAction);
+                this.app.setHumanUi();
             });
         }
     }
