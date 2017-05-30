@@ -6,6 +6,7 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 ## [Unreleased]
 ### FIXED
 - Snapshot background now the same as 3D model background (model default is now white)
+- Image module fades in
 
 ### CHANGED
 

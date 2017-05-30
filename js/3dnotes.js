@@ -1743,9 +1743,24 @@ class AnatomyNotes {
             $content.html(note.note_content);
         }
 
-        // load scene
-        if (note.scene_state != null && note.scene_state != "" && note.scene_state.length > 0){
-            this.human.send("scene.restore", JSON.parse(note.scene_state));
+        // load scene if there are no actions associated with the note, otherwise perform first action in note set code below)
+
+        if (!appGlobals.actions[note.uid]){
+            if (note.scene_state != null && note.scene_state != "" && note.scene_state.length > 0){
+                /*this.human.send("scene.restore", JSON.parse(note.scene_state));*/
+
+                this.human.send('camera.set', {
+                    position: JSON.parse(note.scene_state).camera.eye,
+                    target: JSON.parse(note.scene_state).camera.look,
+                    up: JSON.parse(note.scene_state).camera.up,
+                    animate: true
+                }, () => {
+                    this.human.send('scene.restore', JSON.parse(note.scene_state), () => {
+                        console.log("scene restored");
+                    });
+                });
+
+            }
         }
 
         appGlobals.currentNote = note;
