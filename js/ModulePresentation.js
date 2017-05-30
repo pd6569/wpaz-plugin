@@ -57,6 +57,8 @@ export default class ModulePresentation extends BaseModule {
             '<div id="presentation-overlay">\
                 <div id="presentation-toolbar">\
                     <span id="presentation-current-note" class="label label-default presentation-toolbar">Note 1 of 3</span>\
+                    <span id="presentation-previous-note" class="glyphicon glyphicon-chevron-down presentation-toolbar-btn presentation-toolbar"></span>\
+                    <span id="presentation-next-note" class="glyphicon glyphicon-chevron-up presentation-toolbar-btn presentation-toolbar"></span>\
                     <span id="presentation-current-action" class="label label-default presentation-toolbar">Action 1 of 10</span>\
                     <span id="presentation-previous-action" class="glyphicon glyphicon-chevron-left presentation-toolbar-btn presentation-toolbar"></span>\
                     <span id="presentation-next-action" class="glyphicon glyphicon-chevron-right presentation-toolbar-btn presentation-toolbar"></span>\
@@ -75,8 +77,11 @@ export default class ModulePresentation extends BaseModule {
         // Toolbar Buttons
         this.$toolbarBtns = this.$presentationOverlay.find('.presentation-toolbar-btn');
         this.$exitBtn = this.$toolbar.find('#exit-presentation');
+        this.$previousNoteBtn = this.$toolbar.find('#presentation-previous-note');
+        this.$nextNoteBtn = this.$toolbar.find('#presentation-next-note');
         this.$nextActionBtn = this.$toolbar.find('#presentation-next-action');
         this.$previousActionBtn = this.$toolbar.find('#presentation-previous-action');
+
 
         // Toolbar labels
         this.$currentNoteLabel = this.$toolbar.find('#presentation-current-note');
@@ -139,6 +144,8 @@ export default class ModulePresentation extends BaseModule {
         };
 
         this.$exitBtn.on('click', () => this.toolbarListeners.exit());
+        this.$nextNoteBtn.on('click', () => this.app.navigateNotes('right'));
+        this.$previousNoteBtn.on('click', () => this.app.navigateNotes());
         this.$nextActionBtn.on('click', () => this.app.navigateActions('next'));
         this.$previousActionBtn.on('click', () => this.app.navigateActions());
         this.$hideToolbarBtn.on('click', () => {

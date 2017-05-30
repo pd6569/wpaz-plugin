@@ -1384,6 +1384,13 @@ class AnatomyNotes {
 
 
     // NOTE NAVIGATION
+
+    /****
+     *
+     * Navigate sequentially through notes
+     *
+     * @param {string}  direction       - direction to go through notes. 'right' navigates to next note.
+     */
     navigateNotes(direction){
 
         let noteSeq = parseInt(appGlobals.currentNote.sequence);
@@ -1914,6 +1921,12 @@ class AnatomyNotes {
         this.$actionsDropdownContainer.find('#' + actionId).remove();
     }
 
+    /***
+     *
+     * Navigate up or down through actions
+     *
+     * @param {string}  direction       - Direction navigate: 'next'
+     */
     navigateActions(direction){
         console.log("Navigate actions: " + direction);
 
