@@ -7,12 +7,10 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 ### FIXED
 - Snapshot background now the same as 3D model background (model default is now white)
 - Image module fades in
+- Smooth camera transitions when changing notes
 
 ### CHANGED
-
-### ADDED
-
-### REMOVED
+- Model background default is now white
 
 ## [0.5.1] - 28-05-2017
 ### FIXED
