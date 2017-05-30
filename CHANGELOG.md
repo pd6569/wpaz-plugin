@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog and this project adheres to Semantic Versioning.
 
 ## [Unreleased]
+### FIXED
+- Snapshot background now the same as 3D model background (model default is now white)
+
+### CHANGED
+
+### ADDED
+
+### REMOVED
 
 ## [0.5.1] - 28-05-2017
 ### FIXED
