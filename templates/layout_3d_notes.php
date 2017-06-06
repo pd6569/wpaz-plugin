@@ -611,6 +611,7 @@
                                         <div class="row">
                                             <div class="col-md-12 save-actions">
                                                 <div id="buttons-container">
+                                                    <button id="sync-actions-btn" type="button" class="btn btn-default notes-button pull-left">Sync Actions</button>
                                                     <button id="notes-save-btn" type="button" class="btn btn-primary notes-button pull-right">Save</button>
                                                     <button id="notes-add-new-btn" type="button" class="btn btn-success notes-button pull-right">Add new</button>
                                                     <button id="notes-delete-btn" type="button" class="btn btn-danger notes-button pull-right">Delete</button>

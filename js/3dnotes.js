@@ -66,6 +66,8 @@ class AnatomyNotes {
         appGlobals.currentTab = appGlobals.tabs.NOTE_EDITOR;
 
         // Human loaded
+
+
         this.human.on('human.ready', () => {
 
             //TODO: update/delete these functions
@@ -78,7 +80,11 @@ class AnatomyNotes {
             this.registerCallbacks();
             this.setHumanUi();
 
+        });
 
+        // set default background for model
+        this.human.send('ui.setBackground', {
+            'colors': ['white', 'white'],
         });
 
 
@@ -1167,9 +1173,7 @@ class AnatomyNotes {
             };
         }
         this.human.send('ui.setDisplay', displayConfig);
-        /*this.human.send('ui.setBackground', {
-            'colors': ['white', 'white'],
-        })*/
+
     }
 
     setAppUi(){
