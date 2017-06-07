@@ -3,7 +3,7 @@
 Plugin Name: AnatomyZone 3D Notes Plugin
 Plugin URI:  https://anatomyzone.com
 Description: Interactive 3D anatomy notes
-Version:     1.0.0
+Version:     0.5.3
 Author:      Peter de Souza
 Author URI:  http://www.anatomyzone.com
 License:     GPL2
@@ -49,7 +49,7 @@ require_once ( WP_AZ_PLUGIN_DIR . '/admin/class-3d-notes-admin.php');
 
 // Database
 $wp_az_db_version = '0.5';
-$wp_az_app_version = '0.5.0';
+$wp_az_app_version = '0.5.3';
 
 // Static page Id
 global $wp_az_3d_body_id;
