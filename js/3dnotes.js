@@ -162,6 +162,7 @@ class AnatomyNotes {
         this.$toolbarReset = jQuery('#toolbar-reset');
 
         // save/add/delete notes
+        this.$syncActionsBtn = jQuery('#sync-actions-btn');
         this.$saveBtn = jQuery('#notes-save-btn');
         this.$addNewNotesSection = jQuery('#notes-add-new-btn');
         this.$deleteNoteBtn = jQuery('#notes-delete-btn');
@@ -386,6 +387,7 @@ class AnatomyNotes {
         this.$toolbarReset.on('click', event => { this.human.send("scene.restore", JSON.parse(appGlobals.currentNote.scene_state)); });
 
         // Save/Add new
+        this.$syncActionsBtn.on('click', () => { this.syncActions()});
         this.$saveBtn.on('click', (event) => { this.saveNotes(this.$noteTitle.val(), this.noteEditor.getContent()); });
         this.$addNewNotesSection.on('click', (event) => { this.addNoteSection(); });
         this.$deleteNoteBtn.on('click', (event) => { this.deleteNote(); });
@@ -425,6 +427,11 @@ class AnatomyNotes {
      *      CLASS METHODS       *
      ****************************/
 
+    syncActions() {
+        console.log("syncActions");
+        this.refreshActionList();
+    }
+
     setActionOrderFromEditorLinks($linkedScenes){
         console.log("setActionOrderFromEditorLinks");
 
@@ -439,6 +446,11 @@ class AnatomyNotes {
         }
     }
 
+    /****
+     *
+     * Sorts actions into order according to which they appear in the note editor, and then loads them into the action dropdown
+     *
+     */
     refreshActionList() {
         Action.sortActionsForCurrentNote();
         this.loadActions(appGlobals.currentNote.uid, this);
@@ -1534,6 +1546,9 @@ class AnatomyNotes {
         noteToSave.setTitle(title);
         noteToSave.setNoteContent(note_content);
 
+        // Sort actions before uploading - remove dead links/update order
+        this.refreshActionList();
+
         // Check if changes made to actions, save variable
         let actionsChanged = this.actionsChanged;
 
@@ -2190,6 +2205,14 @@ class AnatomyNotes {
         }
     }
 
+    /*****
+     *
+     * Iterates through actions for the note, and adds to drop down container
+     *
+     *
+     * @param {string}  noteUID         - UID for note to load actions
+     * @param {object}  appObj          - Reference to app object
+     */
     loadActions(noteUID, appObj){
 
         let actions = appGlobals.actions[noteUID];

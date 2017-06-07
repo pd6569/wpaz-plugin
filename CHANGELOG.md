@@ -5,6 +5,13 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ## [Unreleased]
 
+## [0.5.3]
+### FIXED
+- Actions synchronised when saving notes (actions delete and removed on re-order)
+
+### ADDED
+- Sync actions button
+
 ## [0.5.2] - 30-05-2017
 ### FIXED
 - Snapshot background now the same as 3D model background (model default is now white)
@@ -26,7 +33,8 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 ## [0.5.0] - 27-05-2017
 Initial private beta release
 
-[Unreleased]: https://github.com/pd6569/wpaz-plugin/compare/v0.5.2...0.6.0
+[Unreleased]: https://github.com/pd6569/wpaz-plugin/compare/v0.5.3...0.6.0
+[0.5.3]: https://github.com/pd6569/wpaz-plugin/compare/v0.5.2...v0.5.3
 [0.5.2]: https://github.com/pd6569/wpaz-plugin/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/pd6569/wpaz-plugin/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/pd6569/wpaz-plugin/tree/v0.5.0

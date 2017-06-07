@@ -104,6 +104,14 @@ export default class Action {
         }
     }
 
+
+    /*****
+     *
+     * Sort actions for current note. Looks through the text editor body to find class '.linked-scene' to ascertain
+     * number of actions. Actions deleted by user through deleting/backspacing in the editor will then be removed, and
+     * the data model will be updated.
+     *
+     */
     static sortActionsForCurrentNote() {
         console.log("sortActionsForCurrentNote");
 
@@ -111,21 +119,23 @@ export default class Action {
         let $linkedScenes;
         appObj.userIsEditor ? $linkedScenes = appObj.$editorBody.find('.linked-scene') : $linkedScenes = appObj.$noteText.find('.linked-scene');
         let numActions = $linkedScenes.length;
+        console.log("numActions found in text: " + numActions);
+        let sortedActions = [];
         if (numActions > 0){
-            console.log("Sort actions. Number of actions: " + $linkedScenes.length);
-
-            let sortedActions = [];
-            if (numActions > 0){
-                for (let i = 0; i < numActions ; i++){
-                    console.log("action id: " + jQuery($linkedScenes[i]).attr('data-action-id'));
-                    let actionId = jQuery($linkedScenes[i]).attr('data-action-id');
-                    sortedActions.push(Action.getActionById(actionId, appGlobals.currentNote.uid));
-                }
-                appGlobals.actions[appGlobals.currentNote.uid] = sortedActions;
-                console.log("appglobals sorted actions: ", appGlobals.actions[appGlobals.currentNote.uid])
+            for (let i = 0; i < numActions ; i++){
+                console.log("action id: " + jQuery($linkedScenes[i]).attr('data-action-id'));
+                let actionId = jQuery($linkedScenes[i]).attr('data-action-id');
+                sortedActions.push(Action.getActionById(actionId, appGlobals.currentNote.uid));
             }
         }
+
+        appGlobals.actions[appGlobals.currentNote.uid] = sortedActions;
+
+        console.log("appglobals sorted actions: ", appGlobals.actions[appGlobals.currentNote.uid])
+
+        appObj.actionsChanged = true;
     }
+
 
     static actionFunctions(action_data) {
 
