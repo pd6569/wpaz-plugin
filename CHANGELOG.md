@@ -5,6 +5,10 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ## [Unreleased]
 
+## [0.5.4] 
+### FIXED
+- Navigate actions and notes causing error when note has no actions
+
 ## [0.5.3]
 ### FIXED
 - Actions synchronised when saving notes (actions delete and removed on re-order)
@@ -33,7 +37,8 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 ## [0.5.0] - 27-05-2017
 Initial private beta release
 
-[Unreleased]: https://github.com/pd6569/wpaz-plugin/compare/v0.5.3...0.6.0
+[Unreleased] https://github.com/pd6569/wpaz-plugin/compare/v0.5.4...0.6.0
+[0.5.4]: https://github.com/pd6569/wpaz-plugin/compare/v0.5.3...0.5.4
 [0.5.3]: https://github.com/pd6569/wpaz-plugin/compare/v0.5.2...v0.5.3
 [0.5.2]: https://github.com/pd6569/wpaz-plugin/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/pd6569/wpaz-plugin/compare/v0.5.0...v0.5.1
