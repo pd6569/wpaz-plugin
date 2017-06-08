@@ -1745,14 +1745,14 @@ class AnatomyNotes {
     setActiveNote(uid, scrollToTop){
         let note = appGlobals.notes[uid];
 
-        console.log("setActiveNote", note);
+        console.log("setActiveNote WHAT THE FUCK", note);
 
         // get title/content
         let $title = jQuery('.notes-title');
         let $content = jQuery('.notes-text');
 
         // save current note first if changes made
-        if (this.userIsEditor && this.changesMade == true || this.actionsChanged) {
+        if (this.userIsEditor && this.changesMade) {
             this.saveNotes($title.val(), this.noteEditor.getContent());
         }
 
