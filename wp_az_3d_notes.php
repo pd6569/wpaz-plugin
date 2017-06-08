@@ -253,7 +253,7 @@ class wp_az_3d_notes {
 			wp_enqueue_script('wp_az_datatables', plugins_url('lib/js/datatables.min.js', __FILE__), array('jquery'), null, true);
 
 			// App JS bundle
-			wp_enqueue_script('wp_az_3d_notes_main', plugins_url('dist/bundle.js', __FILE__), array('jquery'), '0.5.4', true);
+			wp_enqueue_script('wp_az_3d_notes_main', plugins_url('dist/bundle.js', __FILE__), array('jquery'), '0.5.5', true);
 
 			// Main style
 			//  3d-notes

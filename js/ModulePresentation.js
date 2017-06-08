@@ -23,15 +23,23 @@ export default class ModulePresentation extends BaseModule {
 
         this.app.human = new HumanAPI("embedded-human");
         console.log("currentAction", appGlobals.currentAction);
-        if (appGlobals.currentAction.action_type === appGlobals.actionTypes.IMAGE){
-            this.app.doAction(appGlobals.currentAction);
+        if (appGlobals.currentAction){
+            if (appGlobals.currentAction.action_type === appGlobals.actionTypes.IMAGE){
+                this.app.doAction(appGlobals.currentAction);
+            } else {
+                this.app.human.on('human.ready', () => {
+                    console.log("human ready");
+                    this.app.doAction(appGlobals.currentAction);
+                    this.app.setHumanUi();
+                });
+            }
         } else {
             this.app.human.on('human.ready', () => {
                 console.log("human ready");
-                this.app.doAction(appGlobals.currentAction);
                 this.app.setHumanUi();
             });
         }
+
     }
 
     disableModule () {
@@ -88,7 +96,20 @@ export default class ModulePresentation extends BaseModule {
         this.$currentActionLabel = this.$toolbar.find('#presentation-current-action');
 
         this.$currentNoteLabel.text("Note " + appGlobals.currentNote.sequence + " of " + appGlobals.numNotes);
-        this.$currentActionLabel.text("Action " + (appGlobals.actions[appGlobals.currentNote.uid].indexOf(appGlobals.currentAction) + 1) + " of " + appGlobals.actions[appGlobals.currentNote.uid].length);
+
+        let currentAction;
+        if (appGlobals.actions[appGlobals.currentNote.uid]){
+            currentAction = (appGlobals.actions[appGlobals.currentNote.uid].indexOf(appGlobals.currentAction) + 1);
+        } else {
+            currentAction = 0;
+        }
+        let numActions;
+        if (appGlobals.actions[appGlobals.currentNote.uid]){
+            numActions = appGlobals.actions[appGlobals.currentNote.uid].length;
+        } else {
+            numActions = "0";
+        }
+        this.$currentActionLabel.text("Action " + currentAction + " of " + numActions);
 
         // Toolbar visibility
         this.toolbarVisible = true;

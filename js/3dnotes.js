@@ -1803,6 +1803,8 @@ class AnatomyNotes {
 
         // clear previous actions, load new actions, set current action
         this.clearActions();
+
+
         if (appGlobals.actions[note.uid]) {
             Action.sortActionsForCurrentNote();
             this.loadActions(note.uid, this);
@@ -1814,6 +1816,8 @@ class AnatomyNotes {
 
             // load annotations
             this.loadAnnotations();
+        } else {
+            this.setCurrentAction();
         }
 
         // scroll to top
@@ -1995,11 +1999,23 @@ class AnatomyNotes {
     setCurrentAction(action){
         console.log("setCurrentAction");
         appGlobals.currentAction = action;
-        this.$currentActionLabel.text("Action " + (appGlobals.actions[appGlobals.currentNote.uid].indexOf(action) + 1));
+        let actionNumber;
+        let numActions;
+
+        if (appGlobals.actions[appGlobals.currentNote.uid]){
+            actionNumber = (appGlobals.actions[appGlobals.currentNote.uid].indexOf(action) + 1);
+            numActions = appGlobals.actions[appGlobals.currentNote.uid].length;
+        } else {
+            actionNumber = "0";
+            numActions = "0";
+        }
+
+        this.$currentActionLabel.text("Action " + actionNumber);
 
         if (appGlobals.mode.PRESENTATION) {
             let presentationModule = appGlobals.modulesLoaded[appGlobals.modules.PRESENTATION_MODULE];
-            presentationModule.$currentActionLabel.text("Action " + (appGlobals.actions[appGlobals.currentNote.uid].indexOf(action) + 1) + " of " + appGlobals.actions[appGlobals.currentNote.uid].length);
+            console.log("update action label:" + "Action " + actionNumber + " of " + numActions);
+            presentationModule.$currentActionLabel.text("Action " + actionNumber + " of " + numActions);
         }
     }
 
