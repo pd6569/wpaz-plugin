@@ -31,5 +31,5 @@ module.exports = {
         filename: './dist/bundle.js',
     },
 
-    devtool: 'eval-source-map'
+    devtool: 'source-map'
 };

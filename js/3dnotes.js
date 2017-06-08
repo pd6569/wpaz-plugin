@@ -1807,7 +1807,10 @@ class AnatomyNotes {
             Action.sortActionsForCurrentNote();
             this.loadActions(note.uid, this);
             this.setCurrentAction(appGlobals.actions[note.uid][0]);
-            this.doAction(appGlobals.actions[note.uid][0]);
+
+            if (appGlobals.currentAction){
+                this.doAction(appGlobals.actions[note.uid][0]);
+            }
 
             // load annotations
             this.loadAnnotations();
@@ -1950,6 +1953,17 @@ class AnatomyNotes {
         console.log("Navigate actions: " + direction);
 
         let actions = appGlobals.actions[appGlobals.currentNote.uid];
+
+        if (!actions) {
+            console.log("actions is null");
+            return;
+        }
+
+        if (Object.keys(actions).length === 0){
+            console.log("no actions for this note");
+            return;
+        }
+
         let currentIndex = actions.indexOf(appGlobals.currentAction);
         console.log("current index: " + currentIndex);
 
