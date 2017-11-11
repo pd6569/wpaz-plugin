@@ -396,9 +396,15 @@ class wp_az_3d_notes {
 		global $table_notes;
 		global $table_actions;
 
-		$installed_db_version = get_option('wp_az_db_version');
+		$installed_db_version = null;
 
-		if ($installed_db_version != $wp_az_db_version){
+		if (get_option('wp_az_db_version')) {
+			$installed_db_version = get_option('wp_az_db_version');
+		}
+
+		write_log("database version " . $installed_db_version);
+
+		if ($installed_db_version != $wp_az_db_version || !$installed_db_version){
 
 			$table_notes = $wpdb->prefix . 'az_notes';
 			$table_actions = $wpdb->prefix . 'az_actions';
