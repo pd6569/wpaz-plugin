@@ -25,6 +25,7 @@ import MyNotes from './MyNotes';
 import Action from './Actions';
 import Note from './Note';
 
+let $ = jQuery;
 
 class AnatomyNotes {
 
@@ -116,6 +117,9 @@ class AnatomyNotes {
         /**********************
          *    NOTE CONTAINER  *
          **********************/
+
+        // App container
+        this.$appContainer = jQuery('#wpaz-3d-notes-layout');
 
         // Layouts
         this.$mainLayout = jQuery('#wpaz-main-layout');
@@ -293,7 +297,6 @@ class AnatomyNotes {
 
             console.log("tinyMCE ready");
 
-            //TODO: CHANGE noteEditor to noteEditor - it is not a jquery element!
             this.noteEditor = editor;
 
             this.noteEditor.on('KeyUp', (e) => {
@@ -302,6 +305,8 @@ class AnatomyNotes {
             });
 
             this.$editorBody = jQuery(this.noteEditor.getBody());
+
+            Action.sortActionsForCurrentNote();
 
             // add dynamic listener in editor to link scenes to text
             this.$editorBody.on('click', '.linked-scene', (event) => {
@@ -1308,8 +1313,8 @@ class AnatomyNotes {
                     }
                 });
 
-                // Sort actions for current note
-                Action.sortActionsForCurrentNote();
+                /*// Sort actions for current note
+                Action.sortActionsForCurrentNote();*/
 
                 // load actions
                 appObj.loadActions(appGlobals.currentNote.uid, appObj);
@@ -2177,7 +2182,7 @@ class AnatomyNotes {
                     animate: true
                 }, () => {
                     _this.human.send('scene.restore', JSON.parse(action.scene_state), () => {
-                        console.log("scene restored");
+                        console.log("scene restored", action.scene_state);
                         _this.loadAnnotations();
 
                         // If action has associated data, execute this data
